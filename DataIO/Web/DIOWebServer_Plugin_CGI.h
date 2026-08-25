@@ -51,7 +51,7 @@ class DIOWEBSERVER_PLUGIN_CGI : public DIOWEBSERVER_PLUGIN
     virtual              ~DIOWEBSERVER_PLUGIN_CGI     ();
 
     bool                  Config                      (XPATH* pathCGIinterpreter, XCHAR* nameexec = NULL);
-    bool                  PageExtension               (XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result);
+    bool                  PageExtension               (XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result, bool istls = false);
 
   protected:
 

@@ -167,3 +167,67 @@ bool DIOSTREAMTLSSIGNATURE::Verify(XWORD signaturescheme, CIPHERKEY* key, XBUFFE
 
   return false;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSIGNATURE::Sign(XWORD signaturescheme, CIPHERKEY* privatekey, CIPHERKEY* publickey, XBUFFER& content, XBUFFER& signature)
+* @brief      Sign with the scheme-specific hash and padding parameters (server-side CertificateVerify/ServerKeyExchange)
+* @ingroup    DATAIO
+*
+* @param[in]  privatekey : Local private key (CIPHERKEYTYPE_RSA_PRIVATE).
+* @param[in]  publickey : Local public key from the same key pair (CIPHERKEYTYPE_RSA_PUBLIC) -- typically the
+*             leaf certificate's public key, needed because the private key alone does not carry the modulus.
+* @param[in]  content : Content to sign.
+* @param[out] signature : Produced signature.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSIGNATURE::Sign(XWORD signaturescheme, CIPHERKEY* privatekey, CIPHERKEY* publickey, XBUFFER& content, XBUFFER& signature)
+{
+  if(!privatekey || !publickey || content.IsEmpty()) return false;
+  if((privatekey->GetType() != CIPHERKEYTYPE_RSA_PRIVATE) || (publickey->GetType() != CIPHERKEYTYPE_RSA_PUBLIC)) return false;
+
+  switch(signaturescheme)
+    {
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 : break;
+                                                        default : return false;
+    }
+
+  CIPHERRSA RSA;
+
+  // Order matters: SetKey(RSA_PRIVATE, integritycheck=true) cross-checks P*Q == N, so the modulus (from the
+  // public key) has to be loaded into the shared context first.
+  if(!RSA.SetKey(publickey, true) || !RSA.SetKey(privatekey, true)) return false;
+
+  bool status = false;
+
+  switch(signaturescheme)
+    {
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 : { HASHSHA2 hash(HASHSHA2TYPE_256);
+                                                                    status = RSA.Sign(content, CIPHERKEYTYPE_RSA_PRIVATE, &hash, CIPHERRSAPKCS1VERSIONV21);
+                                                                  }
+                                                                  break;
+
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 : { HASHSHA2 hash(HASHSHA2TYPE_384);
+                                                                    status = RSA.Sign(content, CIPHERKEYTYPE_RSA_PRIVATE, &hash, CIPHERRSAPKCS1VERSIONV21);
+                                                                  }
+                                                                  break;
+
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 : { HASHSHA2 hash(HASHSHA2TYPE_512);
+                                                                    status = RSA.Sign(content, CIPHERKEYTYPE_RSA_PRIVATE, &hash, CIPHERRSAPKCS1VERSIONV21);
+                                                                  }
+                                                                  break;
+
+                                                        default : break;
+    }
+
+  if(!status) return false;
+
+  signature.Delete();
+
+  return signature.Add((*RSA.GetResult()));
+}

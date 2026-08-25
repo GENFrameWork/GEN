@@ -467,7 +467,20 @@ bool XPUBLISHER::PostEvent(XEVENT* event, XSUBJECT* subject)
         }
     }  
 
-  if(xmutexevents) xmutexevents->UnLock();  
+  if(xmutexevents) xmutexevents->UnLock();
+
+  if(!observers.GetSize())
+    {
+      XDWORD nsametype = 0;
+
+      if(xmutexevents) xmutexevents->Lock();
+      for(XDWORD c=0; c<eventsvector.GetSize(); c++)
+        {
+          XPUBLISHERENTRY* publisherentry = eventsvector.Get(c);
+          if(publisherentry && (publisherentry->type == event->GetEventType())) nsametype++;
+        }
+      if(xmutexevents) xmutexevents->UnLock();
+    }
 
   for(XDWORD c=0; c<observers.GetSize(); c++)
     {

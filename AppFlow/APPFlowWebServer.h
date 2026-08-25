@@ -53,6 +53,7 @@ class DIOWEBSERVER_PLUGIN_PHP;
 class DIOWEBSERVER_XEVENT;
 class DIOWEBSERVER;
 class APPFLOWCFG;
+class DIOSTREAMTLSCONFIG;
 
 
 class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
@@ -64,6 +65,14 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
     bool                        Ini                               (APPFLOWCFG* cfg, bool doinitialconnectitivitytest, bool isapirestonly, bool chekuseragentid);
     bool                        Ini_Authentication                (APPFLOWCFG* cfg);
     bool                        Ini                               (XDWORD port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal);
+
+    // Secondary listener on its own port (e.g. WebSocket) that follows the same cfg->WebServer_IsTLS() decision
+    // and credentials as the main Ini(APPFLOWCFG*, ...) listener above, instead of always running plain.
+    bool                        Ini                               (APPFLOWCFG* cfg, XDWORD port, int timeoutserverpage, XSTRING* addrlocal);
+
+    // HTTPS variant: see DIOWEBSERVER::Ini(DIOSTREAMTLSCONFIG*, ...) for the ownership and credential
+    // requirements on tlsconfig (ownership transfers to the internal DIOWEBSERVER instance).
+    bool                        Ini                               (DIOSTREAMTLSCONFIG* tlsconfig, XDWORD port, int timeoutserverpage, XSTRING* addrlocal);
 
     DIOWEBSERVER*               GetWebServer                      ();
 
@@ -88,6 +97,19 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
 
     void                        HandleEvent_WebServer             (DIOWEBSERVER_XEVENT* event);
     void                        HandleEvent                       (XEVENT* xevent);
+
+    void                        Ini_RegisterEvents                ();
+
+    #ifdef DIO_STREAMTLS_ACTIVE
+    // Loads the private key / certificate configured in cfg (APPFLOWCFG::WebServer_PathPrivateKey() /
+    // WebServer_PathCertificate()) into tlsconfig. Used by Ini(APPFLOWCFG*, ...) when cfg->WebServer_IsTLS().
+    bool                        Ini_LoadTLSCredentials            (APPFLOWCFG* cfg, DIOSTREAMTLSCONFIG* tlsconfig);
+
+    // Builds a DIOSTREAMTLSCONFIG (cipher suite / group / signature scheme / ALPN + credentials via
+    // Ini_LoadTLSCredentials()) from cfg, ready to hand to Ini(DIOSTREAMTLSCONFIG*, ...). Returns NULL if the
+    // credentials could not be loaded. Ownership of the returned object belongs to the caller.
+    DIOSTREAMTLSCONFIG*         Ini_BuildTLSConfig                 (APPFLOWCFG* cfg);
+    #endif
 
     void                        Clean                             ();
 

@@ -222,20 +222,21 @@ bool DIOWEBSERVER_PLUGIN::PageExtension_DeleteAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOWEBSERVER_PLUGIN::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result)
+* @fn         bool DIOWEBSERVER_PLUGIN::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result, bool istls)
 * @brief      Page extension
 * @ingroup    DATAIO
-* 
+*
 * @param[in]  pathfile : Pathfile value.
 * @param[in]  request : Request pointer to use.
 * @param[in]  querystrings : Querystrings pointer to use.
 * @param[in]  headerresult : Output headerresult.
 * @param[in]  result : Output result.
-* 
+* @param[in]  istls : true if the request arrived over a TLS (HTTPS) listener; otherwise false.
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBSERVER_PLUGIN::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result)
+bool DIOWEBSERVER_PLUGIN::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result, bool istls)
 {
   return false;
 }

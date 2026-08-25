@@ -34,12 +34,12 @@
 #include "XFactory.h"
 #include "XBuffer.h"
 #include "XTimer.h"
-#include "XTrace.h"
 
 #include "DIOStream.h"
 #include "DIOStreamTLSConfig.h"
 #include "DIOStreamTLS13Session.h"
 #include "DIOStreamTLS13HandshakeClient.h"
+#include "DIOStreamTLS13HandshakeServer.h"
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
 #include "DIOStreamTLSMessagesHandShakeServerHello.h"
 
@@ -88,6 +88,7 @@ class DIOSTREAMTLS : public T
     virtual                                ~DIOSTREAMTLS                            ()
                                             {
                                               handshakeclient.End();
+                                              handshakeserver.End();
                                               session.End();
                                               handshakeclient12.End();
 
@@ -112,9 +113,24 @@ class DIOSTREAMTLS : public T
                                               isclosing = false;
 
                                               config = dynamic_cast<DIOSTREAMTLSCONFIG*>(T::GetConfig());
-                                              if(!config || config->IsServer())
+                                              if(!config)
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  return false;
+                                                }
+
+                                              // Server side (v1 scope: TLS 1.3 only, see DIOStreamTLS13HandshakeServer.h) is a
+                                              // separate, simpler path -- one flight right after ClientHello, no version fallback,
+                                              // no dual TLS 1.2/1.3 negotiation -- so it is dispatched here before any of the
+                                              // client-only version/servername logic below, which does not apply to it.
+                                              if(config->IsServer())
+                                                {
+                                                  if(Handshake_ServerAttempt(config))
+                                                    {
+                                                      T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
+                                                      return true;
+                                                    }
+
                                                   return false;
                                                 }
 
@@ -291,6 +307,62 @@ class DIOSTREAMTLS : public T
 
                                                   if((!usingtls12 && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) != DIOSTREAMTLS13SESSION_EPOCH_CLEAR)) ||
                                                      (usingtls12 && handshakeclient12.GetSession()->IsIni()))
+                                                    {
+                                                      Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE);
+                                                    }
+
+                                                  Close_OnError();
+                                                  return false;
+                                                }
+
+                                              return true;
+                                            }
+
+
+
+
+    bool                                    Handshake_ServerAttempt                 (DIOSTREAMTLSCONFIG* config)
+                                            {
+                                              handshakeclient.End();
+                                              handshakeserver.End();
+                                              session.End();
+                                              handshakeclient12.End();
+
+                                              usingtls12  = false;
+                                              isserverrole = true;
+
+                                              if(!session.Ini(config->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER) ||
+                                                 !handshakeserver.Ini(&session, config))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  return false;
+                                                }
+
+                                              T::ResetOutXBuffer();
+                                              T::ResetInXBuffer();
+
+                                              if(!T::Open())
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  return false;
+                                                }
+
+                                              isclosed = false;
+
+                                              if(!T::WaitToConnected(timeout))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  Close_OnError();
+                                                  return false;
+                                                }
+
+                                              T::SetStatus(DIOSTREAMSTATUS_GETTINGCONNECTION);
+
+                                              if(!Handshake_Server())
+                                                {
+                                                  if(tlserror == DIOSTREAMTLS_ERROR_NONE) tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+
+                                                  if(session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) != DIOSTREAMTLS13SESSION_EPOCH_CLEAR)
                                                     {
                                                       Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE);
                                                     }
@@ -505,6 +577,7 @@ class DIOSTREAMTLS : public T
                                               status = T::Close() && status;
 
                                               handshakeclient.End();
+                                              handshakeserver.End();
                                               session.End();
                                               handshakeclient12.End();
 
@@ -573,7 +646,16 @@ class DIOSTREAMTLS : public T
 
     bool                                    IsHandshakeCompleted                    ()
                                             {
-                                              return usingtls12?handshakeclient12.IsHandshakeCompleted():handshakeclient.IsHandshakeCompleted();
+                                              if(usingtls12)  return handshakeclient12.IsHandshakeCompleted();
+                                              if(isserverrole) return handshakeserver.IsHandshakeCompleted();
+
+                                              return handshakeclient.IsHandshakeCompleted();
+                                            }
+
+
+    DIOSTREAMTLS13HANDSHAKESERVER*            GetTLSHandshakeServer                   ()
+                                            {
+                                              return &handshakeserver;
                                             }
 
   private:
@@ -761,6 +843,92 @@ class DIOSTREAMTLS : public T
                                                   if(!session.GetHandshakeInput()->IsEmpty())            return false;
 
                                                   serverhelloprocessed = true;
+                                                }
+
+                                              return true;
+                                            }
+
+
+    bool                                    Handshake_Server                        ()
+                                            {
+                                              XTIMER* xtimer;
+                                              bool    clienthelloprocessed = false;
+                                              bool    status               = false;
+
+                                              xtimer = GEN_XFACTORY.CreateTimer();
+                                              if(!xtimer) return false;
+
+                                              xtimer->Reset();
+
+                                              while(xtimer->GetMeasureSeconds() < (XDWORD)timeout)
+                                                {
+                                                  XBUFFER input;
+
+                                                  if(!Transport_Read(input))
+                                                    {
+                                                      if(T::GetStatus() == DIOSTREAMSTATUS_DISCONNECTED) break;
+
+                                                      DIOSTREAMCONFIG* streamconfig = T::GetConfig();
+                                                      T::Wait(streamconfig?streamconfig->GetPollInterval():DIOSTREAM_TIMEINWAITFUNCTIONS);
+                                                      continue;
+                                                    }
+
+                                                  if(!handshakeserver.RecordInput_Add(input)) break;
+
+                                                  if(!clienthelloprocessed &&
+                                                     !ClientHello_Process(clienthelloprocessed)) break;
+
+                                                  if(clienthelloprocessed && !handshakeserver.Process()) break;
+
+                                                  if(handshakeserver.IsHandshakeCompleted())
+                                                    {
+                                                      status = true;
+                                                      break;
+                                                    }
+                                                }
+
+                                              GEN_XFACTORY.DeleteTimer(xtimer);
+
+                                              return status;
+                                            }
+
+
+    bool                                    ClientHello_Process                     (bool& clienthelloprocessed)
+                                            {
+                                              while(!clienthelloprocessed)
+                                                {
+                                                  DIOSTREAMTLS_CONTENTTYPE   contenttype = (DIOSTREAMTLS_CONTENTTYPE)0;
+                                                  DIOSTREAMTLS13SESSION_RESULT result;
+                                                  XBUFFER                    plain;
+
+                                                  result = session.Record_Extract(contenttype, plain);
+
+                                                  if(result == DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE) return true;
+                                                  if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)      return false;
+
+                                                  if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT) return false;
+
+                                                  if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE ||
+                                                     !session.HandshakeInput_Add(plain))
+                                                    {
+                                                      return false;
+                                                    }
+
+                                                  XBUFFER clienthello;
+                                                  result = session.Handshake_Extract(clienthello);
+
+                                                  if(result == DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE) continue;
+                                                  if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)      return false;
+
+                                                  XBUFFER serverflightrecords;
+
+                                                  if(!handshakeserver.ClientHello_Process(clienthello, serverflightrecords) ||
+                                                     !Transport_Write(serverflightrecords))
+                                                    {
+                                                      return false;
+                                                    }
+
+                                                  clienthelloprocessed = true;
                                                 }
 
                                               return true;
@@ -981,6 +1149,7 @@ class DIOSTREAMTLS : public T
                                               isclosed        = true;
                                               isclosing       = false;
                                               usingtls12      = false;
+                                              isserverrole    = false;
                                               dualversionmode = false;
                                               versionrejected = false;
                                               algorithmrejected = false;
@@ -1013,6 +1182,8 @@ class DIOSTREAMTLS : public T
 
     DIOSTREAMTLS13SESSION                     session;
     DIOSTREAMTLS13HANDSHAKECLIENT             handshakeclient;
+    DIOSTREAMTLS13HANDSHAKESERVER             handshakeserver;
+    bool                                     isserverrole;
 
     
     

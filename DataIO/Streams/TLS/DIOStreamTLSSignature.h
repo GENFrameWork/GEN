@@ -51,6 +51,12 @@ class DIOSTREAMTLSSIGNATURE
 
     static bool                             IsSupported                                      (XWORD signaturescheme, CIPHERKEY* key);
     static bool                             Verify                                           (XWORD signaturescheme, CIPHERKEY* key, XBUFFER& content, XBUFFER& signature);
+
+    // Server-side counterpart of Verify(). RSA-PSS only for now: CIPHERECDSA (unlike CIPHERRSA) has no Sign()
+    // yet, so an ECDSA local key is rejected here rather than silently producing no signature. publickey is
+    // required in addition to privatekey because CIPHERKEYPRIVATERSA only carries P/Q/D (see SetKey()'s
+    // CIPHERKEYTYPE_RSA_PRIVATE branch in CipherRSA.cpp) -- N/E come from the local certificate's public key.
+    static bool                             Sign                                             (XWORD signaturescheme, CIPHERKEY* privatekey, CIPHERKEY* publickey, XBUFFER& content, XBUFFER& signature);
 };
 
 

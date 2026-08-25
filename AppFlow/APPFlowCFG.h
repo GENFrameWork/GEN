@@ -154,6 +154,12 @@
 #define APPFLOW_CFG_WEBSERVER_PATH_RESOURCES                                          __L("path_resources")
 #define APPFLOW_CFG_WEBSERVER_PATH_PHP                                                __L("path_php")
 
+#ifdef DIO_STREAMTLS_ACTIVE
+#define APPFLOW_CFG_WEBSERVER_ISTLS                                                   __L("istls")
+#define APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                                         __L("path_privatekey")
+#define APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                                        __L("path_certificate")
+#endif
+
 #endif
 
 
@@ -348,6 +354,11 @@ class APPFLOWCFG
     XSTRING*             WebServer_GetPassword                                    ();
     XPATH*               WebServer_PathResources                                  ();
     XPATH*               WebServer_PathPHP                                        ();
+    #ifdef DIO_STREAMTLS_ACTIVE
+    bool                 WebServer_IsTLS                                          ();
+    XPATH*               WebServer_PathPrivateKey                                 ();
+    XPATH*               WebServer_PathCertificate                                ();
+    #endif
     #endif
 
     #ifdef APPFLOW_CFG_SCRIPTS_ACTIVE
@@ -439,6 +450,11 @@ class APPFLOWCFG
     XSTRING              webserver_password;
     XPATH                webserver_path_resources;
     XPATH                webserver_path_PHP;
+    #ifdef DIO_STREAMTLS_ACTIVE
+    bool                 webserver_istls;
+    XPATH                webserver_path_privatekey;
+    XPATH                webserver_path_certificate;
+    #endif
     #endif
 
 

@@ -438,6 +438,32 @@ bool CIPHERRSA::Sign(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* ha
 {
   if(!hash) return false;
 
+  switch(pkcs1version)
+    {
+      case CIPHERRSAPKCS1VERSIONV15 : return Sign_PKCS1_V15(input, size, keytouse, hash);
+      case CIPHERRSAPKCS1VERSIONV21 : return Sign_PKCS1_V21(input, size, hash, 0);
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERRSA::Sign_PKCS1_V15(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* hash)
+* @brief      Sign with EMSA-PKCS1-v1_5 (DigestInfo BER structure, then PKCS#1 v1.5 padding)
+* @ingroup    CIPHER
+*
+* @param[in]  input : Data to sign.
+* @param[in]  size : Data size.
+* @param[in]  keytouse : Keytouse value. Unused: signing always uses the private key.
+* @param[in]  hash : Hash algorithm to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERRSA::Sign_PKCS1_V15(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* hash)
+{
   XBER      beroui;
   XBER      bernull;
   XBER      berhash;
@@ -468,7 +494,152 @@ bool CIPHERRSA::Sign(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* ha
 
   berseq2.GetDump(sign);
 
-  return Cipher(sign, CIPHERKEYTYPE_RSA_PRIVATE, pkcs1version);
+  return Cipher(sign, CIPHERKEYTYPE_RSA_PRIVATE, CIPHERRSAPKCS1VERSIONV15);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERRSA::Sign_PKCS1_V21(XBYTE* input, XDWORD size, HASH* hash, XDWORD saltsize)
+* @brief      Sign with EMSA-PSS (RFC 8017 9.1.1), the mirror of Verify_PKCS1_V21
+* @ingroup    CIPHER
+*
+* @param[in]  input : Data to sign.
+* @param[in]  size : Data size.
+* @param[in]  hash : Hash algorithm to use.
+* @param[in]  saltsize : Exact PSS salt size. Zero selects the hash size (RSASSA-PSS-RSAE, RFC 8446 4.2.3).
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERRSA::Sign_PKCS1_V21(XBYTE* input, XDWORD size, HASH* hash, XDWORD saltsize)
+{
+  XBUFFER messagehash;
+  XBUFFER salt;
+  XBUFFER M;
+  XBUFFER H;
+  XBUFFER DB;
+  XBUFFER DBmask;
+  XBUFFER maskedDB;
+  XBUFFER EM;
+  XBUFFER signature;
+  XDWORD  hashsize;
+  XDWORD  modulusbits;
+  XDWORD  encodedbits;
+  XDWORD  encodedsize;
+  XDWORD  datablocksize;
+  XDWORD  unusedbits;
+  int     keysize;
+
+  if(!input || !size || !hash)
+    {
+      return false;
+    }
+
+  keysize  = GetKeySizeInBytes(CIPHERKEYTYPE_RSA_PRIVATE);
+  hashsize = (XDWORD)hash->GetDefaultSize();
+
+  if(!keysize || !hashsize)
+    {
+      return false;
+    }
+
+  if(!saltsize)
+    {
+      saltsize = hashsize;
+    }
+
+  modulusbits = context.N.GetMSB();
+  if(modulusbits < 2)
+    {
+      return false;
+    }
+
+  encodedbits = modulusbits - 1;
+  encodedsize = (encodedbits + 7) / 8;
+
+  if(encodedsize < (hashsize + saltsize + 2))
+    {
+      return false;
+    }
+
+  if(!hash->ResetResult() || !hash->Do(input, size) || !messagehash.Add((*hash->GetResult())))
+    {
+      return false;
+    }
+
+  if(!salt.Resize(saltsize) || !GenerateRandom(salt.Get(), saltsize, NULL))
+    {
+      return false;
+    }
+
+  for(int c=0; c<8; c++)
+    {
+      if(!M.Add((XBYTE)0x00))
+        {
+          return false;
+        }
+    }
+
+  if(!M.Add(messagehash) || !M.Add(salt) ||
+     !hash->ResetResult() || !hash->Do(M) || !H.Add((*hash->GetResult())) || (H.GetSize() != hashsize))
+    {
+      return false;
+    }
+
+  datablocksize = encodedsize - hashsize - 1;
+
+  for(XDWORD c=0; c<(datablocksize - saltsize - 1); c++)
+    {
+      if(!DB.Add((XBYTE)0x00))
+        {
+          return false;
+        }
+    }
+
+  if(!DB.Add((XBYTE)0x01) || !DB.Add(salt) || (DB.GetSize() != datablocksize))
+    {
+      return false;
+    }
+
+  if(!MaskGenerationFunction1(H, datablocksize, hash, DBmask))
+    {
+      return false;
+    }
+
+  if(!maskedDB.Resize(datablocksize))
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<datablocksize; c++)
+    {
+      maskedDB.Set((XBYTE)(DB.GetByte(c) ^ DBmask.GetByte(c)), c);
+    }
+
+  unusedbits = (8 * encodedsize) - encodedbits;
+  if(unusedbits)
+    {
+      maskedDB.Set((XBYTE)(maskedDB.GetByte(0) & (0xFF >> unusedbits)), 0);
+    }
+
+  if(!EM.Add(maskedDB) || !EM.Add(H) || !EM.Add((XBYTE)0xBC) || (EM.GetSize() != encodedsize))
+    {
+      return false;
+    }
+
+  if(!DoRSAPrivateOperation(EM, signature, GenerateRandom, NULL) || (signature.GetSize() != (XDWORD)keysize))
+    {
+      return false;
+    }
+
+  result->Delete();
+  if(!result->Add(signature))
+    {
+      return false;
+    }
+
+  return true;
 }
 
 

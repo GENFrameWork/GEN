@@ -39,15 +39,24 @@
 #include "XFile.h"
 #include "XPath.h"
 #include "XLog.h"
+#include "XFactory.h"
+#include "XBuffer.h"
 
 #include "HashMD5.h"
 
 #include "DIOStreamTCPIP.h"
+#include "DIOStreamTLSConfig.h"
 #include "DIOWebServer_Plugin_PHP.h"
 #include "DIOWebServer_XEvent.h"
 
 #include "APPFlowCFG.h"
 #include "APPFlowLog.h"
+
+#ifdef DIO_STREAMTLS_ACTIVE
+#include "XFileTXT.h"
+#include "XMPInteger.h"
+#include "CipherKeyPrivateRSA.h"
+#endif
 
 
 
@@ -149,7 +158,74 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
         }
     }
 
+  //-------------------------------------------------------------------------------------------------------------------------------
+  // TLS (HTTPS): the WEB server starts by default in TLS mode (see APPFLOWCFG::WebServer_IsTLS(), true by default).
+  // The port, local address and timeout are shared with the plain-HTTP path below -- this is the same single
+  // listener, just wrapped in TLS instead of speaking plain HTTP, not a second independent one.
+
+  #ifdef DIO_STREAMTLS_ACTIVE
+  if(cfg->WebServer_IsTLS())
+    {
+      DIOSTREAMTLSCONFIG* tlsconfig = Ini_BuildTLSConfig(cfg);
+      if(!tlsconfig)
+        {
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server configured for TLS (istls=si) but the private key / certificate could not be loaded from the configured paths."));
+
+          return false;
+        }
+
+      // Ini(DIOSTREAMTLSCONFIG*, ...) below takes ownership of tlsconfig on both success and failure from this point on.
+      return Ini(tlsconfig, cfg->WebServer_GetPort(), cfg->WebServer_GetTimeoutToServerPage(), cfg->WebServer_GetLocalAddress());
+    }
+  #endif
+
   return Ini(cfg->WebServer_GetPort(), doinitialconnectitivitytest, cfg->WebServer_GetTimeoutToServerPage(), cfg->WebServer_GetLocalAddress());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, XDWORD port, int timeoutserverpage, XSTRING* addrlocal)
+* @brief      Initialize a secondary listener (e.g. WebSocket) on its own port, following the same
+*             cfg->WebServer_IsTLS() decision and credentials as the main Ini(APPFLOWCFG*, ...) listener.
+* @ingroup    APPFLOW
+*
+* @param[in]  cfg : Configuration object to use (only WebServer_IsTLS() / WebServer_PathPrivateKey() /
+*             WebServer_PathCertificate() / WebServer_GetLocalAddress() are consulted here -- port and
+*             timeoutserverpage are taken from the parameters below, not from cfg, since this listener runs on
+*             a different port than the one configured in cfg->WebServer_GetPort()).
+* @param[in]  port : Port number to use.
+* @param[in]  timeoutserverpage : Timeoutserverpage value.
+* @param[in]  addrlocal : Addrlocal pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, XDWORD port, int timeoutserverpage, XSTRING* addrlocal)
+{
+  if(!cfg) return false;
+
+  this->cfg = cfg;
+
+  if(!webserver)  return false;
+
+  #ifdef DIO_STREAMTLS_ACTIVE
+  if(cfg->WebServer_IsTLS())
+    {
+      DIOSTREAMTLSCONFIG* tlsconfig = Ini_BuildTLSConfig(cfg);
+      if(!tlsconfig)
+        {
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server (port %d) configured for TLS (istls=si) but the private key / certificate could not be loaded from the configured paths."), (int)port);
+
+          return false;
+        }
+
+      // Ini(DIOSTREAMTLSCONFIG*, ...) below takes ownership of tlsconfig on both success and failure from this point on.
+      return Ini(tlsconfig, port, timeoutserverpage, addrlocal);
+    }
+  #endif
+
+  return Ini(port, true, timeoutserverpage, addrlocal);
 }
 
 
@@ -230,31 +306,129 @@ bool APPFLOWWEBSERVER::Ini(XDWORD port, bool doinitialconnectitivitytest, int ti
   if(!webserver)  return false;
 
   bool status = webserver->Ini(port, doinitialconnectitivitytest, timeoutserverpage, addrlocal);
-  if(status)
-    {
-      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST);
-      SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST                , (XSUBJECT *)webserver);
+  if(status) Ini_RegisterEvents();
 
-      if(isauthenticatedaccess)
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini(DIOSTREAMTLSCONFIG* tlsconfig, XDWORD port, int timeoutserverpage, XSTRING* addrlocal)
+* @brief      Initialize the object as an HTTPS listener
+* @note       See DIOWEBSERVER::Ini(DIOSTREAMTLSCONFIG*, ...) for the ownership and credential requirements on
+*             tlsconfig (ownership transfers to the internal DIOWEBSERVER instance).
+* @ingroup    APPFLOW
+*
+* @param[in]  tlsconfig : TLS server configuration, already carrying local certificate/private key and offered
+*             cipher suites / groups / signature schemes / ALPN protocols.
+* @param[in]  port : Port number to use.
+* @param[in]  timeoutserverpage : Timeoutserverpage value.
+* @param[in]  addrlocal : Addrlocal pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini(DIOSTREAMTLSCONFIG* tlsconfig, XDWORD port, int timeoutserverpage, XSTRING* addrlocal)
+{
+  if(!webserver)  return false;
+
+  bool status = webserver->Ini(tlsconfig, (int)port, timeoutserverpage, addrlocal);
+  if(status) Ini_RegisterEvents();
+
+  return status;
+}
+
+
+#ifdef DIO_STREAMTLS_ACTIVE
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFIG* tlsconfig)
+* @brief      Load the local certificate and private key configured for the WEB server (TLS) into tlsconfig.
+* @note       INTERNAL. Private key file: plain text, 3 lines in hexadecimal (prime1factor, prime2factor,
+*             exponent -- see CIPHERKEYPRIVATERSA::Set). Certificate file: leaf certificate in raw DER encoding.
+* @ingroup    APPFLOW
+*
+* @param[in]  cfg : Configuration object to use.
+* @param[in]  tlsconfig : TLS server configuration to fill in.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFIG* tlsconfig)
+{
+  if(!cfg)       return false;
+  if(!tlsconfig) return false;
+
+  XPATH* pathkey  = cfg->WebServer_PathPrivateKey();
+  XPATH* pathcert = cfg->WebServer_PathCertificate();
+
+  if(!pathkey  || pathkey->IsEmpty())  return false;
+  if(!pathcert || pathcert->IsEmpty()) return false;
+
+  //-------------------------------------------------------------------------------------------------------------
+  // Private key
+
+  bool     status = false;
+  XFILETXT filetxtkey;
+
+  if(filetxtkey.Open((*pathkey), true))
+    {
+      if(filetxtkey.ReadAllFile())
         {
-          RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_DOAUTHENTICATE);
-          RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_CHECKAUTHENTICATE);
+          if(filetxtkey.GetLine(0) && filetxtkey.GetLine(1) && filetxtkey.GetLine(2))
+            {
+              XMPINTEGER prime1factor;
+              XMPINTEGER prime2factor;
+              XMPINTEGER exponent;
+
+              prime1factor.SetFromString(16, filetxtkey.GetLine(0)->Get());
+              prime2factor.SetFromString(16, filetxtkey.GetLine(1)->Get());
+              exponent.SetFromString(16, filetxtkey.GetLine(2)->Get());
+
+              CIPHERKEYPRIVATERSA privatekey;
+              if(privatekey.Set(prime1factor, prime2factor, exponent))
+                {
+                  status = tlsconfig->SetLocalPrivateKey(&privatekey);
+                }
+            }
         }
 
-      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST_ENDPOINT);
-      SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST_ENDPOINT       , (XSUBJECT *)webserver);
+      filetxtkey.Close();
+    }
 
-      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_CONNECTED);
-      SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_CONNECTED    , (XSUBJECT *)webserver);
+  if(!status) return false;
 
-      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_READDATA);
-      SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_READDATA     , (XSUBJECT *)webserver);
+  //-------------------------------------------------------------------------------------------------------------
+  // Certificate (raw DER)
 
-      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_PONG);
-      SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_PONG         , (XSUBJECT *)webserver);
+  status = false;
 
-      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_DISCONNECTED);
-      SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_DISCONNECTED , (XSUBJECT *)webserver);
+  XFILE* filecert = GEN_XFACTORY.Create_File();
+  if(filecert)
+    {
+      if(filecert->Open((*pathcert), true))
+        {
+          XDWORD size = (XDWORD)filecert->GetSize();
+
+          if(size)
+            {
+              XBUFFER certder;
+
+              if(certder.Resize(size))
+                {
+                  if(filecert->Read(certder.Get(), size))
+                    {
+                      status = tlsconfig->LocalCertificate_Add(certder);
+                    }
+                }
+            }
+
+          filecert->Close();
+        }
+
+      GEN_XFACTORY.Delete_File(filecert);
     }
 
   return status;
@@ -262,7 +436,83 @@ bool APPFLOWWEBSERVER::Ini(XDWORD port, bool doinitialconnectitivitytest, int ti
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         DIOSTREAMTLSCONFIG* APPFLOWWEBSERVER::Ini_BuildTLSConfig(APPFLOWCFG* cfg)
+* @brief      Build a DIOSTREAMTLSCONFIG (cipher suite / group / signature scheme / ALPN + credentials) from cfg.
+* @note       INTERNAL. Ownership of the returned object belongs to the caller. Returns NULL if cfg is NULL or
+*             the private key / certificate could not be loaded (see Ini_LoadTLSCredentials()).
+* @ingroup    APPFLOW
+*
+* @param[in]  cfg : Configuration object to use.
+*
+* @return     DIOSTREAMTLSCONFIG* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLSCONFIG* APPFLOWWEBSERVER::Ini_BuildTLSConfig(APPFLOWCFG* cfg)
+{
+  if(!cfg) return NULL;
+
+  DIOSTREAMTLSCONFIG* tlsconfig = GEN_NEW DIOSTREAMTLSCONFIG();
+  if(!tlsconfig) return NULL;
+
+  tlsconfig->SetMode(DIOSTREAMMODE_SERVER);
+  tlsconfig->CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
+  tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1);
+
+  if(!Ini_LoadTLSCredentials(cfg, tlsconfig))
+    {
+      GEN_DELETE tlsconfig;
+      return NULL;
+    }
+
+  return tlsconfig;
+}
+
+#endif
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void APPFLOWWEBSERVER::Ini_RegisterEvents()
+* @brief      Register/subscribe to the DIOWEBSERVER events common to every Ini() entry point.
+* @note       INTERNAL
+* @ingroup    APPFLOW
+*
+* @return     void : Does not return a value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void APPFLOWWEBSERVER::Ini_RegisterEvents()
+{
+  RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST);
+  SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST                , (XSUBJECT *)webserver);
+
+  if(isauthenticatedaccess)
+    {
+      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_DOAUTHENTICATE);
+      RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_CHECKAUTHENTICATE);
+    }
+
+  RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST_ENDPOINT);
+  SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_REQUEST_ENDPOINT       , (XSUBJECT *)webserver);
+
+  RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_CONNECTED);
+  SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_CONNECTED    , (XSUBJECT *)webserver);
+
+  RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_READDATA);
+  SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_READDATA     , (XSUBJECT *)webserver);
+
+  RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_PONG);
+  SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_PONG         , (XSUBJECT *)webserver);
+
+  RegisterEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_DISCONNECTED);
+  SubscribeEvent(DIOWEBSERVER_XEVENT_TYPE_WEBSOCKET_DISCONNECTED , (XSUBJECT *)webserver);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         DIOWEBSERVER* APPFLOWWEBSERVER::GetWebServer()
 * @brief      Get web server
 * @ingroup    APPFLOW
@@ -436,7 +686,7 @@ bool APPFLOWWEBSERVER::SendRequest(DIOWEBSERVER_CONNECTION* connection, DIOWEBHE
 
   GEN_XFACTORY.Delete_File(xfile);
 
-  if(status) 
+  if(status)
     {
       status = SendRequest(connection, headerresult, &xbuffer, timeout, addhead);
     }
@@ -467,7 +717,13 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
   XSTRING* resource = request->GetResource();
   if(!resource) return false;
 
-  if(!cfg) return false;
+  // NOTE: cfg may legitimately be NULL here. APPFLOWWEBSERVER::Ini(DIOSTREAMTLSCONFIG*, XDWORD, int, XSTRING*) --
+  // the entry point used to initialize an HTTPS-only instance (no APPFLOWCFG involved) -- never assigns this->cfg,
+  // unlike APPFLOWWEBSERVER::Ini(APPFLOWCFG*, ...) used for plain HTTP. Bailing out here unconditionally used to
+  // make every HTTPS request silently return with no response at all (the handshake completed, but nothing was
+  // ever written back). cfg is only actually dereferenced below to resolve the resources root path, and that
+  // already has a fallback (GEN_XPATHSMANAGER) for when it is unavailable, so do not early-out on it: let that
+  // fallback run instead of assuming cfg is always present.
 
   DIOWEBSERVER_HEADER         webserverheader;
   DIOURL                      resourceconv;
@@ -595,7 +851,7 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
 
   XPATH xpathfile;
 
-  if(cfg->WebServer_PathResources()->IsEmpty())
+  if(!cfg || cfg->WebServer_PathResources()->IsEmpty())
          GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_WEB, xpathfile);
     else xpathfile = cfg->WebServer_PathResources()->Get();
 
@@ -617,7 +873,9 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
                   DIOWEBHEADER_RESULT    headerresult = DIOWEBHEADER_RESULT_OK;
                   XSTRING                result;
 
-                  status = plugin->PageExtension(xpathfile, request, &querystring, headerresult, result);
+                  bool istls = (server && server->GetDIOStreamCFG())?server->GetDIOStreamCFG()->IsTLS():false;
+
+                  status = plugin->PageExtension(xpathfile, request, &querystring, headerresult, result, istls);
                   if(status)
                     {
                       XSTRING head;
@@ -676,7 +934,7 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
               PostEvent(&xevent);
 
               status = xevent.GetStatus();
-            }          
+            }
         }
 
       //-------------------------------------------------------------------------------------------------------------------------------
@@ -708,7 +966,7 @@ bool APPFLOWWEBSERVER::ResolveRequest(DIOWEBSERVER* server, DIOWEBSERVER_CONNECT
                    else
                     {
                       status = SendRequest(connection, DIOWEBHEADER_RESULT_OK, xevent.GetOutputBuffer(), 5);
-                    } 
+                    }
                 }
                else
                 {

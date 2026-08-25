@@ -44,7 +44,6 @@
 #include "XLog.h"
 #include "XFileTXT.h"
 #include "XSystem.h"
-#include "XTrace.h"
 
 #include "HashSHA1.h"
 
@@ -55,6 +54,7 @@
 #include "DIOStream_XEvent.h"
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOStreamTCPIP.h"
+#include "DIOStreamTLSConfig.h"
 #include "DIOWebServer_Plugin.h"
 #include "DIOWebServer_XEvent.h"
 
@@ -1983,9 +1983,12 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
   if(!diostream) return false;
 
   if(!diostream->IsConnected())                 return false;
+
   if(diostream->GetInXBuffer()->GetSize() < 5)  return false;
 
-  if(!header.Read(diostream, DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT))  return false;
+  bool headerstatus = header.Read(diostream, DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT);
+
+  if(!headerstatus)  return false;
 
   XSTRING string;
 
@@ -2126,7 +2129,10 @@ bool DIOWEBSERVER_CONNECTION::SendRequest()
   if(!webserver) return false;
   if(!diostream) return false;
 
-  if(request.GetMethod() == DIOWEBHEADER_METHOD_UNKNOWN) return false;
+  if(request.GetMethod() == DIOWEBHEADER_METHOD_UNKNOWN)
+    {
+      return false;
+    }
 
   GEN_XLOG.AddEntry(XLOGLEVEL_INFO, DIOWEBSERVER_LOGSECTIONID_VERBOSE, false, __L("[%08X] Server Page INI [%d] %s"), this, nresourcesprocessed, request.GetResource()->Get());
 
@@ -2140,7 +2146,7 @@ bool DIOWEBSERVER_CONNECTION::SendRequest()
   GEN_XLOG.AddEntry(XLOGLEVEL_INFO, DIOWEBSERVER_LOGSECTIONID_VERBOSE, false, __L("[%08X] Server Page END [%d] %s"), this, nresourcesprocessed, request.GetResource()->Get());
 
   nresourcesprocessed++;
- 
+
   return true;
 }
 
@@ -2693,11 +2699,66 @@ DIOWEBSERVER::~DIOWEBSERVER()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
 {
+  DIOSTREAMTCPIPCONFIG* newcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();
+  if(!newcfg) return false;
+
+  // On failure newcfg is left assigned to diostreamcfg (matches the original single-function behaviour): the
+  // caller is expected to destroy this DIOWEBSERVER, whose destructor/End() frees diostreamcfg either way.
+  return Ini_Internal(newcfg, port, doinitialconnectitivitytest, timeoutserverpage, addrlocal);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOWEBSERVER::Ini(DIOSTREAMTLSCONFIG* tlsconfig, int port, int timeoutserverpage, XSTRING* addrlocal)
+* @brief      Initialize the object as an HTTPS listener
+* @note       See the declaration in DIOWebServer.h for the ownership and ordering requirements on tlsconfig.
+* @ingroup    DATAIO
+*
+* @param[in]  tlsconfig : TLS server configuration, already carrying local certificate/private key and offered
+*             cipher suites / groups / signature schemes / ALPN protocols. Ownership transfers to this object.
+* @param[in]  port : Port number to use.
+* @param[in]  timeoutserverpage : Timeoutserverpage value.
+* @param[in]  addrlocal : Addrlocal pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBSERVER::Ini(DIOSTREAMTLSCONFIG* tlsconfig, int port, int timeoutserverpage, XSTRING* addrlocal)
+{
+  if(!tlsconfig || !tlsconfig->HasLocalCredentials()) return false;
+
+  // doinitialconnectitivitytest is forced off here: it assumes Open() on the probe stream succeeds without a
+  // peer (plain TCP bind+listen only), whereas DIOSTREAMTLS<T>'s server Open() accepts AND completes a full
+  // handshake in that single call, which needs a real client -- reusing the plain-TCP self-test would make
+  // this Ini() fail every time at startup, before any client has had a chance to connect.
+  return Ini_Internal(tlsconfig, port, false, timeoutserverpage, addrlocal);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOWEBSERVER::Ini_Internal(DIOSTREAMTCPIPCONFIG* newcfg, int port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
+* @brief      Common Ini() body shared by the plain-TCP and TLS entry points
+* @note       INTERNAL. Takes ownership of newcfg (plain DIOSTREAMTCPIPCONFIG or a DIOSTREAMTLSCONFIG passed as
+*             one) on both success and failure -- the caller must not delete it itself either way.
+* @ingroup    DATAIO
+*
+* @param[in]  newcfg : Stream configuration to adopt as diostreamcfg.
+* @param[in]  port : Port number to use.
+* @param[in]  doinitialconnectitivitytest : Doinitialconnectitivitytest value.
+* @param[in]  timeoutserverpage : Timeoutserverpage value.
+* @param[in]  addrlocal : Addrlocal pointer to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBSERVER::Ini_Internal(DIOSTREAMTCPIPCONFIG* newcfg, int port, bool doinitialconnectitivitytest, int timeoutserverpage, XSTRING* addrlocal)
+{
   isactive        = false;
   doexit          = false;
 
-  diostreamcfg = GEN_NEW DIOSTREAMTCPIPCONFIG();
-  if(!diostreamcfg) return false;
+  diostreamcfg = newcfg;
 
   this->port                      = port;
   this->timeoutserverpage         = timeoutserverpage;
@@ -3411,16 +3472,48 @@ DIOWEBSERVER_CONNECTION* DIOWEBSERVER::Websocket_GetNextConnection()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Write(XCHAR* string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
 {
-  DIOWEBSERVER_CONNECTION* connection;
-  bool                     status = true;
+  // NOTE: this does NOT use Websocket_GetConnection()/Websocket_GetNextConnection() -- their search position is
+  // kept in shared DIOWEBSERVER members (websocket_search_indexconnection, ...), which is not safe when more than
+  // one WebSocket connection can call into this at the same time (each connection processes its own incoming
+  // frames on its own thread): two concurrent calls stomp on the same shared search state, and a connection can be
+  // silently skipped (its event never gets a reply). The whole search + write is done here under a single lock,
+  // using only local state, so concurrent calls from different connections cannot interfere with each other.
 
-  connection = Websocket_GetConnection(protocol, version, resource);
-  while(connection)
+  XSTRING _protocol;
+  XSTRING _resource;
+  XBYTE   filter_mask = 0x00;
+  bool    status      = true;
+
+  _protocol = protocol;
+  _resource = resource;
+
+  if(_protocol.GetSize()) filter_mask |= 0x01;
+  if(version)              filter_mask |= 0x02;
+  if(_resource.GetSize()) filter_mask |= 0x04;
+
+  if(xmutexconnections) xmutexconnections->Lock();
+
+  for(int c = 0; c<(int)connections.GetSize(); c++)
     {
-      if(connection->WebSocket_Write(string, timeout)) status = false;
+      DIOWEBSERVER_CONNECTION* connection = connections.Get(c);
+      if(!connection)                                                     continue;
+      if(connection->GetMode() != DIOWEBSERVER_CONNECTION_MODE_WEBSOCKET) continue;
 
-      connection = Websocket_GetNextConnection();
+      if(filter_mask)
+        {
+          XBYTE filter_status = 0x00;
+
+          if(!connection->GetRequest()->WebSocket_GetProtocol()->Compare(_protocol))  filter_status |= 0x01;
+          if(connection->GetRequest()->WebSocket_GetVersion()  == version)            filter_status |= 0x02;
+          if(!connection->GetRequest()->GetResource()->Compare(_resource))            filter_status |= 0x04;
+
+          if(filter_mask != filter_status) continue;
+        }
+
+      if(connection->WebSocket_Write(string, timeout)) status = false;
     }
+
+  if(xmutexconnections) xmutexconnections->UnLock();
 
   return status;
 }
@@ -3464,16 +3557,45 @@ bool DIOWEBSERVER::Websocket_Write(XSTRING& string, int timeout, XCHAR* protocol
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Write(XBUFFER& data, int timeout, XCHAR* protocol, int version, XCHAR* resource)
 {
-  DIOWEBSERVER_CONNECTION* connection;
-  bool                     status = true;
+  // See DIOWEBSERVER::Websocket_Write(XCHAR*, ...) above: same self-contained, mutex-protected search + write,
+  // instead of the shared-state Websocket_GetConnection()/Websocket_GetNextConnection() pair, which is not safe
+  // to call concurrently from more than one WebSocket connection's thread.
 
-  connection = Websocket_GetConnection(protocol, version, resource);
-  while(connection)
+  XSTRING _protocol;
+  XSTRING _resource;
+  XBYTE   filter_mask = 0x00;
+  bool    status      = true;
+
+  _protocol = protocol;
+  _resource = resource;
+
+  if(_protocol.GetSize()) filter_mask |= 0x01;
+  if(version)              filter_mask |= 0x02;
+  if(_resource.GetSize()) filter_mask |= 0x04;
+
+  if(xmutexconnections) xmutexconnections->Lock();
+
+  for(int c = 0; c<(int)connections.GetSize(); c++)
     {
-      if(connection->WebSocket_Write(data, timeout)) status = false;
+      DIOWEBSERVER_CONNECTION* connection = connections.Get(c);
+      if(!connection)                                                     continue;
+      if(connection->GetMode() != DIOWEBSERVER_CONNECTION_MODE_WEBSOCKET) continue;
 
-      connection = Websocket_GetNextConnection();
+      if(filter_mask)
+        {
+          XBYTE filter_status = 0x00;
+
+          if(!connection->GetRequest()->WebSocket_GetProtocol()->Compare(_protocol))  filter_status |= 0x01;
+          if(connection->GetRequest()->WebSocket_GetVersion()  == version)            filter_status |= 0x02;
+          if(!connection->GetRequest()->GetResource()->Compare(_resource))            filter_status |= 0x04;
+
+          if(filter_mask != filter_status) continue;
+        }
+
+      if(connection->WebSocket_Write(data, timeout)) status = false;
     }
+
+  if(xmutexconnections) xmutexconnections->UnLock();
 
   return status;
 }
@@ -3496,16 +3618,45 @@ bool DIOWEBSERVER::Websocket_Write(XBUFFER& data, int timeout, XCHAR* protocol, 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Websocket_Ping(XCHAR* string, int timeout, XCHAR* protocol, int version, XCHAR* resource)
 {
-  DIOWEBSERVER_CONNECTION* connection;
-  bool                     status = true;
+  // See DIOWEBSERVER::Websocket_Write(XCHAR*, ...) above: same self-contained, mutex-protected search + write,
+  // instead of the shared-state Websocket_GetConnection()/Websocket_GetNextConnection() pair, which is not safe
+  // to call concurrently from more than one WebSocket connection's thread.
 
-  connection = Websocket_GetConnection(protocol, version, resource);
-  while(connection)
+  XSTRING _protocol;
+  XSTRING _resource;
+  XBYTE   filter_mask = 0x00;
+  bool    status      = true;
+
+  _protocol = protocol;
+  _resource = resource;
+
+  if(_protocol.GetSize()) filter_mask |= 0x01;
+  if(version)              filter_mask |= 0x02;
+  if(_resource.GetSize()) filter_mask |= 0x04;
+
+  if(xmutexconnections) xmutexconnections->Lock();
+
+  for(int c = 0; c<(int)connections.GetSize(); c++)
     {
-      if(!connection->WebSocket_WritePingPong(true, string, timeout)) status = false;
+      DIOWEBSERVER_CONNECTION* connection = connections.Get(c);
+      if(!connection)                                                     continue;
+      if(connection->GetMode() != DIOWEBSERVER_CONNECTION_MODE_WEBSOCKET) continue;
 
-      connection = Websocket_GetNextConnection();
+      if(filter_mask)
+        {
+          XBYTE filter_status = 0x00;
+
+          if(!connection->GetRequest()->WebSocket_GetProtocol()->Compare(_protocol))  filter_status |= 0x01;
+          if(connection->GetRequest()->WebSocket_GetVersion()  == version)            filter_status |= 0x02;
+          if(!connection->GetRequest()->GetResource()->Compare(_resource))            filter_status |= 0x04;
+
+          if(filter_mask != filter_status) continue;
+        }
+
+      if(!connection->WebSocket_WritePingPong(true, string, timeout)) status = false;
     }
+
+  if(xmutexconnections) xmutexconnections->UnLock();
 
   return status;
 }
@@ -3762,6 +3913,21 @@ bool DIOWEBSERVER::Connections_CreateNew()
               // XTRACE_PRINTCOLOR(1, __L("Create Connexion: [%08X]"), connection);
 
               connections.Add(connection);
+
+              // For a TLS-wrapped stream, Open() above is synchronous end-to-end: it already waited for the raw
+              // transport to reach DIOSTREAMSTATUS_CONNECTED *and* completed the whole handshake before returning
+              // here. The transport's own DIOSTREAM_XEVENT_TYPE_CONNECTED event is posted the moment the raw
+              // connection reaches that state -- i.e. from *inside* this same Open() call, well before the
+              // SubscribeEvent() call above ever runs -- so for TLS that event is always missed and
+              // DIOWEBSERVER_CONNECTION::Activate() (which starts this connection's own request-processing
+              // thread) never fires: the connection accepts and completes its handshake but then just sits idle
+              // forever, never reading or answering any request. Since Open() already guarantees the connection
+              // is fully up by the time we get here, activate it directly instead of waiting on an event that
+              // already came and went.
+              if(diostreamcfg && diostreamcfg->IsTLS())
+                {
+                  connection->Activate();
+                }
 
               if(xmutexconnections) xmutexconnections->UnLock();
 

@@ -136,6 +136,9 @@ class CIPHERRSA : public CIPHER
     bool                            Cipher_PKCS1_V15                  (XBYTE* buffer, XDWORD size, XBUFFER& output, CIPHERKEYTYPE keytypetouse, CIPHERRSAPKCS1VERSION pkcs1version,  XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom);
     bool                            Uncipher_PKCS1_V15                (XBYTE* buffer, XDWORD size, XBUFFER& output, CIPHERKEYTYPE keytypetouse, CIPHERRSAPKCS1VERSION pkcs1version,  XMPINTEGER_FUNCRANDOM funcrandom, void* paramrandom);
 
+    bool                            Sign_PKCS1_V15                     (XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, HASH* hash);
+    bool                            Sign_PKCS1_V21                     (XBYTE* input, XDWORD size, HASH* hash, XDWORD saltsize);
+
     bool                            Verify_PKCS1_V15                  (XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash);
     bool                            Verify_PKCS1_V21                  (XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash, XDWORD saltsize);
     bool                            MaskGenerationFunction1          (XBUFFER& seed, XDWORD size, HASH* hash, XBUFFER& mask);

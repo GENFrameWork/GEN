@@ -114,20 +114,21 @@ bool DIOWEBSERVER_PLUGIN_CGI::Config(XPATH* pathCGIinterpreter, XCHAR* nameexec)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result)
+* @fn         bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result, bool istls)
 * @brief      Page extension
 * @ingroup    DATAIO
-* 
+*
 * @param[in]  pathfile : Pathfile value.
 * @param[in]  request : Request pointer to use.
 * @param[in]  querystrings : Querystrings pointer to use.
 * @param[in]  headerresult : Output headerresult.
 * @param[in]  result : Output result.
-* 
+* @param[in]  istls : true if the request arrived over a TLS (HTTPS) listener; otherwise false.
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result)
+bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUEST* request, DIOWEBSERVER_QUERYSTRINGS* querystrings, DIOWEBHEADER_RESULT& headerresult, XSTRING& result, bool istls)
 {
   if(!request)      return false;
   if(!querystrings) return false;
@@ -180,6 +181,10 @@ bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUES
   GEN_XSYSTEM.SetEnviromentVariable(__L("REDIRECT_STATUS")   , __L("true"));
   GEN_XSYSTEM.SetEnviromentVariable(__L("CONTENT_TYPE")      , __L("application/x-www-form-urlencoded"));
 
+  // Standard CGI/1.1 convention (also followed by PHP's $_SERVER['HTTPS']): only set, and only to "on", when the
+  // request arrived over TLS -- absent entirely for plain HTTP, never set to "off".
+  if(istls) GEN_XSYSTEM.SetEnviromentVariable(__L("HTTPS"), __L("on"));
+
   if(request->GetMethod() == DIOWEBHEADER_METHOD_GET) GEN_XSYSTEM.SetEnviromentVariable(__L("QUERY_STRING"), allparam.GetSize()?allparam.Get():__L("\"\""));
 
   status = GEN_XPROCESSMANAGER.Application_Execute(pathexec.Get(), NULL, &in, &out, &returnerror);
@@ -196,6 +201,8 @@ bool DIOWEBSERVER_PLUGIN_CGI::PageExtension(XPATH& pathfile, DIOWEBSERVER_REQUES
   GEN_XSYSTEM.DelEnviromentVariable(__L("REDIRECT_STATUS"));
   GEN_XSYSTEM.DelEnviromentVariable(__L("CONTENT_TYPE"));
   GEN_XSYSTEM.DelEnviromentVariable(__L("QUERY_STRING"));
+
+  if(istls) GEN_XSYSTEM.DelEnviromentVariable(__L("HTTPS"));
 
   return status;
 }

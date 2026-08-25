@@ -234,6 +234,11 @@ bool APPFLOWCFG::DoVariableMapping()
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PASSWORD                                  , &webserver_password                                                 , __L("Password for the WEB server")                                        , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_RESOURCES                            , &webserver_path_resources                                           , __L("Path resources for the WEB server")                                  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PHP                                  , &webserver_path_PHP                                                 , __L("Path instalation PHP for the WEB server")                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  #ifdef DIO_STREAMTLS_ACTIVE
+  AddValue(XFILECFG_VALUETYPE_BOOLEAN , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_ISTLS                                     , &webserver_istls                                                    , __L("Activate TLS (HTTPS) for the WEB server")                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                           , &webserver_path_privatekey                                          , __L("Path to the private key file for the WEB server (TLS)")             , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                          , &webserver_path_certificate                                         , __L("Path to the certificate file for the WEB server (TLS)")             , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  #endif
   #endif
 
 
@@ -359,6 +364,9 @@ bool APPFLOWCFG::DoDefault()
 
   #ifdef APPFLOW_CFG_WEBSERVER_ACTIVE
   webserver_timeouttoserverpage                     = 30;
+  #ifdef DIO_STREAMTLS_ACTIVE
+  webserver_istls                                   = true;
+  #endif
   #endif
 
 
@@ -1676,6 +1684,55 @@ XPATH* APPFLOWCFG::WebServer_PathPHP()
   return &webserver_path_PHP;
 }
 
+
+#ifdef DIO_STREAMTLS_ACTIVE
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWCFG::WebServer_IsTLS()
+* @brief      Web server is TLS (HTTPS) active
+* @ingroup    APPFLOW
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWCFG::WebServer_IsTLS()
+{
+  return webserver_istls;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XPATH* APPFLOWCFG::WebServer_PathPrivateKey()
+* @brief      Web server path private key (TLS)
+* @ingroup    APPFLOW
+*
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XPATH* APPFLOWCFG::WebServer_PathPrivateKey()
+{
+  return &webserver_path_privatekey;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XPATH* APPFLOWCFG::WebServer_PathCertificate()
+* @brief      Web server path certificate (TLS)
+* @ingroup    APPFLOW
+*
+* @return     XPATH* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XPATH* APPFLOWCFG::WebServer_PathCertificate()
+{
+  return &webserver_path_certificate;
+}
+
+#endif
+
 #endif
 
 
@@ -1924,6 +1981,11 @@ void APPFLOWCFG::Clean()
   webserver_password.Empty();
   webserver_path_resources.Empty();
   webserver_path_PHP.Empty();
+  #ifdef DIO_STREAMTLS_ACTIVE
+  webserver_istls                                   = false;
+  webserver_path_privatekey.Empty();
+  webserver_path_certificate.Empty();
+  #endif
   #endif
 
   //-----------------------------------------------------------------------------------------------------
