@@ -235,9 +235,13 @@ bool APPFLOWCFG::DoVariableMapping()
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_RESOURCES                            , &webserver_path_resources                                           , __L("Path resources for the WEB server")                                  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PHP                                  , &webserver_path_PHP                                                 , __L("Path instalation PHP for the WEB server")                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   #ifdef DIO_STREAMTLS_ACTIVE
-  AddValue(XFILECFG_VALUETYPE_BOOLEAN , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_ISTLS                                     , &webserver_istls                                                    , __L("Activate TLS (HTTPS) for the WEB server")                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
-  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                           , &webserver_path_privatekey                                          , __L("Path to the private key file for the WEB server (TLS)")             , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
-  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                          , &webserver_path_certificate                                         , __L("Path to the certificate file for the WEB server (TLS)")             , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  // No "istls" value: the WEB server runs TLS (HTTPS) by default and only falls back to plain HTTP when
+  // path_privatekey and/or path_certificate are left empty (see APPFLOWCFG::WebServer_IsTLS()). At least the
+  // file name is required in each (they can never be completely empty and still be used) -- see
+  // APPFLOWWEBSERVER::Ini_ResolveCertificatePath() for how a bare file name is resolved against
+  // XPATHSMANAGERSECTIONTYPE_CERTIFICATES.
+  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                           , &webserver_path_privatekey                                          , __L("Path to the private key file for the WEB server (empty = no TLS)")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                          , &webserver_path_certificate                                         , __L("Path to the certificate file for the WEB server (empty = no TLS)")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   #endif
   #endif
 
@@ -364,9 +368,6 @@ bool APPFLOWCFG::DoDefault()
 
   #ifdef APPFLOW_CFG_WEBSERVER_ACTIVE
   webserver_timeouttoserverpage                     = 30;
-  #ifdef DIO_STREAMTLS_ACTIVE
-  webserver_istls                                   = true;
-  #endif
   #endif
 
 
@@ -1691,6 +1692,8 @@ XPATH* APPFLOWCFG::WebServer_PathPHP()
 *
 * @fn         bool APPFLOWCFG::WebServer_IsTLS()
 * @brief      Web server is TLS (HTTPS) active
+* @note       Derived, not stored: TLS is used by default, and only turned off when path_privatekey and/or
+*             path_certificate are left empty. There is no separate "istls" value to configure.
 * @ingroup    APPFLOW
 *
 * @return     bool : true if the operation is successful; otherwise false.
@@ -1698,7 +1701,7 @@ XPATH* APPFLOWCFG::WebServer_PathPHP()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWCFG::WebServer_IsTLS()
 {
-  return webserver_istls;
+  return !webserver_path_privatekey.IsEmpty() && !webserver_path_certificate.IsEmpty();
 }
 
 
@@ -1982,7 +1985,6 @@ void APPFLOWCFG::Clean()
   webserver_path_resources.Empty();
   webserver_path_PHP.Empty();
   #ifdef DIO_STREAMTLS_ACTIVE
-  webserver_istls                                   = false;
   webserver_path_privatekey.Empty();
   webserver_path_certificate.Empty();
   #endif

@@ -56,6 +56,11 @@
 #include "XFileTXT.h"
 #include "XMPInteger.h"
 #include "CipherKeyPrivateRSA.h"
+#include "CipherKeyECDSA.h"
+#include "CipherECDSA.h"
+#include "CipherCertificateX509.h"
+#include "CipherPEMCodec.h"
+#include "CipherTrustedRootCertificatesX509.h"
 #endif
 
 
@@ -159,9 +164,11 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
     }
 
   //-------------------------------------------------------------------------------------------------------------------------------
-  // TLS (HTTPS): the WEB server starts by default in TLS mode (see APPFLOWCFG::WebServer_IsTLS(), true by default).
-  // The port, local address and timeout are shared with the plain-HTTP path below -- this is the same single
-  // listener, just wrapped in TLS instead of speaking plain HTTP, not a second independent one.
+  // TLS (HTTPS): there is no separate "istls" setting -- the WEB server runs TLS by default and only falls back
+  // to plain HTTP when path_privatekey and/or path_certificate are left empty (see APPFLOWCFG::WebServer_IsTLS(),
+  // which is derived from those two paths, not stored). The port, local address and timeout are shared with the
+  // plain-HTTP path below -- this is the same single listener, just wrapped in TLS instead of speaking plain
+  // HTTP, not a second independent one.
 
   #ifdef DIO_STREAMTLS_ACTIVE
   if(cfg->WebServer_IsTLS())
@@ -169,7 +176,7 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
       DIOSTREAMTLSCONFIG* tlsconfig = Ini_BuildTLSConfig(cfg);
       if(!tlsconfig)
         {
-          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server configured for TLS (istls=si) but the private key / certificate could not be loaded from the configured paths."));
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server: path_privatekey/path_certificate are configured but the credentials could not be loaded from those paths."));
 
           return false;
         }
@@ -215,7 +222,7 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, XDWORD port, int timeoutserverpage, 
       DIOSTREAMTLSCONFIG* tlsconfig = Ini_BuildTLSConfig(cfg);
       if(!tlsconfig)
         {
-          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server (port %d) configured for TLS (istls=si) but the private key / certificate could not be loaded from the configured paths."), (int)port);
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server (port %d): path_privatekey/path_certificate are configured but the credentials could not be loaded from those paths."), (int)port);
 
           return false;
         }
@@ -344,10 +351,381 @@ bool APPFLOWWEBSERVER::Ini(DIOSTREAMTLSCONFIG* tlsconfig, XDWORD port, int timeo
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool APPFLOWWEBSERVER::Ini_ResolveCertificatePath(XPATH* cfgpath, XPATH& resolvedpath)
+* @brief      Resolve a WebServer_PathPrivateKey()/WebServer_PathCertificate() configuration field to the actual
+*             file to open (see the declaration in APPFlowWebServer.h for the full explanation).
+* @note       INTERNAL
+* @ingroup    APPFLOW
+*
+* @param[in]  cfgpath : Configuration field to resolve (as returned by WebServer_PathPrivateKey() / WebServer_PathCertificate()).
+* @param[out] resolvedpath : Output resolved path.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_ResolveCertificatePath(XPATH* cfgpath, XPATH& resolvedpath)
+{
+  if(!cfgpath || cfgpath->IsEmpty()) return false;
+
+  XSTRING namefileext;
+  if(!cfgpath->GetNamefileExt(namefileext) || namefileext.IsEmpty()) return false;
+
+  XSTRING directorypart;
+  if(cfgpath->GetPath(directorypart) && !directorypart.IsEmpty())
+    {
+      // cfgpath already carries a directory part of its own (relative or absolute): used as-is, same
+      // behaviour as before this change.
+      resolvedpath = cfgpath->Get();
+    }
+   else
+    {
+      // cfgpath is just a file name: resolve it against the certificates section of the XPATHSMANAGER.
+      GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_CERTIFICATES, resolvedpath);
+      resolvedpath.Slash_Add();
+      resolvedpath += namefileext;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini_ReadFile(XPATH& path, XBUFFER& filedata)
+* @brief      Read the whole file at path into filedata (raw bytes) -- used to sniff the format
+*             (CIPHERPEMCODEC::IsPEM()) before deciding how to parse a credential file.
+* @note       INTERNAL
+* @ingroup    APPFLOW
+*
+* @param[in]  path : Path of the file to read.
+* @param[out] filedata : Output raw file bytes.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_ReadFile(XPATH& path, XBUFFER& filedata)
+{
+  bool status = false;
+
+  XFILE* file = GEN_XFACTORY.Create_File();
+  if(file)
+    {
+      if(file->Open(path, true))
+        {
+          XDWORD size = (XDWORD)file->GetSize();
+
+          if(size)
+            {
+              if(filedata.Resize(size))
+                {
+                  status = file->Read(filedata.Get(), size);
+                }
+            }
+
+          file->Close();
+        }
+
+      GEN_XFACTORY.Delete_File(file);
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini_ReadLines(XPATH& path, XVECTOR<XSTRING*>& lines)
+* @brief      Read the whole file at path as text lines into lines (newly allocated XSTRING*, caller must
+*             DeleteContents()+DeleteAll() when done) -- used to feed CIPHERPEMCODEC::PrivateKeyBlock_Decode().
+* @note       INTERNAL
+* @ingroup    APPFLOW
+*
+* @param[in]  path : Path of the file to read.
+* @param[out] lines : Output text lines (newly allocated XSTRING*, ownership transferred to the caller).
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_ReadLines(XPATH& path, XVECTOR<XSTRING*>& lines)
+{
+  bool     status = false;
+  XFILETXT filetxt;
+
+  if(filetxt.Open(path, true))
+    {
+      if(filetxt.ReadAllFile())
+        {
+          for(XDWORD c=0; c<filetxt.GetNLines(); c++)
+            {
+              XSTRING* line = GEN_NEW XSTRING();
+              if(line)
+                {
+                  line->Set(filetxt.GetLine(c)->Get());
+                  lines.Add(line);
+                }
+            }
+
+          status = true;
+        }
+
+      filetxt.Close();
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_ECDSA(XPATH* pathkey, CIPHERKEYTYPE privatekeytype, XDWORD coordinatesize, DIOSTREAMTLSCONFIG* tlsconfig)
+* @brief      Load an ECDSA private key file and set it as the local private key of tlsconfig.
+* @note       INTERNAL. Auto-detected format: SEC1 PEM ("-----BEGIN EC PRIVATE KEY-----"), unencrypted PKCS#8 PEM
+*             ("-----BEGIN PRIVATE KEY-----"), or, as a fallback, GEN's own legacy plain text format (1 line in
+*             hexadecimal: the private scalar D).
+* @ingroup    APPFLOW
+*
+* @param[in]  pathkey : Path of the private key file to use.
+* @param[in]  privatekeytype : Expected CIPHERKEYTYPE (one of the ECDSA_SECP{256,384,521}R1_PRIVATE values).
+* @param[in]  coordinatesize : Size, in bytes, of the curve's coordinate (32 / 48 / 66).
+* @param[in]  tlsconfig : TLS server configuration to fill in.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_ECDSA(XPATH* pathkey, CIPHERKEYTYPE privatekeytype, XDWORD coordinatesize, DIOSTREAMTLSCONFIG* tlsconfig)
+{
+  if(!pathkey || pathkey->IsEmpty()) return false;
+  if(!tlsconfig)                     return false;
+  if(!coordinatesize || (coordinatesize > CIPHERECDSA_MAXCOORDINATE_SIZE)) return false;
+
+  bool    status = false;
+  XBUFFER filedata;
+
+  if(Ini_ReadFile((*pathkey), filedata) && CIPHERPEMCODEC::IsPEM(filedata))
+    {
+      // PEM: SEC1 "EC PRIVATE KEY" directly, or unencrypted PKCS#8 "PRIVATE KEY" (unwrapped first).
+      XVECTOR<XSTRING*> lines;
+
+      if(Ini_ReadLines((*pathkey), lines))
+        {
+          XSTRING blockheader;
+          XBUFFER der;
+
+          if(CIPHERPEMCODEC::PrivateKeyBlock_Decode(lines, blockheader, der))
+            {
+              XBUFFER scalar;
+              bool    haskey = false;
+
+              if(blockheader.Find(__L("EC PRIVATE KEY"), true, 0) != -1)
+                {
+                  haskey = CIPHERPEMCODEC::ECPrivateKey_Decode(der, scalar);
+                }
+               else
+                {
+                  bool    isrsa = false;
+                  bool    isec  = false;
+                  XBUFFER innerkey;
+
+                  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(der, isrsa, isec, innerkey) && isec)
+                    {
+                      haskey = CIPHERPEMCODEC::ECPrivateKey_Decode(innerkey, scalar);
+                    }
+                }
+
+              if(haskey && scalar.GetSize() && (scalar.GetSize() <= coordinatesize))
+                {
+                  XBYTE scalarbuffer[CIPHERECDSA_MAXCOORDINATE_SIZE];
+
+                  memset(scalarbuffer, 0, sizeof(scalarbuffer));
+
+                  // The scalar is a big-endian byte string: left-pad with zeros up to coordinatesize (it may
+                  // come out shorter than coordinatesize if it had leading zero bytes of its own).
+                  memcpy(&scalarbuffer[coordinatesize - scalar.GetSize()], scalar.Get(), scalar.GetSize());
+
+                  CIPHERKEYECDSA privatekey;
+
+                  privatekey.SetType(privatekeytype);
+
+                  if(privatekey.Set(scalarbuffer, coordinatesize))
+                    {
+                      status = tlsconfig->SetLocalPrivateKey(&privatekey);
+                    }
+
+                  memset(scalarbuffer, 0, sizeof(scalarbuffer));
+                }
+            }
+
+          lines.DeleteContents();
+          lines.DeleteAll();
+        }
+    }
+
+  if(!status)
+    {
+      // Fallback: GEN's own legacy plain text format (1 line in hexadecimal: the private scalar D).
+      XFILETXT filetxtkey;
+
+      if(filetxtkey.Open((*pathkey), true))
+        {
+          if(filetxtkey.ReadAllFile())
+            {
+              if(filetxtkey.GetLine(0))
+                {
+                  XMPINTEGER scalar;
+                  XBYTE      scalarbuffer[CIPHERECDSA_MAXCOORDINATE_SIZE];
+
+                  scalar.SetFromString(16, filetxtkey.GetLine(0)->Get());
+
+                  memset(scalarbuffer, 0, sizeof(scalarbuffer));
+
+                  if(scalar.ExportToBinary(scalarbuffer, coordinatesize))
+                    {
+                      CIPHERKEYECDSA privatekey;
+
+                      privatekey.SetType(privatekeytype);
+
+                      if(privatekey.Set(scalarbuffer, coordinatesize))
+                        {
+                          status = tlsconfig->SetLocalPrivateKey(&privatekey);
+                        }
+                    }
+
+                  memset(scalarbuffer, 0, sizeof(scalarbuffer));
+                }
+            }
+
+          filetxtkey.Close();
+        }
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_RSA(XPATH* pathkey, DIOSTREAMTLSCONFIG* tlsconfig)
+* @brief      Load an RSA private key file and set it as the local private key of tlsconfig.
+* @note       INTERNAL. Auto-detected format: PKCS#1 PEM ("-----BEGIN RSA PRIVATE KEY-----"), unencrypted PKCS#8
+*             PEM ("-----BEGIN PRIVATE KEY-----"), or, as a fallback, GEN's own legacy plain text format (3 lines
+*             in hexadecimal: prime1factor, prime2factor, exponent -- see CIPHERKEYPRIVATERSA::Set).
+* @ingroup    APPFLOW
+*
+* @param[in]  pathkey : Path of the private key file to use.
+* @param[in]  tlsconfig : TLS server configuration to fill in.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_RSA(XPATH* pathkey, DIOSTREAMTLSCONFIG* tlsconfig)
+{
+  if(!pathkey || pathkey->IsEmpty()) return false;
+  if(!tlsconfig)                     return false;
+
+  bool    status = false;
+  XBUFFER filedata;
+
+  if(Ini_ReadFile((*pathkey), filedata) && CIPHERPEMCODEC::IsPEM(filedata))
+    {
+      // PEM: PKCS#1 "RSA PRIVATE KEY" directly, or unencrypted PKCS#8 "PRIVATE KEY" (unwrapped first).
+      XVECTOR<XSTRING*> lines;
+
+      if(Ini_ReadLines((*pathkey), lines))
+        {
+          XSTRING blockheader;
+          XBUFFER der;
+
+          if(CIPHERPEMCODEC::PrivateKeyBlock_Decode(lines, blockheader, der))
+            {
+              XMPINTEGER prime1factor;
+              XMPINTEGER prime2factor;
+              XMPINTEGER exponent;
+              bool       haskey = false;
+
+              if(blockheader.Find(__L("RSA PRIVATE KEY"), true, 0) != -1)
+                {
+                  haskey = CIPHERPEMCODEC::RSAPrivateKey_Decode(der, prime1factor, prime2factor, exponent);
+                }
+               else
+                {
+                  bool    isrsa = false;
+                  bool    isec  = false;
+                  XBUFFER innerkey;
+
+                  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(der, isrsa, isec, innerkey) && isrsa)
+                    {
+                      haskey = CIPHERPEMCODEC::RSAPrivateKey_Decode(innerkey, prime1factor, prime2factor, exponent);
+                    }
+                }
+
+              if(haskey)
+                {
+                  CIPHERKEYPRIVATERSA privatekey;
+
+                  if(privatekey.Set(prime1factor, prime2factor, exponent))
+                    {
+                      status = tlsconfig->SetLocalPrivateKey(&privatekey);
+                    }
+                }
+            }
+
+          lines.DeleteContents();
+          lines.DeleteAll();
+        }
+    }
+
+  if(!status)
+    {
+      // Fallback: GEN's own legacy plain text format (3 lines in hexadecimal: prime1factor, prime2factor, exponent).
+      XFILETXT filetxtkey;
+
+      if(filetxtkey.Open((*pathkey), true))
+        {
+          if(filetxtkey.ReadAllFile())
+            {
+              if(filetxtkey.GetLine(0) && filetxtkey.GetLine(1) && filetxtkey.GetLine(2))
+                {
+                  XMPINTEGER prime1factor;
+                  XMPINTEGER prime2factor;
+                  XMPINTEGER exponent;
+
+                  prime1factor.SetFromString(16, filetxtkey.GetLine(0)->Get());
+                  prime2factor.SetFromString(16, filetxtkey.GetLine(1)->Get());
+                  exponent.SetFromString(16, filetxtkey.GetLine(2)->Get());
+
+                  CIPHERKEYPRIVATERSA privatekey;
+                  if(privatekey.Set(prime1factor, prime2factor, exponent))
+                    {
+                      status = tlsconfig->SetLocalPrivateKey(&privatekey);
+                    }
+                }
+            }
+
+          filetxtkey.Close();
+        }
+    }
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFIG* tlsconfig)
-* @brief      Load the local certificate and private key configured for the WEB server (TLS) into tlsconfig.
-* @note       INTERNAL. Private key file: plain text, 3 lines in hexadecimal (prime1factor, prime2factor,
-*             exponent -- see CIPHERKEYPRIVATERSA::Set). Certificate file: leaf certificate in raw DER encoding.
+* @brief      Load the local certificate (chain) and private key configured for the WEB server (TLS) into tlsconfig.
+* @note       INTERNAL. Certificate file: auto-detected. A PEM file ("-----BEGIN " at the start) may carry a single
+*             leaf certificate or a full chain concatenated leaf-first (e.g. Let's Encrypt's fullchain.pem) --
+*             every CERTIFICATE block found is added, in file order, via LocalCertificate_Add() (leaf first, as
+*             required). Anything else is used as-is as a single leaf certificate in raw DER encoding, exactly as
+*             before this change. The leaf certificate is decoded so its public key type (RSA or one of the
+*             supported ECDSA curves) drives the private key file format expected -- see
+*             Ini_LoadTLSPrivateKey_RSA() / Ini_LoadTLSPrivateKey_ECDSA() for the formats each accepts. Only RSA
+*             and the P-256/P-384/P-521 ECDSA curves (the ones CIPHERECDSA actually implements) are supported for
+*             server-side signing. Unlike WebServer_PathResources(), WebServer_PathPrivateKey() /
+*             WebServer_PathCertificate() can never be completely empty (at least the file name is required) --
+*             see Ini_ResolveCertificatePath() for how each is resolved to an actual file (a bare file name
+*             resolves against XPATHSMANAGERSECTIONTYPE_CERTIFICATES; a field carrying its own directory is used
+*             as-is).
 * @ingroup    APPFLOW
 *
 * @param[in]  cfg : Configuration object to use.
@@ -361,75 +739,133 @@ bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFI
   if(!cfg)       return false;
   if(!tlsconfig) return false;
 
-  XPATH* pathkey  = cfg->WebServer_PathPrivateKey();
-  XPATH* pathcert = cfg->WebServer_PathCertificate();
+  XPATH pathkey;
+  XPATH pathcert;
 
-  if(!pathkey  || pathkey->IsEmpty())  return false;
-  if(!pathcert || pathcert->IsEmpty()) return false;
+  if(!Ini_ResolveCertificatePath(cfg->WebServer_PathPrivateKey() , pathkey))  return false;
+  if(!Ini_ResolveCertificatePath(cfg->WebServer_PathCertificate(), pathcert)) return false;
 
   //-------------------------------------------------------------------------------------------------------------
-  // Private key
+  // Certificate(s): read the file's raw bytes first to sniff PEM vs raw DER. The leaf (first certificate found,
+  // in both cases) is decoded so its public key type can drive the private key file format below; the complete
+  // list (leaf [+ intermediates, PEM chain only]) is only handed to tlsconfig once the private key is accepted.
 
-  bool     status = false;
-  XFILETXT filetxtkey;
-
-  if(filetxtkey.Open((*pathkey), true))
-    {
-      if(filetxtkey.ReadAllFile())
-        {
-          if(filetxtkey.GetLine(0) && filetxtkey.GetLine(1) && filetxtkey.GetLine(2))
-            {
-              XMPINTEGER prime1factor;
-              XMPINTEGER prime2factor;
-              XMPINTEGER exponent;
-
-              prime1factor.SetFromString(16, filetxtkey.GetLine(0)->Get());
-              prime2factor.SetFromString(16, filetxtkey.GetLine(1)->Get());
-              exponent.SetFromString(16, filetxtkey.GetLine(2)->Get());
-
-              CIPHERKEYPRIVATERSA privatekey;
-              if(privatekey.Set(prime1factor, prime2factor, exponent))
-                {
-                  status = tlsconfig->SetLocalPrivateKey(&privatekey);
-                }
-            }
-        }
-
-      filetxtkey.Close();
-    }
+  XBUFFER            certder;
+  XVECTOR<XBUFFER*>  certchain;
+  bool               status = Ini_ReadFile(pathcert, certder);
 
   if(!status) return false;
 
+  if(CIPHERPEMCODEC::IsPEM(certder))
+    {
+      CIPHERTRUSTEDROOTCERTIFICATESX509 pemcert;
+
+      status = false;
+
+      if(pemcert.ReadFromFile(&pathcert) && pemcert.Certificates_Decode())
+        {
+          XVECTOR<XBUFFER*>* certificates = pemcert.Certificates_GetAll();
+
+          if(certificates && !certificates->IsEmpty())
+            {
+              for(XDWORD c=0; c<certificates->GetSize(); c++)
+                {
+                  XBUFFER* certificatecopy = GEN_NEW XBUFFER();
+                  if(certificatecopy)
+                    {
+                      (*certificatecopy) = (*certificates->Get(c));
+                      certchain.Add(certificatecopy);
+                    }
+                }
+
+              status = !certchain.IsEmpty();
+            }
+        }
+
+      if(!status)
+        {
+          certchain.DeleteContents();
+          certchain.DeleteAll();
+          return false;
+        }
+
+      certder = (*certchain.Get(0));
+    }
+   else
+    {
+      // Not PEM: used as-is as a single leaf certificate in raw DER encoding, exactly as before this change.
+      XBUFFER* leafcopy = GEN_NEW XBUFFER();
+      if(!leafcopy) return false;
+
+      (*leafcopy) = certder;
+      certchain.Add(leafcopy);
+    }
+
+  CIPHERCERTIFICATEX509 certificate;
+  if(!certificate.Decode(certder))
+    {
+      certchain.DeleteContents();
+      certchain.DeleteAll();
+      return false;
+    }
+
+  CIPHERKEY* publickey = certificate.GetPublicCipherKey();
+  if(!publickey)
+    {
+      certchain.DeleteContents();
+      certchain.DeleteAll();
+      return false;
+    }
+
   //-------------------------------------------------------------------------------------------------------------
-  // Certificate (raw DER)
+  // Private key: format depends on the leaf certificate's public key type.
 
   status = false;
 
-  XFILE* filecert = GEN_XFACTORY.Create_File();
-  if(filecert)
+  switch(publickey->GetType())
     {
-      if(filecert->Open((*pathcert), true))
-        {
-          XDWORD size = (XDWORD)filecert->GetSize();
+      case CIPHERKEYTYPE_RSA_PUBLIC :
+        status = Ini_LoadTLSPrivateKey_RSA(&pathkey, tlsconfig);
+        break;
 
-          if(size)
-            {
-              XBUFFER certder;
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC :
+        status = Ini_LoadTLSPrivateKey_ECDSA(&pathkey, CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE, CIPHERECDSA_P256_COORDINATE_SIZE, tlsconfig);
+        break;
 
-              if(certder.Resize(size))
-                {
-                  if(filecert->Read(certder.Get(), size))
-                    {
-                      status = tlsconfig->LocalCertificate_Add(certder);
-                    }
-                }
-            }
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC :
+        status = Ini_LoadTLSPrivateKey_ECDSA(&pathkey, CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE, CIPHERECDSA_P384_COORDINATE_SIZE, tlsconfig);
+        break;
 
-          filecert->Close();
-        }
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC :
+        status = Ini_LoadTLSPrivateKey_ECDSA(&pathkey, CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE, CIPHERECDSA_P521_COORDINATE_SIZE, tlsconfig);
+        break;
 
-      GEN_XFACTORY.Delete_File(filecert);
+                                    default :
+        // Certificate public key type not supported for server-side signing (e.g. an EC curve CIPHERECDSA
+        // does not implement the math for).
+        status = false;
     }
+
+  if(!status)
+    {
+      certchain.DeleteContents();
+      certchain.DeleteAll();
+      return false;
+    }
+
+  //-------------------------------------------------------------------------------------------------------------
+  // Certificate(s) are only registered once the matching private key has been accepted, leaf first (required
+  // order, see DIOSTREAMTLSCONFIG::LocalCertificate_Add()).
+
+  status = true;
+
+  for(XDWORD c=0; c<certchain.GetSize(); c++)
+    {
+      if(!tlsconfig->LocalCertificate_Add(*certchain.Get(c))) status = false;
+    }
+
+  certchain.DeleteContents();
+  certchain.DeleteAll();
 
   return status;
 }
@@ -458,7 +894,15 @@ DIOSTREAMTLSCONFIG* APPFLOWWEBSERVER::Ini_BuildTLSConfig(APPFLOWCFG* cfg)
   tlsconfig->SetMode(DIOSTREAMMODE_SERVER);
   tlsconfig->CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
   tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
+
+  // All signature schemes actually implemented are offered unconditionally: SignatureScheme_Select() (see
+  // DIOStreamTLS13HandshakeServer.cpp) already filters them through DIOSTREAMTLSSIGNATURE::IsSupported(),
+  // which safely narrows the offer down to whichever one matches the local certificate's actual key type.
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
+  tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384);
+  tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512);
+
   tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1);
 
   if(!Ini_LoadTLSCredentials(cfg, tlsconfig))

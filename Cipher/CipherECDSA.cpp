@@ -402,6 +402,61 @@ static HASHTYPE CIPHERECDSA_RequiredHashType(CIPHERTYPE curvetype)
 }
 
 
+static CIPHERKEYTYPE CIPHERECDSA_ExpectedPrivateKeyType(CIPHERTYPE curvetype)
+{
+  switch(curvetype)
+    {
+      case CIPHERTYPE_ECDSA_SECP256R1 : return CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE;
+      case CIPHERTYPE_ECDSA_SECP384R1 : return CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE;
+      case CIPHERTYPE_ECDSA_SECP521R1 : return CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE;
+                                default : break;
+    }
+
+  return CIPHERKEYTYPE_UNKNOWN;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* Encode one XMPINTEGER as a minimal, non-negative DER INTEGER (tag 0x02): strip leading zero bytes down to a
+* single byte, then prepend one 0x00 pad byte if the remaining high bit is set (otherwise the value would decode
+* as negative). maxsize bounds the fixed-size export used to obtain the big-endian bytes (coordinatesize is
+* always enough: both R and S are reduced mod order, and order fits in coordinatesize bytes for every curve here).
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool CIPHERECDSA_DERIntegerEncode(XMPINTEGER& value, XDWORD maxsize, XBUFFER& output)
+{
+  XBYTE  buffer[CIPHERECDSA_MAXCOORDINATE_SIZE];
+  XDWORD index = 0;
+  XDWORD length;
+  bool   padzero;
+
+  if(!maxsize || (maxsize > sizeof(buffer)) || !value.ExportToBinary(buffer, maxsize)) return false;
+
+  while((index < (maxsize - 1)) && !buffer[index]) index++;
+
+  length  = maxsize - index;
+  padzero = (buffer[index] & 0x80)?true:false;
+
+  XDWORD fulllength = length + (padzero?1:0);
+
+  if(!output.Add((XBYTE)0x02)) return false;
+
+  if(fulllength < 0x80)
+    {
+      if(!output.Add((XBYTE)fulllength)) return false;
+    }
+   else
+    {
+      // Not reached by any curve supported today (worst case is P-521: 66 bytes + 1 pad byte = 67 < 0x80), kept
+      // for correctness if a larger curve is ever added.
+      if(!output.Add((XBYTE)0x81) || !output.Add((XBYTE)fulllength)) return false;
+    }
+
+  if(padzero && !output.Add((XBYTE)0x00)) return false;
+
+  return output.Add(&buffer[index], length);
+}
+
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
@@ -457,9 +512,51 @@ bool CIPHERECDSA::SetKey(CIPHERKEY* key, bool integritycheck)
   CIPHERKEYECDSA* ECDSAkey;
   XBUFFER*        keydata;
 
+  if(!key || !Parameters_Set()) return false;
+
+  // Private key branch: does NOT reset havepublickey/publickeyX/publickeyY -- SetKey() is meant to be called once
+  // per key part (mirrors CIPHERRSA::SetKey(), where SetKey(RSA_PUBLIC) then SetKey(RSA_PRIVATE) accumulate into
+  // the same context instead of each call starting over), so DIOSTREAMTLSSIGNATURE::Sign() can do
+  // ECDSA.SetKey(publickey, true) && ECDSA.SetKey(privatekey, true) the same way it already does for CIPHERRSA.
+  if(key->GetType() == CIPHERECDSA_ExpectedPrivateKeyType(GetType()))
+    {
+      haveprivatekey = false;
+
+      ECDSAkey = (CIPHERKEYECDSA*)key;
+      keydata  = ECDSAkey->Get();
+
+      if(!keydata || (keydata->GetSize() != coordinatesize) ||
+         !privatekeyD.ImportFromBinary(keydata->Get(), coordinatesize) ||
+         (privatekeyD.CompareSignedValues(0) <= 0) || (privatekeyD.CompareSignedValues(order) >= 0))
+        {
+          return false;
+        }
+
+      if(integritycheck && havepublickey)
+        {
+          // Cross-check that the private scalar actually matches the public point already set (privatekey*G ==
+          // publickey), the same purpose as CIPHERRSA::SetKey()'s P*Q == N check for a mismatched RSA key pair.
+          CIPHERECDSA_POINT point;
+          XMPINTEGER        affineX;
+          XMPINTEGER        affineY;
+
+          if(!CIPHERECDSA_PointMultiply(point, privatekeyD, generatorX, generatorY, prime, curvebits) ||
+             !CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) ||
+             affineX.CompareSignedValues(publickeyX) || affineY.CompareSignedValues(publickeyY))
+            {
+              return false;
+            }
+        }
+
+      haveprivatekey = true;
+
+      return true;
+    }
+
+  // Public key branch (unchanged behaviour).
   havepublickey = false;
 
-  if(!key || (key->GetType() != CIPHERECDSA_ExpectedKeyType(GetType())) || !Parameters_Set()) return false;
+  if(key->GetType() != CIPHERECDSA_ExpectedKeyType(GetType())) return false;
 
   ECDSAkey = (CIPHERKEYECDSA*)key;
   keydata  = ECDSAkey->Get();
@@ -562,6 +659,128 @@ bool CIPHERECDSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* ha
 bool CIPHERECDSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash)
 {
   return Verify(input.Get(), input.GetSize(), signature, hash);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERECDSA::Sign(XBYTE* input, XDWORD size, HASH* hash)
+* @brief      Sign with the private key set via SetKey(), for the curve given to the constructor
+* @note       Standard ECDSA: e = leftmost curvebits of HASH(input); pick a random per-signature nonce k in
+*             [1, order-1]; R = (k*G).x mod order; S = k^-1 * (e + R*privatekeyD) mod order; retry with a fresh k
+*             if either R or S comes out 0 (the point at infinity / an unusable signature -- astronomically rare,
+*             the retry is just standard defensive practice). Result (a DER ECDSA-Sig-Value) is left in
+*             GetResult(), same convention as CIPHERRSA::Sign().
+* @ingroup    CIPHER
+*
+* @param[in]  input : Data to sign.
+* @param[in]  size : Data size.
+* @param[in]  hash : Hash algorithm to use; must match the curve's RFC 8446 4.2.3 pairing (SHA-256 for P-256,
+*                    SHA-384 for P-384, SHA-512 for P-521).
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERECDSA::Sign(XBYTE* input, XDWORD size, HASH* hash)
+{
+  XRAND*            xrand;
+  XBYTE             kbuffer[CIPHERECDSA_MAXCOORDINATE_SIZE];
+  XMPINTEGER        digest;
+  XMPINTEGER        k;
+  XMPINTEGER        inverseK;
+  XMPINTEGER        R;
+  XMPINTEGER        S;
+  XMPINTEGER        rd;
+  XMPINTEGER        sum;
+  CIPHERECDSA_POINT point;
+  XMPINTEGER        affineX;
+  XMPINTEGER        affineY;
+  bool              status = false;
+
+  if(!result) return false;
+
+  result->Delete();
+
+  if(!haveprivatekey || !input || !size || !hash ||
+     (hash->GetType() != CIPHERECDSA_RequiredHashType(GetType())) ||
+     !hash->ResetResult() || !hash->Do(input, size) || !hash->GetResult() ||
+     !hash->GetResult()->GetSize() || (hash->GetResult()->GetSize() > coordinatesize) ||
+     !digest.ImportFromBinary(hash->GetResult()->Get(), hash->GetResult()->GetSize()))
+    {
+      return false;
+    }
+
+  xrand = GEN_XFACTORY.CreateRand();
+  if(!xrand) return false;
+
+  if(xrand->Ini())
+    {
+      // See KeyPair_Create() for why the top bits need masking before the rejection-sampling check (P-521:
+      // coordinatesize is 66 bytes = 528 bits for a 521-bit curve).
+      XBYTE topbytemask = (XBYTE)(0xFF >> (((XDWORD)coordinatesize * 8) - curvebits));
+
+      for(int attempt=0; attempt<128; attempt++)
+        {
+          memset(kbuffer, 0, sizeof(kbuffer));
+
+          if(!xrand->Generate(kbuffer, coordinatesize)) break;
+
+          kbuffer[0] &= topbytemask;
+
+          if(!k.ImportFromBinary(kbuffer, coordinatesize)) break;
+
+          if((k.CompareSignedValues(0) <= 0) || (k.CompareSignedValues(order) >= 0)) continue;
+
+          if(!CIPHERECDSA_PointMultiply(point, k, generatorX, generatorY, prime, curvebits) ||
+             !CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) ||
+             !R.Module(&R, &affineX, &order))
+            {
+              continue;
+            }
+
+          if(!R.CompareSignedValues(0)) continue;      // R == 0: unusable, retry with a fresh k
+
+          if(!inverseK.ModularInverse(&k, &order)) continue;
+
+          if(!CIPHERECDSA_ModularMultiplication(rd, R, privatekeyD, order) ||
+             !CIPHERECDSA_ModularAddition(sum, digest, rd, order) ||
+             !CIPHERECDSA_ModularMultiplication(S, inverseK, sum, order))
+            {
+              continue;
+            }
+
+          if(!S.CompareSignedValues(0)) continue;      // S == 0: unusable, retry with a fresh k
+
+          status = true;
+          break;
+        }
+    }
+
+  GEN_XFACTORY.DeleteRand(xrand);
+
+  memset(kbuffer, 0, sizeof(kbuffer));
+
+  if(!status) return false;
+
+  return Signature_Encode(R, S, (*result));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERECDSA::Sign(XBUFFER& input, HASH* hash)
+* @brief      Sign with the private key set via SetKey(), for the curve given to the constructor
+* @ingroup    CIPHER
+*
+* @param[in]  input : Data to sign.
+* @param[in]  hash : Hash algorithm to use.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERECDSA::Sign(XBUFFER& input, HASH* hash)
+{
+  return Sign(input.Get(), input.GetSize(), hash);
 }
 
 
@@ -847,6 +1066,53 @@ bool CIPHERECDSA::Signature_Decode(XBUFFER& signature, XMPINTEGER& R, XMPINTEGER
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool CIPHERECDSA::Signature_Encode(XMPINTEGER& R, XMPINTEGER& S, XBUFFER& signature)
+* @brief      Encode R and S as a DER ECDSA-Sig-Value (SEQUENCE of two INTEGERs)
+* @note       INTERNAL
+* @ingroup    CIPHER
+*
+* @param[in]  R : First ECDSA integer.
+* @param[in]  S : Second ECDSA integer.
+* @param[out] signature : DER signature.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERECDSA::Signature_Encode(XMPINTEGER& R, XMPINTEGER& S, XBUFFER& signature)
+{
+  XBUFFER content;
+  XDWORD  length;
+
+  signature.Delete();
+
+  if(!CIPHERECDSA_DERIntegerEncode(R, coordinatesize, content) ||
+     !CIPHERECDSA_DERIntegerEncode(S, coordinatesize, content))
+    {
+      return false;
+    }
+
+  length = content.GetSize();
+
+  if(!signature.Add((XBYTE)0x30)) return false;
+
+  if(length < 0x80)
+    {
+      if(!signature.Add((XBYTE)length)) return false;
+    }
+   else
+    {
+      // Reached only for the larger curves: two P-521 INTEGERs (up to 67 bytes each incl. tag+len+pad) can add
+      // up to ~138 bytes of content, past the 0x80 short-form limit. A single length-of-length byte is always
+      // enough (well under 256).
+      if(!signature.Add((XBYTE)0x81) || !signature.Add((XBYTE)length)) return false;
+    }
+
+  return signature.Add(content);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void CIPHERECDSA::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -856,6 +1122,7 @@ bool CIPHERECDSA::Signature_Decode(XBUFFER& signature, XMPINTEGER& R, XMPINTEGER
 void CIPHERECDSA::Clean()
 {
   havepublickey  = false;
+  haveprivatekey = false;
   coordinatesize = 0;
   publickeysize  = 0;
   curvebits      = 0;

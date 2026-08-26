@@ -74,6 +74,14 @@ class CIPHERECDSA : public CIPHER
     bool                            Verify                            (XBYTE* input, XDWORD size, XBUFFER& signature, HASH* hash);
     bool                            Verify                            (XBUFFER& input, XBUFFER& signature, HASH* hash);
 
+    // Server-side counterpart of Verify(). Needs a private key set via SetKey(CIPHERKEYTYPE_ECDSA_SECP*_PRIVATE)
+    // beforehand -- if a public key was also set (e.g. from the local certificate, mirroring how CIPHERRSA is
+    // used in DIOSTREAMTLSSIGNATURE), SetKey() cross-checks that the private scalar actually matches it
+    // (privatekey*G == publickey) the same way CIPHERRSA::SetKey() cross-checks P*Q == N. Result is left in
+    // GetResult() (a DER ECDSA-Sig-Value), same convention as CIPHERRSA::Sign().
+    bool                            Sign                              (XBYTE* input, XDWORD size, HASH* hash);
+    bool                            Sign                              (XBUFFER& input, HASH* hash);
+
     bool                            KeyPair_Create                    (XBUFFER& privatekey, XBUFFER& publickey);
     bool                            SharedSecret_Create               (XBUFFER& privatekey, XBUFFER& publickey, XBUFFER& sharedsecret);
     bool                            PublicKey_Check                   (XBUFFER& publickey);
@@ -83,6 +91,7 @@ class CIPHERECDSA : public CIPHER
     bool                            Parameters_Set                    ();
     bool                            PublicKey_Check                   ();
     bool                            Signature_Decode                  (XBUFFER& signature, XMPINTEGER& R, XMPINTEGER& S);
+    bool                            Signature_Encode                  (XMPINTEGER& R, XMPINTEGER& S, XBUFFER& signature);
 
     void                            Clean                             ();
 
@@ -95,6 +104,8 @@ class CIPHERECDSA : public CIPHER
     XMPINTEGER                      publickeyX;
     XMPINTEGER                      publickeyY;
     bool                            havepublickey;
+    XMPINTEGER                      privatekeyD;
+    bool                            haveprivatekey;
 
 
     XDWORD                          coordinatesize;

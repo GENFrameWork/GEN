@@ -187,6 +187,60 @@ bool DIOSTREAMTLSSIGNATURE::Verify(XWORD signaturescheme, CIPHERKEY* key, XBUFFE
 bool DIOSTREAMTLSSIGNATURE::Sign(XWORD signaturescheme, CIPHERKEY* privatekey, CIPHERKEY* publickey, XBUFFER& content, XBUFFER& signature)
 {
   if(!privatekey || !publickey || content.IsEmpty()) return false;
+
+  if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256)
+    {
+      if((privatekey->GetType() != CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE) ||
+         (publickey->GetType()  != CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC))
+        {
+          return false;
+        }
+
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP256R1);
+      HASHSHA2    hash(HASHSHA2TYPE_256);
+
+      // Order matters, same reason as CIPHERRSA below: SetKey(ECDSA_PRIVATE, integritycheck=true) cross-checks
+      // privatekey*G == publickey, so the public point has to be loaded into the shared state first.
+      if(!ECDSA.SetKey(publickey, true) || !ECDSA.SetKey(privatekey, true) || !ECDSA.Sign(content, &hash)) return false;
+
+      signature.Delete();
+      return signature.Add((*ECDSA.GetResult()));
+    }
+
+  if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384)
+    {
+      if((privatekey->GetType() != CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE) ||
+         (publickey->GetType()  != CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC))
+        {
+          return false;
+        }
+
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP384R1);
+      HASHSHA2    hash(HASHSHA2TYPE_384);
+
+      if(!ECDSA.SetKey(publickey, true) || !ECDSA.SetKey(privatekey, true) || !ECDSA.Sign(content, &hash)) return false;
+
+      signature.Delete();
+      return signature.Add((*ECDSA.GetResult()));
+    }
+
+  if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512)
+    {
+      if((privatekey->GetType() != CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE) ||
+         (publickey->GetType()  != CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC))
+        {
+          return false;
+        }
+
+      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP521R1);
+      HASHSHA2    hash(HASHSHA2TYPE_512);
+
+      if(!ECDSA.SetKey(publickey, true) || !ECDSA.SetKey(privatekey, true) || !ECDSA.Sign(content, &hash)) return false;
+
+      signature.Delete();
+      return signature.Add((*ECDSA.GetResult()));
+    }
+
   if((privatekey->GetType() != CIPHERKEYTYPE_RSA_PRIVATE) || (publickey->GetType() != CIPHERKEYTYPE_RSA_PUBLIC)) return false;
 
   switch(signaturescheme)

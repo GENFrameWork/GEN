@@ -40,6 +40,7 @@
 
 #include "CipherCertificateX509.h"
 #include "CipherKeyPrivateRSA.h"
+#include "CipherKeyECDSA.h"
 #include "CipherTrustedRootCertificatesX509.h"
 
 #include "DIOFactory.h"
@@ -640,7 +641,12 @@ CIPHERKEY* DIOSTREAMTLSCONFIG::GetLocalPrivateKey()
 *
 * @fn         bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
 * @brief      Copy the private key of the local end
-* @note       The initial server profile accepts the RSA private key already implemented by GEN.
+* @note       Accepts either an RSA private key or an ECDSA private key for one of the curves CIPHERECDSA
+*             implements (P-256/P-384/P-521 -- see CIPHERECDSA::Parameters_Set()); any other key type is
+*             rejected. The matching CertificateSignatureScheme_Add()/SignatureScheme_Add() calls (see
+*             DoDefault() below) still need to be picked to match whichever key ends up here -- callers building
+*             a server profile from a loaded key, such as APPFLOWWEBSERVER::Ini_BuildTLSConfig(), should offer
+*             only the scheme(s) that pair with this key's type.
 * @ingroup    DATAIO
 *
 * @param[in]  privatekey : Private key to copy.
@@ -650,24 +656,54 @@ CIPHERKEY* DIOSTREAMTLSCONFIG::GetLocalPrivateKey()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
 {
-  CIPHERKEYPRIVATERSA* copy;
+  if(!privatekey || !privatekey->GetSizeInBytes()) return false;
 
-  if(!privatekey || (privatekey->GetType() != CIPHERKEYTYPE_RSA_PRIVATE) || !privatekey->GetSizeInBytes()) return false;
-
-  copy = GEN_NEW CIPHERKEYPRIVATERSA();
-  if(!copy) return false;
-
-  if(!copy->CopyFrom((CIPHERKEYPRIVATERSA*)privatekey))
+  switch(privatekey->GetType())
     {
-      GEN_DELETE copy;
-      return false;
+      case CIPHERKEYTYPE_RSA_PRIVATE :
+        {
+          CIPHERKEYPRIVATERSA* copy;
+
+          copy = GEN_NEW CIPHERKEYPRIVATERSA();
+          if(!copy) return false;
+
+          if(!copy->CopyFrom((CIPHERKEYPRIVATERSA*)privatekey))
+            {
+              GEN_DELETE copy;
+              return false;
+            }
+
+          if(localprivatekey) GEN_DELETE localprivatekey;
+
+          localprivatekey = copy;
+        }
+        return true;
+
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE :
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE :
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE :
+        {
+          CIPHERKEYECDSA* copy;
+
+          copy = GEN_NEW CIPHERKEYECDSA();
+          if(!copy) return false;
+
+          if(!copy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
+            {
+              GEN_DELETE copy;
+              return false;
+            }
+
+          if(localprivatekey) GEN_DELETE localprivatekey;
+
+          localprivatekey = copy;
+        }
+        return true;
+
+                                        default : break;
     }
 
-  if(localprivatekey) GEN_DELETE localprivatekey;
-
-  localprivatekey = copy;
-
-  return true;
+  return false;
 }
 
 
