@@ -62,25 +62,19 @@ class DIOSTREAMTLSCONFIG;
 class DIOSTREAMTLS13HANDSHAKESERVER
 {
   public:
-                                            DIOSTREAMTLS13HANDSHAKESERVER                      ();
-    virtual                                ~DIOSTREAMTLS13HANDSHAKESERVER                      ();
+                                            DIOSTREAMTLS13HANDSHAKESERVER                    ();
+    virtual                                ~DIOSTREAMTLS13HANDSHAKESERVER                    ();
 
     bool                                    Ini                                              (DIOSTREAMTLS13SESSION* session, DIOSTREAMTLSCONFIG* config);
     void                                    End                                              ();
     bool                                    IsIni                                            ();
 
-    DIOSTREAMTLS13HANDSHAKESERVER_STATE       GetState                                         ();
+    DIOSTREAMTLS13HANDSHAKESERVER_STATE     GetState                                         ();
     bool                                    IsHandshakeCompleted                             ();
 
     bool                                    IsApplicationProtocolNegotiated                  ();
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
 
-    // Consumes the exact ClientHello (with handshake header) the transport received, selects cipher suite /
-    // group / signature scheme / ALPN protocol from what config offers and the client requested, and produces
-    // the complete server flight (ServerHello, cleartext, followed by EncryptedExtensions, Certificate,
-    // CertificateVerify and Finished, all protected under the freshly activated handshake traffic keys) ready
-    // for transport. Local application write keys are active on return: the caller may start writing 0.5-RTT
-    // application data before the client Finished arrives, exactly like every other TLS 1.3 server.
     bool                                    ClientHello_Process                              (XBUFFER& clienthello, XBUFFER& records);
 
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
@@ -100,9 +94,9 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     bool                                    SetError                                         ();
     void                                    Clean                                            ();
 
-    DIOSTREAMTLS13SESSION*                    session;
+    DIOSTREAMTLS13SESSION*                  session;
     DIOSTREAMTLSCONFIG*                     config;
-    DIOSTREAMTLS13HANDSHAKESERVER_STATE       state;
+    DIOSTREAMTLS13HANDSHAKESERVER_STATE     state;
     bool                                    isini;
 
     bool                                    applicationprotocolnegotiated;

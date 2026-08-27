@@ -137,8 +137,6 @@ class DIOWEBCLIENT : public XSUBJECT
     int                                       Get_Port                          ();
     void                                      Set_Port                          (int port);
 
-
-
     DIOURL*                                   GetProxyURL                       ();
     int                                       GetProxyPort                      ();
     void                                      SetProxyPort                      (int port);
@@ -165,8 +163,6 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      IsActiveContentEncoding           ();
     void                                      ContentEncoding_Activate          (bool activate);
 
-
-
     bool                                      IsActiveCompressRequestBody       ();
     void                                      CompressRequestBody_Activate      (bool activate);
 
@@ -187,11 +183,7 @@ class DIOWEBCLIENT : public XSUBJECT
    
   private:
 
-    // connectionfailed (out, optional): when non-NULL, set to true if this call returned false because the
-    // connection itself could not be established (TLS unavailable/misconfigured, TCP connect failure, TLS
-    // handshake failure) -- as opposed to failing after a request was actually sent over a working connection.
-    // Used only by the internal scheme-less-URL dispatch below; left NULL (and therefore untouched) by every
-    // ordinary caller.
+ 
     bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool* connectionfailed = NULL);
     bool                                      Header_Read                       (int timeout);
     bool                                      Body_Read                         (DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent);

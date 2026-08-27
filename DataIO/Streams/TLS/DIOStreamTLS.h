@@ -119,10 +119,6 @@ class DIOSTREAMTLS : public T
                                                   return false;
                                                 }
 
-                                              // Server side (v1 scope: TLS 1.3 only, see DIOStreamTLS13HandshakeServer.h) is a
-                                              // separate, simpler path -- one flight right after ClientHello, no version fallback,
-                                              // no dual TLS 1.2/1.3 negotiation -- so it is dispatched here before any of the
-                                              // client-only version/servername logic below, which does not apply to it.
                                               if(config->IsServer())
                                                 {
                                                   if(Handshake_ServerAttempt(config))
@@ -152,16 +148,6 @@ class DIOSTREAMTLS : public T
                                                   return false;
                                                 }
 
-                                              
-                                              
-                                              
-                                              
-                                              
-                                              
-                                              
-                                              
-                                              
-                                              
                                               dualversionmode = (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
                                               starttls12       = (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
 
@@ -171,10 +157,6 @@ class DIOSTREAMTLS : public T
                                                   return true;
                                                 }
 
-                                              
-                                              
-                                              
-                                              
                                               bool tls13rejected = !starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
                                               bool tls12rejected = starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
 
@@ -191,13 +173,6 @@ class DIOSTREAMTLS : public T
                                                   tls12rejected = (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
                                                 }
 
-                                              
-                                              
-                                              
-                                              
-                                              
-                                              
-                                              
                                               if(tls13rejected && (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_3))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_NONE;
@@ -242,11 +217,7 @@ class DIOSTREAMTLS : public T
                                               algorithmrejected = false;
 
                                               if(usingtls12)
-                                                {
-                                                  
-                                                  
-                                                  
-                                                  
+                                                {                               
                                                   if(!handshakeclient12.Ini(config->IsAllowUnauthenticatedServer(), dualversionmode) ||
                                                      (widenschemes && !handshakeclient12.CipherSuitesAndSchemes_WidenECDSA()) ||
                                                      (!config->IsAllowUnauthenticatedServer() &&
@@ -274,11 +245,6 @@ class DIOSTREAMTLS : public T
                                                   handshakeclient.AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
                                                 }
 
-                                              
-                                              
-                                              
-                                              
-                                              
                                               T::ResetOutXBuffer();
                                               T::ResetInXBuffer();
 
@@ -317,8 +283,6 @@ class DIOSTREAMTLS : public T
 
                                               return true;
                                             }
-
-
 
 
     bool                                    Handshake_ServerAttempt                 (DIOSTREAMTLSCONFIG* config)
@@ -1161,38 +1125,16 @@ class DIOSTREAMTLS : public T
     bool                                    isclosed;
     bool                                    isclosing;
 
-    
-    
-    
-    
-    
-    
-    
     bool                                    versionrejected;
 
-    
-    
-    
-    
-    
-    
-    
-    
     bool                                    algorithmrejected;
 
-    DIOSTREAMTLS13SESSION                     session;
-    DIOSTREAMTLS13HANDSHAKECLIENT             handshakeclient;
-    DIOSTREAMTLS13HANDSHAKESERVER             handshakeserver;
-    bool                                     isserverrole;
+    DIOSTREAMTLS13SESSION                   session;
+    DIOSTREAMTLS13HANDSHAKECLIENT           handshakeclient;
+    DIOSTREAMTLS13HANDSHAKESERVER           handshakeserver;
+    bool                                    isserverrole;
 
-    
-    
-    
-    
-    
-    
-    
-    DIOSTREAMTLS12HANDSHAKECLIENT            handshakeclient12;
+    DIOSTREAMTLS12HANDSHAKECLIENT           handshakeclient12;
     bool                                    usingtls12;
     bool                                    dualversionmode;
 };

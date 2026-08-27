@@ -155,8 +155,7 @@
 #define APPFLOW_CFG_WEBSERVER_PATH_PHP                                                __L("path_php")
 
 #ifdef DIO_STREAMTLS_ACTIVE
-// There is no separate "istls" setting to manage: the WEB server runs TLS (HTTPS) by default, and only falls
-// back to plain HTTP when path_privatekey and/or path_certificate are left empty -- see WebServer_IsTLS().
+
 #define APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                                         __L("path_privatekey")
 #define APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                                        __L("path_certificate")
 #endif
@@ -356,8 +355,8 @@ class APPFLOWCFG
     XPATH*               WebServer_PathResources                                  ();
     XPATH*               WebServer_PathPHP                                        ();
     #ifdef DIO_STREAMTLS_ACTIVE
-    // Derived, not stored: true only when both WebServer_PathPrivateKey() and WebServer_PathCertificate() are
-    // non-empty. There is no "istls" setting of its own to configure.
+    
+    
     bool                 WebServer_IsTLS                                          ();
     XPATH*               WebServer_PathPrivateKey                                 ();
     XPATH*               WebServer_PathCertificate                                ();

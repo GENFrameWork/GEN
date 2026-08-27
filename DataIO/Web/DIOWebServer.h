@@ -400,15 +400,7 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
                                                 DIOWEBSERVER                            ();
     virtual                                    ~DIOWEBSERVER                            ();
 
-    bool                                        Ini                                     (int port = DIOWEBSERVER_DEFAULTPORT, bool doinitialconnectitivitytest = true, int timeoutserverpage = DIOWEBSERVER_DEFAULTTIMEOUTSERVERPAGE, XSTRING* addrlocal = NULL);
-
-    // HTTPS variant: tlsconfig must already carry its local certificate chain and private key (see
-    // DIOSTREAMTLSCONFIG::LocalCertificate_Add / SetLocalPrivateKey) plus the cipher suites / groups /
-    // signature schemes / ALPN protocols this listener offers (see DIOSTREAMTLS13HANDSHAKESERVER). Ownership of
-    // tlsconfig is transferred to the DIOWEBSERVER instance, exactly like the plain-TCP config the other Ini()
-    // overload allocates for itself -- it is deleted by End() and must not be reused or deleted by the caller.
-    // Meant to run as a second, independent DIOWEBSERVER instance in parallel with a plain HTTP one, not as a
-    // replacement for it (see MINIWEBSERVER for the intended usage pattern).
+    bool                                        Ini                                     (int port = DIOWEBSERVER_DEFAULTPORT, bool doinitialconnectitivitytest = true, int timeoutserverpage = DIOWEBSERVER_DEFAULTTIMEOUTSERVERPAGE, XSTRING* addrlocal = NULL); 
     bool                                        Ini                                     (DIOSTREAMTLSCONFIG* tlsconfig, int port, int timeoutserverpage = DIOWEBSERVER_DEFAULTTIMEOUTSERVERPAGE, XSTRING* addrlocal = NULL);
 
     int                                         GetPort                                 ();
