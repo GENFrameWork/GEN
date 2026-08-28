@@ -2798,13 +2798,40 @@ bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutse
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::Ini(DIOSTREAMTLSCONFIG* tlsconfig, int port, int timeoutserverpage, XSTRING* addrlocal)
 {
-  if(!tlsconfig || !tlsconfig->HasLocalCredentials()) return false;
+  if(!tlsconfig) return false;
+
+  if(!tlsconfig->LocalCredentials_Validate())
+    {
+      GEN_DELETE tlsconfig;
+      return false;
+    }
+
+  if((tlsconfig->GetClientAuthenticationMode() != DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE) &&
+     (!tlsconfig->GetClientTrustedRoots() || tlsconfig->GetClientTrustedRoots()->IsEmpty()))
+    {
+      GEN_DELETE tlsconfig;
+      return false;
+    }
 
   // The current GEN TLS server implementation is TLS 1.3 only.  Validate this here, before the listener is
   // started, so a TLS 1.2 server configuration fails at Ini() instead of being silently ignored until a client
   // reaches DIOSTREAMTLS::Open().
   if((tlsconfig->GetMinVersion() != DIOSTREAMTLS_MSG_VERSION_TLS_1_3) ||
-     (tlsconfig->GetMaxVersion() != DIOSTREAMTLS_MSG_VERSION_TLS_1_3)) return false;
+     (tlsconfig->GetMaxVersion() != DIOSTREAMTLS_MSG_VERSION_TLS_1_3))
+    {
+      GEN_DELETE tlsconfig;
+      return false;
+    }
+
+  // Session tickets are sealed with a server-wide key stored in the shared TLS configuration. Initialize it before
+  // connection workers can start so all handshakes use the same immutable key and no two workers can race while
+  // creating it. Resumption remains disabled automatically when client authentication (mTLS) is enabled.
+  if(tlsconfig->IsSessionResumptionActive() &&
+     !tlsconfig->SessionResumption_ServerInitialize())
+    {
+      GEN_DELETE tlsconfig;
+      return false;
+    }
 
   // doinitialconnectitivitytest is forced off here: it assumes Open() on the probe stream succeeds without a
   // peer (plain TCP bind+listen only), whereas DIOSTREAMTLS<T>'s server Open() accepts AND completes a full

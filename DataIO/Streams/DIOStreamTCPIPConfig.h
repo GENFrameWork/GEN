@@ -35,6 +35,7 @@
 
 #include "DIOStreamConfig.h"
 #include "DIOStreamConfigString.h"
+#include "DIOStreamTCPIPProxy.h"
 
 
 
@@ -58,6 +59,10 @@ class DIOSTREAMTCPIPCONFIG  : public DIOSTREAMCONFIG, public DIOSTREAMCONFIGSTRI
     int                     GetRemotePort               ();
     bool                    SetRemotePort               (int port);
 
+    DIOSTREAMTCPIPPROXYCFG* GetProxyCFG                 ();
+    DIOURL*                 GetConnectionURL            ();
+    int                     GetConnectionPort           ();
+
     int                     GetCounterMultiServer       ();
     void                    SetCounterMultiServer       (int countermultiserver);
 
@@ -69,6 +74,7 @@ class DIOSTREAMTCPIPCONFIG  : public DIOSTREAMCONFIG, public DIOSTREAMCONFIGSTRI
   protected:
 
     DIOIP                   localIP;
+    DIOSTREAMTCPIPPROXYCFG  proxycfg;
 
     XMUTEX*                 xmutexmultiserver;
     int                     countermultiserver;

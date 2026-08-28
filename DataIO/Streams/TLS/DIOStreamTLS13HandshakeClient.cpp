@@ -168,6 +168,7 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::End()
   offeredsupportedgroups.DeleteAll();
   offeredkeysharegroups.DeleteAll();
   offeredsignatureschemes.DeleteAll();
+  requestedclientsignatureschemes.DeleteAll();
   offeredapplicationprotocols.DeleteAll();
 
   firstclienthello.Delete();
@@ -178,6 +179,7 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::End()
   expectedservername.Empty();
 
   session                      = NULL;
+  config                       = NULL;
   state                        = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE;
   isini                        = false;
   allowunauthenticatedserver   = false;
@@ -189,6 +191,11 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::End()
   hasvalidationdatetime       = false;
   applicationprotocolnegotiated = false;
   applicationprotocol           = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  resumptionoffered             = false;
+  resumptionaccepted            = false;
+  if(!resumptionpsk.IsEmpty()) resumptionpsk.FillBuffer(0);
+  resumptionpsk.Delete();
+  resumptionciphersuite         = 0;
   currentkeysharegroup          = 0;
   helloretryrequestprocessed    = false;
   aiafetchactive                = true;
@@ -323,6 +330,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
     {
       return false;
     }
+
+  this->config = config;
 
   ciphersuites.DeleteAll();
   supportedgroups.DeleteAll();
@@ -474,6 +483,12 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::IsApplicationProtocolNegotiated()
 DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13HANDSHAKECLIENT::GetApplicationProtocol()
 {
   return applicationprotocol;
+}
+
+
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsSessionResumed()
+{
+  return resumptionaccepted;
 }
 
 
@@ -857,7 +872,111 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
       return SetError();
     }
 
-  if(!message.SetToBuffer(clienthello, false) ||
+  resumptionoffered  = false;
+  resumptionaccepted = false;
+  if(!resumptionpsk.IsEmpty()) resumptionpsk.FillBuffer(0);
+  resumptionpsk.Delete();
+  resumptionciphersuite = 0;
+
+  DIOSTREAMTLS13SESSIONTICKET* cachedticket = (config && config->IsSessionResumptionActive() && servername && servername[0])?
+                                                 config->SessionTicket_Get(servername):NULL;
+
+  if(cachedticket)
+    {
+      bool ciphersuiteoffered = false;
+      bool alpncompatible     = (cachedticket->GetApplicationProtocol() == DIOSTREAMTLS_ALPN_TYPE_UNKNOWN)?applicationprotocols.IsEmpty():false;
+
+      for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
+        {
+          if(ciphersuites.Get(c) == cachedticket->GetCipherSuite()) { ciphersuiteoffered = true; break; }
+        }
+
+      if(cachedticket->GetApplicationProtocol() != DIOSTREAMTLS_ALPN_TYPE_UNKNOWN)
+        {
+          for(XDWORD c=0; c<applicationprotocols.GetSize(); c++)
+            {
+              if(applicationprotocols.Get(c) == cachedticket->GetApplicationProtocol()) { alpncompatible = true; break; }
+            }
+        }
+
+      if(ciphersuiteoffered && alpncompatible)
+        {
+          DIOSTREAMTLS13KEYSCHEDULE binderkeyschedule;
+          DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES* pskmodes = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES();
+          DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY*         presharedkey = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY();
+          DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY           identity;
+          XBUFFER                                           placeholder;
+
+          if(!pskmodes || !presharedkey ||
+             !binderkeyschedule.Ini(cachedticket->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
+             !binderkeyschedule.EarlySecret_Calculate(cachedticket->GetPSK()) ||
+             !placeholder.Resize(binderkeyschedule.GetHashSize()))
+            {
+              if(pskmodes) GEN_DELETE pskmodes;
+              if(presharedkey) GEN_DELETE presharedkey;
+              return SetError();
+            }
+
+          memset(placeholder.Get(), 0, placeholder.GetSize());
+          if(!identity.GetIdentity()->Add((*cachedticket->GetTicket())))
+            {
+              GEN_DELETE pskmodes;
+              GEN_DELETE presharedkey;
+              return SetError();
+            }
+          identity.SetObfuscatedTicketAge(cachedticket->GetObfuscatedAge());
+
+          if(!pskmodes->List_Add(DIOSTREAMTLS_MSG_PSKKEYEXCHANGEMODE_PSK_DHE))
+            {
+              GEN_DELETE pskmodes;
+              GEN_DELETE presharedkey;
+              return SetError();
+            }
+
+          if(!body->Extensions_Add(pskmodes))
+            {
+              GEN_DELETE pskmodes;
+              GEN_DELETE presharedkey;
+              return SetError();
+            }
+
+          if(!presharedkey->Identities_Add(&identity) || !presharedkey->Binders_Add(&placeholder))
+            {
+              GEN_DELETE presharedkey;
+              return SetError();
+            }
+
+          if(!body->Extensions_Add(presharedkey))
+            {
+              GEN_DELETE presharedkey;
+              return SetError();
+            }
+
+          clienthello.Delete();
+          if(!message.SetToBuffer(clienthello, false)) return SetError();
+
+          XDWORD removesize = sizeof(XWORD) + sizeof(XBYTE) + binderkeyschedule.GetHashSize();
+          if(clienthello.GetSize() <= removesize) return SetError();
+
+          XBUFFER truncatedclienthello;
+          XBUFFER binder;
+          if(!truncatedclienthello.Add(clienthello.Get(), clienthello.GetSize() - removesize) ||
+             !binderkeyschedule.Binder_Calculate(truncatedclienthello, binder)) return SetError();
+
+          XBUFFER* storedplaceholder = presharedkey->Binders_GetAll()->Get(0);
+          if(!storedplaceholder) return SetError();
+          storedplaceholder->Delete();
+          if(!storedplaceholder->Add(binder)) return SetError();
+
+          clienthello.Delete();
+          if(!message.SetToBuffer(clienthello, false) || !resumptionpsk.Add((*cachedticket->GetPSK()))) return SetError();
+
+          resumptionoffered     = true;
+          resumptionciphersuite = cachedticket->GetCipherSuite();
+        }
+    }
+
+  if((clienthello.IsEmpty() && !message.SetToBuffer(clienthello, false)) ||
      !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, clienthello, records) ||
      !Start(clienthello))
     {
@@ -1170,8 +1289,72 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretr
   messagehash.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH);
 
   if(!messagehash.GetBody()->Add(firsthash) ||
-     !messagehash.SetToBuffer(messagehashbuffer, false) ||
-     !clienthellomessage.SetToBuffer(clienthello, false) ||
+     !messagehash.SetToBuffer(messagehashbuffer, false))
+    {
+      clienthello.Delete();
+      records.Delete();
+      return SetError();
+    }
+
+  // A ClientHello2 that keeps a resumption PSK must recompute its obfuscated ticket age and binder over
+  // message_hash(ClientHello1) + HelloRetryRequest + Truncate(ClientHello2). GEN's own server deliberately falls
+  // back to a full certificate handshake after HRR, but doing this here keeps the client interoperable with servers
+  // that legitimately select the PSK on the second ClientHello.
+  if(resumptionoffered)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY* presharedkey = NULL;
+
+      for(XDWORD c=0; c<clienthellomessage.GetBody()->Extensions_GetAll()->GetSize(); c++)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION* extension = clienthellomessage.GetBody()->Extensions_GetAll()->Get(c);
+          if(extension && (extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY))
+            {
+              if(c != (clienthellomessage.GetBody()->Extensions_GetAll()->GetSize()-1)) return SetError();
+              presharedkey = (DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY*)extension;
+              break;
+            }
+        }
+
+      if(!presharedkey || (presharedkey->Identities_GetAll()->GetSize() != 1) ||
+         (presharedkey->Binders_GetAll()->GetSize() != 1) || resumptionpsk.IsEmpty()) return SetError();
+
+      DIOSTREAMTLS13SESSIONTICKET* cachedticket = (config && !expectedservername.IsEmpty())?
+                                                     config->SessionTicket_Get(expectedservername.Get()):NULL;
+      DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity = presharedkey->Identities_GetAll()->Get(0);
+      XBUFFER*                                storedbinder = presharedkey->Binders_GetAll()->Get(0);
+      DIOSTREAMTLS13KEYSCHEDULE               binderkeyschedule;
+      XBUFFER                                 placeholder;
+      XBUFFER                                 encodedclienthello;
+      XBUFFER                                 truncatedclienthello;
+      XBUFFER                                 bindertranscript;
+      XBUFFER                                 binder;
+
+      if(!identity || !storedbinder ||
+         !binderkeyschedule.Ini(resumptionciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
+         !binderkeyschedule.EarlySecret_Calculate(&resumptionpsk) ||
+         !placeholder.Resize(binderkeyschedule.GetHashSize())) return SetError();
+
+      if(cachedticket && !cachedticket->GetTicket()->Compare((*identity->GetIdentity())))
+        {
+          identity->SetObfuscatedTicketAge(cachedticket->GetObfuscatedAge());
+        }
+
+      memset(placeholder.Get(), 0, placeholder.GetSize());
+      storedbinder->Delete();
+      if(!storedbinder->Add(placeholder) || !clienthellomessage.SetToBuffer(encodedclienthello, false)) return SetError();
+
+      XDWORD removesize = sizeof(XWORD) + presharedkey->Binders_GetLength();
+      if(encodedclienthello.GetSize() <= removesize ||
+         !truncatedclienthello.Add(encodedclienthello.Get(), encodedclienthello.GetSize()-removesize) ||
+         !bindertranscript.Add(messagehashbuffer) || !bindertranscript.Add(helloretryrequest) ||
+         !bindertranscript.Add(truncatedclienthello) ||
+         !binderkeyschedule.Binder_Calculate(bindertranscript, binder)) return SetError();
+
+      storedbinder->Delete();
+      if(!storedbinder->Add(binder)) return SetError();
+    }
+
+  if(!clienthellomessage.SetToBuffer(clienthello, false) ||
      !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, clienthello, records))
     {
       clienthello.Delete();
@@ -1288,6 +1471,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
   XBUFFER                                                          workbuffer;
   bool                                                             versionvalid  = false;
   bool                                                             keysharevalid = false;
+  bool                                                             pskselected   = false;
 
   if(!isini || !session ||
      (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_SERVERHELLO))
@@ -1342,6 +1526,20 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
                                                                   }
                                                                   break;
 
+          case DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY      : { DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER* selectedpsk;
+
+                                                                    selectedpsk = (DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY_SERVER*)extension;
+                                                                    if(!resumptionoffered ||
+                                                                       (selectedpsk->GetSelectedIdentity() != 0) ||
+                                                                       (message.GetBody()->GetCipherSuite() != resumptionciphersuite))
+                                                                      {
+                                                                        return SetError();
+                                                                      }
+
+                                                                    pskselected = true;
+                                                                  }
+                                                                  break;
+
                                                         default : return SetError();
         }
     }
@@ -1352,9 +1550,16 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
      !CipherSuite_IsOffered(message.GetBody()->GetCipherSuite()) ||
      !session->CipherSuite_Select(message.GetBody()->GetCipherSuite()) ||
      !session->Transcript_Add(serverhello) ||
-     !session->HandshakeKeys_Activate(sharedsecret))
+     !session->HandshakeKeys_Activate(sharedsecret, pskselected?&resumptionpsk:NULL))
     {
       return SetError();
+    }
+
+  resumptionaccepted = pskselected;
+  if(pskselected)
+    {
+      serverauthenticated = true;
+      authenticationerror = DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
     }
 
   state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_ENCRYPTEDEXTENSIONS;
@@ -1366,8 +1571,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinished, XBUFFER& records)
-* @brief      Create the client Finished and activate local application traffic keys
-* @note       Client authentication is not implemented; a preceding CertificateRequest is refused here.
+* @brief      Create the optional client-authentication flight and the client Finished
 * @ingroup    DATAIO
 *
 * @param[out] clientfinished : Complete encoded client Finished.
@@ -1382,14 +1586,117 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
   XBUFFER                                                       transcripthash;
   XBUFFER                                                       verifydata;
 
-  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED) ||
-     certificaterequested || (&clientfinished == &records))
+  if(!isini || !session || !config || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_SERVERFINISHED_VERIFIED) ||
+     (&clientfinished == &records))
     {
       return SetError();
     }
 
   clientfinished.Delete();
   records.Delete();
+
+  if(certificaterequested)
+    {
+      DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE> certificatemessage;
+      XBUFFER                                                          certificatebuffer;
+      XBUFFER                                                          flightrecords;
+      XVECTOR<XBUFFER*>*                                               localcertificatechain = config->GetLocalCertificateChain();
+      CIPHERKEY*                                                       localprivatekey       = config->GetLocalPrivateKey();
+      bool                                                             havecredentials       = localcertificatechain && !localcertificatechain->IsEmpty() && localprivatekey;
+
+      certificatemessage.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE);
+      if(!certificatemessage.GetBody()->SetRequestContext(NULL, 0)) return SetError();
+
+      if(havecredentials)
+        {
+          for(XDWORD c=0; c<localcertificatechain->GetSize(); c++)
+            {
+              XBUFFER* dercertificate = localcertificatechain->Get(c);
+              DIOSTREAMTLS_MSG_CERTIFICATEENTRY* entry;
+
+              if(!dercertificate) return SetError();
+              entry = GEN_NEW DIOSTREAMTLS_MSG_CERTIFICATEENTRY();
+              if(!entry) return SetError();
+
+              if(!entry->GetCertificateData()->Add((*dercertificate)) || !certificatemessage.GetBody()->CertificateList_Add(entry))
+                {
+                  GEN_DELETE entry;
+                  return SetError();
+                }
+            }
+        }
+
+      if(!certificatemessage.SetToBuffer(certificatebuffer, false) ||
+         !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, certificatebuffer, flightrecords) ||
+         !session->Transcript_Add(certificatebuffer) || !records.Add(flightrecords))
+        {
+          records.Delete();
+          return SetError();
+        }
+
+      if(havecredentials)
+        {
+          CIPHERCERTIFICATEX509 leafcertificate;
+          XWORD                 signaturescheme = 0;
+
+          if(!leafcertificate.Decode((*localcertificatechain->Get(0))) || !leafcertificate.GetPublicCipherKey())
+            {
+              records.Delete();
+              return SetError();
+            }
+
+          for(XDWORD c=0; c<requestedclientsignatureschemes.GetSize(); c++)
+            {
+              XWORD candidate = requestedclientsignatureschemes.Get(c);
+              if(DIOSTREAMTLSSIGNATURE::IsSupported(candidate, leafcertificate.GetPublicCipherKey()))
+                {
+                  signaturescheme = candidate;
+                  break;
+                }
+            }
+
+          if(!signaturescheme)
+            {
+              records.Delete();
+              return SetError();
+            }
+
+          static XBYTE context[] = { 'T', 'L', 'S', ' ', '1', '.', '3', ',', ' ',
+                                     'c', 'l', 'i', 'e', 'n', 't', ' ',
+                                     'C', 'e', 'r', 't', 'i', 'f', 'i', 'c', 'a', 't', 'e', 'V', 'e', 'r', 'i', 'f', 'y' };
+
+          DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEVERIFY> certificateverify;
+          XBUFFER                                                                certificateverifybuffer;
+          XBUFFER                                                                certificateverifyhash;
+          XBUFFER                                                                signedcontent;
+          XBUFFER                                                                signature;
+
+          if(!session->TranscriptHash(certificateverifyhash)) return SetError();
+
+          for(int c=0; c<64; c++) if(!signedcontent.Add((XBYTE)0x20)) return SetError();
+
+          if(!signedcontent.Add(context, sizeof(context)) || !signedcontent.Add((XBYTE)0x00) ||
+             !signedcontent.Add(certificateverifyhash) ||
+             !DIOSTREAMTLSSIGNATURE::Sign(signaturescheme, localprivatekey, leafcertificate.GetPublicCipherKey(), signedcontent, signature))
+            {
+              records.Delete();
+              return SetError();
+            }
+
+          certificateverify.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY);
+          certificateverify.GetBody()->SetAlgorithm(signaturescheme);
+          flightrecords.Delete();
+
+          if(!certificateverify.GetBody()->GetSignature()->Add(signature) ||
+             !certificateverify.SetToBuffer(certificateverifybuffer, false) ||
+             !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, certificateverifybuffer, flightrecords) ||
+             !session->Transcript_Add(certificateverifybuffer) || !records.Add(flightrecords))
+            {
+              records.Delete();
+              return SetError();
+            }
+        }
+    }
 
   if(!session->TranscriptHash(transcripthash) ||
      !session->GetKeySchedule()->CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL,
@@ -1400,10 +1707,11 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
 
   finished.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED);
 
+  XBUFFER finishedrecords;
   if(!finished.GetBody()->GetVerifyData()->Add(verifydata) ||
      !finished.SetToBuffer(clientfinished, false) ||
-     !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, clientfinished, records) ||
-     !session->Transcript_Add(clientfinished) ||
+     !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, clientfinished, finishedrecords) ||
+     !session->Transcript_Add(clientfinished) || !records.Add(finishedrecords) ||
      !session->ApplicationKeys_Activate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL))
     {
       clientfinished.Delete();
@@ -1411,9 +1719,55 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
       return SetError();
     }
 
+  XBUFFER resumptiontranscripthash;
+  if(!session->TranscriptHash(resumptiontranscripthash) ||
+     !session->GetKeySchedule()->ResumptionSecret_Calculate(resumptiontranscripthash))
+    {
+      return SetError();
+    }
+
   state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED;
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::NewSessionTicket_Process(XBUFFER& message)
+* @brief      Process and cache a TLS 1.3 NewSessionTicket for a future PSK-DHE resumption
+* @ingroup    DATAIO
+*
+* @param[in]  message : Complete NewSessionTicket handshake message.
+*
+* @return     bool : true if the ticket was accepted or deliberately ignored; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKECLIENT::NewSessionTicket_Process(XBUFFER& message)
+{
+  if(!isini || !session || !config || !config->IsSessionResumptionActive() ||
+     (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_HANDSHAKE_COMPLETED)) return true;
+
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET> ticketmessage;
+  XBUFFER workbuffer;
+  XBUFFER PSK;
+
+  workbuffer.Add(message);
+  if(!ticketmessage.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
+     (ticketmessage.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET)) return false;
+
+  if(!ticketmessage.GetBody()->GetTicketLifetime()) return true;
+  if(!session->GetKeySchedule()->ResumptionPSK_Calculate((*ticketmessage.GetBody()->GetTicketNonce()), PSK)) return false;
+
+  DIOSTREAMTLS_ALPN_TYPE protocol = applicationprotocolnegotiated?applicationprotocol:DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  bool status = config->SessionTicket_Store(expectedservername.Get(), (*ticketmessage.GetBody()->GetTicket()), PSK,
+                                             ticketmessage.GetBody()->GetTicketAgeAdd(),
+                                             ticketmessage.GetBody()->GetTicketLifetime(),
+                                             session->GetKeySchedule()->GetCipherSuite(), protocol);
+
+  if(!PSK.IsEmpty()) PSK.FillBuffer(0);
+  PSK.Delete();
+  return status;
 }
 
 
@@ -1632,7 +1986,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message
 
   if(!session->Transcript_Add(message)) return SetError();
 
-  state = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE;
+  state = resumptionaccepted?DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_FINISHED:
+                             DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE;
 
   return true;
 }
@@ -1677,7 +2032,15 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
 
       if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS)
         {
+          DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* algorithms = (DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS*)extension;
+
           signaturealgorithms = true;
+          requestedclientsignatureschemes.DeleteAll();
+
+          for(XDWORD d=0; d<algorithms->List_Get()->GetSize(); d++)
+            {
+              if(!requestedclientsignatureschemes.Add(algorithms->List_Get()->Get(d))) return SetError();
+            }
         }
     }
 
@@ -2176,10 +2539,12 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_A
 void DIOSTREAMTLS13HANDSHAKECLIENT::Clean()
 {
   session                    = NULL;
+  config                     = NULL;
   state                      = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE;
   isini                      = false;
   allowunauthenticatedserver = false;
   certificaterequested       = false;
+  requestedclientsignatureschemes.DeleteAll();
   authenticationconfigured  = false;
   serverauthenticated        = false;
   authenticationerror        = DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
@@ -2187,6 +2552,10 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::Clean()
   hasvalidationdatetime      = false;
   applicationprotocolnegotiated = false;
   applicationprotocol           = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  resumptionoffered             = false;
+  resumptionaccepted            = false;
+  resumptionpsk.Delete();
+  resumptionciphersuite         = 0;
   currentkeysharegroup          = 0;
   helloretryrequestprocessed    = false;
   servercertificate          = NULL;

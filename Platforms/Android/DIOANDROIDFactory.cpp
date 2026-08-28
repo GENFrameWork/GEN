@@ -70,6 +70,10 @@
 #include "DIOANDROIDStreamTCPIP.h"
 #endif
 
+#if defined(DIO_STREAMTCPIP_ACTIVE) && defined(DIO_STREAMTLS_ACTIVE)
+#include "DIOStreamTLS.h"
+#endif
+
 #ifdef DIO_STREAMBLUETOOTH_ACTIVE
 #include "DIOStreamBluetoothConfig.h"
 #include "DIOANDROIDStreamBluetoothLocalEnumDevices.h"
@@ -203,48 +207,61 @@ DIOSTREAM* DIOANDROIDFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 {
   if(!config) return NULL;
 
-  // This platform does not provide a TLS stream implementation.
-  // A TLS request is mandatory and must never fall back to an unprotected stream.
-  if(config->IsTLS()) return NULL;
-
   DIOSTREAM*_class = NULL;
 
-  switch(config->GetType())
+  if(!config->IsTLS())
     {
-      case DIOSTREAMTYPE_UNKNOWN    : return NULL;
+      switch(config->GetType())
+        {
+          case DIOSTREAMTYPE_UNKNOWN    : return NULL;
 
-      #ifdef DIO_STREAMUART_ACTIVE
-      case DIOSTREAMTYPE_UART       : _class = GEN_NEW DIOANDROIDSTREAMUART();        break;
-      #endif
+          #ifdef DIO_STREAMUART_ACTIVE
+          case DIOSTREAMTYPE_UART       : _class = GEN_NEW DIOANDROIDSTREAMUART();        break;
+          #endif
 
-      #ifdef DIO_STREAMUSB_ACTIVE
-      case DIOSTREAMTYPE_USB        : _class = GEN_NEW DIOANDROIDSTREAMUSB();         break;
-      #endif
+          #ifdef DIO_STREAMUSB_ACTIVE
+          case DIOSTREAMTYPE_USB        : _class = GEN_NEW DIOANDROIDSTREAMUSB();         break;
+          #endif
 
-      #ifdef DIO_STREAMICMP_ACTIVE
-      case DIOSTREAMTYPE_ICMP       : _class = GEN_NEW DIOANDROIDSTREAMICMP();        break;
-      #endif
+          #ifdef DIO_STREAMICMP_ACTIVE
+          case DIOSTREAMTYPE_ICMP       : _class = GEN_NEW DIOANDROIDSTREAMICMP();        break;
+          #endif
 
-      #ifdef DIO_STREAMUDP_ACTIVE
-      case DIOSTREAMTYPE_UDP        : _class = GEN_NEW DIOANDROIDSTREAMUDP();         break;
-      #endif
+          #ifdef DIO_STREAMUDP_ACTIVE
+          case DIOSTREAMTYPE_UDP        : _class = GEN_NEW DIOANDROIDSTREAMUDP();         break;
+          #endif
 
-      #ifdef DIO_STREAMTCPIP_ACTIVE
-      case DIOSTREAMTYPE_TCPIP      : _class = GEN_NEW DIOANDROIDSTREAMTCPIP();       break;
-      #endif
+          #ifdef DIO_STREAMTCPIP_ACTIVE
+          case DIOSTREAMTYPE_TCPIP      : _class = GEN_NEW DIOANDROIDSTREAMTCPIP();       break;
+          #endif
 
-      #ifdef DIO_STREAMBLUETOOTH_ACTIVE
-      case DIOSTREAMTYPE_BLUETOOTH  : _class = GEN_NEW DIOANDROIDSTREAMBLUETOOTH();   break;
-      #endif
+          #ifdef DIO_STREAMBLUETOOTH_ACTIVE
+          case DIOSTREAMTYPE_BLUETOOTH  : _class = GEN_NEW DIOANDROIDSTREAMBLUETOOTH();   break;
+          #endif
 
-      #ifdef DIO_STREAMSPI_ACTIVE
-      case DIOSTREAMTYPE_SPI        : _class = GEN_NEW DIOANDROIDSTREAMSPI();         break;
-      #endif
+          #ifdef DIO_STREAMSPI_ACTIVE
+          case DIOSTREAMTYPE_SPI        : _class = GEN_NEW DIOANDROIDSTREAMSPI();         break;
+          #endif
 
-      #ifdef DIO_STREAMI2C_ACTIVE
-      case DIOSTREAMTYPE_I2C        : _class = GEN_NEW DIOANDROIDSTREAMI2C();         break;
-      #endif
-                        default     : break;
+          #ifdef DIO_STREAMI2C_ACTIVE
+          case DIOSTREAMTYPE_I2C        : _class = GEN_NEW DIOANDROIDSTREAMI2C();         break;
+          #endif
+                            default     : break;
+        }
+    }
+   else
+    {
+      switch(config->GetType())
+        {
+          case DIOSTREAMTYPE_UNKNOWN    : return NULL;
+
+          #if defined(DIO_STREAMTCPIP_ACTIVE) && defined(DIO_STREAMTLS_ACTIVE)
+          case DIOSTREAMTYPE_TCPIP      : _class = GEN_NEW DIOSTREAMTLS<DIOANDROIDSTREAMTCPIP>();
+                                          break;
+          #endif
+
+                            default     : return NULL;
+        }
     }
 
   if(_class)

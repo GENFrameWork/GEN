@@ -671,6 +671,62 @@ XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetResumptionSecret()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::ResumptionPSK_Calculate(XBUFFER& ticketnonce, XBUFFER& PSK)
+* @brief      Derive the PSK associated with one NewSessionTicket nonce
+* @ingroup    DATAIO
+*
+* @param[in]  ticketnonce : Nonce carried by NewSessionTicket.
+* @param[out] PSK : Derived resumption PSK.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13KEYSCHEDULE::ResumptionPSK_Calculate(XBUFFER& ticketnonce, XBUFFER& PSK)
+{
+  if(!isini || !HKDF || (resumptionsecret.GetSize() != hashsize)) return false;
+
+  PSK.Delete();
+  return HKDF->ExpandLabel(resumptionsecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTIONPSK, ticketnonce, hashsize, PSK);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::Binder_Calculate(XBUFFER& transcript, XBUFFER& binder)
+* @brief      Calculate a resumption-PSK binder over the truncated ClientHello transcript
+* @ingroup    DATAIO
+*
+* @param[in]  transcript : Binder transcript (ClientHello with the binders list removed, including correct lengths).
+* @param[out] binder : Calculated binder.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13KEYSCHEDULE::Binder_Calculate(XBUFFER& transcript, XBUFFER& binder)
+{
+  XBUFFER  binderkey;
+  XBUFFER  finishedkey;
+  XBUFFER  transcripthash;
+  XBUFFER  context;
+  HASHHMAC hashHMAC(hash);
+
+  if(!isini || !HKDF || !hash || (earlysecret.GetSize() != hashsize)) return false;
+  if(!DeriveEmptySecret(earlysecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTIONBINDER, binderkey)) return false;
+  if(!HKDF->ExpandLabel(binderkey, DIOSTREAMTLS13KEYSCHEDULE_LABEL_FINISHED, context, hashsize, finishedkey)) return false;
+  if(!TranscriptHash(transcript, transcripthash) || !hashHMAC.SetKey(finishedkey)) return false;
+
+  hashHMAC.ResetResult();
+  if(!hashHMAC.Do(transcripthash)) return false;
+
+  binder.Delete();
+  if(!binder.Add(hashHMAC.GetResult())) return false;
+
+  return (binder.GetSize() == hashsize);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Get a traffic secret by level and direction, never by role
 * @ingroup    DATAIO

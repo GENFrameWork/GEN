@@ -32,6 +32,7 @@
 
 #include "DIOStreamTLS13Session.h"
 #include "DIOStreamTLSMessagesHandShakeServerFlight.h"
+#include "CipherCertificateX509Validator.h"
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
 
 
@@ -39,13 +40,15 @@
 
 
 // v1 server scope (see DIOStreamTLS.h server Open() branch): TLS 1.3 only, RSA-PSS server certificate only,
-// HelloRetryRequest for (EC)DHE key_share correction, no PSK/session resumption and no client certificate
-// authentication. A CertificateRequest is never sent, so after the server flight the only message waited for
-// is the client Finished.
+// HelloRetryRequest for (EC)DHE key_share correction and TLS 1.3 PSK-DHE session resumption. TLS 1.3 client
+// certificate authentication is optional and controlled by DIOSTREAMTLSCONFIG (NONE / OPTIONAL / REQUIRED);
+// resumption is deliberately not used while client authentication is active.
 enum DIOSTREAMTLS13HANDSHAKESERVER_STATE
 {
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_NONE                       = 0 ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY          ,
+  DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATE        ,
+  DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATEVERIFY  ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED                  ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_HANDSHAKE_COMPLETED            ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_ERROR                          ,
@@ -74,6 +77,10 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     bool                                    IsHandshakeCompleted                             ();
     bool                                    IsWaitingClientHelloRetry                        ();
 
+    bool                                    IsClientAuthenticated                            ();
+    bool                                    IsSessionResumed                                 ();
+    CIPHERCERTIFICATEX509*                  GetClientCertificate                             ();
+
     bool                                    IsApplicationProtocolNegotiated                  ();
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
     DIOSTREAMTLS_ALERT_DESCRIPTION          GetErrorAlertDescription                         ();
@@ -88,9 +95,13 @@ class DIOSTREAMTLS13HANDSHAKESERVER
 
   private:
 
+    bool                                    ClientCertificate_Process                        (XBUFFER& message);
+    bool                                    ClientCertificateVerify_Process                  (XBUFFER& message);
     bool                                    Finished_Process                                 (XBUFFER& message);
     bool                                    HelloRetryRequest_Create                         (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XWORD ciphersuite, XWORD group, XBUFFER& records);
     bool                                    ClientHelloRetry_Validate                        (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello);
+    bool                                    ResumptionPSK_Select                             (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XCHAR* servername, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XWORD& ciphersuite, XBUFFER& PSK);
+    bool                                    NewSessionTicket_Create                          ();
 
     bool                                    CipherSuite_Select                               (XVECTOR<XWORD>& offered, XWORD& selected);
     bool                                    Group_Select                                     (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey, bool& helloretryrequestrequired);
@@ -113,6 +124,11 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     XBUFFER                                 firstclienthello;
     XWORD                                   retryselectedgroup;
     XWORD                                   retryciphersuite;
+    bool                                    clientcertificateprovided;
+    bool                                    resumptionaccepted;
+    XBUFFER                                 resumptionpsk;
+    XSTRING                                 negotiatedservername;
+    CIPHERCERTIFICATEX509VALIDATOR          clientcertificatevalidator;
 };
 
 

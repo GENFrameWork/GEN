@@ -95,6 +95,7 @@ enum DIOWEBCLIENT_CHUNKEDRESULT
 class XTIMER;
 class XFILE;
 class DIOSTREAMTCPIPCONFIG;
+class DIOSTREAMTCPIPPROXYCFG;
 class DIOSTREAMTCPIP;
 class DIOSTREAMTLSCONFIG;
 class DIOWEBCLIENT_XEVENT;
@@ -138,6 +139,7 @@ class DIOWEBCLIENT : public XSUBJECT
     void                                      Set_Port                          (int port);
 
     DIOURL*                                   GetProxyURL                       ();
+    DIOSTREAMTCPIPPROXYCFG*                 GetProxyCFG                       ();
     int                                       GetProxyPort                      ();
     void                                      SetProxyPort                      (int port);
 
@@ -207,9 +209,6 @@ class DIOWEBCLIENT : public XSUBJECT
     int                                       port;
     bool                                      isportconfigured;
     bool                                      isstreamTLS;
-
-    DIOURL                                    proxyurl;
-    int                                       proxyport;
 
     DIOWEBCLIENT_AUTHENTICATION_METHOD        authenticationmethod;
 

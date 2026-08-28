@@ -191,6 +191,33 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_FINISHED : public DIOSTREAMTLS_MSG_INTERFACE
 
 
 
+class DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET : public DIOSTREAMTLS_MSG_INTERFACE
+{
+  public:
+                                            DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET        ();
+    virtual                                ~DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET        ();
+
+    XDWORD                                  GetTicketLifetime                                   ();
+    void                                    SetTicketLifetime                                   (XDWORD lifetime);
+    XDWORD                                  GetTicketAgeAdd                                     ();
+    void                                    SetTicketAgeAdd                                     (XDWORD ageadd);
+    XBUFFER*                                GetTicketNonce                                      ();
+    XBUFFER*                                GetTicket                                           ();
+
+    bool                                    SetToBuffer                                         (XBUFFER& buffer, bool showdebug);
+    bool                                    GetFromBuffer                                       (XBUFFER& buffer, bool showdebug);
+
+  private:
+
+    void                                    Clean                                               ();
+
+    XDWORD                                  ticketlifetime;
+    XDWORD                                  ticketageadd;
+    XBUFFER                                 ticketnonce;
+    XBUFFER                                 ticket;
+};
+
+
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
 

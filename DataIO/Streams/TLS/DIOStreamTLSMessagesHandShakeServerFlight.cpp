@@ -1322,3 +1322,133 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_FINISHED::Clean()
 {
   verifydata.Delete();
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::~DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::~DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET()
+{
+  Clean();
+}
+
+
+XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketLifetime()
+{
+  return ticketlifetime;
+}
+
+
+void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetTicketLifetime(XDWORD lifetime)
+{
+  ticketlifetime = lifetime;
+}
+
+
+XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketAgeAdd()
+{
+  return ticketageadd;
+}
+
+
+void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetTicketAgeAdd(XDWORD ageadd)
+{
+  ticketageadd = ageadd;
+}
+
+
+XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketNonce()
+{
+  return &ticketnonce;
+}
+
+
+XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicket()
+{
+  return &ticket;
+}
+
+
+bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetToBuffer(XBUFFER& buffer, bool showdebug)
+{
+  (void)showdebug;
+
+  if((ticketlifetime > 604800) || ticketnonce.GetSize() > 255 || ticket.IsEmpty() || ticket.GetSize() > 0xFFFF)
+    {
+      return false;
+    }
+
+  if(!buffer.Add(ticketlifetime) || !buffer.Add(ticketageadd) ||
+     !buffer.Add((XBYTE)ticketnonce.GetSize()) || !buffer.Add(ticketnonce) ||
+     !buffer.Add((XWORD)ticket.GetSize()) || !buffer.Add(ticket) ||
+     !buffer.Add((XWORD)0))
+    {
+      return false;
+    }
+
+  return true;
+}
+
+
+bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+{
+  (void)showdebug;
+
+  XBYTE nonce_length = 0;
+  XWORD ticket_length = 0;
+  XWORD extensions_length = 0;
+
+  ticketnonce.Delete();
+  ticket.Delete();
+
+  if(!buffer.Extract(ticketlifetime) || !buffer.Extract(ticketageadd) ||
+     (ticketlifetime > 604800) || !buffer.Extract(nonce_length) ||
+     (buffer.GetSize() < ((XDWORD)nonce_length + sizeof(XWORD))))
+    {
+      return false;
+    }
+
+  if(nonce_length)
+    {
+      if(!ticketnonce.Resize(nonce_length) || buffer.Extract(ticketnonce.Get(), 0, nonce_length) != nonce_length) return false;
+    }
+
+  if(!buffer.Extract(ticket_length) || !ticket_length ||
+     (buffer.GetSize() < ((XDWORD)ticket_length + sizeof(XWORD))))
+    {
+      return false;
+    }
+
+  if(!ticket.Resize(ticket_length) || buffer.Extract(ticket.Get(), 0, ticket_length) != ticket_length) return false;
+  if(!buffer.Extract(extensions_length) || buffer.GetSize() != extensions_length) return false;
+
+  // GEN currently does not advertise early_data in NewSessionTicket. Unknown future extensions are ignored.
+  return (buffer.Extract(NULL, 0, extensions_length) == extensions_length);
+}
+
+
+void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::Clean()
+{
+  ticketlifetime = 0;
+  ticketageadd    = 0;
+  ticketnonce.Delete();
+  ticket.Delete();
+}

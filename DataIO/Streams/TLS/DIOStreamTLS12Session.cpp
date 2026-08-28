@@ -448,6 +448,8 @@ bool DIOSTREAMTLS12SESSION::RecordInput_Add(XBUFFER& data)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS12SESSION_RESULT DIOSTREAMTLS12SESSION::Record_Extract(DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain)
 {
+  lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+
   DIOSTREAMTLS_MSG_RECORDHEADER header;
   XBUFFER                       onerecord;
 
@@ -463,8 +465,15 @@ DIOSTREAMTLS12SESSION_RESULT DIOSTREAMTLS12SESSION::Record_Extract(DIOSTREAMTLS_
       return DIOSTREAMTLS12SESSION_RESULT_INCOMPLETE;
     }
 
-  if(!header.Peek(recordinput) || (header.GetLength() > DIOSTREAMTLS12RECORD_MAXCIPHERSIZE))
+  if(!header.Peek(recordinput))
     {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+      return DIOSTREAMTLS12SESSION_RESULT_ERROR;
+    }
+
+  if(header.GetLength() > DIOSTREAMTLS12RECORD_MAXCIPHERSIZE)
+    {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_RECORD_OVERFLOW;
       return DIOSTREAMTLS12SESSION_RESULT_ERROR;
     }
 
@@ -475,15 +484,32 @@ DIOSTREAMTLS12SESSION_RESULT DIOSTREAMTLS12SESSION::Record_Extract(DIOSTREAMTLS_
 
   if(!DIOSTREAMTLS12RECORD::Record_Extract(recordinput, onerecord))
     {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
       return DIOSTREAMTLS12SESSION_RESULT_ERROR;
     }
 
   if(!record.Unprotect(onerecord, contenttype, plain))
     {
+      lastrecordalertdescription = record.GetLastAlertDescription();
       return DIOSTREAMTLS12SESSION_RESULT_ERROR;
     }
 
   return DIOSTREAMTLS12SESSION_RESULT_COMPLETE;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS12SESSION::GetLastRecordAlertDescription()
+* @brief      Get the TLS alert associated with the last record-layer error
+* @ingroup    DATAIO
+*
+* @return     DIOSTREAMTLS_ALERT_DESCRIPTION : Alert description.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS12SESSION::GetLastRecordAlertDescription()
+{
+  return lastrecordalertdescription;
 }
 
 
@@ -673,6 +699,7 @@ void DIOSTREAMTLS12SESSION::Clean()
   closenotifysent               = false;
   closenotifyreceived           = false;
   transportclosedwithoutnotify  = false;
+  lastrecordalertdescription     = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
 }
 
 

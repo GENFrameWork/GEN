@@ -74,6 +74,15 @@ enum DIOSTREAMTLS_ERROR
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
+enum DIOSTREAMTLS_HANDSHAKERETRYCAUSE
+{
+  DIOSTREAMTLS_HANDSHAKERETRYCAUSE_NONE = 0,
+  DIOSTREAMTLS_HANDSHAKERETRYCAUSE_VERSION,
+  DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM,
+  DIOSTREAMTLS_HANDSHAKERETRYCAUSE_OTHER,
+};
+
+
 template<typename T>
 class DIOSTREAMTLS : public T
 {
@@ -169,10 +178,30 @@ class DIOSTREAMTLS : public T
                                                   return true;
                                                 }
 
-                                              bool tls13rejected = !starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
-                                              bool tls12rejected = starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
+                                              bool tls12algorithmrejected = starttls12 &&
+                                                                            (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
+                                                                            (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM);
 
-                                              if(dualversionmode && !starttls12 && (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && versionrejected)
+                                              // A TLS 1.3 handshake_failure/insufficient_security is an algorithm/parameter retry,
+                                              // not a version rejection.  Exhaust the wider TLS 1.3 offer first and only change
+                                              // protocol version after an explicit protocol_version alert.
+                                              if(!starttls12 &&
+                                                 (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
+                                                 (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_NONE;
+
+                                                  if(Handshake_Attempt(config, servername, false, true))
+                                                    {
+                                                      T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
+                                                      return true;
+                                                    }
+                                                }
+
+                                              if(dualversionmode &&
+                                                 !usingtls12 &&
+                                                 (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
+                                                 (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_VERSION))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_NONE;
 
@@ -182,26 +211,11 @@ class DIOSTREAMTLS : public T
                                                       return true;
                                                     }
 
-                                                  tls12rejected = (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && algorithmrejected;
+                                                  tls12algorithmrejected = (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
+                                                                           (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM);
                                                 }
 
-                                              if(tls13rejected && (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_3))
-                                                {
-                                                  tlserror = DIOSTREAMTLS_ERROR_NONE;
-
-                                                  if(Handshake_Attempt(config, servername, false, true))
-                                                    {
-                                                      T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
-                                                      return true;
-                                                    }
-
-                                                  if((tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) && versionrejected && (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2))
-                                                    {
-                                                      tls12rejected = true;
-                                                    }
-                                                }
-
-                                              if(tls12rejected && (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2))
+                                              if(tls12algorithmrejected && (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_NONE;
 
@@ -225,8 +239,7 @@ class DIOSTREAMTLS : public T
                                               handshakeclient12.End();
 
                                               usingtls12       = astls12;
-                                              versionrejected  = false;
-                                              algorithmrejected = false;
+                                              retrycause = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_NONE;
 
                                               if(usingtls12)
                                                 {                               
@@ -275,6 +288,13 @@ class DIOSTREAMTLS : public T
                                                   return false;
                                                 }
 
+                                              if(!T::Proxy_Connect(timeout))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  Close_OnError();
+                                                  return false;
+                                                }
+
                                               T::SetStatus(DIOSTREAMSTATUS_GETTINGCONNECTION);
 
                                               if(!Handshake_Client(servername))
@@ -286,7 +306,10 @@ class DIOSTREAMTLS : public T
                                                       T::SetLastDIOError(DIOSTREAMERROR_TLSAUTHENTICATION);
                                                     }
 
-                                                  if(usingtls12) algorithmrejected = handshakeclient12.IsAlgorithmRejected();
+                                                  if(usingtls12 && handshakeclient12.IsAlgorithmRejected())
+                                                    {
+                                                      retrycause = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM;
+                                                    }
 
                                                   if((!usingtls12 && (session.GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL) != DIOSTREAMTLS13SESSION_EPOCH_CLEAR)) ||
                                                      (usingtls12 && handshakeclient12.GetSession()->IsIni()))
@@ -470,6 +493,27 @@ class DIOSTREAMTLS : public T
                                                 }
 
                                               return true;
+                                            }
+
+
+    bool                                    IsSessionResumed                        ()
+                                            {
+                                              if(usingtls12) return false;
+                                              return isserverrole?handshakeserver.IsSessionResumed():handshakeclient.IsSessionResumed();
+                                            }
+
+
+    bool                                    IsClientAuthenticated                   ()
+                                            {
+                                              if(usingtls12 || !isserverrole) return false;
+                                              return handshakeserver.IsClientAuthenticated();
+                                            }
+
+
+    CIPHERCERTIFICATEX509*                  GetClientCertificate                    ()
+                                            {
+                                              if(usingtls12 || !isserverrole) return NULL;
+                                              return handshakeserver.GetClientCertificate();
                                             }
 
 
@@ -770,7 +814,11 @@ class DIOSTREAMTLS : public T
                                                   result = session.Record_Extract(contenttype, plain);
 
                                                   if(result == DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE) return true;
-                                                  if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)      return false;
+                                                  if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)
+                                                    {
+                                                      Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, session.GetLastRecordAlertDescription());
+                                                      return false;
+                                                    }
 
                                                   if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC)
                                                     {
@@ -789,12 +837,20 @@ class DIOSTREAMTLS : public T
                                                       if(alert.GetFromBuffer(plain, false))
                                                         {
 
-                                                          if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
-                                                             ((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION) ||
-                                                              (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE)))
+                                                          if(alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL)
                                                             {
-                                                              versionrejected   = true;
-                                                              algorithmrejected = true;
+                                                              switch(alert.GetDescription())
+                                                                {
+                                                                  case DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION      : retrycause = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_VERSION;
+                                                                                                                              break;
+
+                                                                  case DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE     :
+                                                                  case DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY : retrycause = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM;
+                                                                                                                              break;
+
+                                                                                                                       default : retrycause = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_OTHER;
+                                                                                                                              break;
+                                                                }
                                                             }
                                                         }
                                                        else
@@ -971,7 +1027,7 @@ class DIOSTREAMTLS : public T
                                                   if(result == DIOSTREAMTLS12SESSION_RESULT_ERROR)
                                                     {
                                                       tlserror = DIOSTREAMTLS_ERROR_RECORD;
-                                                      Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+                                                      Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, handshakeclient12.GetSession()->GetLastRecordAlertDescription());
                                                       T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                       return false;
                                                     }
@@ -1013,9 +1069,31 @@ class DIOSTREAMTLS : public T
                                               if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_RECORD;
-                                                  Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+                                                  Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, session.GetLastRecordAlertDescription());
                                                   T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                   return false;
+                                                }
+
+                                              if(!isserverrole)
+                                                {
+                                                  while(true)
+                                                    {
+                                                      XBUFFER newsessionticket;
+                                                      if(!session.NewSessionTicket_Extract(newsessionticket))
+                                                        {
+                                                          tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+                                                          T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+                                                          return false;
+                                                        }
+
+                                                      if(newsessionticket.IsEmpty()) break;
+                                                      if(!handshakeclient.NewSessionTicket_Process(newsessionticket))
+                                                        {
+                                                          tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+                                                          T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
+                                                          return false;
+                                                        }
+                                                    }
                                                 }
 
                                               XBUFFER posthandshakeoutput;
@@ -1185,8 +1263,7 @@ class DIOSTREAMTLS : public T
                                               usingtls12      = false;
                                               isserverrole    = false;
                                               dualversionmode = false;
-                                              versionrejected = false;
-                                              algorithmrejected = false;
+                                              retrycause      = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_NONE;
                                             }
 
 
@@ -1195,9 +1272,7 @@ class DIOSTREAMTLS : public T
     bool                                    isclosed;
     bool                                    isclosing;
 
-    bool                                    versionrejected;
-
-    bool                                    algorithmrejected;
+    DIOSTREAMTLS_HANDSHAKERETRYCAUSE        retrycause;
 
     DIOSTREAMTLS13SESSION                   session;
     DIOSTREAMTLS13HANDSHAKECLIENT           handshakeclient;

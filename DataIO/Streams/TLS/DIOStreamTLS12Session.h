@@ -94,6 +94,7 @@ class DIOSTREAMTLS12SESSION
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
     bool                                    RecordInput_Add                                  (XBUFFER& data);
     DIOSTREAMTLS12SESSION_RESULT            Record_Extract                                    (DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain);
+    DIOSTREAMTLS_ALERT_DESCRIPTION          GetLastRecordAlertDescription                     ();
 
     XBUFFER*                                GetHandshakeInput                                 ();
     bool                                    HandshakeInput_Add                               (XBYTE* data, XDWORD size);
@@ -141,6 +142,7 @@ class DIOSTREAMTLS12SESSION
     XBUFFER                                 keyexchangep384public;
 
     XBUFFER                                 recordinput;
+    DIOSTREAMTLS_ALERT_DESCRIPTION          lastrecordalertdescription;
     XBUFFER                                 handshakeinput;
     XBUFFER                                 transcript;
     XBUFFER                                 applicationinput;

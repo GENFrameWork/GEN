@@ -94,6 +94,7 @@ class DIOSTREAMTLS13SESSION
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
     bool                                    RecordInput_Add                                  (XBUFFER& data);
     DIOSTREAMTLS13SESSION_RESULT              Record_Extract                                   (DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain);
+    DIOSTREAMTLS_ALERT_DESCRIPTION          GetLastRecordAlertDescription                     ();
 
     XBUFFER*                                GetHandshakeInput                                 ();
     bool                                    HandshakeInput_Add                               (XBYTE* data, XDWORD size);
@@ -104,7 +105,7 @@ class DIOSTREAMTLS13SESSION
     bool                                    Transcript_Add                                   (XBUFFER& message);
     bool                                    TranscriptHash                                   (XBUFFER& transcripthash);
 
-    bool                                    HandshakeKeys_Activate                           (XBUFFER& sharedsecret);
+    bool                                    HandshakeKeys_Activate                           (XBUFFER& sharedsecret, XBUFFER* PSK = NULL);
     bool                                    ApplicationTrafficSecrets_Calculate              ();
     bool                                    ApplicationKeys_Activate                         (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
 
@@ -114,7 +115,9 @@ class DIOSTREAMTLS13SESSION
     XDWORD                                  ApplicationData_Read                             (XBYTE* data, XDWORD size);
     DIOSTREAMTLS13SESSION_RESULT              ApplicationData_Process                          ();
     bool                                    KeyUpdate_Create                                 (bool requestpeer, XBUFFER& records);
+    bool                                    PostHandshakeOutput_Add                           (XBUFFER& records);
     bool                                    PostHandshakeOutput_Extract                       (XBUFFER& records);
+    bool                                    NewSessionTicket_Extract                          (XBUFFER& message);
 
     bool                                    Alert_Create                                     (DIOSTREAMTLS_ALERT_LEVEL level, DIOSTREAMTLS_ALERT_DESCRIPTION description, XBUFFER& records);
     bool                                    CloseNotify_Create                               (XBUFFER& records);
@@ -150,10 +153,12 @@ class DIOSTREAMTLS13SESSION
     XBUFFER                                 keyexchangep384public;
 
     XBUFFER                                 recordinput;
+    DIOSTREAMTLS_ALERT_DESCRIPTION          lastrecordalertdescription;
     XBUFFER                                 handshakeinput;
     XBUFFER                                 transcript;
     XBUFFER                                 applicationinput;
     XBUFFER                                 posthandshakeoutput;
+    XBUFFER                                 newsessionticketinput;
 
     XQWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     bool                                    keyupdaterequestpending;

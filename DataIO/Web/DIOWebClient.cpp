@@ -670,7 +670,26 @@ void DIOWEBCLIENT::Set_Port(int port)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOWEBCLIENT::GetProxyURL()
 {
-  return &proxyurl;
+  if(!diostreamcfg) return NULL;
+
+  return diostreamcfg->GetProxyCFG()->GetURL();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTCPIPPROXYCFG* DIOWEBCLIENT::GetProxyCFG()
+* @brief      Get proxy configuration
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTCPIPPROXYCFG* : Proxy configuration.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTCPIPPROXYCFG* DIOWEBCLIENT::GetProxyCFG()
+{
+  if(!diostreamcfg) return NULL;
+
+  return diostreamcfg->GetProxyCFG();
 }
 
 
@@ -685,7 +704,9 @@ DIOURL* DIOWEBCLIENT::GetProxyURL()
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBCLIENT::GetProxyPort()
 {
-  return proxyport;
+  if(!diostreamcfg) return 0;
+
+  return diostreamcfg->GetProxyCFG()->GetPort();
 }
 
 
@@ -700,7 +721,12 @@ int DIOWEBCLIENT::GetProxyPort()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::SetProxyPort(int port)
 {
-  proxyport = port;
+  if(!diostreamcfg) return;
+
+  DIOSTREAMTCPIPPROXYCFG* proxycfg = diostreamcfg->GetProxyCFG();
+
+  proxycfg->SetPort(port);
+  if(port > 0) proxycfg->SetType(DIOSTREAMTCPIPPROXYTYPE_HTTP);
 }
 
 
@@ -1848,17 +1874,18 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       if(!localIP->IsEmpty()) diostreamcfg->GetLocalIP()->Set(localIP->Get());
     }
 
-  if(proxyurl.IsEmpty())
+  diostreamcfg->GetRemoteURL()->Set(server.Get());
+  diostreamcfg->SetRemotePort(operationport);
+
+  DIOSTREAMTCPIPPROXYCFG* proxycfg = diostreamcfg->GetProxyCFG();
+  if(proxycfg && !proxycfg->GetURL()->IsEmpty() && (proxycfg->GetPort() > 0))
     {
-      diostreamcfg->GetRemoteURL()->Set(server.Get());
-      diostreamcfg->SetRemotePort(operationport);
+      if(proxycfg->GetType() == DIOSTREAMTCPIPPROXYTYPE_NONE) proxycfg->SetType(DIOSTREAMTCPIPPROXYTYPE_HTTP);
+      proxycfg->SetMode(isTLS?DIOSTREAMTCPIPPROXYMODE_TUNNEL:DIOSTREAMTCPIPPROXYMODE_FORWARD);
     }
    else
     {
-      if(isTLS) { if(connectionfailed) *connectionfailed = true; return false; }
-
-      diostreamcfg->GetRemoteURL()->Set(proxyurl.Get());
-      diostreamcfg->SetRemotePort(proxyport);
+      if(proxycfg) proxycfg->SetMode(DIOSTREAMTCPIPPROXYMODE_NONE);
     }
 
   #ifdef DIO_STREAMTLS_ACTIVE
@@ -1929,7 +1956,24 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     }
 
 
-  sendheader.AddFormat(__L("%s %s HTTP/1.1\r\n"), methodstring.Get(), resource.Get());
+  XSTRING requestresource;
+
+  if(proxycfg && proxycfg->IsActive() && (proxycfg->GetMode() == DIOSTREAMTCPIPPROXYMODE_FORWARD))
+    {
+      requestresource = __L("http://");
+      requestresource += server;
+
+      if(operationport != DIOWEBCLIENT_DEFAULTPORT) requestresource.AddFormat(__L(":%d"), operationport);
+
+      if(resource.IsEmpty() || (resource.Get()[0] != __C('/'))) requestresource += __L("/");
+      requestresource += resource;
+    }
+   else
+    {
+      requestresource = resource;
+    }
+
+  sendheader.AddFormat(__L("%s %s HTTP/1.1\r\n"), methodstring.Get(), requestresource.Get());
 
   sendheader += __L("Host: ");
   sendheader += server.Get();
@@ -1944,6 +1988,20 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       sendheader += stringport.Get();
     }
   sendheader += __L("\r\n");
+
+  if(proxycfg && proxycfg->IsActive() && (proxycfg->GetMode() == DIOSTREAMTCPIPPROXYMODE_FORWARD) &&
+     (!proxycfg->GetLogin()->IsEmpty() || !proxycfg->GetPassword()->IsEmpty()))
+    {
+      XSTRING proxycredentials;
+      XSTRING proxycredentialsbase64;
+
+      proxycredentials.Format(__L("%s:%s"), proxycfg->GetLogin()->Get(), proxycfg->GetPassword()->Get());
+      proxycredentials.ConvertToBase64(proxycredentialsbase64);
+
+      sendheader += __L("Proxy-Authorization: Basic ");
+      sendheader += proxycredentialsbase64;
+      sendheader += __L("\r\n");
+    }
 
   if(addhead) sendheader += addhead;
 
@@ -2511,8 +2569,6 @@ void DIOWEBCLIENT::Clean()
 
   diostreamcfg            = NULL;
   diostream               = NULL;
-
-  proxyport               = 0;
 
   port                    = DIOWEBCLIENT_DEFAULTPORT;
   isportconfigured        = false;

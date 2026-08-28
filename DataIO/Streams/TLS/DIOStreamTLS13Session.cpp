@@ -138,6 +138,7 @@ void DIOSTREAMTLS13SESSION::End()
   transcript.Delete();
   applicationinput.Delete();
   posthandshakeoutput.Delete();
+  newsessionticketinput.Delete();
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {
@@ -505,6 +506,8 @@ bool DIOSTREAMTLS13SESSION::RecordInput_Add(XBUFFER& data)
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::Record_Extract(DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain)
 {
+  lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+
   DIOSTREAMTLS_MSG_RECORDHEADER header;
   XBUFFER                       onerecord;
 
@@ -520,8 +523,15 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::Record_Extract(DIOSTREAMTLS_
       return DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE;
     }
 
-  if(!header.Peek(recordinput) || (header.GetLength() > DIOSTREAMTLSRECORD_MAXCIPHERSIZE))
+  if(!header.Peek(recordinput))
     {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+      return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+    }
+
+  if(header.GetLength() > DIOSTREAMTLSRECORD_MAXCIPHERSIZE)
+    {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_RECORD_OVERFLOW;
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
 
@@ -532,15 +542,32 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::Record_Extract(DIOSTREAMTLS_
 
   if(!DIOSTREAMTLSRECORD::Record_Extract(recordinput, onerecord))
     {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
 
   if(!record.Unprotect(onerecord, contenttype, plain))
     {
+      lastrecordalertdescription = record.GetLastAlertDescription();
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
 
   return DIOSTREAMTLS13SESSION_RESULT_COMPLETE;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS13SESSION::GetLastRecordAlertDescription()
+* @brief      Get the TLS alert associated with the last record-layer error
+* @ingroup    DATAIO
+*
+* @return     DIOSTREAMTLS_ALERT_DESCRIPTION : Alert description.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS13SESSION::GetLastRecordAlertDescription()
+{
+  return lastrecordalertdescription;
 }
 
 
@@ -725,7 +752,7 @@ bool DIOSTREAMTLS13SESSION::TranscriptHash(XBUFFER& transcripthash)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret)
+* @fn         bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 * @brief      Derive and install both handshake traffic directions
 * @ingroup    DATAIO
 *
@@ -734,7 +761,7 @@ bool DIOSTREAMTLS13SESSION::TranscriptHash(XBUFFER& transcripthash)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret)
+bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 {
   XBUFFER transcripthash;
 
@@ -755,7 +782,7 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret)
       return false;
     }
 
-  if(!keyschedule.EarlySecret_Calculate())                         return false;
+  if(!keyschedule.EarlySecret_Calculate(PSK))                      return false;
   if(!keyschedule.HandshakeSecret_Calculate(sharedsecret))         return false;
   if(!TranscriptHash(transcripthash))                              return false;
   if(!keyschedule.HandshakeTrafficSecrets_Calculate(transcripthash)) return false;
@@ -1019,7 +1046,13 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
 
                                                                         switch(handshake.GetMsgType())
                                                                           {
-                                                                            case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET : break;
+                                                                            case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT ||
+                                                                                                                                             !newsessionticketinput.Add(message))
+                                                                                                                                          {
+                                                                                                                                            iserror = true;
+                                                                                                                                            return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+                                                                                                                                          }
+                                                                                                                                        break;
 
                                                                             case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE         : if(!KeyUpdate_Process(handshake))
                                                                                                                                               {
@@ -1139,6 +1172,21 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Create(bool requestpeer, XBUFFER& records)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Add(XBUFFER& records)
+{
+  if(!isini || records.IsEmpty()) return false;
+  return posthandshakeoutput.Add(records);
+}
+
+
+bool DIOSTREAMTLS13SESSION::NewSessionTicket_Extract(XBUFFER& message)
+{
+  message.Delete();
+  if(!isini || newsessionticketinput.IsEmpty()) return true;
+  return DIOSTREAMTLS_MSG_HANDSHAKE::Message_Extract(newsessionticketinput, message);
+}
+
+
 bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Extract(XBUFFER& records)
 {
   records.Delete();
@@ -1410,6 +1458,7 @@ void DIOSTREAMTLS13SESSION::Clean()
   transcript.Delete();
   applicationinput.Delete();
   posthandshakeoutput.Delete();
+  newsessionticketinput.Delete();
 
   KeyExchange_Delete();
 
@@ -1421,6 +1470,7 @@ void DIOSTREAMTLS13SESSION::Clean()
   transportclosedwithoutnotify = false;
   receivedalertlevel            = (DIOSTREAMTLS_ALERT_LEVEL)0;
   receivedalertdescription      = (DIOSTREAMTLS_ALERT_DESCRIPTION)0;
+  lastrecordalertdescription    = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {

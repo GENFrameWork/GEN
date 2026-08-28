@@ -38,6 +38,9 @@
 
 #include "XFileTXT.h"
 
+#include "CipherCertificateX509.h"
+#include "CipherKey.h"
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -54,6 +57,165 @@
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         CIPHERTRUSTPROVIDERX509::CIPHERTRUSTPROVIDERX509()
+* @brief      Constructor of class
+* @ingroup    CIPHER
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+CIPHERTRUSTPROVIDERX509::CIPHERTRUSTPROVIDERX509()
+{
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         CIPHERTRUSTPROVIDERX509::~CIPHERTRUSTPROVIDERX509()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    CIPHER
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+CIPHERTRUSTPROVIDERX509::~CIPHERTRUSTPROVIDERX509()
+{
+  Roots_Delete();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XBUFFER*>* CIPHERTRUSTPROVIDERX509::GetRoots()
+* @brief      Get the trust anchors loaded by the provider
+* @ingroup    CIPHER
+*
+* @return     XVECTOR<XBUFFER*>* : Pointer to the loaded trust anchors.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XBUFFER*>* CIPHERTRUSTPROVIDERX509::GetRoots()
+{
+  return &roots;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERTRUSTPROVIDERX509::Root_Add(XBUFFER& root)
+* @brief      Add a copied DER trust anchor to the provider
+* @ingroup    CIPHER
+*
+* @param[in]  root : DER certificate to copy.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERTRUSTPROVIDERX509::Root_Add(XBUFFER& root)
+{
+  XBUFFER* copy;
+
+  if(root.IsEmpty()) return false;
+
+  copy = GEN_NEW XBUFFER();
+  if(!copy) return false;
+
+  if(!copy->Add(root) || !roots.Add(copy))
+    {
+      GEN_DELETE copy;
+      return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERTRUSTPROVIDERX509::Roots_Delete()
+* @brief      Delete all trust anchors loaded by the provider
+* @ingroup    CIPHER
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERTRUSTPROVIDERX509::Roots_Delete()
+{
+  roots.DeleteContents();
+  roots.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         CIPHERTRUSTPROVIDERX509GEN::CIPHERTRUSTPROVIDERX509GEN()
+* @brief      Constructor of class
+* @ingroup    CIPHER
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+CIPHERTRUSTPROVIDERX509GEN::CIPHERTRUSTPROVIDERX509GEN()
+{
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         CIPHERTRUSTPROVIDERX509GEN::~CIPHERTRUSTPROVIDERX509GEN()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    CIPHER
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+CIPHERTRUSTPROVIDERX509GEN::~CIPHERTRUSTPROVIDERX509GEN()
+{
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERTRUSTPROVIDERX509GEN::Load()
+* @brief      Load the supported trust anchors from the embedded GEN CA bundle
+* @ingroup    CIPHER
+*
+* @return     bool : true if at least one trust anchor is loaded; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERTRUSTPROVIDERX509GEN::Load()
+{
+  CIPHERTRUSTEDROOTCERTIFICATESX509 defaultroots;
+
+  Roots_Delete();
+
+  if(!defaultroots.Certificates_Decode()) return false;
+
+  for(XDWORD c=0; c<defaultroots.Certificates_GetAll()->GetSize(); c++)
+    {
+      XBUFFER* rootDER = defaultroots.Certificates_GetAll()->Get(c);
+
+      if(rootDER)
+        {
+          CIPHERCERTIFICATEX509 root;
+
+          if(root.Decode((*rootDER)) && root.IsCertificateAuthority() && root.GetPublicCipherKey() &&
+             ((root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_RSA_PUBLIC) ||
+              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) ||
+              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC) ||
+              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC)))
+            {
+              if(!Root_Add((*rootDER)))
+                {
+                  Roots_Delete();
+                  return false;
+                }
+            }
+        }
+    }
+
+  return !GetRoots()->IsEmpty();
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------

@@ -43,12 +43,105 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
+enum DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE
+{
+  DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE = 0 ,
+  DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_OPTIONAL ,
+  DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_REQUIRED ,
+};
+
+
+#define DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_LIFETIME      86400
+#define DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME         604800
+#define DIOSTREAMTLS13_SESSIONTICKET_MAX_CACHED                8
+
+
+enum DIOSTREAMTLS_LOCALCREDENTIALSERROR
+{
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE                         = 0 ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_NOTCONFIGURED                   ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE              ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDDATE                     ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDKEYUSAGE                 ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_UNSUPPORTEDKEY                  ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_KEYMISMATCH                     ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCHAIN                    ,
+  DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDSERVERNAME               ,
+};
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
 class CIPHERKEY;
+class CIPHERTRUSTPROVIDERX509;
+
+
+class DIOSTREAMTLS13SESSIONTICKET
+{
+  public:
+                            DIOSTREAMTLS13SESSIONTICKET       ();
+    virtual                ~DIOSTREAMTLS13SESSIONTICKET       ();
+
+    XSTRING*                GetServerName                      ();
+    XBUFFER*                GetTicket                          ();
+    XBUFFER*                GetPSK                             ();
+    XDWORD                  GetTicketAgeAdd                    ();
+    void                    SetTicketAgeAdd                    (XDWORD ageadd);
+    XDWORD                  GetLifetime                        ();
+    void                    SetLifetime                        (XDWORD lifetime);
+    XQWORD                  GetReceivedEpoch                   ();
+    void                    SetReceivedEpoch                   (XQWORD epoch);
+    XWORD                   GetCipherSuite                     ();
+    void                    SetCipherSuite                     (XWORD ciphersuite);
+    DIOSTREAMTLS_ALPN_TYPE  GetApplicationProtocol             ();
+    void                    SetApplicationProtocol             (DIOSTREAMTLS_ALPN_TYPE protocol);
+    bool                    IsExpired                          ();
+    XDWORD                  GetObfuscatedAge                   ();
+    bool                    Delete                             ();
+
+  private:
+
+    void                    Clean                              ();
+
+    XSTRING                 servername;
+    XBUFFER                 ticket;
+    XBUFFER                 psk;
+    XDWORD                  ticketageadd;
+    XDWORD                  lifetime;
+    XQWORD                  receivedepoch;
+    XWORD                   ciphersuite;
+    DIOSTREAMTLS_ALPN_TYPE  applicationprotocol;
+};
+
+
+class DIOSTREAMTLSSERVERCREDENTIALS
+{
+  public:
+                            DIOSTREAMTLSSERVERCREDENTIALS      ();
+    virtual                ~DIOSTREAMTLSSERVERCREDENTIALS      ();
+
+    XSTRING*                GetServerName                       ();
+
+    XVECTOR<XBUFFER*>*      GetCertificateChain                ();
+    bool                    Certificate_Add                    (XBUFFER& certificate);
+    bool                    Certificates_Delete                ();
+
+    CIPHERKEY*              GetPrivateKey                       ();
+    bool                    SetPrivateKey                       (CIPHERKEY* privatekey);
+
+    bool                    HasCredentials                      ();
+    bool                    Delete                              ();
+
+  private:
+
+    void                    Clean                               ();
+
+    XSTRING                 servername;
+    XVECTOR<XBUFFER*>       certificatechain;
+    CIPHERKEY*              privatekey;
+};
 
 
 class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
@@ -84,8 +177,16 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
 
     XVECTOR<XBUFFER*>*      GetTrustedRoots                   ();
     bool                    TrustedRoot_Add                   (XBUFFER& root);
+    bool                    TrustedRoots_Load                 (CIPHERTRUSTPROVIDERX509& provider);
     bool                    TrustedRoots_AddDefaults          ();
     bool                    TrustedRoots_Delete               ();
+
+    DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE GetClientAuthenticationMode ();
+    void                    SetClientAuthenticationMode       (DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE mode);
+    XVECTOR<XBUFFER*>*      GetClientTrustedRoots             ();
+    bool                    ClientTrustedRoot_Add             (XBUFFER& root);
+    bool                    ClientTrustedRoots_Load           (CIPHERTRUSTPROVIDERX509& provider);
+    bool                    ClientTrustedRoots_Delete         ();
 
     XVECTOR<XBUFFER*>*      GetLocalCertificateChain          ();
     bool                    LocalCertificate_Add              (XBUFFER& certificate);
@@ -95,7 +196,14 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     bool                    SetLocalPrivateKey                (CIPHERKEY* privatekey);
 
     bool                    HasLocalCredentials               ();
+    bool                    LocalCredentials_Validate         ();
+    DIOSTREAMTLS_LOCALCREDENTIALSERROR GetLocalCredentialsError ();
     bool                    LocalCredentials_Delete           ();
+
+    DIOSTREAMTLSSERVERCREDENTIALS* ServerCredentials_Add      (XCHAR* servername);
+    XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*>* GetServerCredentials ();
+    bool                    ServerCredentials_Select           (XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey);
+    bool                    ServerCredentials_Delete           ();
 
     bool                    IsAllowUnauthenticatedServer      ();
     void                    SetAllowUnauthenticatedServer     (bool allowunauthenticatedserver);
@@ -112,10 +220,22 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XWORD                   GetMaxVersion                     ();
     bool                    SetMaxVersion                     (XWORD version);
 
+    bool                    IsSessionResumptionActive         ();
+    void                    SessionResumption_Activate        (bool active);
+    XDWORD                  GetSessionTicketLifetime          ();
+    bool                    SetSessionTicketLifetime          (XDWORD lifetime);
+    bool                    SessionResumption_ServerInitialize ();
+    bool                    SessionTicket_Store               (XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd, XDWORD lifetime, XWORD ciphersuite, DIOSTREAMTLS_ALPN_TYPE applicationprotocol);
+    DIOSTREAMTLS13SESSIONTICKET* SessionTicket_Get             (XCHAR* servername);
+    bool                    SessionTickets_Delete             ();
+    bool                    SessionTicket_Seal                (XBUFFER& PSK, XWORD ciphersuite, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername, XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket);
+    bool                    SessionTicket_Open                (XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite, DIOSTREAMTLS_ALPN_TYPE& applicationprotocol, XSTRING& servername, XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd);
+
   protected:
 
   private:
 
+    bool                    Credentials_Validate              (XVECTOR<XBUFFER*>* certificatechain, CIPHERKEY* privatekey);
     void                    Clean                             ();
 
     XWORD                   minversion;
@@ -128,12 +248,21 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XVECTOR<DIOSTREAMTLS_ALPN_TYPE> applicationprotocols;
     XSTRING                 servername;
     XVECTOR<XBUFFER*>       trustedroots;
+    DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE clientauthenticationmode;
+    XVECTOR<XBUFFER*>       clienttrustedroots;
     XVECTOR<XBUFFER*>       localcertificatechain;
     CIPHERKEY*              localprivatekey;
+    XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*> servercredentials;
+    DIOSTREAMTLS_LOCALCREDENTIALSERROR localcredentialserror;
     bool                    allowunauthenticatedserver;
 
     bool                    aiafetchactive;
     int                     aiafetchtimeout;
+
+    bool                    sessionresumptionactive;
+    XDWORD                  sessionticketlifetime;
+    XBUFFER                 sessionticketserverkey;
+    XVECTOR<DIOSTREAMTLS13SESSIONTICKET*> sessiontickets;
 };
 
 

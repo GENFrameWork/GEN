@@ -35,6 +35,8 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "DIOStreamTCPIP.h"
+#include "DIOStreamTCPIPConfig.h"
+#include "DIOStreamTCPIPProxy.h"
 
 #include "DIOFactory.h"
 
@@ -160,6 +162,37 @@ DIOSTREAMENUMSERVERS* DIOSTREAMTCPIP::GetEnumServers()
 bool DIOSTREAMTCPIP::SetEnumServers(DIOSTREAMENUMSERVERS* enumservers)
 {
   this->enumservers = enumservers;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTCPIP::Proxy_Connect(int timeout)
+* @brief      Negotiate the configured proxy tunnel after the physical TCP connection is established
+* @ingroup    DATAIO
+* 
+* @param[in]  timeout : Timeout in seconds.
+* 
+* @return     bool : true if no tunnel is required or the tunnel was established.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTCPIP::Proxy_Connect(int timeout)
+{
+  if(!config) return false;
+
+  DIOSTREAMTCPIPPROXYCFG* proxycfg = config->GetProxyCFG();
+  if(!proxycfg || !proxycfg->IsActive()) return true;
+  if(proxycfg->GetMode() != DIOSTREAMTCPIPPROXYMODE_TUNNEL) return true;
+
+  DIOSTREAMTCPIPPROXY proxy;
+
+  if(!proxy.Connect(this, proxycfg, config->GetRemoteURL()->Get(), config->GetRemotePort(), timeout))
+    {
+      SetLastDIOError(DIOSTREAMERROR_TCPIPPROXY);
+      return false;
+    }
 
   return true;
 }

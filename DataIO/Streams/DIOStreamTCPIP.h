@@ -70,6 +70,8 @@ class DIOSTREAMTCPIP : public DIOSTREAM
     DIOSTREAMENUMSERVERS*                   GetEnumServers            ();
     bool                                    SetEnumServers            (DIOSTREAMENUMSERVERS* localenumservers);
 
+    bool                                    Proxy_Connect             (int timeout);
+
   protected:
 
     DIOSTREAMTCPIPCONFIG*                   config;

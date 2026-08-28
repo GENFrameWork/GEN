@@ -44,6 +44,13 @@
                                                                                  // does not limit it; a real chain rarely exceeds 4-5).
 
 
+enum CIPHERCERTIFICATEX509VALIDATOR_PURPOSE
+{
+  CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH = 0 ,
+  CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_CLIENT_AUTH     ,
+};
+
+
 enum CIPHERCERTIFICATEX509VALIDATOR_ERROR
 {
   CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE                         = 0 ,
@@ -72,6 +79,7 @@ class CIPHERCERTIFICATEX509VALIDATOR
     virtual                                ~CIPHERCERTIFICATEX509VALIDATOR          ();
 
     bool                                    Validate                                 (XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XCHAR* servername, XDATETIME* datetime = NULL);
+    bool                                    ValidateClient                           (XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
 
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    GetError                                 ();
     CIPHERCERTIFICATEX509*                  GetLeafCertificate                       ();
@@ -81,6 +89,7 @@ class CIPHERCERTIFICATEX509VALIDATOR
 
   private:
 
+    bool                                    ValidateInternal                         (XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE purpose, XCHAR* servername, XDATETIME* datetime);
     bool                                    IsSignatureAlgorithmSupported             (CIPHERCERTIFICATEX509* certificate);
     bool                                    IsSamePublicKey                           (CIPHERKEY* key1, CIPHERKEY* key2);
     bool                                    SetError                                  (CIPHERCERTIFICATEX509VALIDATOR_ERROR error);

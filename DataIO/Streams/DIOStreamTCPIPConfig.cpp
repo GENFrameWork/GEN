@@ -155,6 +155,55 @@ bool DIOSTREAMTCPIPCONFIG ::SetRemotePort(int port)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         DIOSTREAMTCPIPPROXYCFG* DIOSTREAMTCPIPCONFIG::GetProxyCFG()
+* @brief      Get proxy configuration
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTCPIPPROXYCFG* : Proxy configuration.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTCPIPPROXYCFG* DIOSTREAMTCPIPCONFIG::GetProxyCFG()
+{
+  return &proxycfg;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOURL* DIOSTREAMTCPIPCONFIG::GetConnectionURL()
+* @brief      Get the physical endpoint used to establish the TCP connection
+* @ingroup    DATAIO
+* 
+* @return     DIOURL* : Proxy URL when active; otherwise the configured remote URL.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOURL* DIOSTREAMTCPIPCONFIG::GetConnectionURL()
+{
+  if(proxycfg.IsActive()) return proxycfg.GetURL();
+
+  return GetRemoteURL();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int DIOSTREAMTCPIPCONFIG::GetConnectionPort()
+* @brief      Get the physical endpoint port used to establish the TCP connection
+* @ingroup    DATAIO
+* 
+* @return     int : Proxy port when active; otherwise the configured remote port.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+int DIOSTREAMTCPIPCONFIG::GetConnectionPort()
+{
+  if(proxycfg.IsActive()) return proxycfg.GetPort();
+
+  return GetRemotePort();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int DIOSTREAMTCPIPCONFIG::GetCounterMultiServer()
 * @brief      Get counter multi server
 * @ingroup    DATAIO

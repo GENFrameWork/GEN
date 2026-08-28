@@ -1696,6 +1696,7 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
   static const XBYTE OIDextendedkeyusage[] = { 0x55, 0x1D, 0x25 };
   static const XBYTE OIDsubjectaltname[]   = { 0x55, 0x1D, 0x11 };
   static const XBYTE OIDserverauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x01 };
+  static const XBYTE OIDclientauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x02 };
   static const XBYTE OIDauthorityinfoaccess[] = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x01, 0x01 };  // id-pe-authorityInfoAccess
   static const XBYTE OIDcaissuers[]           = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x02 };  // id-ad-caIssuers
 
@@ -2174,6 +2175,11 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
                     {
                       extendedkeyusageserverauthentication = true;
                     }
+
+                  if(CIPHERCERTIFICATEX509_DER_OIDCompare(extendedOID, OIDclientauth, sizeof(OIDclientauth)))
+                    {
+                      extendedkeyusageclientauthentication = true;
+                    }
                 }
             }
           else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDsubjectaltname, sizeof(OIDsubjectaltname)))
@@ -2506,6 +2512,21 @@ bool CIPHERCERTIFICATEX509::HasExtendedKeyUsage()
 bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageServerAuthentication()
 {
   return extendedkeyusageserverauthentication;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageClientAuthentication()
+* @brief      Check the id-kp-clientAuth ExtendedKeyUsage
+* @ingroup    CIPHER
+*
+* @return     bool : true if TLS client authentication is authorized; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageClientAuthentication()
+{
+  return extendedkeyusageclientauthentication;
 }
 
 
@@ -2953,6 +2974,7 @@ void CIPHERCERTIFICATEX509::Clean()
 
   hasextendedkeyusage                   = false;
   extendedkeyusageserverauthentication  = false;
+  extendedkeyusageclientauthentication  = false;
   hasunknowncriticalextension           = false;
   hassubjectalternativename              = false;
 

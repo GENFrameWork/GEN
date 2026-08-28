@@ -54,6 +54,8 @@
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTAPPLICATION       __L("c ap traffic")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_SERVERAPPLICATION       __L("s ap traffic")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTION              __L("res master")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTIONPSK           __L("resumption")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTIONBINDER        __L("res binder")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_KEY                     __L("key")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_IV                      __L("iv")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_FINISHED                __L("finished")
@@ -108,6 +110,8 @@ class DIOSTREAMTLS13KEYSCHEDULE
     bool                                    HandshakeTrafficSecrets_Calculate                 (XBUFFER& transcripthash);
     bool                                    ApplicationTrafficSecrets_Calculate               (XBUFFER& transcripthash);
     bool                                    ResumptionSecret_Calculate                        (XBUFFER& transcripthash);
+    bool                                    ResumptionPSK_Calculate                           (XBUFFER& ticketnonce, XBUFFER& PSK);
+    bool                                    Binder_Calculate                                  (XBUFFER& transcript, XBUFFER& binder);
 
     XBUFFER*                                GetEarlySecret                                    ();
     XBUFFER*                                GetHandshakeSecret                                ();

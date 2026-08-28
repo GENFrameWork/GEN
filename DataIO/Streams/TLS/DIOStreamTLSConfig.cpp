@@ -37,11 +37,17 @@
 #include "DIOStreamTLSConfig.h"
 
 #include "XFactory.h"
+#include "XDateTime.h"
+#include "XRand.h"
 
 #include "CipherCertificateX509.h"
+#include "CipherAESGCM.h"
+#include "CipherKeySymmetrical.h"
 #include "CipherKeyPrivateRSA.h"
 #include "CipherKeyECDSA.h"
 #include "CipherTrustedRootCertificatesX509.h"
+
+#include "DIOStreamTLSSignature.h"
 
 #include "DIOFactory.h"
 
@@ -59,6 +65,354 @@
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
+static bool DIOSTREAMTLSCONFIG_ServerNameMatch(XSTRING& pattern, XCHAR* servername)
+{
+  XSTRING hostname;
+  int     dot;
+
+  if(!servername || !servername[0] || pattern.IsEmpty()) return false;
+
+  hostname = servername;
+
+  if(hostname.Character_GetLast() == __C('.')) hostname.DeleteLastCharacter();
+  if(pattern.Character_GetLast()  == __C('.')) pattern.DeleteLastCharacter();
+
+  if(!pattern.Compare(hostname, true)) return true;
+
+  if((pattern.GetSize() < 3) || (pattern[0] != __C('*')) || (pattern[1] != __C('.')) ||
+     (pattern.FindCharacter(__C('*'), 1) >= 0)) return false;
+
+  dot = hostname.FindCharacter(__C('.'));
+  if(dot <= 0) return false;
+
+  XSTRING hostnamesuffix(&hostname.Get()[dot]);
+  XSTRING patternsuffix(&pattern.Get()[1]);
+
+  return !hostnamesuffix.Compare(patternsuffix, true);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLSSERVERCREDENTIALS::DIOSTREAMTLSSERVERCREDENTIALS()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLSSERVERCREDENTIALS::DIOSTREAMTLSSERVERCREDENTIALS()
+{
+  privatekey = NULL;
+
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLSSERVERCREDENTIALS::~DIOSTREAMTLSSERVERCREDENTIALS()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLSSERVERCREDENTIALS::~DIOSTREAMTLSSERVERCREDENTIALS()
+{
+  Delete();
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* DIOSTREAMTLSSERVERCREDENTIALS::GetServerName()
+* @brief      Get the SNI server name pattern associated with these credentials
+* @ingroup    DATAIO
+*
+* @return     XSTRING* : Server name pattern.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* DIOSTREAMTLSSERVERCREDENTIALS::GetServerName()
+{
+  return &servername;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<XBUFFER*>* DIOSTREAMTLSSERVERCREDENTIALS::GetCertificateChain()
+* @brief      Get the certificate chain associated with this SNI name
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<XBUFFER*>* : Certificate chain.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<XBUFFER*>* DIOSTREAMTLSSERVERCREDENTIALS::GetCertificateChain()
+{
+  return &certificatechain;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::Certificate_Add(XBUFFER& certificate)
+* @brief      Add a copied DER certificate to the SNI certificate chain
+* @ingroup    DATAIO
+*
+* @param[in]  certificate : DER certificate.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSERVERCREDENTIALS::Certificate_Add(XBUFFER& certificate)
+{
+  XBUFFER* copy;
+
+  if(certificate.IsEmpty()) return false;
+
+  copy = GEN_NEW XBUFFER();
+  if(!copy) return false;
+
+  if(!copy->Add(certificate) || !certificatechain.Add(copy))
+    {
+      GEN_DELETE copy;
+      return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::Certificates_Delete()
+* @brief      Delete the SNI certificate chain
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSERVERCREDENTIALS::Certificates_Delete()
+{
+  certificatechain.DeleteContents();
+  certificatechain.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         CIPHERKEY* DIOSTREAMTLSSERVERCREDENTIALS::GetPrivateKey()
+* @brief      Get the private key associated with this SNI name
+* @ingroup    DATAIO
+*
+* @return     CIPHERKEY* : Private key.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+CIPHERKEY* DIOSTREAMTLSSERVERCREDENTIALS::GetPrivateKey()
+{
+  return privatekey;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::SetPrivateKey(CIPHERKEY* privatekey)
+* @brief      Copy the private key associated with this SNI name
+* @ingroup    DATAIO
+*
+* @param[in]  privatekey : Private key to copy.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSERVERCREDENTIALS::SetPrivateKey(CIPHERKEY* privatekey)
+{
+  CIPHERKEY* copy = NULL;
+
+  if(!privatekey || !privatekey->GetSizeInBytes()) return false;
+
+  switch(privatekey->GetType())
+    {
+      case CIPHERKEYTYPE_RSA_PRIVATE :
+        {
+          CIPHERKEYPRIVATERSA* rsacopy = GEN_NEW CIPHERKEYPRIVATERSA();
+          if(!rsacopy) return false;
+
+          if(!rsacopy->CopyFrom((CIPHERKEYPRIVATERSA*)privatekey))
+            {
+              GEN_DELETE rsacopy;
+              return false;
+            }
+
+          copy = rsacopy;
+        }
+        break;
+
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE :
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE :
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE :
+        {
+          CIPHERKEYECDSA* ecdsacopy = GEN_NEW CIPHERKEYECDSA();
+          if(!ecdsacopy) return false;
+
+          if(!ecdsacopy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
+            {
+              GEN_DELETE ecdsacopy;
+              return false;
+            }
+
+          copy = ecdsacopy;
+        }
+        break;
+
+                                        default : return false;
+    }
+
+  if(this->privatekey) GEN_DELETE this->privatekey;
+
+  this->privatekey = copy;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::HasCredentials()
+* @brief      Check whether this SNI entry contains a certificate chain and private key
+* @ingroup    DATAIO
+*
+* @return     bool : true if credentials are configured; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSERVERCREDENTIALS::HasCredentials()
+{
+  return !certificatechain.IsEmpty() && privatekey;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::Delete()
+* @brief      Delete all credentials owned by this SNI entry
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSSERVERCREDENTIALS::Delete()
+{
+  Certificates_Delete();
+
+  if(privatekey)
+    {
+      GEN_DELETE privatekey;
+      privatekey = NULL;
+    }
+
+  servername.Empty();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void DIOSTREAMTLSSERVERCREDENTIALS::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOSTREAMTLSSERVERCREDENTIALS::Clean()
+{
+  servername.Empty();
+  privatekey = NULL;
+}
+
+
+static XQWORD DIOSTREAMTLSCONFIG_CurrentEpoch()
+{
+  XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
+  XQWORD     epoch    = 0;
+
+  if(datetime)
+    {
+      if(datetime->Read(false)) epoch = datetime->GetEPOCHFormat();
+      GEN_XFACTORY.DeleteDateTime(datetime);
+    }
+
+  return epoch;
+}
+
+
+DIOSTREAMTLS13SESSIONTICKET::DIOSTREAMTLS13SESSIONTICKET()
+{
+  Clean();
+}
+
+
+DIOSTREAMTLS13SESSIONTICKET::~DIOSTREAMTLS13SESSIONTICKET()
+{
+  Delete();
+  Clean();
+}
+
+
+XSTRING* DIOSTREAMTLS13SESSIONTICKET::GetServerName() { return &servername; }
+XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetTicket() { return &ticket; }
+XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetPSK() { return &psk; }
+XDWORD DIOSTREAMTLS13SESSIONTICKET::GetTicketAgeAdd() { return ticketageadd; }
+void DIOSTREAMTLS13SESSIONTICKET::SetTicketAgeAdd(XDWORD ageadd) { ticketageadd = ageadd; }
+XDWORD DIOSTREAMTLS13SESSIONTICKET::GetLifetime() { return lifetime; }
+void DIOSTREAMTLS13SESSIONTICKET::SetLifetime(XDWORD lifetime) { this->lifetime = lifetime; }
+XQWORD DIOSTREAMTLS13SESSIONTICKET::GetReceivedEpoch() { return receivedepoch; }
+void DIOSTREAMTLS13SESSIONTICKET::SetReceivedEpoch(XQWORD epoch) { receivedepoch = epoch; }
+XWORD DIOSTREAMTLS13SESSIONTICKET::GetCipherSuite() { return ciphersuite; }
+void DIOSTREAMTLS13SESSIONTICKET::SetCipherSuite(XWORD ciphersuite) { this->ciphersuite = ciphersuite; }
+DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocol() { return applicationprotocol; }
+void DIOSTREAMTLS13SESSIONTICKET::SetApplicationProtocol(DIOSTREAMTLS_ALPN_TYPE protocol) { applicationprotocol = protocol; }
+
+
+bool DIOSTREAMTLS13SESSIONTICKET::IsExpired()
+{
+  XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
+  if(!now || !receivedepoch || !lifetime) return true;
+  return (now < receivedepoch) || ((now - receivedepoch) >= lifetime);
+}
+
+
+XDWORD DIOSTREAMTLS13SESSIONTICKET::GetObfuscatedAge()
+{
+  XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
+  if(!now || !receivedepoch || now < receivedepoch) return ticketageadd;
+
+  XQWORD agems = (now - receivedepoch) * 1000ULL;
+  return (XDWORD)((agems + ticketageadd) & 0xFFFFFFFFULL);
+}
+
+
+bool DIOSTREAMTLS13SESSIONTICKET::Delete()
+{
+  if(!psk.IsEmpty()) psk.FillBuffer(0);
+  psk.Delete();
+  ticket.Delete();
+  servername.Empty();
+  Clean();
+  return true;
+}
+
+
+void DIOSTREAMTLS13SESSIONTICKET::Clean()
+{
+  ticketageadd        = 0;
+  lifetime            = 0;
+  receivedepoch       = 0;
+  ciphersuite         = 0;
+  applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -496,9 +850,46 @@ bool DIOSTREAMTLSCONFIG::TrustedRoot_Add(XBUFFER& root)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool DIOSTREAMTLSCONFIG::TrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
+* @brief      Replace the configured trust anchors with the roots supplied by a GEN trust provider
+* @ingroup    DATAIO
+*
+* @param[in]  provider : Trust provider to load.
+*
+* @return     bool : true if at least one trust anchor is loaded; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::TrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
+{
+  XVECTOR<XBUFFER*>* roots;
+
+  if(!provider.Load()) return false;
+
+  roots = provider.GetRoots();
+  if(!roots || roots->IsEmpty()) return false;
+
+  TrustedRoots_Delete();
+
+  for(XDWORD c=0; c<roots->GetSize(); c++)
+    {
+      XBUFFER* root = roots->Get(c);
+
+      if(root && !TrustedRoot_Add((*root)))
+        {
+          TrustedRoots_Delete();
+          return false;
+        }
+    }
+
+  return !trustedroots.IsEmpty();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
-* @brief      Add the supported RSA/ECDSA-P256 trust anchors from the embedded GEN CA bundle
+* @brief      Add the trust anchors supplied by the embedded GEN trust provider
 * @ingroup    DATAIO
 *
 * @return     bool : true if at least one trust anchor is added; otherwise false.
@@ -506,38 +897,11 @@ bool DIOSTREAMTLSCONFIG::TrustedRoot_Add(XBUFFER& root)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
 {
-  CIPHERTRUSTEDROOTCERTIFICATESX509 defaultroots;
+  CIPHERTRUSTPROVIDERX509GEN provider;
 
   if(!trustedroots.IsEmpty()) return false;
-  if(!defaultroots.Certificates_Decode()) return false;
 
-  for(XDWORD c=0; c<defaultroots.Certificates_GetAll()->GetSize(); c++)
-    {
-      XBUFFER* rootDER = defaultroots.Certificates_GetAll()->Get(c);
-
-      if(rootDER)
-        {
-          CIPHERCERTIFICATEX509 root;
-
-          // Only load a root as a trust anchor when its key type is one CIPHERCERTIFICATEX509VALIDATOR can actually
-          // verify a chain signature against (see VerifySignature()): RSA of any size, or ECDSA on P-256/P-384/P-521.
-          // Silently admitting a root whose signature can never be checked would be worse than excluding it.
-          if(root.Decode((*rootDER)) && root.IsCertificateAuthority() && root.GetPublicCipherKey() &&
-             ((root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_RSA_PUBLIC) ||
-              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) ||
-              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC) ||
-              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC)))
-            {
-              if(!TrustedRoot_Add((*rootDER)))
-                {
-                  TrustedRoots_Delete();
-                  return false;
-                }
-            }
-        }
-    }
-
-  return !trustedroots.IsEmpty();
+  return TrustedRoots_Load(provider);
 }
 
 
@@ -555,6 +919,76 @@ bool DIOSTREAMTLSCONFIG::TrustedRoots_Delete()
   trustedroots.DeleteContents();
   trustedroots.DeleteAll();
 
+  return true;
+}
+
+
+DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE DIOSTREAMTLSCONFIG::GetClientAuthenticationMode()
+{
+  return clientauthenticationmode;
+}
+
+
+void DIOSTREAMTLSCONFIG::SetClientAuthenticationMode(DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE mode)
+{
+  clientauthenticationmode = mode;
+}
+
+
+XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetClientTrustedRoots()
+{
+  return &clienttrustedroots;
+}
+
+
+bool DIOSTREAMTLSCONFIG::ClientTrustedRoot_Add(XBUFFER& root)
+{
+  XBUFFER* copy;
+
+  if(root.IsEmpty()) return false;
+
+  copy = GEN_NEW XBUFFER();
+  if(!copy) return false;
+
+  if(!copy->Add(root) || !clienttrustedroots.Add(copy))
+    {
+      GEN_DELETE copy;
+      return false;
+    }
+
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
+{
+  XVECTOR<XBUFFER*>* roots;
+
+  if(!provider.Load()) return false;
+
+  roots = provider.GetRoots();
+  if(!roots || roots->IsEmpty()) return false;
+
+  ClientTrustedRoots_Delete();
+
+  for(XDWORD c=0; c<roots->GetSize(); c++)
+    {
+      XBUFFER* root = roots->Get(c);
+      if(root && !ClientTrustedRoot_Add((*root)))
+        {
+          ClientTrustedRoots_Delete();
+          return false;
+        }
+    }
+
+  return !clienttrustedroots.IsEmpty();
+}
+
+
+bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Delete()
+{
+  clienttrustedroots.DeleteContents();
+  clienttrustedroots.DeleteAll();
   return true;
 }
 
@@ -726,6 +1160,286 @@ bool DIOSTREAMTLSCONFIG::HasLocalCredentials()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLSCONFIG::LocalCredentials_Validate()
+* @brief      Validate the local TLS certificate chain and private key before using them in server mode
+* @ingroup    DATAIO
+*
+* @return     bool : true if the local credentials are coherent and usable; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::LocalCredentials_Validate()
+{
+  localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE;
+
+  if(!Credentials_Validate(&localcertificatechain, localprivatekey)) return false;
+
+  for(XDWORD c=0; c<servercredentials.GetSize(); c++)
+    {
+      DIOSTREAMTLSSERVERCREDENTIALS* credentials = servercredentials.Get(c);
+
+      if(!credentials || credentials->GetServerName()->IsEmpty() ||
+         !Credentials_Validate(credentials->GetCertificateChain(), credentials->GetPrivateKey()))
+        {
+          if(localcredentialserror == DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE)
+            {
+              localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NOTCONFIGURED;
+            }
+
+          return false;
+        }
+
+      XBUFFER* certificateDER = credentials->GetCertificateChain()->Get(0);
+      CIPHERCERTIFICATEX509 certificate;
+      XSTRING servernametest((*credentials->GetServerName()));
+      bool    servernamematch = false;
+
+      if(certificateDER && certificate.Decode((*certificateDER)))
+        {
+          if((servernametest.GetSize() >= 2) && (servernametest[0] == __C('*')) && (servernametest[1] == __C('.')))
+            {
+              for(XDWORD d=0; d<certificate.GetSubjectAlternativeNamesDNS()->GetSize(); d++)
+                {
+                  XSTRING* subjectname = certificate.GetSubjectAlternativeNamesDNS()->Get(d);
+                  if(!subjectname) continue;
+
+                  XSTRING normalized((*subjectname));
+                  if(normalized.Character_GetLast() == __C('.')) normalized.DeleteLastCharacter();
+
+                  if(!normalized.Compare(servernametest, true))
+                    {
+                      servernamematch = true;
+                      break;
+                    }
+                }
+            }
+           else
+            {
+              servernamematch = certificate.IsServerNameValid(servernametest.Get());
+            }
+        }
+
+      if(!servernamematch)
+        {
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDSERVERNAME;
+          return false;
+        }
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::Credentials_Validate(XVECTOR<XBUFFER*>* certificatechain, CIPHERKEY* privatekey)
+* @brief      Validate one server certificate chain/private key pair
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  certificatechain : Certificate chain to validate.
+* @param[in]  privatekey : Private key associated with the leaf certificate.
+*
+* @return     bool : true if the credentials are coherent and usable; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::Credentials_Validate(XVECTOR<XBUFFER*>* certificatechain, CIPHERKEY* privatekey)
+{
+  XVECTOR<CIPHERCERTIFICATEX509*> certificates;
+  XBUFFER                         content;
+  XBUFFER                         signature;
+
+  if(!certificatechain || certificatechain->IsEmpty() || !privatekey)
+    {
+      localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NOTCONFIGURED;
+      return false;
+    }
+
+  for(XDWORD c=0; c<certificatechain->GetSize(); c++)
+    {
+      XBUFFER*               certificateDER = certificatechain->Get(c);
+      CIPHERCERTIFICATEX509* certificate;
+
+      if(!certificateDER || certificateDER->IsEmpty())
+        {
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE;
+          certificates.DeleteContents();
+          certificates.DeleteAll();
+          return false;
+        }
+
+      certificate = GEN_NEW CIPHERCERTIFICATEX509();
+      if(!certificate || !certificate->Decode((*certificateDER)))
+        {
+          if(certificate) GEN_DELETE certificate;
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE;
+          certificates.DeleteContents();
+          certificates.DeleteAll();
+          return false;
+        }
+
+      if(!certificates.Add(certificate))
+        {
+          GEN_DELETE certificate;
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE;
+          certificates.DeleteContents();
+          certificates.DeleteAll();
+          return false;
+        }
+    }
+
+  for(XDWORD c=0; c<certificates.GetSize(); c++)
+    {
+      CIPHERCERTIFICATEX509* certificate = certificates.Get(c);
+
+      if(!certificate || certificate->HasUnknownCriticalExtension())
+        {
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE;
+          certificates.DeleteContents();
+          certificates.DeleteAll();
+          return false;
+        }
+
+      if(!certificate->IsValidDates())
+        {
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDDATE;
+          certificates.DeleteContents();
+          certificates.DeleteAll();
+          return false;
+        }
+
+      if(!c)
+        {
+          if(!certificate->IsPublicCipherKeyValid())
+            {
+              localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE;
+              certificates.DeleteContents();
+              certificates.DeleteAll();
+              return false;
+            }
+
+          if(certificate->IsCertificateAuthority() ||
+             (certificate->HasKeyUsage() && !certificate->IsKeyUsageDigitalSignature()) ||
+             (certificate->HasExtendedKeyUsage() && !certificate->IsExtendedKeyUsageServerAuthentication()))
+            {
+              localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDKEYUSAGE;
+              certificates.DeleteContents();
+              certificates.DeleteAll();
+              return false;
+            }
+        }
+       else
+        {
+          if(!certificate->IsCertificateAuthority() ||
+             (certificate->HasKeyUsage() && !certificate->IsKeyUsageCertificateSign()))
+            {
+              localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDKEYUSAGE;
+              certificates.DeleteContents();
+              certificates.DeleteAll();
+              return false;
+            }
+
+          if((certificate->GetBasicConstraintsPathLength() >= 0) &&
+             ((int)c - 1 > certificate->GetBasicConstraintsPathLength()))
+            {
+              localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCHAIN;
+              certificates.DeleteContents();
+              certificates.DeleteAll();
+              return false;
+            }
+        }
+    }
+
+  for(XDWORD c=0; c+1<certificates.GetSize(); c++)
+    {
+      CIPHERCERTIFICATEX509* certificate = certificates.Get(c);
+      CIPHERCERTIFICATEX509* issuer      = certificates.Get(c+1);
+
+      if(!certificate->GetIssuerData()->Compare((*issuer->GetSubjectData())) ||
+         !certificate->VerifySignature(issuer->GetPublicCipherKey()))
+        {
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCHAIN;
+          certificates.DeleteContents();
+          certificates.DeleteAll();
+          return false;
+        }
+    }
+
+  CIPHERCERTIFICATEX509* leaf      = certificates.Get(0);
+  CIPHERKEY*             publickey = leaf?leaf->GetPublicCipherKey():NULL;
+
+  if(!publickey)
+    {
+      localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_UNSUPPORTEDKEY;
+      certificates.DeleteContents();
+      certificates.DeleteAll();
+      return false;
+    }
+
+  static const XBYTE testcontent[] = { 0x47, 0x45, 0x4E, 0x2D, 0x54, 0x4C, 0x53, 0x2D,
+                                       0x43, 0x52, 0x45, 0x44, 0x45, 0x4E, 0x54, 0x49,
+                                       0x41, 0x4C, 0x53 };
+
+  if(!content.Add((XBYTE*)testcontent, sizeof(testcontent)))
+    {
+      localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_KEYMISMATCH;
+      certificates.DeleteContents();
+      certificates.DeleteAll();
+      return false;
+    }
+
+  bool havesupportedscheme = false;
+  bool keypairvalid        = false;
+
+  for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+    {
+      XWORD signaturescheme = signatureschemes.Get(c);
+
+      if(!DIOSTREAMTLSSIGNATURE::IsSupported(signaturescheme, publickey)) continue;
+
+      havesupportedscheme = true;
+      signature.Delete();
+
+      if(DIOSTREAMTLSSIGNATURE::Sign(signaturescheme, privatekey, publickey, content, signature) &&
+         DIOSTREAMTLSSIGNATURE::Verify(signaturescheme, publickey, content, signature))
+        {
+          keypairvalid = true;
+          break;
+        }
+    }
+
+  if(!havesupportedscheme || !keypairvalid)
+    {
+      localcredentialserror = havesupportedscheme?DIOSTREAMTLS_LOCALCREDENTIALSERROR_KEYMISMATCH:
+                                                 DIOSTREAMTLS_LOCALCREDENTIALSERROR_UNSUPPORTEDKEY;
+      certificates.DeleteContents();
+      certificates.DeleteAll();
+      return false;
+    }
+
+  certificates.DeleteContents();
+  certificates.DeleteAll();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_LOCALCREDENTIALSERROR DIOSTREAMTLSCONFIG::GetLocalCredentialsError()
+* @brief      Get the result of the last local credential validation
+* @ingroup    DATAIO
+*
+* @return     DIOSTREAMTLS_LOCALCREDENTIALSERROR : Last validation result.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_LOCALCREDENTIALSERROR DIOSTREAMTLSCONFIG::GetLocalCredentialsError()
+{
+  return localcredentialserror;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLSCONFIG::LocalCredentials_Delete()
 * @brief      Delete the copied certificate chain and private key of the local end
 * @ingroup    DATAIO
@@ -742,6 +1456,152 @@ bool DIOSTREAMTLSCONFIG::LocalCredentials_Delete()
       GEN_DELETE localprivatekey;
       localprivatekey = NULL;
     }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLSSERVERCREDENTIALS* DIOSTREAMTLSCONFIG::ServerCredentials_Add(XCHAR* servername)
+* @brief      Add a server credential set selected by SNI
+* @ingroup    DATAIO
+*
+* @param[in]  servername : Exact DNS name or single-label wildcard pattern.
+*
+* @return     DIOSTREAMTLSSERVERCREDENTIALS* : New credential set; NULL on error.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLSSERVERCREDENTIALS* DIOSTREAMTLSCONFIG::ServerCredentials_Add(XCHAR* servername)
+{
+  DIOSTREAMTLSSERVERCREDENTIALS* credentials;
+  XSTRING                         pattern;
+
+  if(!servername || !servername[0]) return NULL;
+
+  pattern = servername;
+  if(pattern.Character_GetLast() == __C('.')) pattern.DeleteLastCharacter();
+  if(pattern.IsEmpty()) return NULL;
+
+  if(pattern.FindCharacter(__C('*')) >= 0)
+    {
+      if((pattern.GetSize() < 3) || (pattern[0] != __C('*')) || (pattern[1] != __C('.')) ||
+         (pattern.FindCharacter(__C('*'), 1) >= 0)) return NULL;
+    }
+
+  for(XDWORD c=0; c<servercredentials.GetSize(); c++)
+    {
+      DIOSTREAMTLSSERVERCREDENTIALS* existing = servercredentials.Get(c);
+
+      if(existing && !existing->GetServerName()->Compare(pattern, true)) return NULL;
+    }
+
+  credentials = GEN_NEW DIOSTREAMTLSSERVERCREDENTIALS();
+  if(!credentials) return NULL;
+
+  credentials->GetServerName()->Set(pattern);
+
+  if(!servercredentials.Add(credentials))
+    {
+      GEN_DELETE credentials;
+      return NULL;
+    }
+
+  return credentials;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*>* DIOSTREAMTLSCONFIG::GetServerCredentials()
+* @brief      Get all SNI-specific server credentials
+* @ingroup    DATAIO
+*
+* @return     XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*>* : Credential list.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*>* DIOSTREAMTLSCONFIG::GetServerCredentials()
+{
+  return &servercredentials;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey)
+* @brief      Select server credentials for an SNI hostname, falling back to the default credentials
+* @ingroup    DATAIO
+*
+* @param[in]  servername : Requested SNI DNS name; NULL or empty when SNI is absent.
+* @param[out] certificatechain : Selected certificate chain.
+* @param[out] privatekey : Selected private key.
+*
+* @return     bool : true if usable credentials are available; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey)
+{
+  certificatechain = NULL;
+  privatekey        = NULL;
+
+  if(servername && servername[0])
+    {
+      // Exact names always win over wildcard entries regardless of insertion order.
+      for(XDWORD c=0; c<servercredentials.GetSize(); c++)
+        {
+          DIOSTREAMTLSSERVERCREDENTIALS* credentials = servercredentials.Get(c);
+          if(!credentials || !credentials->HasCredentials()) continue;
+
+          XSTRING pattern((*credentials->GetServerName()));
+          if(pattern.FindCharacter(__C('*')) >= 0) continue;
+
+          if(DIOSTREAMTLSCONFIG_ServerNameMatch(pattern, servername))
+            {
+              certificatechain = credentials->GetCertificateChain();
+              privatekey        = credentials->GetPrivateKey();
+              return true;
+            }
+        }
+
+      for(XDWORD c=0; c<servercredentials.GetSize(); c++)
+        {
+          DIOSTREAMTLSSERVERCREDENTIALS* credentials = servercredentials.Get(c);
+          if(!credentials || !credentials->HasCredentials()) continue;
+
+          XSTRING pattern((*credentials->GetServerName()));
+          if(pattern.FindCharacter(__C('*')) < 0) continue;
+
+          if(DIOSTREAMTLSCONFIG_ServerNameMatch(pattern, servername))
+            {
+              certificatechain = credentials->GetCertificateChain();
+              privatekey        = credentials->GetPrivateKey();
+              return true;
+            }
+        }
+    }
+
+  if(!HasLocalCredentials()) return false;
+
+  certificatechain = &localcertificatechain;
+  privatekey        = localprivatekey;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::ServerCredentials_Delete()
+* @brief      Delete all SNI-specific server credentials
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::ServerCredentials_Delete()
+{
+  servercredentials.DeleteContents();
+  servercredentials.DeleteAll();
 
   return true;
 }
@@ -925,6 +1785,254 @@ bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
 }
 
 
+
+bool DIOSTREAMTLSCONFIG::IsSessionResumptionActive()
+{
+  return sessionresumptionactive;
+}
+
+
+void DIOSTREAMTLSCONFIG::SessionResumption_Activate(bool active)
+{
+  sessionresumptionactive = active;
+
+  if(!active)
+    {
+      SessionTickets_Delete();
+      if(!sessionticketserverkey.IsEmpty()) sessionticketserverkey.FillBuffer(0);
+      sessionticketserverkey.Delete();
+    }
+}
+
+
+XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketLifetime()
+{
+  return sessionticketlifetime;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SetSessionTicketLifetime(XDWORD lifetime)
+{
+  if(!lifetime || (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME)) return false;
+  sessionticketlifetime = lifetime;
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionResumption_ServerInitialize()
+{
+  if(!sessionresumptionactive) return true;
+  if(sessionticketserverkey.GetSize() == 32) return true;
+
+  XRAND* random = GEN_XFACTORY.CreateRand();
+  if(!random) return false;
+
+  XBYTE key[32];
+  bool status = random->Ini();
+  if(status) status = random->Generate(key, sizeof(key));
+  GEN_XFACTORY.DeleteRand(random);
+
+  if(status)
+    {
+      sessionticketserverkey.Delete();
+      status = sessionticketserverkey.Add(key, sizeof(key));
+    }
+
+  volatile XBYTE* clean = key;
+  for(XDWORD c=0; c<sizeof(key); c++) clean[c] = 0;
+  return status;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd,
+                                              XDWORD lifetime, XWORD ciphersuite,
+                                              DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+{
+  if(!sessionresumptionactive || !servername || !servername[0] || ticket.IsEmpty() || PSK.IsEmpty() ||
+     !lifetime || (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME)) return false;
+
+  for(int c=(int)sessiontickets.GetSize()-1; c>=0; c--)
+    {
+      DIOSTREAMTLS13SESSIONTICKET* current = sessiontickets.Get(c);
+      if(!current || current->IsExpired() || !current->GetServerName()->Compare(servername, true))
+        {
+          sessiontickets.Delete(current);
+          if(current) GEN_DELETE current;
+        }
+    }
+
+  while(sessiontickets.GetSize() >= DIOSTREAMTLS13_SESSIONTICKET_MAX_CACHED)
+    {
+      DIOSTREAMTLS13SESSIONTICKET* oldest = sessiontickets.Get(0);
+      sessiontickets.Delete(oldest);
+      if(oldest) GEN_DELETE oldest;
+    }
+
+  DIOSTREAMTLS13SESSIONTICKET* stored = GEN_NEW DIOSTREAMTLS13SESSIONTICKET();
+  if(!stored) return false;
+
+  stored->GetServerName()->Set(servername);
+  stored->SetTicketAgeAdd(ageadd);
+  stored->SetLifetime(lifetime);
+  stored->SetReceivedEpoch(DIOSTREAMTLSCONFIG_CurrentEpoch());
+  stored->SetCipherSuite(ciphersuite);
+  stored->SetApplicationProtocol(applicationprotocol);
+
+  if(!stored->GetTicket()->Add(ticket) || !stored->GetPSK()->Add(PSK) || !stored->GetReceivedEpoch() ||
+     !sessiontickets.Add(stored))
+    {
+      GEN_DELETE stored;
+      return false;
+    }
+
+  return true;
+}
+
+
+DIOSTREAMTLS13SESSIONTICKET* DIOSTREAMTLSCONFIG::SessionTicket_Get(XCHAR* servername)
+{
+  if(!sessionresumptionactive || !servername || !servername[0]) return NULL;
+
+  for(int c=(int)sessiontickets.GetSize()-1; c>=0; c--)
+    {
+      DIOSTREAMTLS13SESSIONTICKET* ticket = sessiontickets.Get(c);
+      if(!ticket) continue;
+
+      if(ticket->IsExpired())
+        {
+          sessiontickets.Delete(ticket);
+          GEN_DELETE ticket;
+          continue;
+        }
+
+      if(!ticket->GetServerName()->Compare(servername, true)) return ticket;
+    }
+
+  return NULL;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTickets_Delete()
+{
+  sessiontickets.DeleteContents();
+  sessiontickets.DeleteAll();
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicket_Seal(XBUFFER& PSK, XWORD ciphersuite,
+                                             DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername,
+                                             XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket)
+{
+  if(!sessionresumptionactive || PSK.IsEmpty() || !lifetime ||
+     (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME) ||
+     !SessionResumption_ServerInitialize()) return false;
+
+  XBUFFER plain;
+  XBUFFER nonce;
+  XBUFFER aad;
+  XBUFFER tag;
+  CIPHERKEYSYMMETRICAL key;
+  CIPHERAESGCM cipher;
+  XRAND* random = GEN_XFACTORY.CreateRand();
+  XQWORD issueepoch = DIOSTREAMTLSCONFIG_CurrentEpoch();
+  XBYTE namelength = 0;
+
+  if(!issueepoch || PSK.GetSize() > 255) return false;
+  if(servername)
+    {
+      XDWORD length = 0;
+      while(servername[length])
+        {
+          if((XDWORD)servername[length] > 0x7F || length >= 255) return false;
+          length++;
+        }
+      namelength = (XBYTE)length;
+    }
+
+  if(!random) return false;
+  if(!nonce.Resize(CIPHERAESGCM_NONCESIZE)) { GEN_XFACTORY.DeleteRand(random); return false; }
+  bool status = random->Ini() && random->Generate(nonce.Get(), nonce.GetSize());
+  GEN_XFACTORY.DeleteRand(random);
+  if(!status) return false;
+
+  if(!plain.Add((XBYTE)1) || !plain.Add(issueepoch) || !plain.Add(lifetime) || !plain.Add(ageadd) ||
+     !plain.Add(ciphersuite) || !plain.Add((XWORD)applicationprotocol) || !plain.Add((XBYTE)PSK.GetSize()) ||
+     !plain.Add(PSK) || !plain.Add(namelength)) return false;
+
+  for(XDWORD c=0; c<namelength; c++) if(!plain.Add((XBYTE)servername[c])) return false;
+
+  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','1' };
+  if(!aad.Add(aadbytes, sizeof(aadbytes)) || !key.Set(sessionticketserverkey) || !cipher.SetKey(&key) ||
+     !cipher.CipherAEAD(plain.Get(), plain.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
+
+  ticket.Delete();
+  if(!ticket.Add(nonce) || !ticket.Add((*cipher.GetResult())) || !ticket.Add(tag)) return false;
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite,
+                                             DIOSTREAMTLS_ALPN_TYPE& applicationprotocol, XSTRING& servername,
+                                             XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
+{
+  if(!sessionresumptionactive || sessionticketserverkey.GetSize() != 32 ||
+     ticket.GetSize() <= (CIPHERAESGCM_NONCESIZE + CIPHERAESGCM_TAGSIZE)) return false;
+
+  XBUFFER nonce;
+  XBUFFER ciphertext;
+  XBUFFER tag;
+  XBUFFER aad;
+  CIPHERKEYSYMMETRICAL key;
+  CIPHERAESGCM cipher;
+  XDWORD ciphertextsize = ticket.GetSize() - CIPHERAESGCM_NONCESIZE - CIPHERAESGCM_TAGSIZE;
+
+  if(!nonce.Add(ticket.Get(), CIPHERAESGCM_NONCESIZE) ||
+     !ciphertext.Add(ticket.Get() + CIPHERAESGCM_NONCESIZE, ciphertextsize) ||
+     !tag.Add(ticket.Get() + CIPHERAESGCM_NONCESIZE + ciphertextsize, CIPHERAESGCM_TAGSIZE)) return false;
+
+  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','1' };
+  if(!aad.Add(aadbytes, sizeof(aadbytes)) || !key.Set(sessionticketserverkey) || !cipher.SetKey(&key) ||
+     !cipher.UncipherAEAD(ciphertext.Get(), ciphertext.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
+
+  XBUFFER plain;
+  if(!plain.Add((*cipher.GetResult()))) return false;
+
+  XBYTE version = 0;
+  XWORD protocol = 0;
+  XBYTE psklength = 0;
+  XBYTE namelength = 0;
+
+  if(!plain.Extract(version) || version != 1 || !plain.Extract(issueepoch) || !plain.Extract(lifetime) ||
+     !plain.Extract(ageadd) || !plain.Extract(ciphersuite) || !plain.Extract(protocol) ||
+     !plain.Extract(psklength) || !psklength || plain.GetSize() < ((XDWORD)psklength + 1)) return false;
+
+  PSK.Delete();
+  if(!PSK.Resize(psklength) || plain.Extract(PSK.Get(), 0, psklength) != psklength || !plain.Extract(namelength) ||
+     plain.GetSize() != namelength) return false;
+
+  servername.Empty();
+  for(XDWORD c=0; c<namelength; c++)
+    {
+      XBYTE character = 0;
+      if(!plain.Extract(character)) return false;
+      servername.Add((XCHAR)character);
+    }
+
+  applicationprotocol = (DIOSTREAMTLS_ALPN_TYPE)protocol;
+  XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
+  if(!now || !issueepoch || now < issueepoch || !lifetime ||
+     lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME || (now - issueepoch) >= lifetime)
+    {
+      PSK.FillBuffer(0);
+      PSK.Delete();
+      return false;
+    }
+
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOSTREAMTLSCONFIG::Clean()
@@ -949,20 +2057,9 @@ void DIOSTREAMTLSCONFIG::Clean()
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
 
-  // Handshake-signing schemes offered in signature_algorithms. RSA-PSS only BY DEFAULT: this is the set that
-  // has been in production use, and it is deliberately not widened without evidence, because every entry added
-  // here changes which certificate a dual-certificate server decides to send -- confirmed for real against
-  // example.com, whose CDN switched to an ECDSA certificate chain the moment ECDSA was offered here, and that
-  // specific chain did not validate against the embedded trusted-root bundle (untrusted root), even though the
-  // bundle already carries 40+ common ECDSA roots. Root-caused but not yet reproduced with the real chain, so
-  // this stays RSA-PSS-only until it is.
-  //
-  // ECDSA (P-256/P-384/P-521) is verified correctly by DIOSTREAMTLSSIGNATURE and can be enabled per connection:
-  //
-  //     GetStreamTLSCFG()->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
-  //
-  // A server holding ONLY an ECDSA certificate aborts the handshake with handshake_failure unless that is done,
-  // since it cannot sign CertificateVerify with anything offered here.
+  // Default handshake-signing profile. Keep the existing RSA-PSS defaults for backwards compatibility. The trust
+  // anchor source is configured independently through CIPHERTRUSTPROVIDERX509, so applications can extend these
+  // schemes without coupling that decision to the selected Root CA provider.
   SignatureSchemes_Delete();
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
@@ -983,9 +2080,19 @@ void DIOSTREAMTLSCONFIG::Clean()
 
   servername.Empty();
   TrustedRoots_Delete();
+  ClientTrustedRoots_Delete();
+  clientauthenticationmode = DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE;
   LocalCredentials_Delete();
+  ServerCredentials_Delete();
+  localcredentialserror       = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE;
   allowunauthenticatedserver  = false;
 
   aiafetchactive  = true;
   aiafetchtimeout = 5;
+
+  SessionTickets_Delete();
+  if(!sessionticketserverkey.IsEmpty()) sessionticketserverkey.FillBuffer(0);
+  sessionticketserverkey.Delete();
+  sessionresumptionactive = true;
+  sessionticketlifetime   = DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_LIFETIME;
 }

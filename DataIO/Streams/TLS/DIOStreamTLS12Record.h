@@ -78,6 +78,7 @@ class DIOSTREAMTLS12RECORD
     bool                                    Protect                                           (DIOSTREAMTLS_CONTENTTYPE contenttype, XBUFFER& plain, XBUFFER& records);
 
     bool                                    Unprotect                                         (XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain);
+    DIOSTREAMTLS_ALERT_DESCRIPTION          GetLastAlertDescription                           ();
 
     static bool                             Record_Extract                                    (XBUFFER& input, XBUFFER& record);
 
@@ -103,6 +104,7 @@ class DIOSTREAMTLS12RECORD
 
     XQWORD                                  sequence[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     bool                                    isprotected[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+    DIOSTREAMTLS_ALERT_DESCRIPTION          lastalertdescription;
 };
 
 

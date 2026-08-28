@@ -44,6 +44,39 @@ typedef XCHAR* _CIPHERTRUSTEDROOTCERTIFICATESX509[];
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
+
+
+class CIPHERTRUSTPROVIDERX509
+{
+  public:
+                          CIPHERTRUSTPROVIDERX509            ();
+    virtual              ~CIPHERTRUSTPROVIDERX509            ();
+
+    virtual bool          Load                               () = 0;
+
+    XVECTOR<XBUFFER*>*    GetRoots                           ();
+    bool                  Roots_Delete                       ();
+
+  protected:
+
+    bool                  Root_Add                           (XBUFFER& root);
+
+  private:
+
+    XVECTOR<XBUFFER*>     roots;
+};
+
+
+class CIPHERTRUSTPROVIDERX509GEN : public CIPHERTRUSTPROVIDERX509
+{
+  public:
+                          CIPHERTRUSTPROVIDERX509GEN         ();
+    virtual              ~CIPHERTRUSTPROVIDERX509GEN         ();
+
+    bool                  Load                               ();
+};
+
+
 class CIPHERTRUSTEDROOTCERTIFICATESX509
 {
   public:

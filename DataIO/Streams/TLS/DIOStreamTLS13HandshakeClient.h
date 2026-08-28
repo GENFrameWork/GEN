@@ -100,6 +100,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     
     bool                                    SignatureSchemes_WidenECDSA                      ();
     bool                                    IsApplicationProtocolNegotiated                  ();
+    bool                                    IsSessionResumed                                 ();
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
 
     bool                                    Authentication_Set                               (XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
@@ -116,6 +117,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    ServerHello_Process                              (XBUFFER& serverhello);
     bool                                    ServerHello_Process                              (XBUFFER& serverhello, XBUFFER& sharedsecret);
     bool                                    ClientFinished_Create                            (XBUFFER& clientfinished, XBUFFER& records);
+    bool                                    NewSessionTicket_Process                         (XBUFFER& message);
 
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
     bool                                    RecordInput_Add                                  (XBUFFER& data);
@@ -142,6 +144,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     void                                    Clean                                            ();
 
     DIOSTREAMTLS13SESSION*                    session;
+    DIOSTREAMTLSCONFIG*                       config;
     DIOSTREAMTLS13HANDSHAKECLIENT_STATE       state;
     bool                                    isini;
     bool                                    allowunauthenticatedserver;
@@ -174,10 +177,16 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     XVECTOR<XWORD>                          offeredsupportedgroups;
     XVECTOR<XWORD>                          offeredkeysharegroups;
     XVECTOR<XWORD>                          offeredsignatureschemes;
+    XVECTOR<XWORD>                          requestedclientsignatureschemes;
     XVECTOR<DIOSTREAMTLS_ALPN_TYPE>          offeredapplicationprotocols;
 
     bool                                    applicationprotocolnegotiated;
     DIOSTREAMTLS_ALPN_TYPE                  applicationprotocol;
+
+    bool                                    resumptionoffered;
+    bool                                    resumptionaccepted;
+    XBUFFER                                 resumptionpsk;
+    XWORD                                   resumptionciphersuite;
 
     XBUFFER                                 firstclienthello;
     XWORD                                   currentkeysharegroup;

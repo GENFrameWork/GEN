@@ -375,13 +375,15 @@ bool DIOSTREAMTLS12RECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttyp
   // Before the ChangeCipherSpec of this end, every record travels in the clear, exactly as it is.
   if(!isprotected[direction])
     {
+      XBUFFER encodedrecord;
+
       header.SetContenType(contenttype);
       header.SetLength(size);
 
-      if(!header.SetToBuffer(records, false)) return false;
-      if(size && !records.Add(plain, size))   return false;
+      if(!header.SetToBuffer(encodedrecord, false)) return false;
+      if(size && !encodedrecord.Add(plain, size))    return false;
 
-      return true;
+      return records.Add(encodedrecord);
     }
 
   if(!cipher[direction]) return false;
@@ -414,10 +416,13 @@ bool DIOSTREAMTLS12RECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttyp
   header.SetContenType(contenttype);                                            // In TLS 1.2 the real type stays in the header
   header.SetLength((XWORD)fragmentsize);
 
-  if(!header.SetToBuffer(records, false))                                            return false;
-  if(!records.Add(explicitnonce, DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE))           return false;
-  if(!records.Add(cipher[direction]->GetResult()))                                   return false;
-  if(!records.Add(tag))                                                              return false;
+  XBUFFER encodedrecord;
+
+  if(!header.SetToBuffer(encodedrecord, false))                                      return false;
+  if(!encodedrecord.Add(explicitnonce, DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE))      return false;
+  if(!encodedrecord.Add(cipher[direction]->GetResult()))                              return false;
+  if(!encodedrecord.Add(tag))                                                         return false;
+  if(!records.Add(encodedrecord))                                                     return false;
 
   sequence[direction]++;
 
@@ -488,14 +493,14 @@ bool DIOSTREAMTLS12RECORD::Protect(DIOSTREAMTLS_CONTENTTYPE contenttype, XBUFFER
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLS12RECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain)
-* @brief      Unprotect one complete record and authenticate it
+* @brief      Decode and authenticate one complete TLS record
 * @ingroup    DATAIO
 *
 * @param[in]  record : One complete record, header included.
-* @param[out] contenttype : Content type of the record.
+* @param[out] contenttype : Decoded content type.
 * @param[out] plain : Buffer that receives the plain text.
 *
-* @return     bool : true if the record authenticates; false if it does not, and then nothing is returned.
+* @return     bool : true if the record is valid; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12RECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain)
@@ -505,53 +510,111 @@ bool DIOSTREAMTLS12RECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& 
   XWORD                             length;
 
   plain.Delete();
+  lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
 
-  if(!isini)                return false;
-  if(!header.Peek(record))  return false;
+  if(!isini)               return false;
+  if(!header.Peek(record)) return false;
 
   contenttype = header.GetContenType();
   length      = header.GetLength();
 
   if(record.GetSize() != (XDWORD)(DIOSTREAMTLS_MSG_RECORDHEADER_SIZE + length)) return false;
 
-  // ChangeCipherSpec always travels in the clear: it is precisely the message that announces the change,
-  // so it can never be read with the keys it is installing.
   if(!isprotected[direction] || (contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC))
     {
-      if(length && !plain.Add(&record.Get()[DIOSTREAMTLS_MSG_RECORDHEADER_SIZE], length)) return false;
+      if(length > DIOSTREAMTLS12RECORD_MAXPLAINSIZE)
+        {
+          lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_RECORD_OVERFLOW;
+          return false;
+        }
+
+      if(length && !plain.Add(&record.Get()[DIOSTREAMTLS_MSG_RECORDHEADER_SIZE], length))
+        {
+          lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+          return false;
+        }
 
       return true;
     }
 
-  if(!cipher[direction]) return false;
+  if(!cipher[direction])
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+      return false;
+    }
 
-  if(sequence[direction] == 0xFFFFFFFFFFFFFFFFULL) return false;
+  if(sequence[direction] == 0xFFFFFFFFFFFFFFFFULL)
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+      return false;
+    }
 
   XDWORD tagsize = cipher[direction]->GetAEADTagSize();
 
-  if((XDWORD)length < (DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE + tagsize)) return false;
+  if((XDWORD)length < (DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE + tagsize))
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_RECORD_MAC;
+      return false;
+    }
 
   XWORD  plainlength = (XWORD)(length - DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE - tagsize);
   XBYTE* fragment    = &record.Get()[DIOSTREAMTLS_MSG_RECORDHEADER_SIZE];
+
+  if(plainlength > DIOSTREAMTLS12RECORD_MAXPLAINSIZE)
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_RECORD_OVERFLOW;
+      return false;
+    }
 
   XBUFFER nonce;
   XBUFFER additionaldata;
   XBUFFER ciphertext;
   XBUFFER tag;
 
-  if(!Nonce_Build(direction, fragment, nonce))                                                              return false;
-  if(!AAD_Build(sequence[direction], contenttype, header.GetProtocolVersion(), plainlength, additionaldata)) return false;
+  if(!Nonce_Build(direction, fragment, nonce) ||
+     !AAD_Build(sequence[direction], contenttype, header.GetProtocolVersion(), plainlength, additionaldata))
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+      return false;
+    }
 
-  if(plainlength && !ciphertext.Add(&fragment[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE], plainlength))         return false;
-  if(!tag.Add(&fragment[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE + plainlength], tagsize))                     return false;
+  if((plainlength && !ciphertext.Add(&fragment[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE], plainlength)) ||
+     !tag.Add(&fragment[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE + plainlength], tagsize))
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+      return false;
+    }
 
-  if(!cipher[direction]->UncipherAEAD(ciphertext.Get(), plainlength, nonce, additionaldata, tag)) return false;
+  if(!cipher[direction]->UncipherAEAD(ciphertext.Get(), plainlength, nonce, additionaldata, tag))
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_RECORD_MAC;
+      return false;
+    }
 
-  if(plainlength && !plain.Add(cipher[direction]->GetResult()->Get(), plainlength)) return false;
+  if(plainlength && !plain.Add(cipher[direction]->GetResult()->Get(), plainlength))
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+      return false;
+    }
 
   sequence[direction]++;
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS12RECORD::GetLastAlertDescription()
+* @brief      Get the alert that best describes the last record-layer error
+* @ingroup    DATAIO
+*
+* @return     DIOSTREAMTLS_ALERT_DESCRIPTION : Alert description.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS12RECORD::GetLastAlertDescription()
+{
+  return lastalertdescription;
 }
 
 
@@ -584,7 +647,8 @@ bool DIOSTREAMTLS12RECORD::Record_Extract(XBUFFER& input, XBUFFER& record)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS12RECORD::Clean()
 {
-  isini = false;
+  isini                = false;
+  lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {

@@ -89,20 +89,40 @@ CIPHERCERTIFICATEX509VALIDATOR::~CIPHERCERTIFICATEX509VALIDATOR()
 * @brief      Validate an ordered X.509 server chain against explicitly configured trust anchors
 * @ingroup    CIPHER
 *
-* @param[in]  certificatechain : DER certificates, leaf first.
-* @param[in]  trustedroots : Explicit DER trust anchors.
-* @param[in]  servername : Expected DNS name or IP address.
-* @param[in]  datetime : Optional UTC validation time. NULL uses the current time.
-*
-* @return     bool : true if chain, identity and policy are valid; otherwise false.
-*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XCHAR* servername, XDATETIME* datetime)
+{
+  return ValidateInternal(certificatechain, trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH, servername, datetime);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClient(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
+* @brief      Validate an ordered X.509 client-authentication chain against explicitly configured trust anchors
+* @ingroup    CIPHER
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClient(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
+{
+  return ValidateInternal(certificatechain, trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_CLIENT_AUTH, NULL, datetime);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE purpose, XCHAR* servername, XDATETIME* datetime)
+* @brief      Validate an ordered X.509 chain for the requested TLS authentication purpose
+* @note       INTERNAL
+* @ingroup    CIPHER
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE purpose, XCHAR* servername, XDATETIME* datetime)
 {
   End();
 
   if(!certificatechain || certificatechain->IsEmpty() || !trustedroots || trustedroots->IsEmpty() ||
-     !servername || !servername[0])
+     ((purpose == CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH) && (!servername || !servername[0])))
     {
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDPARAMETER);
     }
@@ -194,7 +214,10 @@ bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechai
 
       if((c > 0) && (!certificate->IsCertificateAuthority() ||
                      (certificate->HasKeyUsage() && !certificate->IsKeyUsageCertificateSign()) ||
-                     (certificate->HasExtendedKeyUsage() && !certificate->IsExtendedKeyUsageServerAuthentication())))
+                     (certificate->HasExtendedKeyUsage() &&
+                      ((purpose == CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH)?
+                        !certificate->IsExtendedKeyUsageServerAuthentication():
+                        !certificate->IsExtendedKeyUsageClientAuthentication()))))
         {
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCA);
         }
@@ -208,12 +231,15 @@ bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechai
 
   if(leaf->IsCertificateAuthority() ||
      (leaf->HasKeyUsage() && !leaf->IsKeyUsageDigitalSignature()) ||
-     (leaf->HasExtendedKeyUsage() && !leaf->IsExtendedKeyUsageServerAuthentication()))
+     (leaf->HasExtendedKeyUsage() &&
+      ((purpose == CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH)?
+        !leaf->IsExtendedKeyUsageServerAuthentication():
+        !leaf->IsExtendedKeyUsageClientAuthentication())))
     {
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDKEYUSAGE);
     }
 
-  if(!leaf->IsServerNameValid(servername))
+  if((purpose == CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH) && !leaf->IsServerNameValid(servername))
     {
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDNAME);
     }

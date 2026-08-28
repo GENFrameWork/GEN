@@ -81,6 +81,7 @@ class DIOSTREAMTLSRECORD
     bool                                    Protect                                           (DIOSTREAMTLS_CONTENTTYPE contenttype, XBUFFER& plain, XBUFFER& records);
 
     bool                                    Unprotect                                         (XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& contenttype, XBUFFER& plain);
+    DIOSTREAMTLS_ALERT_DESCRIPTION           GetLastAlertDescription                           ();
 
     static bool                             Record_Extract                                    (XBUFFER& input, XBUFFER& record);
 
@@ -102,6 +103,7 @@ class DIOSTREAMTLSRECORD
     XWORD                                   maxplainsize;
     XBYTE                                   paddingsize;
     bool                                    isini;
+    DIOSTREAMTLS_ALERT_DESCRIPTION          lastalertdescription;
 };
 
 

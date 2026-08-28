@@ -569,7 +569,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleServer()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOLINUXSTREAMTCPIP::GetHandleClient()
 {
-  if(config->GetRemoteURL()->IsEmpty())
+  if(config->GetConnectionURL()->IsEmpty())
     {
       SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
       return false;
@@ -614,7 +614,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
 
   memset(&rem_addr, 0, sizeof(struct sockaddr_in));
 
-  if(!config->GetRemoteURL()->ResolveURL(remoteIP))
+  if(!config->GetConnectionURL()->ResolveURL(remoteIP))
     {
       SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
       SetLastDIOError(DIOSTREAMERROR_URLNOTVALID);
@@ -630,7 +630,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
   IPstring.ConvertToASCII(charstr);  
   rem_addr.sin_addr.s_addr  = inet_addr(charstr.GetPtrChar());
   clientIP.Set(charstr.GetPtrChar());  
-  rem_addr.sin_port         = htons(config->GetRemotePort());
+  rem_addr.sin_port         = htons(config->GetConnectionPort());
 
   int opt = 1;
   if(setsockopt(handlesocket, SOL_SOCKET, SO_KEEPALIVE , &opt, sizeof(opt)) < 0)

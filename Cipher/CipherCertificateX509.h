@@ -178,6 +178,7 @@ class CIPHERCERTIFICATEX509
 
     bool                                    HasExtendedKeyUsage                     ();
     bool                                    IsExtendedKeyUsageServerAuthentication  ();
+    bool                                    IsExtendedKeyUsageClientAuthentication  ();
     bool                                    HasUnknownCriticalExtension             ();
 
     XVECTOR<XSTRING*>*                      GetSubjectAlternativeNamesDNS           ();
@@ -237,6 +238,7 @@ class CIPHERCERTIFICATEX509
 
     bool                                    hasextendedkeyusage;
     bool                                    extendedkeyusageserverauthentication;
+    bool                                    extendedkeyusageclientauthentication;
     bool                                    hasunknowncriticalextension;
     bool                                    hassubjectalternativename;
 
