@@ -58,6 +58,38 @@
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
 
+static XBYTE DIOSTREAMTLS13_HANDSHAKESERVER_HELLORETRYREQUEST_RANDOM[DIOSTREAMTLS_MSG_HELLORETRYREQUEST_RANDOM_SIZE] =
+{
+  0xCF, 0x21, 0xAD, 0x74, 0xE5, 0x9A, 0x61, 0x11,
+  0xBE, 0x1D, 0x8C, 0x02, 0x1E, 0x65, 0xB8, 0x91,
+  0xC2, 0xA2, 0x11, 0x16, 0x7A, 0xBB, 0x8C, 0x5E,
+  0x07, 0x9E, 0x09, 0xE2, 0xC8, 0xA8, 0x33, 0x9C
+};
+
+
+static const XWORD DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_PADDING    = 0x0015;
+static const XWORD DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_EARLYDATA  = 0x002A;
+
+
+static bool DIOSTREAMTLS13_HANDSHAKESERVER_ExtensionIsEqual(DIOSTREAMTLS_MSG_EXTENSION* first,
+                                                             DIOSTREAMTLS_MSG_EXTENSION* second)
+{
+  XBUFFER firstbuffer;
+  XBUFFER secondbuffer;
+
+  if(!first || !second || (first->GetType() != second->GetType()) ||
+     !first->SetToBuffer(firstbuffer, false) || !second->SetToBuffer(secondbuffer, false) ||
+     (firstbuffer.GetSize() != secondbuffer.GetSize()))
+    {
+      return false;
+    }
+
+  if(!firstbuffer.GetSize()) return true;
+
+  return !memcmp(firstbuffer.Get(), secondbuffer.Get(), firstbuffer.GetSize());
+}
+
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
@@ -181,6 +213,21 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::IsHandshakeCompleted()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::IsWaitingClientHelloRetry()
+* @brief      Check whether a HelloRetryRequest was sent and the second ClientHello is still pending
+* @ingroup    DATAIO
+*
+* @return     bool : true if the condition is met; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKESERVER::IsWaitingClientHelloRetry()
+{
+  return (state == DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::IsApplicationProtocolNegotiated()
 * @brief      Check whether an ALPN protocol was negotiated
 * @ingroup    DATAIO
@@ -206,6 +253,36 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::IsApplicationProtocolNegotiated()
 DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13HANDSHAKESERVER::GetApplicationProtocol()
 {
   return applicationprotocol;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS13HANDSHAKESERVER::GetErrorAlertDescription()
+* @brief      Get the TLS alert that best describes the current handshake error
+* @ingroup    DATAIO
+*
+* @return     DIOSTREAMTLS_ALERT_DESCRIPTION : Alert description.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS13HANDSHAKESERVER::GetErrorAlertDescription()
+{
+  return erroralertdescription;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::ShouldSendErrorAlert()
+* @brief      Check whether the current handshake error was generated locally and should be reported to the peer
+* @ingroup    DATAIO
+*
+* @return     bool : true when a fatal alert should be sent; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKESERVER::ShouldSendErrorAlert()
+{
+  return senderroralert;
 }
 
 
@@ -244,37 +321,54 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::CipherSuite_Select(XVECTOR<XWORD>& offered, 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey)
-* @brief      Select the first configured group (server preference order) for which the client also sent a key_share
-* @note       INTERNAL. If the client only listed the group in supported_groups but did not send a matching
-*             key_share entry, a HelloRetryRequest would be required to continue -- out of v1 scope, so this
-*             is treated as a negotiation failure instead.
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey, bool& helloretryrequestrequired)
+* @brief      Select the first configured mutually supported group, requesting a new key_share when needed
+* @note       INTERNAL. Server preference order is preserved. A HelloRetryRequest is requested only when the
+*             selected group was advertised in supported_groups but no key_share for it was sent.
 * @ingroup    DATAIO
 *
 * @param[in]  clienthello : Decoded ClientHello body.
 * @param[out] selectedgroup : Selected group.
-* @param[out] peerpublickey : Client key_share public key for the selected group.
+* @param[out] peerpublickey : Client key_share public key when already available.
+* @param[out] helloretryrequestrequired : true when the selected group needs a retried key_share.
 *
-* @return     bool : true if the operation is successful; otherwise false.
+* @return     bool : true if a mutually supported group was selected; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey)
+bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup,
+                                                  XBUFFER& peerpublickey, bool& helloretryrequestrequired)
 {
-  DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* keyshare = NULL;
+  DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS* supportedgroups = NULL;
+  DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*        keyshare        = NULL;
+
+  peerpublickey.Delete();
+  helloretryrequestrequired = false;
+
+  if(!clienthello) return false;
 
   for(XDWORD c=0; c<clienthello->Extensions_GetAll()->GetSize(); c++)
     {
       DIOSTREAMTLS_MSG_EXTENSION* extension = clienthello->Extensions_GetAll()->Get(c);
+      if(!extension) return false;
 
-      if(extension && (extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE))
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDGROUPS)
         {
+          if(supportedgroups) return false;
+          supportedgroups = (DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS*)extension;
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE)
+        {
+          if(keyshare) return false;
           keyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension;
-          break;
         }
     }
 
-  if(!keyshare) return false;
+  if(!supportedgroups || !keyshare) return false;
 
+  // First preference: use a key_share that the client already supplied.  HRR is not a mechanism for
+  // enforcing the server's absolute group preference when another mutually supported and usable key_share
+  // is already present; avoiding an unnecessary retry also improves interoperability with normal browsers.
   for(XDWORD c=0; c<config->GetSupportedGroups()->GetSize(); c++)
     {
       XWORD candidate = config->GetSupportedGroups()->Get(c);
@@ -285,15 +379,31 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
 
           if(key && (key->GetKeyType() == candidate))
             {
-              bool validsize = ((candidate == DIOSTREAMTLS_MSG_CURVEID_X25519)   && (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY))      ||
+              bool validsize = ((candidate == DIOSTREAMTLS_MSG_CURVEID_X25519)    && (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY))          ||
                                ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||
                                ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P384_PUBLICKEY_SIZE));
 
               if(!validsize) return false;
 
               selectedgroup = candidate;
-
               return peerpublickey.Add((*key->GetKeyData()));
+            }
+        }
+    }
+
+  // No configured key_share can be used directly.  Only now look for a mutually supported group and
+  // request a new share with HelloRetryRequest.  Keep the configured server preference order.
+  for(XDWORD c=0; c<config->GetSupportedGroups()->GetSize(); c++)
+    {
+      XWORD candidate = config->GetSupportedGroups()->Get(c);
+
+      for(XDWORD d=0; d<supportedgroups->List_Get()->GetSize(); d++)
+        {
+          if(supportedgroups->List_Get()->Get(d) == candidate)
+            {
+              selectedgroup = candidate;
+              helloretryrequestrequired = true;
+              return true;
             }
         }
     }
@@ -343,8 +453,8 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offer
 *
 * @fn         void DIOSTREAMTLS13HANDSHAKESERVER::ApplicationProtocol_Select(XVECTOR<DIOSTREAMTLS_ALPN_TYPE>& offered)
 * @brief      Select the first configured ALPN protocol (server preference order) the client also offered
-* @note       INTERNAL. Leaving applicationprotocolnegotiated false when nothing matches lets the handshake
-*             continue without an ALPN extension in EncryptedExtensions rather than failing the connection.
+* @note       INTERNAL. If the client sent ALPN, the caller must treat no common protocol as
+*             no_application_protocol.  Absence of the ALPN extension is a different, valid case.
 * @ingroup    DATAIO
 *
 * @param[in]  offered : Application protocols offered by the client (ALPN extension).
@@ -374,14 +484,266 @@ void DIOSTREAMTLS13HANDSHAKESERVER::ApplicationProtocol_Select(XVECTOR<DIOSTREAM
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHelloRetry_Validate(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello)
+* @brief      Validate the second ClientHello received after a TLS 1.3 HelloRetryRequest
+* @ingroup    DATAIO
+*
+* @param[in]  clienthello : Decoded second ClientHello body.
+*
+* @return     bool : true if ClientHello2 is valid for the outstanding retry; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHelloRetry_Validate(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello)
+{
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO> firstmessage;
+  XBUFFER                                                           workbuffer;
+
+  if(!clienthello || firstclienthello.IsEmpty() || !retryselectedgroup) return false;
+
+  workbuffer.Add(firstclienthello);
+
+  if(!firstmessage.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
+     (firstmessage.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO))
+    {
+      return false;
+    }
+
+  DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* first = firstmessage.GetBody();
+  if(!first) return false;
+
+  if((first->GetClientVersion() != clienthello->GetClientVersion()) ||
+     memcmp(first->GetRandom(), clienthello->GetRandom(), DIOSTREAMTLS_MSG_RANDOM_SIZE) ||
+     (first->GetSessionIDLength() != clienthello->GetSessionIDLength()) ||
+     (first->GetSessionIDLength() && memcmp(first->GetSessionID(), clienthello->GetSessionID(), first->GetSessionIDLength())) ||
+     (first->GetCompressionLength() != clienthello->GetCompressionLength()) ||
+     (first->GetCompressionMethod() != clienthello->GetCompressionMethod()) ||
+     (first->GetCipherSuites()->GetSize() != clienthello->GetCipherSuites()->GetSize()))
+    {
+      return false;
+    }
+
+  for(XDWORD c=0; c<first->GetCipherSuites()->GetSize(); c++)
+    {
+      if(first->GetCipherSuites()->Get(c) != clienthello->GetCipherSuites()->Get(c)) return false;
+    }
+
+  bool keysharevalidated = false;
+
+  // ClientHello2 is the same ClientHello except for the modifications explicitly permitted after HRR.
+  // GEN v1 emits only a key_share request, but accept the standard client-side changes for early_data,
+  // pre_shared_key and padding so normal TLS 1.3 clients are not rejected unnecessarily.
+  for(XDWORD c=0; c<clienthello->Extensions_GetAll()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* secondextension = clienthello->Extensions_GetAll()->Get(c);
+      if(!secondextension) return false;
+
+      if(secondextension->GetType() == DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_EARLYDATA) return false;
+
+      if(secondextension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE)
+        {
+          if(keysharevalidated) return false;
+
+          DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* secondkeyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)secondextension;
+          if(secondkeyshare->List_Get()->GetSize() != 1) return false;
+
+          DIOSTREAMTLS_MSG_EXTENSION_KEY* key = secondkeyshare->List_Get()->Get(0);
+          if(!key || (key->GetKeyType() != retryselectedgroup)) return false;
+
+          keysharevalidated = true;
+          continue;
+        }
+
+      if((secondextension->GetType() == DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_PADDING) ||
+         (secondextension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY))
+        {
+          continue;
+        }
+
+      DIOSTREAMTLS_MSG_EXTENSION* firstextension = NULL;
+
+      for(XDWORD d=0; d<first->Extensions_GetAll()->GetSize(); d++)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION* candidate = first->Extensions_GetAll()->Get(d);
+          if(candidate && (candidate->GetType() == secondextension->GetType()))
+            {
+              firstextension = candidate;
+              break;
+            }
+        }
+
+      if(!firstextension || !DIOSTREAMTLS13_HANDSHAKESERVER_ExtensionIsEqual(firstextension, secondextension)) return false;
+    }
+
+  if(!keysharevalidated) return false;
+
+  // Every unchanged extension from ClientHello1 must still be present.  early_data may be removed, padding may
+  // be changed/added/removed, and pre_shared_key may be recomputed as allowed by TLS 1.3 after HRR.
+  for(XDWORD c=0; c<first->Extensions_GetAll()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* firstextension = first->Extensions_GetAll()->Get(c);
+      if(!firstextension) return false;
+
+      if((firstextension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE) ||
+         (firstextension->GetType() == DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_EARLYDATA) ||
+         (firstextension->GetType() == DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_PADDING) ||
+         (firstextension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY))
+        {
+          continue;
+        }
+
+      bool found = false;
+
+      for(XDWORD d=0; d<clienthello->Extensions_GetAll()->GetSize(); d++)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION* candidate = clienthello->Extensions_GetAll()->Get(d);
+          if(candidate && (candidate->GetType() == firstextension->GetType()) &&
+             DIOSTREAMTLS13_HANDSHAKESERVER_ExtensionIsEqual(firstextension, candidate))
+            {
+              found = true;
+              break;
+            }
+        }
+
+      if(!found) return false;
+    }
+
+  // The requested group must not have appeared in ClientHello1's key_share; otherwise HRR itself would have
+  // been invalid and a second ClientHello for that group must not be accepted.
+  for(XDWORD c=0; c<first->Extensions_GetAll()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = first->Extensions_GetAll()->Get(c);
+
+      if(extension && (extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE))
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE* firstkeyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension;
+
+          for(XDWORD d=0; d<firstkeyshare->List_Get()->GetSize(); d++)
+            {
+              DIOSTREAMTLS_MSG_EXTENSION_KEY* key = firstkeyshare->List_Get()->Get(d);
+              if(key && (key->GetKeyType() == retryselectedgroup)) return false;
+            }
+        }
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::HelloRetryRequest_Create(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XWORD ciphersuite, XWORD group, XBUFFER& records)
+* @brief      Create a TLS 1.3 HelloRetryRequest and rebuild the transcript using message_hash(ClientHello1)
+* @note       INTERNAL. Only a key_share retry is generated; GEN v1 does not issue HRR cookies.
+* @ingroup    DATAIO
+*
+* @param[in]  clienthello : Decoded first ClientHello body.
+* @param[in]  clienthellobuffer : Complete encoded first ClientHello.
+* @param[in]  ciphersuite : Cipher suite selected for the retry and final handshake.
+* @param[in]  group : Mutually supported group whose key_share is requested.
+* @param[out] records : Clear-text TLS records containing the HelloRetryRequest.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKESERVER::HelloRetryRequest_Create(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello,
+                                                              XBUFFER& clienthellobuffer, XWORD ciphersuite,
+                                                              XWORD group, XBUFFER& records)
+{
+  DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO> hrrmessage;
+  DIOSTREAMTLS_MSG_HANDSHAKE_SERVERHELLO*                           hrrbody;
+  DIOSTREAMTLS_MSG_HANDSHAKE                                       messagehash;
+  XBUFFER                                                           firsthash;
+  XBUFFER                                                           messagehashbuffer;
+  XBUFFER                                                           hrrbuffer;
+
+  if(!clienthello || firstclienthello.GetSize() || !group || !session->CipherSuite_Select(ciphersuite) ||
+     !session->Transcript_Add(clienthellobuffer) || !session->TranscriptHash(firsthash))
+    {
+      return SetError();
+    }
+
+  messagehash.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_MESSAGE_HASH);
+
+  if(!messagehash.GetBody()->Add(firsthash) || !messagehash.SetToBuffer(messagehashbuffer, false))
+    {
+      return SetError();
+    }
+
+  hrrmessage.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_SERVER_HELLO);
+  hrrbody = hrrmessage.GetBody();
+  if(!hrrbody) return SetError();
+
+  hrrbody->SetLegacyVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+  memcpy(hrrbody->GetRandom(), DIOSTREAMTLS13_HANDSHAKESERVER_HELLORETRYREQUEST_RANDOM,
+         DIOSTREAMTLS_MSG_HELLORETRYREQUEST_RANDOM_SIZE);
+
+  hrrbody->SetSessionIDLength(clienthello->GetSessionIDLength());
+  if(clienthello->GetSessionIDLength())
+    {
+      memcpy(hrrbody->GetSessionID(), clienthello->GetSessionID(), clienthello->GetSessionIDLength());
+    }
+
+  hrrbody->SetCipherSuite(ciphersuite);
+  hrrbody->SetCompressionMethod(DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL);
+
+  DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER* supportedversions = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDVERSIONS_SERVER();
+  if(!supportedversions) return SetError();
+
+  supportedversions->SetVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
+
+  if(!hrrbody->Extensions_Add(supportedversions))
+    {
+      GEN_DELETE supportedversions;
+      return SetError();
+    }
+
+  DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST* keyshare = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE_HELLORETRYREQUEST();
+  if(!keyshare) return SetError();
+
+  keyshare->SetSelectedGroup(group);
+
+  if(!hrrbody->Extensions_Add(keyshare))
+    {
+      GEN_DELETE keyshare;
+      return SetError();
+    }
+
+  records.Delete();
+
+  if(!hrrmessage.SetToBuffer(hrrbuffer, false) ||
+     !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, hrrbuffer, records) ||
+     !firstclienthello.Add(clienthellobuffer))
+    {
+      records.Delete();
+      return SetError();
+    }
+
+  session->GetTranscript()->Delete();
+
+  if(!session->Transcript_Add(messagehashbuffer) || !session->Transcript_Add(hrrbuffer))
+    {
+      records.Delete();
+      return SetError();
+    }
+
+  retryselectedgroup = group;
+  retryciphersuite   = ciphersuite;
+  state              = DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XBUFFER& records)
-* @brief      Process the ClientHello and produce the complete server flight
+* @brief      Process a ClientHello and produce either HelloRetryRequest or the complete server flight
 * @ingroup    DATAIO
 *
 * @param[in]  clienthello : Complete encoded ClientHello, as received (with its handshake header).
-* @param[out] records : Encrypted TLS records ready for transport: ServerHello (cleartext) followed by
-*             EncryptedExtensions, Certificate, CertificateVerify and Finished (protected under the handshake
-*             traffic keys).
+* @param[out] records : TLS records ready for transport. On retry this contains the clear-text
+*             HelloRetryRequest; otherwise it contains ServerHello followed by EncryptedExtensions, Certificate,
+*             CertificateVerify and Finished protected under the handshake traffic keys.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -394,6 +756,11 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
   XVECTOR<XWORD>                                                   offeredsignatureschemes;
   XVECTOR<DIOSTREAMTLS_ALPN_TYPE>                                  offeredapplicationprotocols;
   bool                                                              supportedversionsfound = false;
+  bool                                                              alpnfound              = false;
+  DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS*                       supportedgroups         = NULL;
+  DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*                              clientkeyshare          = NULL;
+  bool                                                              helloretryrequestrequired = false;
+  bool                                                              isretry                 = (state == DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY);
   XWORD                                                             ciphersuite;
   XWORD                                                             group;
   XBUFFER                                                           peerpublickey;
@@ -405,10 +772,14 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
   XBYTE                                                             random[DIOSTREAMTLS_MSG_RANDOM_SIZE];
   bool                                                              status;
 
-  if(!isini || !session || (state != DIOSTREAMTLS13HANDSHAKESERVER_STATE_NONE) ||
-     !session->GetTranscript()->IsEmpty() || (&clienthello == &records))
+  if(!isini || !session ||
+     ((state != DIOSTREAMTLS13HANDSHAKESERVER_STATE_NONE) &&
+      (state != DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY)) ||
+     (!isretry && !session->GetTranscript()->IsEmpty()) ||
+     (isretry && (session->GetTranscript()->IsEmpty() || firstclienthello.IsEmpty())) ||
+     (&clienthello == &records))
     {
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
     }
 
   records.Delete();
@@ -418,20 +789,20 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
   if(!clienthellomessage.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
      (clienthellomessage.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CLIENT_HELLO))
     {
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
     }
 
   DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* body = clienthellomessage.GetBody();
 
   for(XDWORD c=0; c<body->GetCipherSuites()->GetSize(); c++)
     {
-      if(!offeredciphersuites.Add(body->GetCipherSuites()->Get(c))) return SetError();
+      if(!offeredciphersuites.Add(body->GetCipherSuites()->Get(c))) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
     }
 
   for(XDWORD c=0; c<body->Extensions_GetAll()->GetSize(); c++)
     {
       DIOSTREAMTLS_MSG_EXTENSION* extension = body->Extensions_GetAll()->Get(c);
-      if(!extension) return SetError();
+      if(!extension) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
 
       if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDVERSIONS)
         {
@@ -449,46 +820,152 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
 
           for(XDWORD d=0; d<algorithms->List_Get()->GetSize(); d++)
             {
-              if(!offeredsignatureschemes.Add(algorithms->List_Get()->Get(d))) return SetError();
+              if(!offeredsignatureschemes.Add(algorithms->List_Get()->Get(d))) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
             }
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDGROUPS)
+        {
+          supportedgroups = (DIOSTREAMTLS_MSG_EXTENSION_SUPPORTEDGROUPS*)extension;
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE)
+        {
+          clientkeyshare = (DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE*)extension;
         }
 
       if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN)
         {
           DIOSTREAMTLS_MSG_EXTENSION_ALPN* ALPN = (DIOSTREAMTLS_MSG_EXTENSION_ALPN*)extension;
 
+          alpnfound = true;
+
           for(XDWORD d=0; d<ALPN->List_GetNProtocols(); d++)
             {
               DIOSTREAMTLS_ALPN_TYPE alpntype;
 
-              if(!ALPN->List_Get(d, alpntype) || !offeredapplicationprotocols.Add(alpntype)) return SetError();
+              if(!ALPN->List_Get(d, alpntype)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+              if(!offeredapplicationprotocols.Add(alpntype)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
             }
         }
     }
 
-  // Not TLS 1.3, no key_share, no signature_algorithms or nothing our leaf certificate can use, no shared
-  // cipher suite, or nothing shared with what config->GetSupportedGroups() offers without a HelloRetryRequest:
-  // all treated alike as a negotiation failure (v1 has no HelloRetryRequest / downgrade path).
-  if(!supportedversionsfound || offeredsignatureschemes.IsEmpty() ||
-     !config->GetLocalCertificateChain() || config->GetLocalCertificateChain()->IsEmpty() ||
-     !leafcertificate.Decode((*config->GetLocalCertificateChain()->Get(0))) ||
-     !CipherSuite_Select(offeredciphersuites, ciphersuite) ||
-     !Group_Select(body, group, peerpublickey) ||
+  // This server is TLS 1.3-only.  Version negotiation must be resolved before applying TLS 1.3-specific
+  // mandatory-extension rules; otherwise an older ClientHello could incorrectly receive missing_extension.
+  if(!supportedversionsfound)
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION);
+    }
+
+  // RFC 8446 fixes these legacy ClientHello fields for TLS 1.3.  Accepting any other value makes the
+  // message syntactically decodable but semantically invalid.
+  if((body->GetClientVersion() != DIOSTREAMTLS_MSG_VERSION_TLS_1_2) ||
+     (body->GetCompressionLength() != 1) ||
+     (body->GetCompressionMethod() != DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL))
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
+    }
+
+  // Every KeyShareEntry must name a group from supported_groups and must preserve the order in which those
+  // groups were advertised.  The vector itself may be empty in ClientHello1; that valid case is what allows
+  // the server to select a group with HelloRetryRequest.
+  if(!supportedgroups || !clientkeyshare)
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_MISSING_EXTENSION);
+    }
+
+  if(!supportedgroups->List_Get()->GetSize())
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
+    }
+
+  XDWORD lastgroupindex = 0;
+  bool   haslastgroup   = false;
+
+  for(XDWORD c=0; c<clientkeyshare->List_Get()->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_KEY* key = clientkeyshare->List_Get()->Get(c);
+      if(!key)
+        {
+          return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
+        }
+
+      bool   groupfound = false;
+      XDWORD groupindex = 0;
+
+      for(XDWORD d=0; d<supportedgroups->List_Get()->GetSize(); d++)
+        {
+          if(supportedgroups->List_Get()->Get(d) == key->GetKeyType())
+            {
+              groupfound = true;
+              groupindex = d;
+              break;
+            }
+        }
+
+      if(!groupfound || (haslastgroup && (groupindex <= lastgroupindex)))
+        {
+          return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
+        }
+
+      lastgroupindex = groupindex;
+      haslastgroup   = true;
+    }
+
+  // TLS 1.3 certificate authentication requires supported_versions, signature_algorithms, supported_groups
+  // and key_share.  Keep protocol errors separate from local server/configuration failures so the peer receives
+  // the alert that actually explains why negotiation stopped.
+  if(offeredsignatureschemes.IsEmpty())
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_MISSING_EXTENSION);
+    }
+
+  if(!config->GetLocalCertificateChain() || config->GetLocalCertificateChain()->IsEmpty() ||
+     !leafcertificate.Decode((*config->GetLocalCertificateChain()->Get(0))))
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+    }
+
+  if(!CipherSuite_Select(offeredciphersuites, ciphersuite) ||
+     !Group_Select(body, group, peerpublickey, helloretryrequestrequired) ||
      !SignatureScheme_Select(offeredsignatureschemes, leafcertificate.GetPublicCipherKey(), signaturescheme))
     {
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE);
+    }
+
+  if(isretry)
+    {
+      if(!ClientHelloRetry_Validate(body) || helloretryrequestrequired ||
+         (group != retryselectedgroup) || (ciphersuite != retryciphersuite))
+        {
+          return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
+        }
     }
 
   ApplicationProtocol_Select(offeredapplicationprotocols);
 
+  if(alpnfound && !applicationprotocolnegotiated)
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_NO_APPLICATION_PROTOCOL);
+    }
+
+  if(!isretry && helloretryrequestrequired)
+    {
+      return HelloRetryRequest_Create(body, clienthello, ciphersuite, group, records);
+    }
+
   session->KeyExchange_Delete();
 
-  if(!session->KeyExchange_Generate(group, serverpublickey) ||
-     !session->KeyExchange_SharedSecret(group, peerpublickey, sharedsecret) ||
-     !session->CipherSuite_Select(ciphersuite))
+  if(!session->KeyExchange_Generate(group, serverpublickey) || !session->CipherSuite_Select(ciphersuite))
     {
       sharedsecret.FillBuffer(0);
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+    }
+
+  if(!session->KeyExchange_SharedSecret(group, peerpublickey, sharedsecret))
+    {
+      sharedsecret.FillBuffer(0);
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
     }
 
   if(!session->Transcript_Add(clienthello))
@@ -734,7 +1211,10 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
       return SetError();
     }
 
-  state = DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED;
+  firstclienthello.Delete();
+  retryselectedgroup = 0;
+  retryciphersuite   = 0;
+  state              = DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED;
 
   return true;
 }
@@ -760,25 +1240,33 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Finished_Process(XBUFFER& message)
 
   if(state != DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED)
     {
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
     }
 
   workbuffer.Add(message);
 
   if(!finished.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty() ||
      (finished.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED) ||
-     (finished.GetBody()->GetVerifyData()->GetSize() != session->GetKeySchedule()->GetHashSize()) ||
-     !session->TranscriptHash(transcripthash) ||
-     !session->GetKeySchedule()->VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE,
+     (finished.GetBody()->GetVerifyData()->GetSize() != session->GetKeySchedule()->GetHashSize()))
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+    }
+
+  if(!session->TranscriptHash(transcripthash))
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+    }
+
+  if(!session->GetKeySchedule()->VerifyFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE,
                                                 transcripthash, *finished.GetBody()->GetVerifyData()))
     {
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECRYPT_ERROR);
     }
 
   if(!session->Transcript_Add(message) ||
      !session->ApplicationKeys_Activate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE))
     {
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
     }
 
   state = DIOSTREAMTLS13HANDSHAKESERVER_STATE_HANDSHAKE_COMPLETED;
@@ -864,20 +1352,24 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Process()
 
       switch(contenttype)
         {
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE          : if(!session->HandshakeInput_Add(plain)) return SetError();
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE          : if(!session->HandshakeInput_Add(plain)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
                                                                 break;
 
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC : if((plain.GetSize() != 1) || (plain.GetByte(0) != 1)) return SetError();
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC : if((plain.GetSize() != 1) || (plain.GetByte(0) != 1)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
                                                                 break;
 
           case DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT              : { DIOSTREAMTLS_MSG_ALERT alert;
 
-                                                                  alert.GetFromBuffer(plain, false);
-                                                                  return SetError();
+                                                                  if(!alert.GetFromBuffer(plain, false))
+                                                                    {
+                                                                      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+                                                                    }
+
+                                                                  return SetError(alert.GetDescription(), false);
                                                                 }
 
                                                        default :
-                                                                 return SetError();
+                                                                 return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
         }
 
       while(true)
@@ -893,7 +1385,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Process()
 
           if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)
             {
-              return SetError();
+              return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
             }
 
           if(!Handshake_Process(handshake))
@@ -941,7 +1433,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Handshake_Process(XBUFFER& message)
 
   if(!genericmessage.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty())
     {
-      return SetError();
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
     }
 
   switch(genericmessage.GetMsgType())
@@ -949,24 +1441,29 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Handshake_Process(XBUFFER& message)
       // No client authentication in v1: a CertificateRequest is never sent, so the client is never expected to
       // reply with a Certificate / CertificateVerify of its own -- only its Finished is waited for.
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED : return Finished_Process(message);
-                                                    default : return SetError();
+                                                    default : return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
     }
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::SetError()
-* @brief      Move the handshake to its terminal error state
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::SetError(DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription, bool sendalert)
+* @brief      Move the handshake to its terminal error state and preserve the precise TLS alert cause
 * @note       INTERNAL
 * @ingroup    DATAIO
+*
+* @param[in]  alertdescription : TLS alert that best describes the failure.
+* @param[in]  sendalert : true when the failure was generated locally and should be reported to the peer.
 *
 * @return     bool : Always false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS13HANDSHAKESERVER::SetError()
+bool DIOSTREAMTLS13HANDSHAKESERVER::SetError(DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription, bool sendalert)
 {
-  state = DIOSTREAMTLS13HANDSHAKESERVER_STATE_ERROR;
+  erroralertdescription = alertdescription;
+  senderroralert        = sendalert;
+  state                 = DIOSTREAMTLS13HANDSHAKESERVER_STATE_ERROR;
 
   return false;
 }
@@ -988,4 +1485,9 @@ void DIOSTREAMTLS13HANDSHAKESERVER::Clean()
   isini                          = false;
   applicationprotocolnegotiated = false;
   applicationprotocol            = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  erroralertdescription           = DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE;
+  senderroralert                  = false;
+  firstclienthello.Delete();
+  retryselectedgroup               = 0;
+  retryciphersuite                 = 0;
 }

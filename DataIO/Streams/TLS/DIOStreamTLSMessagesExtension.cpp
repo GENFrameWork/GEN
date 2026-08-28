@@ -1124,7 +1124,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, DIOSTREAMTLS_ALPN_T
               return true;
             }
 
-          return false;
+          // ALPN protocol names are opaque byte strings.  Unknown names are valid and must not
+          // make the extension decoder fail; callers that only understand the legacy enum API
+          // receive UNKNOWN and can still continue parsing the remaining offered protocols.
+          return true;
         }
 
       position += sizeof(XBYTE) + protocolsize;
@@ -2185,7 +2188,9 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer, bool sh
       return false;
     }
 
-  if(!list_length || (buffer.GetSize() != list_length))
+  // RFC 8446 permits an empty client_shares vector in ClientHello. This is the valid input that lets a
+  // server select a mutually supported group through HelloRetryRequest.
+  if(buffer.GetSize() != list_length)
     {
       return false;
     }
@@ -2227,7 +2232,7 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEYSHARE::GetFromBuffer(XBUFFER& buffer, bool sh
         }
     }
 
-  return !list.IsEmpty();
+  return true;
 }
                                              
       

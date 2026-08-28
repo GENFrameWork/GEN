@@ -41,6 +41,7 @@
 #include "XTimer.h"
 
 #include "DIOFactory.h"
+#include "DIOIP.h"
 #include "DIOURL.h"
 #include "DIOStreamTCPIPConfig.h"
 #include "DIOStreamTCPIP.h"
@@ -138,8 +139,24 @@ bool DIOSTREAMTLSAIAFETCHER::Fetch(XSTRING& url, XBUFFER& tobuffer, int timeout)
   if(!hostpath.GetHTTPServer(server, login, password) || server.IsEmpty()) return false;
   if(!hostpath.GetHTTPResource(resource)) resource.Slash_Add();
 
+  // AIA is deliberately restricted to the standard HTTP port.  Besides keeping this fetcher narrowly scoped,
+  // this prevents an untrusted certificate from turning chain completion into an arbitrary TCP port probe.
+  if(remoteport != DIOSTREAMTLSAIAFETCHER_DEFAULTPORT) return false;
+
+  // Resolve once, validate that exact address, and connect to the validated IP instead of resolving the hostname
+  // again inside the stream.  This avoids DNS rebinding between the security check and the actual connection.
+  DIOURL resolvedurl;
+  DIOIP  resolvedIP;
+
+  resolvedurl = server.Get();
+  if(!resolvedurl.ResolveURL(resolvedIP)) return false;
+  if(!Destination_IsPublic(resolvedIP))   return false;
+
+  XSTRING resolvedIPstring;
+  if(!resolvedIP.GetXString(resolvedIPstring) || resolvedIPstring.IsEmpty()) return false;
+
   streamcfg.SetMode(DIOSTREAMMODE_CLIENT);
-  streamcfg.GetRemoteURL()->Set(server.Get());
+  streamcfg.GetRemoteURL()->Set(resolvedIPstring.Get());
   streamcfg.SetRemotePort(remoteport);
 
   DIOSTREAMTCPIP* diostream = (DIOSTREAMTCPIP*)GEN_DIOFACTORY.CreateStreamIO(&streamcfg);
@@ -158,15 +175,58 @@ bool DIOSTREAMTLSAIAFETCHER::Fetch(XSTRING& url, XBUFFER& tobuffer, int timeout)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLSAIAFETCHER::Destination_IsPublic(DIOIP& IP)
+* @brief      Check whether an AIA destination is a globally routable IPv4 address
+* @note       INTERNAL.  The GEN DNS resolver used by this fetcher currently resolves A records, so IPv6 literals
+*             and AAAA-only names are rejected before reaching this function rather than bypassing the policy.
+* @ingroup    DATAIO
+*
+* @param[in]  IP : Resolved destination address.
+*
+* @return     bool : true only for a public unicast IPv4 destination; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSAIAFETCHER::Destination_IsPublic(DIOIP& IP)
+{
+  if(IP.IsEmpty() || IP.IsLocal()) return false;
+
+  XBYTE* address = IP.Get();
+  if(!address) return false;
+
+  // Unspecified/current-network, shared CGNAT, protocol-assignment/documentation, benchmarking and non-unicast
+  // ranges are not appropriate destinations for certificate-chain completion.  Rejecting them also closes the
+  // obvious SSRF paths to local infrastructure and metadata endpoints.
+  if(address[0] == 0)   return false;
+  if(address[0] == 127) return false;                                         // complete loopback block 127.0.0.0/8
+
+  if((address[0] == 100) && ((address[1] & 0xC0) == 0x40)) return false;       // 100.64.0.0/10
+
+  if((address[0] == 192) && (address[1] == 0) && (address[2] == 0)) return false;
+  if((address[0] == 192) && (address[1] == 0) && (address[2] == 2)) return false;
+  if((address[0] == 192) && (address[1] == 88) && (address[2] == 99)) return false;
+
+  if((address[0] == 198) && ((address[1] == 18) || (address[1] == 19))) return false;
+  if((address[0] == 198) && (address[1] == 51) && (address[2] == 100)) return false;
+  if((address[0] == 203) && (address[1] == 0) && (address[2] == 113)) return false;
+
+  if(address[0] >= 224) return false;                                         // multicast + reserved/broadcast
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLSAIAFETCHER::Exchange(DIOSTREAMTCPIP* diostream, XSTRING& server, XSTRING& resource, int timeout, XBUFFER& raw)
 * @brief      Connect, issue a single GET, and collect the complete raw response
 * @note       INTERNAL
 * @ingroup    DATAIO
 *
 * @param[in]  diostream : Unopened TCP/IP transport, owned by the caller.
-* @param[in]  server : Value to send as the Host header (may include a non-default ":port").
+* @param[in]  server : Value to send as the Host header.
 * @param[in]  resource : Request target (the path, including a leading "/").
-* @param[in]  timeout : Connect / idle timeout, in seconds.
+* @param[in]  timeout : Total operation deadline and idle timeout, in seconds.  Incoming data resets only the idle
+*             timer; the total deadline is never extended.
 * @param[out] raw : Complete response (status line, headers and body), on success.
 *
 * @return     bool : true if the operation is successful; otherwise false.
@@ -178,44 +238,79 @@ bool DIOSTREAMTLSAIAFETCHER::Exchange(DIOSTREAMTCPIP* diostream, XSTRING& server
 
   if(!diostream) return false;
 
-  if(!diostream->Open())
+  XTIMER* timertotal = GEN_XFACTORY.CreateTimer();
+  XTIMER* timeridle  = GEN_XFACTORY.CreateTimer();
+
+  if(!timertotal || !timeridle)
     {
+      if(timertotal) GEN_XFACTORY.DeleteTimer(timertotal);
+      if(timeridle)  GEN_XFACTORY.DeleteTimer(timeridle);
+
       diostream->Close();
       return false;
     }
 
-  if(!diostream->WaitToConnected(timeout))
+  timertotal->Reset();
+  timeridle->Reset();
+
+  bool status    = true;
+  bool completed = false;
+
+  if(!diostream->Open()) status = false;
+
+  if(status)
     {
-      diostream->Close();
-      return false;
+      if(!diostream->WaitToConnected(timeout)) status = false;
+      if(timeout && (timertotal->GetMeasureSeconds() >= (XDWORD)timeout)) status = false;
     }
 
-  XSTRING request;
-  request.Format(__L("GET %s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\nUser-Agent: Mozilla 5.0\r\nAccept: */*\r\n\r\n"),
-                  resource.Get(), server.Get());
-
-  diostream->WriteStr(request);
-  diostream->WaitToFlushOutXBuffer(timeout);
-
-  XTIMER* timerout = GEN_XFACTORY.CreateTimer();
-  if(!timerout)
+  if(status)
     {
-      diostream->Close();
-      return false;
+      XSTRING request;
+      request.Format(__L("GET %s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\nUser-Agent: Mozilla 5.0\r\nAccept: */*\r\n\r\n"),
+                     resource.Get(), server.Get());
+
+      if(!diostream->WriteStr(request)) status = false;
+
+      if(status)
+        {
+          int remainingtimeout = timeout;
+
+          if(timeout)
+            {
+              XDWORD elapsed = timertotal->GetMeasureSeconds();
+
+              if(elapsed >= (XDWORD)timeout)
+                {
+                  status = false;
+                }
+               else
+                {
+                  remainingtimeout = timeout - (int)elapsed;
+                }
+            }
+
+          if(status && !diostream->WaitToFlushOutXBuffer(remainingtimeout)) status = false;
+          if(timeout && (timertotal->GetMeasureSeconds() >= (XDWORD)timeout)) status = false;
+        }
     }
 
   XBYTE readbuffer[DIOSTREAMTLSAIAFETCHER_READBLOCKSIZE];
-  bool  status    = true;
-  bool  completed = false;
 
-  timerout->Reset();
+  timeridle->Reset();
 
   while(status && !completed)
     {
+      if(timeout && (timertotal->GetMeasureSeconds() >= (XDWORD)timeout))
+        {
+          status = false;
+          break;
+        }
+
       XDWORD sizeread = diostream->Read(readbuffer, sizeof(readbuffer));
       if(sizeread)
         {
-          timerout->Reset();
+          timeridle->Reset();
 
           if(((XQWORD)raw.GetSize() + sizeread) > DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE)
             {
@@ -231,7 +326,7 @@ bool DIOSTREAMTLSAIAFETCHER::Exchange(DIOSTREAMTCPIP* diostream, XSTRING& server
         }
        else
         {
-          if(timeout && (timerout->GetMeasureSeconds() > (XDWORD)timeout))
+          if(timeout && (timeridle->GetMeasureSeconds() >= (XDWORD)timeout))
             {
               status = false;
               break;
@@ -247,7 +342,9 @@ bool DIOSTREAMTLSAIAFETCHER::Exchange(DIOSTREAMTCPIP* diostream, XSTRING& server
         }
     }
 
-  GEN_XFACTORY.DeleteTimer(timerout);
+  GEN_XFACTORY.DeleteTimer(timeridle);
+  GEN_XFACTORY.DeleteTimer(timertotal);
+
   diostream->Close();
 
   return status && completed && !raw.IsEmpty();

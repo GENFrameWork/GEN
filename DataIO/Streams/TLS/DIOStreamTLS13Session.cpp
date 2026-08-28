@@ -146,6 +146,8 @@ void DIOSTREAMTLS13SESSION::End()
     }
 
   applicationsecretscalculated = false;
+  keyupdaterequestpending      = false;
+  keyupdateresponsepending     = false;
   closenotifysent              = false;
   closenotifyreceived          = false;
   iserror                      = false;
@@ -878,6 +880,22 @@ bool DIOSTREAMTLS13SESSION::ApplicationData_Protect(XBYTE* data, XDWORD size, XB
       return false;
     }
 
+  XQWORD recordsneeded = size?(((XQWORD)size + record.GetMaxPlainSize() - 1) / record.GetMaxPlainSize()):1;
+  XQWORD sequence      = record.GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
+
+  if((sequence >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS) ||
+     (recordsneeded >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS) ||
+     ((sequence + recordsneeded) >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS))
+    {
+      XBUFFER keyupdaterecords;
+
+      if(!KeyUpdate_Create(false, keyupdaterecords) || !records.Add(keyupdaterecords))
+        {
+          iserror = true;
+          return false;
+        }
+    }
+
   return record.Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA, data, size, records);
 }
 
@@ -1083,7 +1101,8 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Create(bool requestpeer, XBUFFER& records)
 
   if(!isini || iserror || closenotifysent || closenotifyreceived ||
      (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] != DIOSTREAMTLS13SESSION_EPOCH_APPLICATION) ||
-     (keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLS13SESSION_MAXKEYUPDATES))
+     (keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES) ||
+     (requestpeer && keyupdaterequestpending))
     {
       return false;
     }
@@ -1102,6 +1121,8 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Create(bool requestpeer, XBUFFER& records)
     }
 
   keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]++;
+
+  if(requestpeer) keyupdaterequestpending = true;
 
   return true;
 }
@@ -1123,6 +1144,19 @@ bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Extract(XBUFFER& records)
   records.Delete();
 
   if(!isini) return false;
+
+  if(keyupdateresponsepending)
+    {
+      XBUFFER keyupdaterecords;
+
+      if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] < DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES)
+        {
+          if(!KeyUpdate_Create(false, keyupdaterecords) || !posthandshakeoutput.Add(keyupdaterecords)) return false;
+        }
+
+      keyupdateresponsepending = false;
+    }
+
   if(posthandshakeoutput.IsEmpty()) return true;
 
   if(!records.Add(posthandshakeoutput)) return false;
@@ -1150,8 +1184,7 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Process(DIOSTREAMTLS_MSG_HANDSHAKE& handsh
   XBYTE requestupdate;
 
   if((handshake.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE) ||
-     (handshake.GetBody()->GetSize() != 1) ||
-     (keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] >= DIOSTREAMTLS13SESSION_MAXKEYUPDATES))
+     (handshake.GetBody()->GetSize() != 1))
     {
       return false;
     }
@@ -1165,14 +1198,14 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Process(DIOSTREAMTLS_MSG_HANDSHAKE& handsh
       return false;
     }
 
-  keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]++;
-
-  if(requestupdate)
+  if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != (XQWORD)-1)
     {
-      XBUFFER records;
-
-      if(!KeyUpdate_Create(false, records) || !posthandshakeoutput.Add(records)) return false;
+      keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]++;
     }
+
+  keyupdaterequestpending = false;
+
+  if(requestupdate) keyupdateresponsepending = true;
 
   return true;
 }
@@ -1380,6 +1413,8 @@ void DIOSTREAMTLS13SESSION::Clean()
 
   KeyExchange_Delete();
 
+  keyupdaterequestpending       = false;
+  keyupdateresponsepending      = false;
   closenotifysent               = false;
   closenotifyreceived           = false;
   iserror                       = false;

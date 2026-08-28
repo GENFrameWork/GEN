@@ -203,6 +203,10 @@ DIOSTREAM* DIOANDROIDFACTORY::CreateStreamIO(DIOSTREAMCONFIG* config)
 {
   if(!config) return NULL;
 
+  // This platform does not provide a TLS stream implementation.
+  // A TLS request is mandatory and must never fall back to an unprotected stream.
+  if(config->IsTLS()) return NULL;
+
   DIOSTREAM*_class = NULL;
 
   switch(config->GetType())

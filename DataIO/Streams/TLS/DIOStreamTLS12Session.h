@@ -107,6 +107,7 @@ class DIOSTREAMTLS12SESSION
     
     
     XBUFFER*                                GetApplicationInput                              ();
+    bool                                    ApplicationData_CanProtect                       (XDWORD size);
     bool                                    ApplicationData_Protect                          (XBYTE* data, XDWORD size, XBUFFER& records);
     bool                                    ApplicationData_Protect                          (XBUFFER& data, XBUFFER& records);
     XDWORD                                  ApplicationData_Read                             (XBYTE* data, XDWORD size);

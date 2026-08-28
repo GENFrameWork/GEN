@@ -66,6 +66,7 @@ enum DIOSTREAMTLSAIAFETCHER_CHUNKRESULT
 
 
 class DIOSTREAMTCPIP;
+class DIOIP;
 
 
 class DIOSTREAMTLSAIAFETCHER
@@ -78,6 +79,7 @@ class DIOSTREAMTLSAIAFETCHER
 
   private:
 
+    bool                                    Destination_IsPublic            (DIOIP& IP);
     bool                                    Exchange                        (DIOSTREAMTCPIP* diostream, XSTRING& server, XSTRING& resource, int timeout, XBUFFER& raw);
     bool                                    ResponseBody_Extract            (XBUFFER& raw, XBUFFER& tobuffer);
     DIOSTREAMTLSAIAFETCHER_CHUNKRESULT      ChunkSize_Get                   (XBUFFER& input, XQWORD& chunksize);

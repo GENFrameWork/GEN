@@ -39,12 +39,13 @@
 
 
 // v1 server scope (see DIOStreamTLS.h server Open() branch): TLS 1.3 only, RSA-PSS server certificate only,
-// a single server flight built right after ClientHello (no HelloRetryRequest, no PSK/session resumption, no
-// client certificate authentication -- a CertificateRequest is never sent, so no WAIT_CERTIFICATE-like states
-// are needed on the server side: after the flight is sent, the only thing left to wait for is the client Finished.
+// HelloRetryRequest for (EC)DHE key_share correction, no PSK/session resumption and no client certificate
+// authentication. A CertificateRequest is never sent, so after the server flight the only message waited for
+// is the client Finished.
 enum DIOSTREAMTLS13HANDSHAKESERVER_STATE
 {
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_NONE                       = 0 ,
+  DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY          ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED                  ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_HANDSHAKE_COMPLETED            ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_ERROR                          ,
@@ -71,9 +72,12 @@ class DIOSTREAMTLS13HANDSHAKESERVER
 
     DIOSTREAMTLS13HANDSHAKESERVER_STATE     GetState                                         ();
     bool                                    IsHandshakeCompleted                             ();
+    bool                                    IsWaitingClientHelloRetry                        ();
 
     bool                                    IsApplicationProtocolNegotiated                  ();
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
+    DIOSTREAMTLS_ALERT_DESCRIPTION          GetErrorAlertDescription                         ();
+    bool                                    ShouldSendErrorAlert                             ();
 
     bool                                    ClientHello_Process                              (XBUFFER& clienthello, XBUFFER& records);
 
@@ -85,13 +89,15 @@ class DIOSTREAMTLS13HANDSHAKESERVER
   private:
 
     bool                                    Finished_Process                                 (XBUFFER& message);
+    bool                                    HelloRetryRequest_Create                         (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XWORD ciphersuite, XWORD group, XBUFFER& records);
+    bool                                    ClientHelloRetry_Validate                        (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello);
 
     bool                                    CipherSuite_Select                               (XVECTOR<XWORD>& offered, XWORD& selected);
-    bool                                    Group_Select                                     (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey);
+    bool                                    Group_Select                                     (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey, bool& helloretryrequestrequired);
     bool                                    SignatureScheme_Select                           (XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected);
     void                                    ApplicationProtocol_Select                       (XVECTOR<DIOSTREAMTLS_ALPN_TYPE>& offered);
 
-    bool                                    SetError                                         ();
+    bool                                    SetError                                         (DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR, bool sendalert = true);
     void                                    Clean                                            ();
 
     DIOSTREAMTLS13SESSION*                  session;
@@ -101,6 +107,12 @@ class DIOSTREAMTLS13HANDSHAKESERVER
 
     bool                                    applicationprotocolnegotiated;
     DIOSTREAMTLS_ALPN_TYPE                  applicationprotocol;
+    DIOSTREAMTLS_ALERT_DESCRIPTION          erroralertdescription;
+    bool                                    senderroralert;
+
+    XBUFFER                                 firstclienthello;
+    XWORD                                   retryselectedgroup;
+    XWORD                                   retryciphersuite;
 };
 
 

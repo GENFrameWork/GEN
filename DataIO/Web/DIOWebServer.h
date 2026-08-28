@@ -321,6 +321,8 @@ class DIOWEBSERVER_CONNECTION
 
     bool                                        IsActive                                ();
     bool                                        Activate                                ();
+    bool                                        ActivateOpen                            ();
+    bool                                        IsOpening                               ();
 
     bool                                        Deactivate                              ();
 
@@ -360,6 +362,7 @@ class DIOWEBSERVER_CONNECTION
     DIOSTREAMTCPIP*                             diostream;
 
     bool                                        isactive;
+    bool                                        isopening;
     DIOWEBSERVER_CONNECTION_MODE                mode;
     XTIMER*                                     xtimerconnection;
     XTIMER*                                     xtimerdisconnection;

@@ -2587,7 +2587,7 @@ XSTRING* CIPHERCERTIFICATEX509::GetCAIssuersURL()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERCERTIFICATEX509::IsServerNameValid(XCHAR* servername)
-* @brief      Match a TLS server name against subjectAltName or the legacy commonName fallback
+* @brief      Match a TLS server name exclusively against subjectAltName
 * @ingroup    CIPHER
 *
 * @param[in]  servername : Expected DNS name or IP address.
@@ -2631,13 +2631,7 @@ bool CIPHERCERTIFICATEX509::IsServerNameValid(XCHAR* servername)
         }
     }
 
-  if(hassubjectalternativename)
-    {
-      return false;
-    }
-
-  XSTRING commonname((*subjectID.GetCommonName()));
-  return CIPHERCERTIFICATEX509_DNSName(commonname, servername);
+  return false;
 }
 
 

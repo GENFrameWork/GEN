@@ -846,7 +846,7 @@ bool DIOSTREAMTLSCONFIG::SetAIAFetchTimeout(int timeout)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWORD DIOSTREAMTLSCONFIG::GetMinVersion()
-* @brief      Get the minimum TLS version this client will negotiate
+* @brief      Get the minimum TLS version configured for this endpoint
 * @ingroup    DATAIO
 *
 * @return     XWORD : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.
@@ -861,7 +861,9 @@ XWORD DIOSTREAMTLSCONFIG::GetMinVersion()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLSCONFIG::SetMinVersion(XWORD version)
-* @brief      Set the minimum TLS version this client will negotiate
+* @brief      Set the minimum TLS version configured for this endpoint
+* @note       The current server-side DIOSTREAMTLS implementation supports TLS 1.3 only; a server configured
+*             with any other version window is rejected by DIOSTREAMTLS::Open() and DIOWEBSERVER::Ini().
 * @note       A TLS 1.2 fallback (minversion == TLS_1_2, maxversion == TLS_1_3) does not add anything to
 *             GetCipherSuites(): DIOSTREAMTLS<T> tries TLS 1.3 first with that list completely unchanged, and
 *             only on a handshake-stage failure retries the whole connection using the parallel
@@ -888,7 +890,7 @@ bool DIOSTREAMTLSCONFIG::SetMinVersion(XWORD version)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XWORD DIOSTREAMTLSCONFIG::GetMaxVersion()
-* @brief      Get the maximum TLS version this client will negotiate
+* @brief      Get the maximum TLS version configured for this endpoint
 * @ingroup    DATAIO
 *
 * @return     XWORD : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.
@@ -903,7 +905,8 @@ XWORD DIOSTREAMTLSCONFIG::GetMaxVersion()
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
-* @brief      Set the maximum TLS version this client will negotiate
+* @brief      Set the maximum TLS version configured for this endpoint
+* @note       The current server-side DIOSTREAMTLS implementation supports TLS 1.3 only.
 * @ingroup    DATAIO
 *
 * @param[in]  version : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.

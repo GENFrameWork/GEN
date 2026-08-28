@@ -45,7 +45,7 @@
 
 #define DIOSTREAMTLS13SESSION_MAXHANDSHAKESIZE                    DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE
 #define DIOSTREAMTLS13SESSION_MAXRECORDINPUTSIZE                  (4*1024*1024)
-#define DIOSTREAMTLS13SESSION_MAXKEYUPDATES                       1024
+#define DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES                  ((((XQWORD)1) << 48) - 1)
 
 
 enum DIOSTREAMTLS13SESSION_RESULT
@@ -155,7 +155,9 @@ class DIOSTREAMTLS13SESSION
     XBUFFER                                 applicationinput;
     XBUFFER                                 posthandshakeoutput;
 
-    XDWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+    XQWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+    bool                                    keyupdaterequestpending;
+    bool                                    keyupdateresponsepending;
 
     bool                                    closenotifysent;
     bool                                    closenotifyreceived;

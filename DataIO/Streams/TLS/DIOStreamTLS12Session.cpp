@@ -693,6 +693,31 @@ XBUFFER* DIOSTREAMTLS12SESSION::GetApplicationInput()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS12SESSION::ApplicationData_CanProtect(XDWORD size)
+* @brief      Check whether application data can be encrypted without reaching the proactive AES-GCM usage threshold
+* @ingroup    DATAIO
+*
+* @param[in]  size : Number of application bytes that would be protected.
+*
+* @return     bool : true if the current write keys still have sufficient usage margin; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS12SESSION::ApplicationData_CanProtect(XDWORD size)
+{
+  if(!isini || !keysactivated || iserror || closenotifysent || closenotifyreceived) return false;
+
+  XQWORD recordsneeded = size?(((XQWORD)size + DIOSTREAMTLS12RECORD_MAXPLAINSIZE - 1) / DIOSTREAMTLS12RECORD_MAXPLAINSIZE):1;
+  XQWORD sequence      = record.GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
+
+  if(sequence >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS) return false;
+  if(recordsneeded >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS) return false;
+
+  return (sequence + recordsneeded) < DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLS12SESSION::ApplicationData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
 * @brief      Protect application data with the active LOCAL key
 * @ingroup    DATAIO

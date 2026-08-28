@@ -50,6 +50,43 @@
 
 
 
+/*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
+
+
+
+static void DIOStreamTLS12_BufferErase(XBUFFER& buffer)
+{
+  volatile XBYTE* data = buffer.Get();
+
+  for(XDWORD c=0; c<buffer.GetSize(); c++) data[c] = 0;
+
+  buffer.Delete();
+}
+
+
+class DIOSTREAMTLS12SECUREBUFFER : public XBUFFER
+{
+  public:
+
+    virtual ~DIOSTREAMTLS12SECUREBUFFER()
+    {
+      DIOStreamTLS12_BufferErase((*this));
+    }
+};
+
+
+class DIOSTREAMTLS12SECUREHMAC : public HASHHMAC
+{
+  public:
+
+    virtual ~DIOSTREAMTLS12SECUREHMAC()
+    {
+      if(GetKey())    DIOStreamTLS12_BufferErase((*GetKey()));
+      if(GetResult()) DIOStreamTLS12_BufferErase((*GetResult()));
+    }
+};
+
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
@@ -146,16 +183,18 @@ void DIOSTREAMTLS12KEYSCHEDULE::End()
 {
   if(hash)
     {
+      if(hash->GetResult()) DIOStreamTLS12_BufferErase((*hash->GetResult()));
+
       GEN_DELETE hash;
       hash = NULL;
     }
 
-  mastersecret.Delete();
+  DIOStreamTLS12_BufferErase(mastersecret);
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {
-      key[c].Delete();
-      fixedIV[c].Delete();
+      DIOStreamTLS12_BufferErase(key[c]);
+      DIOStreamTLS12_BufferErase(fixedIV[c]);
     }
 
   isini       = false;
@@ -294,21 +333,21 @@ bool DIOSTREAMTLS12KEYSCHEDULE::PHash(XBUFFER& secret, XBUFFER& seed, XDWORD out
   // A(0) = seed, A(i) = HMAC(secret, A(i-1))
   // output = HMAC(secret, A(1) + seed) + HMAC(secret, A(2) + seed) + ...
 
-  XBUFFER A;
+  DIOSTREAMTLS12SECUREBUFFER A;
 
   if(!A.Add(seed)) return false;
 
   while(output.GetSize() < outputsize)
     {
-      HASHHMAC HMAC;
-      XBUFFER  newA;
-      XBUFFER  block;
+      DIOSTREAMTLS12SECUREHMAC   HMAC;
+      DIOSTREAMTLS12SECUREBUFFER newA;
+      DIOSTREAMTLS12SECUREBUFFER block;
 
       if(!HMAC.SetHash(hash) || !HMAC.SetKey(secret) || !HMAC.Do(A)) return false;
       if(!newA.Add(HMAC.GetResult()->Get(), hashsize))               return false;
 
-      HASHHMAC HMACblock;
-      XBUFFER  input;
+      DIOSTREAMTLS12SECUREHMAC   HMACblock;
+      DIOSTREAMTLS12SECUREBUFFER input;
 
       if(!input.Add(newA) || !input.Add(seed))                                       return false;
       if(!HMACblock.SetHash(hash) || !HMACblock.SetKey(secret) || !HMACblock.Do(input)) return false;
@@ -316,7 +355,7 @@ bool DIOSTREAMTLS12KEYSCHEDULE::PHash(XBUFFER& secret, XBUFFER& seed, XDWORD out
 
       if(!output.Add(block)) return false;
 
-      A.Delete();
+      DIOStreamTLS12_BufferErase(A);
       if(!A.Add(newA)) return false;
     }
 
@@ -381,7 +420,7 @@ bool DIOSTREAMTLS12KEYSCHEDULE::MasterSecret_Create(XBUFFER& premastersecret, XB
 
   if(!seed.Add(clientrandom) || !seed.Add(serverrandom)) return false;
 
-  mastersecret.Delete();
+  DIOStreamTLS12_BufferErase(mastersecret);
 
   return PRF(premastersecret, DIOSTREAMTLS12KEYSCHEDULE_LABEL_MASTERSECRET, seed,
              DIOSTREAMTLS12KEYSCHEDULE_MASTERSECRETSIZE, mastersecret);
@@ -421,8 +460,8 @@ bool DIOSTREAMTLS12KEYSCHEDULE::KeyBlock_Create(XBUFFER& clientrandom, XBUFFER& 
   if(clientrandom.GetSize() != DIOSTREAMTLS12KEYSCHEDULE_RANDOMSIZE)          return false;
   if(serverrandom.GetSize() != DIOSTREAMTLS12KEYSCHEDULE_RANDOMSIZE)          return false;
 
-  XBUFFER seed;
-  XBUFFER keyblock;
+  XBUFFER                     seed;
+  DIOSTREAMTLS12SECUREBUFFER keyblock;
 
   // RFC 5246 section 6.3: server_random FIRST here, the opposite order of the master secret.
   if(!seed.Add(serverrandom) || !seed.Add(clientrandom)) return false;
@@ -436,10 +475,10 @@ bool DIOSTREAMTLS12KEYSCHEDULE::KeyBlock_Create(XBUFFER& clientrandom, XBUFFER& 
   // Order inside the block: client_write_key, server_write_key, client_write_IV, server_write_IV.
   XDWORD position = 0;
 
-  XBUFFER clientkey;
-  XBUFFER serverkey;
-  XBUFFER clientIV;
-  XBUFFER serverIV;
+  DIOSTREAMTLS12SECUREBUFFER clientkey;
+  DIOSTREAMTLS12SECUREBUFFER serverkey;
+  DIOSTREAMTLS12SECUREBUFFER clientIV;
+  DIOSTREAMTLS12SECUREBUFFER serverIV;
 
   if(!clientkey.Add(keyblock.Get() + position, keysize)) return false;
   position += keysize;
@@ -457,8 +496,8 @@ bool DIOSTREAMTLS12KEYSCHEDULE::KeyBlock_Create(XBUFFER& clientrandom, XBUFFER& 
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {
-      key[c].Delete();
-      fixedIV[c].Delete();
+      DIOStreamTLS12_BufferErase(key[c]);
+      DIOStreamTLS12_BufferErase(fixedIV[c]);
     }
 
   if(!key[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL].Add(isclient?clientkey:serverkey))       return false;

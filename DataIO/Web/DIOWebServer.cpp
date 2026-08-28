@@ -1394,6 +1394,7 @@ bool DIOWEBSERVER_CONNECTION::Ini(DIOWEBSERVER* webserver, DIOSTREAMTCPIPCONFIG*
 {
   this->webserver     = webserver;
   this->diostreamcfg  = diostreamcfg;
+  this->isopening     = false;
 
   SetMode(DIOWEBSERVER_CONNECTION_MODE_UNKNOWN);
 
@@ -1481,6 +1482,49 @@ bool DIOWEBSERVER_CONNECTION::Activate()
   xtimerconnection->Reset();
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER_CONNECTION::ActivateOpen()
+* @brief      Starts the connection worker and lets it perform the stream Open().
+* @note       Used by TLS server connections because DIOSTREAMTLS::Open() includes the complete synchronous handshake.
+*             Running it in the connection worker prevents the web server accept loop from being blocked by a slow peer.
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the worker was started; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBSERVER_CONNECTION::ActivateOpen()
+{
+  if(!threadconnection) return false;
+  if(!xtimerconnection) return false;
+  if(!diostream)        return false;
+
+  isopening = true;
+  isactive  = false;
+
+  threadconnection->Ini();
+
+  xtimerconnection->Reset();
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER_CONNECTION::IsOpening()
+* @brief      Returns whether the connection worker is opening the stream / completing the TLS handshake.
+* @ingroup    DATAIO
+* 
+* @return     bool : true while Open() is in progress.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBSERVER_CONNECTION::IsOpening()
+{
+  return isopening;
 }
 
 
@@ -1963,6 +2007,7 @@ bool DIOWEBSERVER_CONNECTION::End()
     }
 
   isactive            = false;
+  isopening           = false;
   isrequestinprogress = false;
 
   return true;
@@ -2543,6 +2588,32 @@ void DIOWEBSERVER_CONNECTION::ThreadRunFunction(void* param)
   DIOWEBSERVER_WEBSOCKET_OPCODE opcode      = DIOWEBSERVER_WEBSOCKET_OPCODE_RESERVED10;
   bool                          sendrequest = false;
 
+  // TLS server Open() includes accept + complete handshake and is intentionally synchronous.
+  // Execute it here, in the per-connection worker, never in DIOWEBSERVER's accept/control thread.
+  if(wsconn->isopening)
+    {
+      bool openstatus = wsconn->diostream?wsconn->diostream->Open():false;
+
+      wsconn->isopening = false;
+
+      if(!openstatus)
+        {
+          wsconn->isactive = false;
+          if(wsconn->threadconnection) wsconn->threadconnection->Run(false);
+          return;
+        }
+
+      wsconn->isactive = true;
+      if(wsconn->xtimerconnection) wsconn->xtimerconnection->Reset();
+
+      if(wsconn->webserver)
+        {
+          XSTRING IPstring;
+          wsconn->diostream->GetClientIP()->GetXString(IPstring);
+          GEN_XLOG.AddEntry(XLOGLEVEL_INFO, DIOWEBSERVER_LOGSECTIONID_VERBOSE, false, __L("[%08X] Connection Active [%s]"), wsconn, IPstring.Get());
+        }
+    }
+
   switch(wsconn->GetMode())
     {
       case DIOWEBSERVER_CONNECTION_MODE_UNKNOWN       :
@@ -2637,6 +2708,7 @@ void DIOWEBSERVER_CONNECTION::Clean()
   diostream             = NULL;
 
   isactive              = false;
+  isopening             = false;
   mode                  =  DIOWEBSERVER_CONNECTION_MODE_UNKNOWN;
   xtimerconnection      = NULL;
   xtimerdisconnection   = NULL;
@@ -2727,6 +2799,12 @@ bool DIOWEBSERVER::Ini(int port, bool doinitialconnectitivitytest, int timeoutse
 bool DIOWEBSERVER::Ini(DIOSTREAMTLSCONFIG* tlsconfig, int port, int timeoutserverpage, XSTRING* addrlocal)
 {
   if(!tlsconfig || !tlsconfig->HasLocalCredentials()) return false;
+
+  // The current GEN TLS server implementation is TLS 1.3 only.  Validate this here, before the listener is
+  // started, so a TLS 1.2 server configuration fails at Ini() instead of being silently ignored until a client
+  // reaches DIOSTREAMTLS::Open().
+  if((tlsconfig->GetMinVersion() != DIOSTREAMTLS_MSG_VERSION_TLS_1_3) ||
+     (tlsconfig->GetMaxVersion() != DIOSTREAMTLS_MSG_VERSION_TLS_1_3)) return false;
 
   // doinitialconnectitivitytest is forced off here: it assumes Open() on the probe stream succeeds without a
   // peer (plain TCP bind+listen only), whereas DIOSTREAMTLS<T>'s server Open() accepts AND completes a full
@@ -3838,7 +3916,7 @@ XDWORD DIOWEBSERVER::Connections_GetNWaiting()
           DIOWEBSERVER_CONNECTION* connection = (DIOWEBSERVER_CONNECTION*)connections.Get(c);
           if(connection)
             {
-              if((!connection->IsRequestInProgress())  && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_GETTINGCONNECTION))
+              if(connection->IsOpening() || ((!connection->IsRequestInProgress()) && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_GETTINGCONNECTION)))
                 {
                   nconnectionswait++;
                 }
@@ -3898,53 +3976,64 @@ bool DIOWEBSERVER::Connections_CreateNew()
   XDWORD nwaiting = Connections_GetNWaiting();
   if(nwaiting >= DIOWEBSERVER_MAXPAGECONNECTIONS)  return false;
 
-  if(xmutexconnections) xmutexconnections->Lock();
-
   DIOWEBSERVER_CONNECTION* connection = GEN_NEW DIOWEBSERVER_CONNECTION();
-  if(connection)
+  if(!connection) return false;
+
+  if(!connection->Ini(this, diostreamcfg))
     {
-      if(connection->Ini(this, diostreamcfg))
-        {
-          if(connection->GetDIOStream()->Open())
-            {
-              SubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , connection->GetDIOStream());
-              SubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , connection->GetDIOStream());
-
-              // XTRACE_PRINTCOLOR(1, __L("Create Connexion: [%08X]"), connection);
-
-              connections.Add(connection);
-
-              // For a TLS-wrapped stream, Open() above is synchronous end-to-end: it already waited for the raw
-              // transport to reach DIOSTREAMSTATUS_CONNECTED *and* completed the whole handshake before returning
-              // here. The transport's own DIOSTREAM_XEVENT_TYPE_CONNECTED event is posted the moment the raw
-              // connection reaches that state -- i.e. from *inside* this same Open() call, well before the
-              // SubscribeEvent() call above ever runs -- so for TLS that event is always missed and
-              // DIOWEBSERVER_CONNECTION::Activate() (which starts this connection's own request-processing
-              // thread) never fires: the connection accepts and completes its handshake but then just sits idle
-              // forever, never reading or answering any request. Since Open() already guarantees the connection
-              // is fully up by the time we get here, activate it directly instead of waiting on an event that
-              // already came and went.
-              if(diostreamcfg && diostreamcfg->IsTLS())
-                {
-                  connection->Activate();
-                }
-
-              if(xmutexconnections) xmutexconnections->UnLock();
-
-              return true;
-            }
-            else
-            {
-              connection->End();
-              GEN_DELETE connection;
-            }
-
-        } else GEN_DELETE connection;
+      GEN_DELETE connection;
+      return false;
     }
 
+  // DIOSTREAMTLS<T>::Open() in server mode performs accept + the complete TLS handshake synchronously.
+  // Do not execute it in the DIOWEBSERVER control/accept thread: a slow or incomplete peer would stop this
+  // thread from creating/accepting the following connections. The per-connection worker owns that blocking work.
+  if(diostreamcfg && diostreamcfg->IsTLS())
+    {
+      SubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , connection->GetDIOStream());
+      SubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , connection->GetDIOStream());
+
+      if(xmutexconnections) xmutexconnections->Lock();
+      connections.Add(connection);
+
+      // Set the opening state and start the worker while the connection is already registered. ActivateOpen()
+      // returns immediately; the network wait/handshake happens in DIOWEBSERVER_CONNECTION::ThreadRunFunction().
+      bool status = connection->ActivateOpen();
+      if(xmutexconnections) xmutexconnections->UnLock();
+
+      if(!status)
+        {
+          if(xmutexconnections) xmutexconnections->Lock();
+          connections.Delete(connection);
+          if(xmutexconnections) xmutexconnections->UnLock();
+
+          UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , connection->GetDIOStream());
+          UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , connection->GetDIOStream());
+
+          GEN_DELETE connection;
+          return false;
+        }
+
+      return true;
+    }
+
+  // Keep the established non-TLS behavior unchanged. Its Open() only starts the native stream accept and the
+  // CONNECTED event activates the per-connection request worker afterwards.
+  if(!connection->GetDIOStream()->Open())
+    {
+      connection->End();
+      GEN_DELETE connection;
+      return false;
+    }
+
+  SubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , connection->GetDIOStream());
+  SubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , connection->GetDIOStream());
+
+  if(xmutexconnections) xmutexconnections->Lock();
+  connections.Add(connection);
   if(xmutexconnections) xmutexconnections->UnLock();
 
-  return false;
+  return true;
 }
 
 
@@ -3968,7 +4057,7 @@ bool DIOWEBSERVER::Connections_DeleteUsed()
       do{ DIOWEBSERVER_CONNECTION* connection = (DIOWEBSERVER_CONNECTION*)connections.Get(c);
           if(connection)
             {
-              if((connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_DISCONNECTED) &&  (!connection->IsRequestInProgress()))
+              if((!connection->IsOpening()) && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_DISCONNECTED) && (!connection->IsRequestInProgress()))
                 {
                   UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , connection->GetDIOStream());
                   UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , connection->GetDIOStream());
@@ -4010,7 +4099,7 @@ bool DIOWEBSERVER::Connections_DeleteWaiting()
       do{ DIOWEBSERVER_CONNECTION* connection = (DIOWEBSERVER_CONNECTION*)connections.Get(c);
           if(connection)
             {
-              if((!connection->IsRequestInProgress())  && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_GETTINGCONNECTION))
+              if(connection->IsOpening() || ((!connection->IsRequestInProgress()) && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_GETTINGCONNECTION)))
                 {
                   connections.Delete(connection);
                   GEN_DELETE connection;
@@ -4075,11 +4164,18 @@ void DIOWEBSERVER::HandleEvent_DIOStream(DIOSTREAM_XEVENT* event)
                                                       {
                                                         if(connection->GetDIOStream() == event->GetDIOStream())
                                                           {
-                                                            connection->Activate();
+                                                            // A TLS connection worker is started before Open(). Its underlying transport
+                                                            // may post CONNECTED before (or be dispatched after) the TLS handshake finishes,
+                                                            // so this event must never start that worker a second time. The worker marks/logs
+                                                            // the connection active only after the complete TLS handshake succeeds.
+                                                            if(!diostreamcfg || !diostreamcfg->IsTLS())
+                                                              {
+                                                                connection->Activate();
 
-                                                            XSTRING IPstring;
-                                                            connection->GetDIOStream()->GetClientIP()->GetXString(IPstring);
-                                                            GEN_XLOG.AddEntry(XLOGLEVEL_INFO, DIOWEBSERVER_LOGSECTIONID_VERBOSE, false, __L("[%08X] Connection Active [%s]"), connection, IPstring.Get());
+                                                                XSTRING IPstring;
+                                                                connection->GetDIOStream()->GetClientIP()->GetXString(IPstring);
+                                                                GEN_XLOG.AddEntry(XLOGLEVEL_INFO, DIOWEBSERVER_LOGSECTIONID_VERBOSE, false, __L("[%08X] Connection Active [%s]"), connection, IPstring.Get());
+                                                              }
 
                                                             break;
                                                           }

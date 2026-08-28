@@ -1881,9 +1881,17 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   if(!diostream->Open())
     {
-      diostream->Close();
-      if(connectionfailed) *connectionfailed = true;
+      DIOSTREAMERROR streamerror = diostream->GetLastDIOError();
 
+      diostream->Close();
+
+      // For an implicit URL the caller may retry over HTTP, but never after TLS has positively failed
+      // authentication/security checks. In that case downgrading would turn a security failure into an
+      // unprotected request. Explicit https:// URLs never reach the fallback branch in any case.
+      if(connectionfailed)
+        {
+          *connectionfailed = (streamerror == DIOSTREAMERROR_TLSAUTHENTICATION)?false:true;
+        }
 
       return false;
     }

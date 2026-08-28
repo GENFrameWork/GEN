@@ -386,7 +386,8 @@ bool DIOSTREAMTLS12RECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttyp
 
   if(!cipher[direction]) return false;
 
-  if(sequence[direction] == 0xFFFFFFFFFFFFFFFFULL) return false;                // The sequence number must never wrap
+  if(sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS) return false; // Never encrypt beyond the AES-GCM key-usage limit
+  if(sequence[direction] == 0xFFFFFFFFFFFFFFFFULL) return false;                  // The sequence number must never wrap
 
   // The explicit nonce only has to be unique for the key. Using the sequence number is what every
   // implementation does, and it makes a capture reproducible.

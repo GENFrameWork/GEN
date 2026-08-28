@@ -737,6 +737,11 @@ bool DIOSTREAMTLSRECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttype,
       return false;
     }
 
+  if(sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS)             // Never encrypt beyond the AES-GCM key-usage limit
+    {
+      return false;
+    }
+
   if(sequence[direction] == 0xFFFFFFFFFFFFFFFFULL)                              // RFC 8446 section 5.3: the sequence number must never wrap
     {
       return false;
