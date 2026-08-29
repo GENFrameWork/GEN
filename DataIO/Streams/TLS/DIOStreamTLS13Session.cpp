@@ -276,7 +276,12 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
 
   switch(group)
     {
-      case DIOSTREAMTLS_MSG_CURVEID_X25519    : keyexchange.CleanAllKeys();
+      case DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768 : keyexchangex25519mlkem768.Delete();
+                                                    if(!keyexchangex25519mlkem768.ClientKeyShare_Create(publickey)) return false;
+                                                    break;
+
+      case DIOSTREAMTLS_MSG_CURVEID_X25519    : keyexchangex25519mlkem768.Delete();
+                                                keyexchange.CleanAllKeys();
 
                                                 if(!keyexchange.GenerateRandomPrivateKey() ||
                                                    !keyexchange.CreatePublicKey() ||
@@ -288,7 +293,8 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                   }
                                                 break;
 
-      case DIOSTREAMTLS_MSG_CURVEID_SECP256R1 : keyexchangep256private.FillBuffer(0);
+      case DIOSTREAMTLS_MSG_CURVEID_SECP256R1 : keyexchangex25519mlkem768.Delete();
+                                                keyexchangep256private.FillBuffer(0);
                                                 keyexchangep256private.Delete();
                                                 keyexchangep256public.Delete();
 
@@ -303,7 +309,8 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                   }
                                                 break;
 
-      case DIOSTREAMTLS_MSG_CURVEID_SECP384R1 : keyexchangep384private.FillBuffer(0);
+      case DIOSTREAMTLS_MSG_CURVEID_SECP384R1 : keyexchangex25519mlkem768.Delete();
+                                                keyexchangep384private.FillBuffer(0);
                                                 keyexchangep384private.Delete();
                                                 keyexchangep384public.Delete();
 
@@ -346,6 +353,9 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
 
   switch(group)
     {
+      case DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768 : if(!keyexchangex25519mlkem768.ClientSharedSecret_Create(publickey, sharedsecret)) return false;
+                                                    break;
+
       case DIOSTREAMTLS_MSG_CURVEID_X25519    : if((publickey.GetSize() != CIPHERECDSAX25519_MAXKEY) ||
                                                    !keyexchange.GetKey(CIPHERECDSAX25519_TYPEKEY_PRIVATE) ||
                                                    !keyexchange.CreateSharedKey(publickey.Get()) ||
@@ -381,6 +391,26 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13SESSION::KeyExchange_ServerGenerate(XWORD group, XBUFFER& peerpublickey, XBUFFER& publickey, XBUFFER& sharedsecret)
+* @brief      Generate the server key share and shared secret for a TLS group
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13SESSION::KeyExchange_ServerGenerate(XWORD group, XBUFFER& peerpublickey, XBUFFER& publickey, XBUFFER& sharedsecret)
+{
+  if(!isini) return false;
+
+  if(group == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768)
+    {
+      return keyexchangex25519mlkem768.ServerKeyShare_Create(peerpublickey, publickey, sharedsecret);
+    }
+
+  return KeyExchange_Generate(group, publickey) && KeyExchange_SharedSecret(group, peerpublickey, sharedsecret);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
 * @brief      Erase all ephemeral key exchange material
 * @ingroup    DATAIO
@@ -389,6 +419,7 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
 void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
 {
   keyexchange.CleanAllKeys();
+  keyexchangex25519mlkem768.Delete();
 
   keyexchangep256private.FillBuffer(0);
   keyexchangep256private.Delete();
@@ -769,7 +800,8 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFE
   // produces 48 (its coordinate size) -- so this must enumerate every group KeyExchange_SharedSecret() can
   // hand back here, not assume the X25519 constant fits them all.
   if(!isini ||
-     ((sharedsecret.GetSize() != CIPHERECDSAX25519_MAXKEY) &&
+     ((sharedsecret.GetSize() != CIPHERX25519MLKEM768_SHAREDSECRETSIZE) &&
+      (sharedsecret.GetSize() != CIPHERECDSAX25519_MAXKEY) &&
       (sharedsecret.GetSize() != CIPHERECDSA_P256_COORDINATE_SIZE) &&
       (sharedsecret.GetSize() != CIPHERECDSA_P384_COORDINATE_SIZE)))
     {

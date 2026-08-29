@@ -44,6 +44,8 @@
 
 #include "CipherKeyPublicRSA.h"
 #include "CipherKeyECDSA.h"
+#include "CipherKeySymmetrical.h"
+#include "CipherEd25519.h"
 #include "CipherRSA.h"
 #include "CipherECDSA.h"
 #include "HashSHA2.h"
@@ -1304,8 +1306,14 @@ bool CIPHERCERTIFICATEX509::SetAlgorithmType(XCHAR* OID)
                
   if(!_OID.Compare(__L("1.2.840.113549.1.1.10"), false))
     {
-      algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS;    	                  
-      algorithmtypestr  = __L("Probabilistic RSA signature scheme");  
+      algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS;
+      algorithmtypestr  = __L("Probabilistic RSA signature scheme");
+    }
+
+  if(!_OID.Compare(__L("1.3.101.112"), false))
+    {
+      algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519;
+      algorithmtypestr  = __L("Ed25519 signature");
     }
  
   return (algorithmtype != CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN)?true:false;
@@ -1753,8 +1761,10 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
    else if((algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1)   ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256) ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384) ||
-           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512))
+           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512) ||
+           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519))
     {
+      // RFC 8410 requires Ed25519 AlgorithmIdentifier parameters to be absent; ECDSA uses the same encoding rule.
       if(outeralgorithmparameters.tag) return false;
     }
    else
@@ -1974,6 +1984,22 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
          !ECDSA.SetKey(ECDSApublickey, true) || !SetPublicCipherKey(ECDSApublickey))
         {
           GEN_DELETE ECDSApublickey;
+          return false;
+        }
+    }
+   else if(!publickeyalgorithmOID.Compare(__L("1.3.101.112"), false))
+    {
+      // RFC 8410: Ed25519 AlgorithmIdentifier parameters MUST be absent and SubjectPublicKey is exactly 32 bytes.
+      if(publickeyalgorithmparameters.tag || (publickeybits.size != (CIPHERED25519_PUBLICKEYSIZE + 1))) return false;
+
+      CIPHERKEYSYMMETRICAL* Ed25519publickey = GEN_NEW CIPHERKEYSYMMETRICAL();
+      if(!Ed25519publickey) return false;
+
+      Ed25519publickey->SetType(CIPHERKEYTYPE_ED25519_PUBLIC);
+      if(!Ed25519publickey->Set((XBYTE*)&publickeybits.data[1], CIPHERED25519_PUBLICKEYSIZE) ||
+         !SetPublicCipherKey(Ed25519publickey))
+        {
+          GEN_DELETE Ed25519publickey;
           return false;
         }
     }
@@ -2719,6 +2745,18 @@ bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
 
                                                                         default : break;
         }
+    }
+
+  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ED25519_PUBLIC) &&
+     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519))
+    {
+      CIPHERKEYSYMMETRICAL* key = (CIPHERKEYSYMMETRICAL*)issuerpublickey;
+      if(!key->Get() || key->Get()->GetSize() != CIPHERED25519_PUBLICKEYSIZE) return false;
+
+      CIPHERED25519 Ed25519;
+      XBUFFER publickey;
+      if(!publickey.Add((*key->Get()))) return false;
+      return Ed25519.Verify(publickey, tbsdata, signature);
     }
 
   if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) &&

@@ -38,6 +38,7 @@
 
 #include "CipherKeyPublicRSA.h"
 #include "CipherKeyECDSA.h"
+#include "CipherKeySymmetrical.h"
 
 
 
@@ -418,6 +419,7 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSignatureAlgorithmSupported(CIPHERCERTIFI
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256         :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384         :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512         : return true;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519                  : return true;
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               : return (certificate->GetRSASSAPSSHashType() !=
                                                                                   CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN);
                                                                     default : break;
@@ -460,12 +462,23 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSamePublicKey(CIPHERKEY* key1, CIPHERKEY*
                                       }
                                  break;
 
-      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC : { CIPHERKEYECDSA* keyECDSA1 = (CIPHERKEYECDSA*)key1;
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC :
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC :
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC : { CIPHERKEYECDSA* keyECDSA1 = (CIPHERKEYECDSA*)key1;
                                                     CIPHERKEYECDSA* keyECDSA2 = (CIPHERKEYECDSA*)key2;
 
                                                     if(!keyECDSA1->Get() || !keyECDSA2->Get()) return false;
 
                                                     return keyECDSA1->Get()->Compare((*keyECDSA2->Get()));
+                                                  }
+                                             break;
+
+      case CIPHERKEYTYPE_ED25519_PUBLIC          : { CIPHERKEYSYMMETRICAL* keyEd255191 = (CIPHERKEYSYMMETRICAL*)key1;
+                                                    CIPHERKEYSYMMETRICAL* keyEd255192 = (CIPHERKEYSYMMETRICAL*)key2;
+
+                                                    if(!keyEd255191->Get() || !keyEd255192->Get()) return false;
+
+                                                    return keyEd255191->Get()->Compare((*keyEd255192->Get()));
                                                   }
                                              break;
 

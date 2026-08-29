@@ -67,6 +67,9 @@ enum CIPHERKEYTYPE
   CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PRIVATE	       ,
   CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PUBLIC	       ,                                                     
   CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PRIVATE	       ,
+
+  CIPHERKEYTYPE_ED25519_PUBLIC                      ,
+  CIPHERKEYTYPE_ED25519_PRIVATE                     ,
   
   CIPHERKEYTYPE_LASTTYPE                           
 };

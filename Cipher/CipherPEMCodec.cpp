@@ -49,10 +49,10 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
-// rsaEncryption (1.2.840.113549.1.1.1) and id-ecPublicKey (1.2.840.10045.2.1), DER-encoded OBJECT IDENTIFIER
-// content (i.e. without the leading 0x06 tag / length bytes) -- the only two PKCS#8 algorithms recognised.
+// DER-encoded OBJECT IDENTIFIER contents (without the leading 0x06 tag / length bytes).
 static const XBYTE CIPHERPEMCODEC_OID_RSAENCRYPTION[] = { 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01 };
 static const XBYTE CIPHERPEMCODEC_OID_ECPUBLICKEY[]   = { 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01 };
+static const XBYTE CIPHERPEMCODEC_OID_ED25519[]       = { 0x2B, 0x65, 0x70 };
 
 
 
@@ -327,7 +327,36 @@ bool CIPHERPEMCODEC::ECPrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool CIPHERPEMCODEC::PKCS8PrivateKey_Decode(XBUFFER& der, bool& isrsa, bool& isec, XBUFFER& innerkey)
+* @fn         bool CIPHERPEMCODEC::Ed25519PrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
+* @brief      Decode the CurvePrivateKey carried inside an Ed25519 PKCS#8 PrivateKeyInfo (RFC 8410).
+* @ingroup    CIPHER
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool CIPHERPEMCODEC::Ed25519PrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
+{
+  XBYTE* data  = der.Get();
+  XDWORD size  = der.GetSize();
+  XDWORD index = 0;
+  XBYTE  tag;
+  XDWORD valueoffset;
+  XDWORD valuelength;
+
+  privatekey.Delete();
+
+  // RFC 8410: the PKCS#8 privateKey OCTET STRING contains a CurvePrivateKey, itself an OCTET STRING of 32 seed bytes.
+  if(!data || !size) return false;
+  if(!DER_ReadTagLength(data, size, index, tag, valueoffset, valuelength) ||
+     (tag != 0x04) || (valuelength != 32) || (index != size)) return false;
+
+  return privatekey.Add(&data[valueoffset], valuelength);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool CIPHERPEMCODEC::PKCS8PrivateKey_Decode(XBUFFER& der, bool& isrsa, bool& isec, bool& ised25519, XBUFFER& innerkey)
 * @brief      Decode an unencrypted PKCS#8 PrivateKeyInfo DER blob: identify its algorithm and return the nested
 *             RSAPrivateKey / ECPrivateKey DER blob.
 * @ingroup    CIPHER
@@ -335,7 +364,7 @@ bool CIPHERPEMCODEC::ECPrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool CIPHERPEMCODEC::PKCS8PrivateKey_Decode(XBUFFER& der, bool& isrsa, bool& isec, XBUFFER& innerkey)
+bool CIPHERPEMCODEC::PKCS8PrivateKey_Decode(XBUFFER& der, bool& isrsa, bool& isec, bool& ised25519, XBUFFER& innerkey)
 {
   XBYTE* data = der.Get();
   XDWORD size = der.GetSize();
@@ -345,8 +374,9 @@ bool CIPHERPEMCODEC::PKCS8PrivateKey_Decode(XBUFFER& der, bool& isrsa, bool& ise
   XDWORD seqoffset;
   XDWORD seqlength;
 
-  isrsa = false;
-  isec  = false;
+  isrsa     = false;
+  isec      = false;
+  ised25519 = false;
   innerkey.Delete();
 
   if(!data || !size) return false;
@@ -382,6 +412,12 @@ bool CIPHERPEMCODEC::PKCS8PrivateKey_Decode(XBUFFER& der, bool& isrsa, bool& ise
    else if((oidlength == sizeof(CIPHERPEMCODEC_OID_ECPUBLICKEY)) && !memcmp(&data[oidoffset], CIPHERPEMCODEC_OID_ECPUBLICKEY, oidlength))
     {
       isec = true;
+    }
+   else if((oidlength == sizeof(CIPHERPEMCODEC_OID_ED25519)) && !memcmp(&data[oidoffset], CIPHERPEMCODEC_OID_ED25519, oidlength))
+    {
+      // RFC 8410 requires AlgorithmIdentifier parameters to be absent for Ed25519.
+      if(algindex != algseqend) return false;
+      ised25519 = true;
     }
    else
     {

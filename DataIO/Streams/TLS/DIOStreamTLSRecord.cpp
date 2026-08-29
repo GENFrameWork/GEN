@@ -238,7 +238,14 @@ bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREA
       return false;
     }
 
-  cipher[direction] = GEN_NEW CIPHERAESGCM();
+  switch(keyschedule->GetCipherSuite())
+    {
+      case DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256:
+      case DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384:       cipher[direction] = GEN_NEW CIPHERAESGCM();                break;
+      case DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256: cipher[direction] = GEN_NEW CIPHERCHACHA20POLY1305();      break;
+                                                  default:   cipher[direction] = NULL;                                   break;
+    }
+
   if(!cipher[direction])
     {
       GEN_DELETE key[direction];
@@ -775,7 +782,9 @@ bool DIOSTREAMTLSRECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttype,
       return false;
     }
 
-  if(sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS)             // Never encrypt beyond the AES-GCM key-usage limit
+  if((keyschedule->GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256 ||
+      keyschedule->GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384) &&
+     sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS)              // RFC 8446 / RFC 8446 key-usage bound for AES-GCM
     {
       return false;
     }

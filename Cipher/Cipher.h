@@ -57,6 +57,8 @@ enum CIPHERTYPE
   CIPHERTYPE_ECDSA_BRAINPOOLP384R1	      ,
   CIPHERTYPE_ECDSA_BRAINPOOLP512R1	      ,
   CIPHERTYPE_ECDSA_X25519                 , // Not neccesary (Interchange Keys Only)
+  CIPHERTYPE_CHACHA20_POLY1305            ,
+  CIPHERTYPE_ED25519                      ,
 };                                        
 
 enum CIPHERCHAININGMODE

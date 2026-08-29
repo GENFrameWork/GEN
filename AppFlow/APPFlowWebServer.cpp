@@ -57,6 +57,8 @@
 #include "XMPInteger.h"
 #include "CipherKeyPrivateRSA.h"
 #include "CipherKeyECDSA.h"
+#include "CipherKeySymmetrical.h"
+#include "CipherEd25519.h"
 #include "CipherECDSA.h"
 #include "CipherCertificateX509.h"
 #include "CipherPEMCodec.h"
@@ -522,11 +524,12 @@ bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_ECDSA(XPATH* pathkey, CIPHERKEYTYPE
                 }
                else
                 {
-                  bool    isrsa = false;
-                  bool    isec  = false;
+                  bool    isrsa     = false;
+                  bool    isec      = false;
+                  bool    ised25519 = false;
                   XBUFFER innerkey;
 
-                  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(der, isrsa, isec, innerkey) && isec)
+                  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(der, isrsa, isec, ised25519, innerkey) && isec)
                     {
                       haskey = CIPHERPEMCODEC::ECPrivateKey_Decode(innerkey, scalar);
                     }
@@ -602,6 +605,64 @@ bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_ECDSA(XPATH* pathkey, CIPHERKEYTYPE
 }
 
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_Ed25519(XPATH* pathkey, DIOSTREAMTLSCONFIG* tlsconfig)
+* @brief      Load an Ed25519 private key from an unencrypted PKCS#8 PEM file (RFC 8410).
+* @note       INTERNAL. Ed25519 private material is the 32-byte seed carried by the nested CurvePrivateKey OCTET STRING.
+* @ingroup    APPFLOW
+*
+* @param[in]  pathkey : Path of the private key file to use.
+* @param[in]  tlsconfig : TLS server configuration to fill in.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_Ed25519(XPATH* pathkey, DIOSTREAMTLSCONFIG* tlsconfig)
+{
+  if(!pathkey || pathkey->IsEmpty() || !tlsconfig) return false;
+
+  XBUFFER filedata;
+  if(!Ini_ReadFile((*pathkey), filedata) || !CIPHERPEMCODEC::IsPEM(filedata)) return false;
+
+  XVECTOR<XSTRING*> lines;
+  bool status = false;
+
+  if(Ini_ReadLines((*pathkey), lines))
+    {
+      XSTRING blockheader;
+      XBUFFER der;
+
+      if(CIPHERPEMCODEC::PrivateKeyBlock_Decode(lines, blockheader, der) &&
+         (blockheader.Find(__L("PRIVATE KEY"), true, 0) != -1) &&
+         (blockheader.Find(__L("RSA PRIVATE KEY"), true, 0) == -1) &&
+         (blockheader.Find(__L("EC PRIVATE KEY"), true, 0) == -1))
+        {
+          bool isrsa = false;
+          bool isec = false;
+          bool ised25519 = false;
+          XBUFFER innerkey;
+          XBUFFER seed;
+
+          if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(der, isrsa, isec, ised25519, innerkey) && ised25519 &&
+             CIPHERPEMCODEC::Ed25519PrivateKey_Decode(innerkey, seed) &&
+             (seed.GetSize() == CIPHERED25519_PRIVATEKEYSIZE))
+            {
+              CIPHERKEYSYMMETRICAL privatekey;
+              privatekey.SetType(CIPHERKEYTYPE_ED25519_PRIVATE);
+
+              if(privatekey.Set(seed.Get(), seed.GetSize())) status = tlsconfig->SetLocalPrivateKey(&privatekey);
+            }
+        }
+
+      lines.DeleteContents();
+      lines.DeleteAll();
+    }
+
+  return status;
+}
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_RSA(XPATH* pathkey, DIOSTREAMTLSCONFIG* tlsconfig)
@@ -648,11 +709,12 @@ bool APPFLOWWEBSERVER::Ini_LoadTLSPrivateKey_RSA(XPATH* pathkey, DIOSTREAMTLSCON
                 }
                else
                 {
-                  bool    isrsa = false;
-                  bool    isec  = false;
+                  bool    isrsa     = false;
+                  bool    isec      = false;
+                  bool    ised25519 = false;
                   XBUFFER innerkey;
 
-                  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(der, isrsa, isec, innerkey) && isrsa)
+                  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(der, isrsa, isec, ised25519, innerkey) && isrsa)
                     {
                       haskey = CIPHERPEMCODEC::RSAPrivateKey_Decode(innerkey, prime1factor, prime2factor, exponent);
                     }
@@ -828,6 +890,10 @@ bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFI
         status = Ini_LoadTLSPrivateKey_RSA(&pathkey, tlsconfig);
         break;
 
+      case CIPHERKEYTYPE_ED25519_PUBLIC :
+        status = Ini_LoadTLSPrivateKey_Ed25519(&pathkey, tlsconfig);
+        break;
+
       case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC :
         status = Ini_LoadTLSPrivateKey_ECDSA(&pathkey, CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE, CIPHERECDSA_P256_COORDINATE_SIZE, tlsconfig);
         break;
@@ -893,11 +959,14 @@ DIOSTREAMTLSCONFIG* APPFLOWWEBSERVER::Ini_BuildTLSConfig(APPFLOWCFG* cfg)
 
   tlsconfig->SetMode(DIOSTREAMMODE_SERVER);
   tlsconfig->CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  tlsconfig->CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
+  tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
 
   // All signature schemes actually implemented are offered unconditionally: SignatureScheme_Select() (see
   // DIOStreamTLS13HandshakeServer.cpp) already filters them through DIOSTREAMTLSSIGNATURE::IsSupported(),
   // which safely narrows the offer down to whichever one matches the local certificate's actual key type.
+  tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384);

@@ -157,6 +157,8 @@ XCHAR* CIPHERKEY::GetTypeStr()
       case CIPHERKEYTYPE_ECDSA_BRAINPOOLP384R1_PRIVATE  : nametype = __L("ECDSA brainpoolp384r1 private");   break;                                                        
       case CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PUBLIC	  : nametype = __L("ECDSA brainpoolp512r1 public");    break;                                                                                                          
       case CIPHERKEYTYPE_ECDSA_BRAINPOOLP512R1_PRIVATE  : nametype = __L("ECDSA brainpoolp512r1 private");   break;                                                        
+      case CIPHERKEYTYPE_ED25519_PUBLIC                  : nametype = __L("Ed25519 public");                   break;
+      case CIPHERKEYTYPE_ED25519_PRIVATE                 : nametype = __L("Ed25519 private");                  break;
     }
 
   return nametype;

@@ -411,7 +411,8 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
 
           if(key && (key->GetKeyType() == candidate))
             {
-              bool validsize = ((candidate == DIOSTREAMTLS_MSG_CURVEID_X25519)    && (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY))          ||
+              bool validsize = ((candidate == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) && (key->GetKeyData()->GetSize() == CIPHERX25519MLKEM768_CLIENTSHARESIZE)) ||
+                               ((candidate == DIOSTREAMTLS_MSG_CURVEID_X25519)           && (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY))          ||
                                ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||
                                ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P384_PUBLICKEY_SIZE));
 
@@ -1270,13 +1271,13 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
 
   session->KeyExchange_Delete();
 
-  if(!session->KeyExchange_Generate(group, serverpublickey) || !session->CipherSuite_Select(ciphersuite))
+  if(!session->CipherSuite_Select(ciphersuite))
     {
       sharedsecret.FillBuffer(0);
       return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
     }
 
-  if(!session->KeyExchange_SharedSecret(group, peerpublickey, sharedsecret))
+  if(!session->KeyExchange_ServerGenerate(group, peerpublickey, serverpublickey, sharedsecret))
     {
       sharedsecret.FillBuffer(0);
       return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);

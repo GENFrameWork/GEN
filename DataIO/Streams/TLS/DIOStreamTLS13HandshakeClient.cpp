@@ -122,6 +122,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Ini(DIOSTREAMTLS13SESSION* session, bool all
   isini                            = true;
 
   ciphersuites.Add(session->GetKeySchedule()->GetCipherSuite());
+  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
@@ -344,7 +345,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       XWORD ciphersuite = config->GetCipherSuites()->Get(c);
 
       if((ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) &&
-         (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384)) return false;
+         (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384) &&
+         (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256)) return false;
       if(!ciphersuites.Add(ciphersuite)) return false;
     }
 
@@ -352,7 +354,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
     {
       XWORD supportedgroup = config->GetSupportedGroups()->Get(c);
 
-      if(((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+      if(((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) &&
+          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
           (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
           (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) || !supportedgroups.Add(supportedgroup)) return false;
     }
@@ -370,6 +373,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       switch(signaturescheme)
         {
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256    :
@@ -390,6 +394,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       switch(signaturescheme)
         {
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
@@ -1514,7 +1519,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
                                                                     key      = keyshare->GetKey();
 
                                                                     if(key && (key->GetKeyType() == currentkeysharegroup) &&
-                                                                       (((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+                                                                       (((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERX25519MLKEM768_SERVERSHARESIZE)) ||
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
                                                                          (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY)) ||
                                                                         ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
                                                                          (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||

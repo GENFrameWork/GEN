@@ -96,6 +96,7 @@
                                         
 #define DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL                                 0x00
 
+#define DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768                                  0x11EC    // RFC 10024
 #define DIOSTREAMTLS_MSG_CURVEID_X25519	                                      0x001D    // Optimizated              // Curvas modernas (TLS 1.3 recomendadas)
 #define DIOSTREAMTLS_MSG_CURVEID_X448	                                        0x001E	
 #define DIOSTREAMTLS_MSG_CURVEID_SECP256R1                                    0x0017	  // 256 bits

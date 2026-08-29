@@ -105,6 +105,7 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
     bool                        Ini_ReadLines                     (XPATH& path, XVECTOR<XSTRING*>& lines);
     bool                        Ini_LoadTLSPrivateKey_RSA         (XPATH* pathkey, DIOSTREAMTLSCONFIG* tlsconfig);
     bool                        Ini_LoadTLSPrivateKey_ECDSA       (XPATH* pathkey, CIPHERKEYTYPE privatekeytype, XDWORD coordinatesize, DIOSTREAMTLSCONFIG* tlsconfig);
+    bool                        Ini_LoadTLSPrivateKey_Ed25519     (XPATH* pathkey, DIOSTREAMTLSCONFIG* tlsconfig);
     bool                        Ini_LoadTLSCredentials            (APPFLOWCFG* cfg, DIOSTREAMTLSCONFIG* tlsconfig);
        
     DIOSTREAMTLSCONFIG*         Ini_BuildTLSConfig                (APPFLOWCFG* cfg);

@@ -58,7 +58,9 @@ class CIPHERPEMCODEC
 
     static bool              ECPrivateKey_Decode               (XBUFFER& der, XBUFFER& privatekey);
 
-    static bool              PKCS8PrivateKey_Decode            (XBUFFER& der, bool& isrsa, bool& isec, XBUFFER& innerkey);
+    static bool              Ed25519PrivateKey_Decode          (XBUFFER& der, XBUFFER& privatekey);
+
+    static bool              PKCS8PrivateKey_Decode            (XBUFFER& der, bool& isrsa, bool& isec, bool& ised25519, XBUFFER& innerkey);
 
   private:
 

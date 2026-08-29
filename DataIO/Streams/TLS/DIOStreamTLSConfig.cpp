@@ -250,6 +250,21 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::SetPrivateKey(CIPHERKEY* privatekey)
         }
         break;
 
+      case CIPHERKEYTYPE_ED25519_PRIVATE :
+        {
+          CIPHERKEYSYMMETRICAL* edcopy = GEN_NEW CIPHERKEYSYMMETRICAL();
+          if(!edcopy) return false;
+
+          if(!edcopy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
+            {
+              GEN_DELETE edcopy;
+              return false;
+            }
+
+          copy = edcopy;
+        }
+        break;
+
       case CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE :
       case CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE :
       case CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE :
@@ -508,7 +523,8 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCipherSuites()
 bool DIOSTREAMTLSCONFIG::CipherSuite_Add(XWORD ciphersuite)
 {
   if((ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) &&
-     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384)) return false;
+     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384) &&
+     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256)) return false;
 
   for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
     {
@@ -564,7 +580,8 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
 {
-  if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+  if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) &&
+     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
      (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
      (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) return false;
 
@@ -624,6 +641,7 @@ bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
 {
   switch(signaturescheme)
     {
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -689,6 +707,7 @@ bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
 {
   switch(signaturescheme)
     {
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -1075,9 +1094,8 @@ CIPHERKEY* DIOSTREAMTLSCONFIG::GetLocalPrivateKey()
 *
 * @fn         bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
 * @brief      Copy the private key of the local end
-* @note       Accepts either an RSA private key or an ECDSA private key for one of the curves CIPHERECDSA
-*             implements (P-256/P-384/P-521 -- see CIPHERECDSA::Parameters_Set()); any other key type is
-*             rejected. The matching CertificateSignatureScheme_Add()/SignatureScheme_Add() calls (see
+* @note       Accepts RSA, Ed25519, or an ECDSA private key for one of the curves CIPHERECDSA implements
+*             (P-256/P-384/P-521 -- see CIPHERECDSA::Parameters_Set()); any other key type is rejected. The matching CertificateSignatureScheme_Add()/SignatureScheme_Add() calls (see
 *             DoDefault() below) still need to be picked to match whichever key ends up here -- callers building
 *             a server profile from a loaded key, such as APPFLOWWEBSERVER::Ini_BuildTLSConfig(), should offer
 *             only the scheme(s) that pair with this key's type.
@@ -1102,6 +1120,25 @@ bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
           if(!copy) return false;
 
           if(!copy->CopyFrom((CIPHERKEYPRIVATERSA*)privatekey))
+            {
+              GEN_DELETE copy;
+              return false;
+            }
+
+          if(localprivatekey) GEN_DELETE localprivatekey;
+
+          localprivatekey = copy;
+        }
+        return true;
+
+      case CIPHERKEYTYPE_ED25519_PRIVATE :
+        {
+          CIPHERKEYSYMMETRICAL* copy;
+
+          copy = GEN_NEW CIPHERKEYSYMMETRICAL();
+          if(!copy) return false;
+
+          if(!copy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
             {
               GEN_DELETE copy;
               return false;
@@ -2051,8 +2088,10 @@ void DIOSTREAMTLSCONFIG::Clean()
   CipherSuites_Delete();
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
 
   SupportedGroups_Delete();
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
@@ -2061,11 +2100,13 @@ void DIOSTREAMTLSCONFIG::Clean()
   // anchor source is configured independently through CIPHERTRUSTPROVIDERX509, so applications can extend these
   // schemes without coupling that decision to the selected Root CA provider.
   SignatureSchemes_Delete();
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
 
   CertificateSignatureSchemes_Delete();
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);

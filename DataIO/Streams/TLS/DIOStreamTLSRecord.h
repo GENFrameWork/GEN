@@ -33,6 +33,7 @@
 #include "XBuffer.h"
 
 #include "CipherAESGCM.h"
+#include "CipherChaCha20Poly1305.h"
 #include "CipherKeySymmetrical.h"
 
 #include "DIOStreamTLSMessages.h"
@@ -94,7 +95,7 @@ class DIOSTREAMTLSRECORD
 
     DIOSTREAMTLS13KEYSCHEDULE*                keyschedule;
 
-    CIPHERAESGCM*                           cipher[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+    CIPHER*                                 cipher[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     CIPHERKEYSYMMETRICAL*                   key[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     XBUFFER                                 IV[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     XQWORD                                  sequence[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
