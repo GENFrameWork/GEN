@@ -49,8 +49,9 @@
 #define DIOSTREAMTLS_MSG_MAXLENGTH24                                          0x00FFFFFF
 #define DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE                                     (4*1024*1024)
 
-#define DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS                              23726566ULL     // floor(2^24.5), RFC 9846 section 5.5
+#define DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS                              23726566ULL     // floor(2^24.5), RFC 8446 section 5.5
 #define DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS                              (((XQWORD)1) << 24) // Conservative operational threshold
+#define DIOSTREAMTLS_CHACHA20POLY1305_PROACTIVEKEYUSAGERECORDS              0xFFFFFFFFFFFFFF00ULL // Update before the record sequence can wrap
 
 #define DIOSTREAMTLS_MSG_CIPHER_DES_CBC3_SHA                                  0x000A    // SSLv3   
 #define DIOSTREAMTLS_MSG_CIPHER_RSA_WITH_AES_128_CBC_SHA                      0x002F    // SSLv3   

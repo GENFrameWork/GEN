@@ -242,7 +242,13 @@ bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREA
     {
       case DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256:
       case DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384:       cipher[direction] = GEN_NEW CIPHERAESGCM();                break;
+
+      #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
       case DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256: cipher[direction] = GEN_NEW CIPHERCHACHA20POLY1305();      break;
+
+      #endif
+
                                                   default:   cipher[direction] = NULL;                                   break;
     }
 

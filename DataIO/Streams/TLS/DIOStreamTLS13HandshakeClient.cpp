@@ -351,8 +351,16 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
     {
       XWORD ciphersuite = config->GetCipherSuites()->Get(c);
 
-      if((ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) &&
-         (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384)) return false;
+      bool supported = (ciphersuite == DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) ||
+                       (ciphersuite == DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+
+      #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+      supported = supported || (ciphersuite == DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
+
+      #endif
+
+      if(!supported) return false;
       if(!ciphersuites.Add(ciphersuite)) return false;
     }
 

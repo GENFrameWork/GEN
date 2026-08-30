@@ -33,7 +33,11 @@
 #include "XBuffer.h"
 
 #include "CipherAESGCM.h"
+
+#ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
 #include "CipherChaCha20Poly1305.h"
+#endif
+
 #include "CipherKeySymmetrical.h"
 
 #include "DIOStreamTLSMessages.h"
@@ -111,6 +115,5 @@ class DIOSTREAMTLSRECORD
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 

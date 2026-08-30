@@ -69,6 +69,24 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+static bool DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(XWORD ciphersuite)
+{
+  switch(ciphersuite)
+    {
+      case DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256 :
+      case DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384 : return true;
+
+      #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256 : return true;
+
+      #endif
+
+      default : return false;
+    }
+}
+
+
 static bool DIOSTREAMTLSCONFIG_ServerNameMatch(XSTRING& pattern, XCHAR* servername)
 {
   XSTRING hostname;
@@ -577,7 +595,7 @@ XWORD DIOSTREAMTLSCONFIG::GetCipherSuite()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::SetCipherSuite(XWORD ciphersuite)
 {
-  if(IsFrozen()) return;
+  if(IsFrozen() || !DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(ciphersuite)) return;
   ciphersuites.DeleteAll();
   ciphersuites.Add(ciphersuite);
 }
@@ -611,9 +629,7 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCipherSuites()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CipherSuite_Add(XWORD ciphersuite)
 {
-  if(IsFrozen()) return false;
-  if((ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) &&
-     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384)) return false;
+  if(IsFrozen() || !DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(ciphersuite)) return false;
 
   for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
     {
@@ -2760,6 +2776,7 @@ void DIOSTREAMTLSCONFIG::Clean()
 
   CipherSuites_Delete();
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
 
   SupportedGroups_Delete();

@@ -106,7 +106,7 @@ DIOSTREAMTLS13KEYSCHEDULE::~DIOSTREAMTLS13KEYSCHEDULE()
 *             which is what makes this class usable by a server without any change.
 * @ingroup    DATAIO
 *
-* @param[in]  ciphersuite : Negotiated cipher suite. Only the TLS 1.3 AES-GCM ones are accepted.
+* @param[in]  ciphersuite : Negotiated TLS 1.3 cipher suite.
 * @param[in]  role : Role of this end of the connection.
 *
 * @return     bool : true if the operation is successful; otherwise false.
@@ -125,6 +125,15 @@ bool DIOSTREAMTLS13KEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_R
       case DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384   : hash     = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);
                                                           keysize  = 32;
                                                           break;
+
+      #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256
+                                                        : hash     = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
+                                                          keysize  = 32;
+                                                          break;
+
+      #endif
 
                                               default   : return false;
     }

@@ -909,10 +909,11 @@ bool DIOSTREAMTLS13SESSION::ApplicationData_Protect(XBYTE* data, XDWORD size, XB
 
   XQWORD recordsneeded = size?(((XQWORD)size + record.GetMaxPlainSize() - 1) / record.GetMaxPlainSize()):1;
   XQWORD sequence      = record.GetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
+  XQWORD usagelimit    = (keyschedule.GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256)?
+                          DIOSTREAMTLS_CHACHA20POLY1305_PROACTIVEKEYUSAGERECORDS:
+                          DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS;
 
-  if((sequence >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS) ||
-     (recordsneeded >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS) ||
-     ((sequence + recordsneeded) >= DIOSTREAMTLS_AESGCM_PROACTIVEKEYUSAGERECORDS))
+  if((sequence >= usagelimit) || (recordsneeded >= usagelimit) || (recordsneeded >= (usagelimit-sequence)))
     {
       XBUFFER keyupdaterecords;
 

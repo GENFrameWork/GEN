@@ -19,6 +19,13 @@
 #include "GEN_Control.h"
 
 
+static void CIPHERCHACHA20POLY1305_SecureErase(void* data, XDWORD size)
+{
+  volatile XBYTE* bytes = (volatile XBYTE*)data;
+  for(XDWORD c=0; c<size; c++) bytes[c] = 0;
+}
+
+
 CIPHERCHACHA20POLY1305::CIPHERCHACHA20POLY1305() : CIPHER()
 {
   Clean();
@@ -137,8 +144,8 @@ void CIPHERCHACHA20POLY1305::Block(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZ
 
   for(int c=0; c<16; c++) Store32LE(&output[c*4], working[c] + state[c]);
 
-  memset(state,   0, sizeof(state));
-  memset(working, 0, sizeof(working));
+  CIPHERCHACHA20POLY1305_SecureErase(state,   sizeof(state));
+  CIPHERCHACHA20POLY1305_SecureErase(working, sizeof(working));
 }
 
 
@@ -157,7 +164,7 @@ void CIPHERCHACHA20POLY1305::Crypt(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZ
       offset += n;
     }
 
-  memset(block, 0, sizeof(block));
+  CIPHERCHACHA20POLY1305_SecureErase(block, sizeof(block));
 }
 
 
@@ -275,27 +282,28 @@ bool CIPHERCHACHA20POLY1305::CalculateTag(const XBYTE key[CIPHERCHACHA20POLY1305
 {
   XBYTE block[64];
   XBYTE polykey[32];
-  XBUFFER authenticated;
+  XBYTE lengths[16];
+  XSECUREBUFFER authenticated;
+  bool status = true;
 
   Block(key, 0, nonce, block);
   memcpy(polykey, block, sizeof(polykey));
 
-  if(additionaldata.GetSize() && !authenticated.Add(additionaldata)) return false;
-  while(authenticated.GetSize() & 15) authenticated.Add((XBYTE)0);
-  if(size && !authenticated.Add((XBYTE*)ciphertext, size)) return false;
-  while(authenticated.GetSize() & 15) authenticated.Add((XBYTE)0);
+  if(additionaldata.GetSize() && !authenticated.Add(additionaldata)) status = false;
+  while(status && (authenticated.GetSize() & 15)) status = authenticated.Add((XBYTE)0);
+  if(status && size && !authenticated.Add((XBYTE*)ciphertext, size)) status = false;
+  while(status && (authenticated.GetSize() & 15)) status = authenticated.Add((XBYTE)0);
 
-  XBYTE lengths[16];
   Store64LE(lengths,     (XQWORD)additionaldata.GetSize());
   Store64LE(lengths + 8, (XQWORD)size);
-  if(!authenticated.Add(lengths, sizeof(lengths))) return false;
+  if(status && !authenticated.Add(lengths, sizeof(lengths))) status = false;
 
-  Poly1305(polykey, authenticated.Get(), authenticated.GetSize(), tag);
+  if(status) Poly1305(polykey, authenticated.Get(), authenticated.GetSize(), tag);
 
-  memset(block,   0, sizeof(block));
-  memset(polykey, 0, sizeof(polykey));
-  memset(lengths, 0, sizeof(lengths));
-  return true;
+  CIPHERCHACHA20POLY1305_SecureErase(block,   sizeof(block));
+  CIPHERCHACHA20POLY1305_SecureErase(polykey, sizeof(polykey));
+  CIPHERCHACHA20POLY1305_SecureErase(lengths, sizeof(lengths));
+  return status;
 }
 
 
@@ -316,54 +324,61 @@ bool CIPHERCHACHA20POLY1305::GetRawKey(XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE]
 
 bool CIPHERCHACHA20POLY1305::CipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
 {
-  XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE];
-  XBYTE authtag[CIPHERCHACHA20POLY1305_TAGSIZE];
+  XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE] = { 0 };
+  XBYTE authtag[CIPHERCHACHA20POLY1305_TAGSIZE] = { 0 };
+  bool status = false;
 
   if((size && !input) || nonce.GetSize() != CIPHERCHACHA20POLY1305_NONCESIZE || !GetRawKey(key)) return false;
 
   result->Delete();
-  if(size)
+  if(!size)
     {
-      if(!result->Resize(size)) return false;
+      status = CalculateTag(key, nonce.Get(), additionaldata, NULL, 0, authtag);
+    }
+   else if(result->Resize(size))
+    {
       Crypt(key, 1, nonce.Get(), input, result->Get(), size);
+      status = CalculateTag(key, nonce.Get(), additionaldata, result->Get(), size, authtag);
     }
 
-  if(!CalculateTag(key, nonce.Get(), additionaldata, result->Get(), size, authtag)) return false;
-
   tag.Delete();
-  bool status = tag.Add(authtag, sizeof(authtag));
-  memset(key,     0, sizeof(key));
-  memset(authtag, 0, sizeof(authtag));
+  if(status) status = tag.Add(authtag, sizeof(authtag));
+  if(!status) result->Delete();
+
+  CIPHERCHACHA20POLY1305_SecureErase(key,     sizeof(key));
+  CIPHERCHACHA20POLY1305_SecureErase(authtag, sizeof(authtag));
   return status;
 }
 
 
 bool CIPHERCHACHA20POLY1305::UncipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
 {
-  XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE];
-  XBYTE expected[CIPHERCHACHA20POLY1305_TAGSIZE];
+  XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE] = { 0 };
+  XBYTE expected[CIPHERCHACHA20POLY1305_TAGSIZE] = { 0 };
+  bool status = false;
 
   if((size && !input) || nonce.GetSize() != CIPHERCHACHA20POLY1305_NONCESIZE ||
      tag.GetSize() != CIPHERCHACHA20POLY1305_TAGSIZE || !GetRawKey(key)) return false;
 
-  if(!CalculateTag(key, nonce.Get(), additionaldata, input, size, expected)) return false;
-  if(!CIPHER::CompareConstantTime(expected, tag.Get(), sizeof(expected)))
+  if(CalculateTag(key, nonce.Get(), additionaldata, input, size, expected) &&
+     CIPHER::CompareConstantTime(expected, tag.Get(), sizeof(expected)))
     {
-      memset(key,      0, sizeof(key));
-      memset(expected, 0, sizeof(expected));
-      return false;
+      result->Delete();
+      if(!size)
+        {
+          status = true;
+        }
+       else if(result->Resize(size))
+        {
+          Crypt(key, 1, nonce.Get(), input, result->Get(), size);
+          status = true;
+        }
     }
 
-  result->Delete();
-  if(size)
-    {
-      if(!result->Resize(size)) return false;
-      Crypt(key, 1, nonce.Get(), input, result->Get(), size);
-    }
-
-  memset(key,      0, sizeof(key));
-  memset(expected, 0, sizeof(expected));
-  return true;
+  if(!status) result->Delete();
+  CIPHERCHACHA20POLY1305_SecureErase(key,      sizeof(key));
+  CIPHERCHACHA20POLY1305_SecureErase(expected, sizeof(expected));
+  return status;
 }
 
 
