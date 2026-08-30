@@ -43,6 +43,7 @@
 #include "XThread.h"
 
 #include "CipherCertificateX509.h"
+#include "CipherCertificateX509Revocation.h"
 #include "CipherAESGCM.h"
 #include "CipherKeySymmetrical.h"
 #include "CipherKeyPrivateRSA.h"
@@ -367,6 +368,28 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::SetPrivateKey(CIPHERKEY* privatekey)
 }
 
 
+XBUFFER* DIOSTREAMTLSSERVERCREDENTIALS::GetOCSPStapledResponse()
+{
+  return &OCSPstapledresponse;
+}
+
+
+bool DIOSTREAMTLSSERVERCREDENTIALS::SetOCSPStapledResponse(XBUFFER& response)
+{
+  if(response.IsEmpty() || (response.GetSize() > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE)) return false;
+
+  OCSPstapledresponse.Delete();
+  return OCSPstapledresponse.Add(response);
+}
+
+
+bool DIOSTREAMTLSSERVERCREDENTIALS::DeleteOCSPStapledResponse()
+{
+  OCSPstapledresponse.Delete();
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::HasCredentials()
@@ -394,6 +417,7 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::HasCredentials()
 bool DIOSTREAMTLSSERVERCREDENTIALS::Delete()
 {
   Certificates_Delete();
+  DeleteOCSPStapledResponse();
 
   if(privatekey)
     {
@@ -687,9 +711,16 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
 bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
 {
   if(IsFrozen()) return false;
-  if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
-     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) return false;
+
+  bool supported = (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_X25519) ||
+                   (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
+                   (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
+
+  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+  supported = supported || (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
+  #endif
+
+  if(!supported) return false;
 
   for(XDWORD c=0; c<supportedgroups.GetSize(); c++)
     {
@@ -749,6 +780,9 @@ bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
   if(IsFrozen()) return false;
   switch(signaturescheme)
     {
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                  :
+      #endif
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -816,6 +850,9 @@ bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
   if(IsFrozen()) return false;
   switch(signaturescheme)
     {
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                  :
+      #endif
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -1299,6 +1336,29 @@ CIPHERKEY* DIOSTREAMTLSCONFIG::GetLocalPrivateKey()
 }
 
 
+XBUFFER* DIOSTREAMTLSCONFIG::GetLocalOCSPStapledResponse()
+{
+  return &localOCSPstapledresponse;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SetLocalOCSPStapledResponse(XBUFFER& response)
+{
+  if(IsFrozen() || response.IsEmpty() || (response.GetSize() > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE)) return false;
+
+  localOCSPstapledresponse.Delete();
+  return localOCSPstapledresponse.Add(response);
+}
+
+
+bool DIOSTREAMTLSCONFIG::DeleteLocalOCSPStapledResponse()
+{
+  if(IsFrozen()) return false;
+  localOCSPstapledresponse.Delete();
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
@@ -1680,6 +1740,7 @@ bool DIOSTREAMTLSCONFIG::LocalCredentials_Delete()
 {
   if(IsFrozen()) return false;
   LocalCertificates_Delete();
+  DeleteLocalOCSPStapledResponse();
 
   if(localprivatekey)
     {
@@ -1772,8 +1833,17 @@ XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*>* DIOSTREAMTLSCONFIG::GetServerCredential
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey)
 {
+  XBUFFER* OCSPstapledresponse = NULL;
+  return ServerCredentials_Select(servername, certificatechain, privatekey, OCSPstapledresponse);
+}
+
+
+bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey,
+                                                   XBUFFER*& OCSPstapledresponse)
+{
   certificatechain = NULL;
   privatekey        = NULL;
+  OCSPstapledresponse = NULL;
 
   if(servername && servername[0])
     {
@@ -1790,6 +1860,7 @@ bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBU
             {
               certificatechain = credentials->GetCertificateChain();
               privatekey        = credentials->GetPrivateKey();
+              OCSPstapledresponse = credentials->GetOCSPStapledResponse();
               return true;
             }
         }
@@ -1806,6 +1877,7 @@ bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBU
             {
               certificatechain = credentials->GetCertificateChain();
               privatekey        = credentials->GetPrivateKey();
+              OCSPstapledresponse = credentials->GetOCSPStapledResponse();
               return true;
             }
         }
@@ -1815,6 +1887,7 @@ bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBU
 
   certificatechain = &localcertificatechain;
   privatekey        = localprivatekey;
+  OCSPstapledresponse = &localOCSPstapledresponse;
 
   return true;
 }
@@ -1982,7 +2055,8 @@ XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetCertificateRevocationLists()
 bool DIOSTREAMTLSCONFIG::CertificateRevocationList_Add(XBUFFER& CRL)
 {
   if(IsFrozen()) return false;
-  if(CRL.IsEmpty()) return false;
+  if(CRL.IsEmpty() || (CRL.GetSize() > CIPHERCERTIFICATEX509REVOCATION_MAX_CRL_SIZE) ||
+     (certificaterevocationlists.GetSize() >= 64)) return false;
   XBUFFER* copy=GEN_NEW XBUFFER();
   if(!copy || !copy->Add(CRL) || !certificaterevocationlists.Add(copy)) { if(copy) GEN_DELETE copy; return false; }
   return true;
@@ -2780,6 +2854,7 @@ void DIOSTREAMTLSCONFIG::Clean()
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
 
   SupportedGroups_Delete();
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
@@ -2788,11 +2863,13 @@ void DIOSTREAMTLSCONFIG::Clean()
   // anchor source is configured independently through CIPHERTRUSTPROVIDERX509, so applications can extend these
   // schemes without coupling that decision to the selected Root CA provider.
   SignatureSchemes_Delete();
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
 
   CertificateSignatureSchemes_Delete();
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);

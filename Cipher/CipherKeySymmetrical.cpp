@@ -137,13 +137,11 @@ XBUFFER* CIPHERKEYSYMMETRICAL::Get()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
 {
-  if(!key) return false;
+  if(!key || !size || !xbufferkey) return false;
 
   this->xbufferkey->SecureDelete();
 
-  this->xbufferkey->Add(key, (XDWORD)size);
-
-  return true;
+  return this->xbufferkey->Add(key, (XDWORD)size);
 }
 
 
@@ -215,7 +213,6 @@ void CIPHERKEYSYMMETRICAL::Clean()
 {
   xbufferkey = NULL;
 }
-
 
 
 

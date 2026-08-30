@@ -124,10 +124,19 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Ini(DIOSTREAMTLS13SESSION* session, bool all
   isini                            = true;
 
   ciphersuites.Add(session->GetKeySchedule()->GetCipherSuite());
+
+  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
+  #endif
+
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
   signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+  signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
+  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
+  #endif
   certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
   certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
@@ -368,9 +377,15 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
     {
       XWORD supportedgroup = config->GetSupportedGroups()->Get(c);
 
-      if(((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
-          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
-          (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) || !supportedgroups.Add(supportedgroup)) return false;
+      bool supported = (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_X25519) ||
+                       (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
+                       (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
+
+      #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+      supported = supported || (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
+      #endif
+
+      if(!supported || !supportedgroups.Add(supportedgroup)) return false;
     }
 
   // A signature scheme this build cannot actually verify is SKIPPED, not treated as a fatal configuration error.
@@ -385,6 +400,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 
       switch(signaturescheme)
         {
+          #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                  :
+          #endif
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -405,6 +423,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 
       switch(signaturescheme)
         {
+          #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                  :
+          #endif
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -1565,7 +1586,12 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
                                                                     key      = keyshare->GetKey();
 
                                                                     if(key && (key->GetKeyType() == currentkeysharegroup) &&
-                                                                       (((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+                                                                       (
+                                                                        #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERX25519MLKEM768_SERVERSHARESIZE)) ||
+                                                                        #endif
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519) &&
                                                                          (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY)) ||
                                                                         ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
                                                                          (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||
@@ -1655,7 +1681,10 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
       CIPHERKEY*                                                       localprivatekey       = config->GetLocalPrivateKey();
       bool                                                             havecredentials       = localcertificatechain && !localcertificatechain->IsEmpty() && localprivatekey;
       CIPHERCERTIFICATEX509                                            clientleafcertificate;
+      CIPHERCERTIFICATEX509                                            clientissuercertificate;
       XWORD                                                            clientsignaturescheme = 0;
+      XBUFFER*                                                         localOCSPresponse      = config->GetLocalOCSPStapledResponse();
+      bool                                                             sendOCSPresponse       = false;
 
       if(havecredentials)
         {
@@ -1673,6 +1702,17 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
             }
 
           if(!clientsignaturescheme) havecredentials = false;
+
+          if(havecredentials && clientOCSPstaplingrequested && localOCSPresponse && !localOCSPresponse->IsEmpty() &&
+             (localcertificatechain->GetSize() >= 2) && localcertificatechain->Get(1) &&
+             clientissuercertificate.Decode((*localcertificatechain->Get(1))))
+            {
+              CIPHERCERTIFICATEX509REVOCATION_RESULT OCSPresult = CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(
+                                                        (*localOCSPresponse), clientleafcertificate, clientissuercertificate);
+
+              if(OCSPresult == CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED) return SetError();
+              sendOCSPresponse = (OCSPresult == CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD);
+            }
         }
 
       certificatemessage.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE);
@@ -1689,7 +1729,37 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
               entry = GEN_NEW DIOSTREAMTLS_MSG_CERTIFICATEENTRY();
               if(!entry) return SetError();
 
-              if(!entry->GetCertificateData()->Add((*dercertificate)) || !certificatemessage.GetBody()->CertificateList_Add(entry))
+              if(!entry->GetCertificateData()->Add((*dercertificate)))
+                {
+                  GEN_DELETE entry;
+                  return SetError();
+                }
+
+              if(!c && sendOCSPresponse)
+                {
+                  DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* statusrequest = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+                  XDWORD                               responsesize  = localOCSPresponse->GetSize();
+
+                  if(!statusrequest)
+                    {
+                      GEN_DELETE entry;
+                      return SetError();
+                    }
+
+                  statusrequest->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_STATUSREQUEST);
+                  if(!statusrequest->GetData()->Add((XBYTE)1) ||
+                     !statusrequest->GetData()->Add((XBYTE)((responsesize >> 16) & 0xFF)) ||
+                     !statusrequest->GetData()->Add((XBYTE)((responsesize >> 8) & 0xFF)) ||
+                     !statusrequest->GetData()->Add((XBYTE)(responsesize & 0xFF)) ||
+                     !statusrequest->GetData()->Add((*localOCSPresponse)) || !entry->Extensions_Add(statusrequest))
+                    {
+                      GEN_DELETE statusrequest;
+                      GEN_DELETE entry;
+                      return SetError();
+                    }
+                }
+
+              if(!certificatemessage.GetBody()->CertificateList_Add(entry))
                 {
                   GEN_DELETE entry;
                   return SetError();
@@ -2059,6 +2129,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
   DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATEREQUEST> certificaterequest;
   XBUFFER                                                                 workbuffer;
   bool                                                                    signaturealgorithms = false;
+  bool                                                                    statusrequest       = false;
 
   if((state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE) || certificaterequested)
     {
@@ -2083,6 +2154,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
         {
           DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* algorithms = (DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS*)extension;
 
+          if(signaturealgorithms) return SetError();
           signaturealgorithms = true;
           requestedclientsignatureschemes.DeleteAll();
 
@@ -2091,11 +2163,20 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateRequest_Process(XBUFFER& message)
               if(!requestedclientsignatureschemes.Add(algorithms->List_Get()->Get(d))) return SetError();
             }
         }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_STATUSREQUEST)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* OCSPrequest = (DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
+
+          if(statusrequest || !OCSPrequest->GetData() || !OCSPrequest->GetData()->IsEmpty()) return SetError();
+          statusrequest = true;
+        }
     }
 
   if(!signaturealgorithms || !session->Transcript_Add(message)) return SetError();
 
   certificaterequested = true;
+  clientOCSPstaplingrequested = statusrequest;
 
   return true;
 }
@@ -2255,19 +2336,27 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
         {
           DIOSTREAMTLS_MSG_EXTENSION* extension = leafentry->Extensions_GetAll()->Get(c);
           if(!extension || extension->GetType()!=DIOSTREAMTLS_MSG_EXTENSION_TYPE_STATUSREQUEST) continue;
+          if(hasstapledOCSP)
+            {
+              certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
+              SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
+              return SetError();
+            }
           DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* status = (DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
           hasstapledOCSP=true;
           XBUFFER* data = status->GetData();
           XVECTOR<CIPHERCERTIFICATEX509*>* validatedchain = certificatevalidator.GetCertificateChain();
-          if(!data || data->GetSize()<4 || data->Get()[0]!=1 ||
+          if(!data || data->GetSize()<5 || data->Get()[0]!=1 ||
              (((XDWORD)data->Get()[1]<<16)|((XDWORD)data->Get()[2]<<8)|data->Get()[3]) != data->GetSize()-4 ||
+             ((data->GetSize()-4) > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE) ||
              !validatedchain || validatedchain->GetSize()<2)
             {
               certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
               SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
               return SetError();
             }
-          XBUFFER OCSP; OCSP.Add(data->Get()+4,data->GetSize()-4);
+          XBUFFER OCSP;
+          if(!OCSP.Add(data->Get()+4,data->GetSize()-4)) return SetError();
           CIPHERCERTIFICATEX509REVOCATION_RESULT result = CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(
             OCSP,(*validatedchain->Get(0)),(*validatedchain->Get(1)));
           if(result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
@@ -2283,11 +2372,14 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
         {
           XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
           XBUFFER response;
-          if(!chain || chain->GetSize()<2 || !chain->Get(0)->HasOCSPURL() ||
-             !config->GetOCSPDirectFetcher()((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,config->GetOCSPDirectContext()) ||
-             CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(0)),(*chain->Get(1)))!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
+          CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+          if(chain && chain->GetSize()>=2 && chain->Get(0)->HasOCSPURL() &&
+             config->GetOCSPDirectFetcher()((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,config->GetOCSPDirectContext()))
+            result=CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(0)),(*chain->Get(1)));
+          if(result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
             {
-              certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
+              certificatevalidationerror=(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)?
+                CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED:CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
               SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
               return SetError();
             }
@@ -2683,6 +2775,7 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::Clean()
   isini                      = false;
   allowunauthenticatedserver = false;
   certificaterequested       = false;
+  clientOCSPstaplingrequested = false;
   requestedclientsignatureschemes.DeleteAll();
   authenticationconfigured  = false;
   serverauthenticated        = false;

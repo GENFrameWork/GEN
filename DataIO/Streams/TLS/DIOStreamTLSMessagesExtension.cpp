@@ -1885,7 +1885,10 @@ bool DIOSTREAMTLS_MSG_EXTENSION_KEY::GetFromBuffer(XBUFFER& buffer, bool showdeb
     }
 
   keydata.Delete();
-  keydata.Resize(lengthkeydata);
+  if(!keydata.Resize(lengthkeydata))
+    {
+      return false;
+    }
 
   if(buffer.Extract(keydata.Get(), 0, lengthkeydata) != lengthkeydata)
     {

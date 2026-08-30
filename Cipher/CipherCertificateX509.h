@@ -62,7 +62,8 @@ enum CIPHERCERTIFICATEX509_ALGORITHM_TYPE
   CIPHERCERTIFICATEX509_ALGORITHM_TYPE_DSAWITHSHA1	                          ,
   CIPHERCERTIFICATEX509_ALGORITHM_TYPE_DSAWITHSHA256	                        ,  
 
-  CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS	                                
+  CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS	                              ,
+  CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519
 };
 
 
@@ -167,6 +168,9 @@ class CIPHERCERTIFICATEX509
     XBUFFER*                                GetSignature                            ();
     XBUFFER*                                GetIssuerData                           ();
     XBUFFER*                                GetSubjectData                          ();
+    XBUFFER*                                GetSubjectPublicKeyData                 ();
+    bool                                    HasSubjectKeyIdentifier                 ();
+    XBUFFER*                                GetSubjectKeyIdentifier                 ();
 
     bool                                    HasBasicConstraints                     ();
     bool                                    IsCertificateAuthority                  ();
@@ -175,10 +179,12 @@ class CIPHERCERTIFICATEX509
     bool                                    HasKeyUsage                             ();
     bool                                    IsKeyUsageDigitalSignature              ();
     bool                                    IsKeyUsageCertificateSign               ();
+    bool                                    IsKeyUsageCRLSign                       ();
 
     bool                                    HasExtendedKeyUsage                     ();
     bool                                    IsExtendedKeyUsageServerAuthentication  ();
     bool                                    IsExtendedKeyUsageClientAuthentication  ();
+    bool                                    IsExtendedKeyUsageOCSPSigning            ();
     bool                                    HasUnknownCriticalExtension             ();
 
     bool                                    HasNameConstraints                      ();
@@ -235,6 +241,9 @@ class CIPHERCERTIFICATEX509
     XBUFFER                                 signature;
     XBUFFER                                 issuerdata;
     XBUFFER                                 subjectdata;
+    XBUFFER                                 subjectpublickeydata;
+    bool                                    hassubjectkeyidentifier;
+    XBUFFER                                 subjectkeyidentifier;
 
     bool                                    hasbasicconstraints;
     bool                                    iscertificateauthority;
@@ -243,10 +252,12 @@ class CIPHERCERTIFICATEX509
     bool                                    haskeyusage;
     bool                                    keyusagedigitalsignature;
     bool                                    keyusagecertificatesign;
+    bool                                    keyusageCRLsign;
 
     bool                                    hasextendedkeyusage;
     bool                                    extendedkeyusageserverauthentication;
     bool                                    extendedkeyusageclientauthentication;
+    bool                                    extendedkeyusageOCSPsigning;
     bool                                    hasunknowncriticalextension;
     bool                                    hassubjectalternativename;
 

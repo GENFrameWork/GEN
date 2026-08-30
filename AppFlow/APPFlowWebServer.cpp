@@ -493,12 +493,14 @@ DIOSTREAMTLSCONFIG* APPFLOWWEBSERVER::Ini_BuildTLSConfig(APPFLOWCFG* cfg)
 
   tlsconfig->SetMode(DIOSTREAMMODE_SERVER);
   tlsconfig->CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
 
   // All signature schemes actually implemented are offered unconditionally: SignatureScheme_Select() (see
   // DIOStreamTLS13HandshakeServer.cpp) already filters them through DIOSTREAMTLSSIGNATURE::IsSupported(),
   // which safely narrows the offer down to whichever one matches the local certificate's actual key type.
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
+  tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384);
   tlsconfig->SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512);

@@ -18,6 +18,12 @@
 
 namespace
 {
+  static void SecureErase(void* data,XDWORD size)
+  {
+    volatile XBYTE* bytes=(volatile XBYTE*)data;
+    for(XDWORD c=0;c<size;c++) bytes[c]=0;
+  }
+
   struct EDPOINT
   {
     XMPINTEGER X;
@@ -40,17 +46,19 @@ namespace
   static bool ImportLE(XMPINTEGER& v,const XBYTE* data,XDWORD size)
   {
     XBYTE temp[64]; if(!data||size>sizeof(temp))return false; for(XDWORD i=0;i<size;i++)temp[i]=data[size-1-i];
-    bool s=v.ImportFromBinary(temp,size);memset(temp,0,sizeof(temp));return s;
+    bool s=v.ImportFromBinary(temp,size);SecureErase(temp,sizeof(temp));return s;
   }
   static bool ExportLE(XMPINTEGER& v,XBYTE* data,XDWORD size)
   {
-    XBYTE temp[64]; if(!data||size>sizeof(temp))return false;memset(temp,0,sizeof(temp));if(!v.ExportToBinary(temp,size))return false;
-    for(XDWORD i=0;i<size;i++)data[i]=temp[size-1-i];memset(temp,0,sizeof(temp));return true;
+    XBYTE temp[64]; if(!data||size>sizeof(temp))return false;memset(temp,0,sizeof(temp));
+    bool status=v.ExportToBinary(temp,size);
+    if(status) for(XDWORD i=0;i<size;i++)data[i]=temp[size-1-i];
+    SecureErase(temp,sizeof(temp));return status;
   }
 
   static bool Hash512(const XBYTE* a,XDWORD as,const XBYTE* b,XDWORD bs,const XBYTE* c,XDWORD cs,XBYTE out[64])
   {
-    XBUFFER in;if(as&&!in.Add((XBYTE*)a,as))return false;if(bs&&!in.Add((XBYTE*)b,bs))return false;if(cs&&!in.Add((XBYTE*)c,cs))return false;
+    XSECUREBUFFER in;if(as&&!in.Add((XBYTE*)a,as))return false;if(bs&&!in.Add((XBYTE*)b,bs))return false;if(cs&&!in.Add((XBYTE*)c,cs))return false;
     HASHSHA2 hash(HASHSHA2TYPE_512);if(!hash.Do(in)||!hash.GetResult()||hash.GetResult()->GetSize()!=64)return false;memcpy(out,hash.GetResult()->Get(),64);return true;
   }
 
@@ -118,13 +126,39 @@ namespace
     return PointFromAffine(point,x,y,prime);
   }
 
+  static bool PointIsPrimeOrder(EDPOINT& point,XMPINTEGER& order,XMPINTEGER& prime,XMPINTEGER& d,bool rejectidentity)
+  {
+    EDPOINT multiple;
+    XBYTE encoded[32];
+    XBYTE identity[32]={1};
+
+    if(rejectidentity)
+      {
+        if(!PointEncode(point,encoded,prime)) return false;
+        if(CIPHER::CompareConstantTime(encoded,identity,sizeof(encoded))) return false;
+      }
+
+    bool status=PointMul(multiple,order,point,prime,d) && PointEncode(multiple,encoded,prime) &&
+                CIPHER::CompareConstantTime(encoded,identity,sizeof(encoded));
+    SecureErase(encoded,sizeof(encoded));
+    return status;
+  }
+
   static bool ScalarFromLEMod(XMPINTEGER& s,const XBYTE* data,XDWORD size,XMPINTEGER& l)
   { XMPINTEGER t;if(!ImportLE(t,data,size))return false;return s.Module(&s,&t,&l); }
 
   static bool PublicFromSeed(const XBYTE seed[32],XBYTE publickey[32])
   {
-    XMPINTEGER p,l,d,bx,by,sqrtm1,a;XBYTE h[64];if(!InitConstants(p,l,d,bx,by,sqrtm1)||!Hash512(seed,32,NULL,0,NULL,0,h))return false;
-    h[0]&=248;h[31]&=63;h[31]|=64;if(!ImportLE(a,h,32))return false;EDPOINT B,A;if(!PointFromAffine(B,bx,by,p)||!PointMul(A,a,B,p,d)||!PointEncode(A,publickey,p))return false;memset(h,0,sizeof(h));return true;
+    XMPINTEGER p,l,d,bx,by,sqrtm1,a;XBYTE h[64]={0};EDPOINT B,A;bool status=false;
+    do
+      {
+        if(!InitConstants(p,l,d,bx,by,sqrtm1)||!Hash512(seed,32,NULL,0,NULL,0,h)) break;
+        h[0]&=248;h[31]&=63;h[31]|=64;
+        if(!ImportLE(a,h,32)||!PointFromAffine(B,bx,by,p)||!PointMul(A,a,B,p,d)||!PointEncode(A,publickey,p)) break;
+        status=true;
+      }
+    while(false);
+    SecureErase(h,sizeof(h));return status;
   }
 }
 
@@ -133,34 +167,66 @@ CIPHERED25519::~CIPHERED25519(){Clean();}
 
 bool CIPHERED25519::Random(XBYTE* data,XDWORD size)
 {
-  XRAND* xrand=GEN_XFACTORY.CreateRand();if(!xrand)return false;bool status=false;if(xrand->Ini()&&xrand->IsCryptographicallySecure())status=xrand->Generate(data,size);GEN_XFACTORY.DeleteRand(xrand);return status;
+  if(!data||!size)return false;XRAND* xrand=GEN_XFACTORY.CreateRand();if(!xrand)return false;bool status=false;if(xrand->Ini()&&xrand->IsCryptographicallySecure())status=xrand->Generate(data,size);GEN_XFACTORY.DeleteRand(xrand);return status;
 }
 
 bool CIPHERED25519::KeyPair_Create(XBUFFER& privatekey,XBUFFER& publickey)
 {
-  XBYTE seed[32],pub[32];privatekey.FillBuffer(0);privatekey.Delete();publickey.Delete();bool status=Random(seed,sizeof(seed))&&PublicFromSeed(seed,pub)&&privatekey.Add(seed,32)&&publickey.Add(pub,32);memset(seed,0,sizeof(seed));memset(pub,0,sizeof(pub));return status;
+  XBYTE seed[32]={0},pub[32]={0};privatekey.SecureDelete();publickey.Delete();bool status=Random(seed,sizeof(seed))&&PublicFromSeed(seed,pub)&&privatekey.Add(seed,32)&&publickey.Add(pub,32);if(!status){privatekey.SecureDelete();publickey.Delete();}SecureErase(seed,sizeof(seed));SecureErase(pub,sizeof(pub));return status;
 }
 
 bool CIPHERED25519::PublicKey_Create(XBUFFER& privatekey,XBUFFER& publickey)
 {
-  if(privatekey.GetSize()!=32)return false;XBYTE pub[32];publickey.Delete();bool status=PublicFromSeed(privatekey.Get(),pub)&&publickey.Add(pub,32);memset(pub,0,sizeof(pub));return status;
+  if(privatekey.GetSize()!=32)return false;XBYTE pub[32]={0};publickey.Delete();bool status=PublicFromSeed(privatekey.Get(),pub)&&publickey.Add(pub,32);if(!status)publickey.Delete();SecureErase(pub,sizeof(pub));return status;
+}
+
+bool CIPHERED25519::PublicKey_IsValid(XBUFFER& publickey)
+{
+  if(publickey.GetSize()!=CIPHERED25519_PUBLICKEYSIZE)return false;
+  XMPINTEGER p,l,d,bx,by,sqrtm1;EDPOINT point;XBYTE canonical[32]={0};
+  bool status=InitConstants(p,l,d,bx,by,sqrtm1)&&PointDecode(publickey.Get(),point,p,d,sqrtm1)&&
+              PointEncode(point,canonical,p)&&CIPHER::CompareConstantTime(canonical,publickey.Get(),sizeof(canonical))&&
+              PointIsPrimeOrder(point,l,p,d,true);
+  SecureErase(canonical,sizeof(canonical));return status;
 }
 
 bool CIPHERED25519::Sign(XBUFFER& privatekey,XBUFFER& publickey,XBUFFER& input,XBUFFER& signature)
 {
-  if(privatekey.GetSize()!=32||publickey.GetSize()!=32)return false;XBYTE derived[32];if(!PublicFromSeed(privatekey.Get(),derived)||!CIPHER::CompareConstantTime(derived,publickey.Get(),32))return false;
-  XMPINTEGER p,l,d,bx,by,sqrtm1,a,r,k,S,tmp;if(!InitConstants(p,l,d,bx,by,sqrtm1))return false;XBYTE h[64],rh[64],kh[64],Renc[32],Senc[32];
-  if(!Hash512(privatekey.Get(),32,NULL,0,NULL,0,h))return false;h[0]&=248;h[31]&=63;h[31]|=64;if(!ImportLE(a,h,32)||!Hash512(h+32,32,input.Get(),input.GetSize(),NULL,0,rh)||!ScalarFromLEMod(r,rh,64,l))return false;
-  EDPOINT B,R;if(!PointFromAffine(B,bx,by,p)||!PointMul(R,r,B,p,d)||!PointEncode(R,Renc,p)||!Hash512(Renc,32,publickey.Get(),32,input.Get(),input.GetSize(),kh)||!ScalarFromLEMod(k,kh,64,l)||!ModMul(tmp,k,a,l)||!ModAdd(S,r,tmp,l)||!ExportLE(S,Senc,32))return false;
-  signature.Delete();bool status=signature.Add(Renc,32)&&signature.Add(Senc,32);memset(h,0,sizeof(h));memset(rh,0,sizeof(rh));memset(kh,0,sizeof(kh));memset(Senc,0,sizeof(Senc));return status;
+  signature.Delete();if(privatekey.GetSize()!=32||publickey.GetSize()!=32||!PublicKey_IsValid(publickey))return false;
+  XBYTE derived[32]={0},h[64]={0},rh[64]={0},kh[64]={0},Renc[32]={0},Senc[32]={0};
+  XMPINTEGER p,l,d,bx,by,sqrtm1,a,r,k,S,tmp;EDPOINT B,R;bool status=false;
+  do
+    {
+      if(!PublicFromSeed(privatekey.Get(),derived)||!CIPHER::CompareConstantTime(derived,publickey.Get(),32)||
+         !InitConstants(p,l,d,bx,by,sqrtm1)||!Hash512(privatekey.Get(),32,NULL,0,NULL,0,h)) break;
+      h[0]&=248;h[31]&=63;h[31]|=64;
+      if(!ImportLE(a,h,32)||!Hash512(h+32,32,input.Get(),input.GetSize(),NULL,0,rh)||!ScalarFromLEMod(r,rh,64,l)||
+         !PointFromAffine(B,bx,by,p)||!PointMul(R,r,B,p,d)||!PointEncode(R,Renc,p)||
+         !Hash512(Renc,32,publickey.Get(),32,input.Get(),input.GetSize(),kh)||!ScalarFromLEMod(k,kh,64,l)||
+         !ModMul(tmp,k,a,l)||!ModAdd(S,r,tmp,l)||!ExportLE(S,Senc,32)) break;
+      status=signature.Add(Renc,32)&&signature.Add(Senc,32);
+    }
+  while(false);
+  if(!status)signature.Delete();SecureErase(derived,sizeof(derived));SecureErase(h,sizeof(h));SecureErase(rh,sizeof(rh));SecureErase(kh,sizeof(kh));SecureErase(Renc,sizeof(Renc));SecureErase(Senc,sizeof(Senc));return status;
 }
 
 bool CIPHERED25519::Verify(XBUFFER& publickey,XBUFFER& input,XBUFFER& signature)
 {
-  if(publickey.GetSize()!=32||signature.GetSize()!=64)return false;XMPINTEGER p,l,d,bx,by,sqrtm1,S,k;if(!InitConstants(p,l,d,bx,by,sqrtm1)||!ImportLE(S,signature.Get()+32,32)||S.CompareSignedValues(l)>=0)return false;
-  EDPOINT A,R,B,SB,kA,rhs;if(!PointDecode(publickey.Get(),A,p,d,sqrtm1)||!PointDecode(signature.Get(),R,p,d,sqrtm1)||!PointFromAffine(B,bx,by,p))return false;
-  XBYTE kh[64];if(!Hash512(signature.Get(),32,publickey.Get(),32,input.Get(),input.GetSize(),kh)||!ScalarFromLEMod(k,kh,64,l)||!PointMul(SB,S,B,p,d)||!PointMul(kA,k,A,p,d)||!PointAdd(rhs,R,kA,p,d))return false;
-  XBYTE left[32],right[32];if(!PointEncode(SB,left,p)||!PointEncode(rhs,right,p))return false;return CIPHER::CompareConstantTime(left,right,32);
+  if(publickey.GetSize()!=32||signature.GetSize()!=64||!PublicKey_IsValid(publickey))return false;
+  XMPINTEGER p,l,d,bx,by,sqrtm1,S,k;EDPOINT A,R,B,SB,kA,rhs;XBYTE kh[64]={0},left[32]={0},right[32]={0},canonicalR[32]={0};bool status=false;
+  do
+    {
+      if(!InitConstants(p,l,d,bx,by,sqrtm1)||!ImportLE(S,signature.Get()+32,32)||S.CompareSignedValues(l)>=0||
+         !PointDecode(publickey.Get(),A,p,d,sqrtm1)||!PointDecode(signature.Get(),R,p,d,sqrtm1)||
+         !PointEncode(R,canonicalR,p)||!CIPHER::CompareConstantTime(canonicalR,signature.Get(),sizeof(canonicalR))||
+         !PointIsPrimeOrder(R,l,p,d,false)||!PointFromAffine(B,bx,by,p)||
+         !Hash512(signature.Get(),32,publickey.Get(),32,input.Get(),input.GetSize(),kh)||!ScalarFromLEMod(k,kh,64,l)||
+         !PointMul(SB,S,B,p,d)||!PointMul(kA,k,A,p,d)||!PointAdd(rhs,R,kA,p,d)||
+         !PointEncode(SB,left,p)||!PointEncode(rhs,right,p)) break;
+      status=CIPHER::CompareConstantTime(left,right,32);
+    }
+  while(false);
+  SecureErase(kh,sizeof(kh));SecureErase(left,sizeof(left));SecureErase(right,sizeof(right));SecureErase(canonicalR,sizeof(canonicalR));return status;
 }
 
 void CIPHERED25519::Clean(){}

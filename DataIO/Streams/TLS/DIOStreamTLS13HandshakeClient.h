@@ -151,6 +151,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    isini;
     bool                                    allowunauthenticatedserver;
     bool                                    certificaterequested;
+    bool                                    clientOCSPstaplingrequested;
     bool                                    authenticationconfigured;
     bool                                    serverauthenticated;
 

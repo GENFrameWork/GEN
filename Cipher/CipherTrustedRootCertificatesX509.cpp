@@ -264,7 +264,11 @@ bool CIPHERTRUSTPROVIDERX509GEN::Load()
              ((root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_RSA_PUBLIC) ||
               (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) ||
               (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC) ||
-              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC)))
+              (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC)
+              #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+              || (root.GetPublicCipherKey()->GetType() == CIPHERKEYTYPE_ED25519_PUBLIC)
+              #endif
+             ))
             {
               if(!Root_Add((*rootDER)))
                 {
@@ -777,4 +781,3 @@ void CIPHERTRUSTEDROOTCERTIFICATESX509::Clean()
 {
 
 }
-

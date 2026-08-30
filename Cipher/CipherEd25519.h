@@ -20,6 +20,7 @@ class CIPHERED25519
 
     bool                  KeyPair_Create      (XBUFFER& privatekey, XBUFFER& publickey);
     bool                  PublicKey_Create    (XBUFFER& privatekey, XBUFFER& publickey);
+    bool                  PublicKey_IsValid   (XBUFFER& publickey);
     bool                  Sign                (XBUFFER& privatekey, XBUFFER& publickey, XBUFFER& input, XBUFFER& signature);
     bool                  Verify              (XBUFFER& publickey, XBUFFER& input, XBUFFER& signature);
 

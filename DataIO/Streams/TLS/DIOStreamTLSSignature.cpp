@@ -40,9 +40,12 @@
 #include "CipherKey.h"
 #include "CipherRSA.h"
 #include "CipherECDSA.h"
-#include "CipherEd25519.h"
 #include "CipherKeySymmetrical.h"
 #include "HashSHA2.h"
+
+#ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+#include "CipherEd25519.h"
+#endif
 
 
 
@@ -76,8 +79,10 @@ bool DIOSTREAMTLSSIGNATURE::IsSupported(XWORD signaturescheme, CIPHERKEY* key)
 {
   if(!key) return false;
 
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
   if((key->GetType() == CIPHERKEYTYPE_ED25519_PUBLIC) &&
      (signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519)) return true;
+  #endif
 
   if((key->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) &&
      (signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256)) return true;
@@ -120,6 +125,8 @@ bool DIOSTREAMTLSSIGNATURE::Verify(XWORD signaturescheme, CIPHERKEY* key, XBUFFE
 {
   if(!IsSupported(signaturescheme, key) || content.IsEmpty() || signature.IsEmpty()) return false;
 
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+
   if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519)
     {
       CIPHERKEYSYMMETRICAL* edkey = (CIPHERKEYSYMMETRICAL*)key;
@@ -127,6 +134,8 @@ bool DIOSTREAMTLSSIGNATURE::Verify(XWORD signaturescheme, CIPHERKEY* key, XBUFFE
       CIPHERED25519 Ed25519;
       return Ed25519.Verify((*edkey->Get()), content, signature);
     }
+
+  #endif
 
   if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256)
     {
@@ -201,6 +210,8 @@ bool DIOSTREAMTLSSIGNATURE::Sign(XWORD signaturescheme, CIPHERKEY* privatekey, C
 {
   if(!privatekey || !publickey || content.IsEmpty()) return false;
 
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+
   if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519)
     {
       if((privatekey->GetType() != CIPHERKEYTYPE_ED25519_PRIVATE) ||
@@ -208,11 +219,15 @@ bool DIOSTREAMTLSSIGNATURE::Sign(XWORD signaturescheme, CIPHERKEY* privatekey, C
 
       CIPHERKEYSYMMETRICAL* privateed = (CIPHERKEYSYMMETRICAL*)privatekey;
       CIPHERKEYSYMMETRICAL* publiced  = (CIPHERKEYSYMMETRICAL*)publickey;
-      if(!privateed->Get() || !publiced->Get()) return false;
+      if(!privateed->Get() || !publiced->Get() ||
+         privateed->Get()->GetSize()!=CIPHERED25519_PRIVATEKEYSIZE ||
+         publiced->Get()->GetSize()!=CIPHERED25519_PUBLICKEYSIZE) return false;
 
       CIPHERED25519 Ed25519;
       return Ed25519.Sign((*privateed->Get()), (*publiced->Get()), content, signature);
     }
+
+  #endif
 
   if(signaturescheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256)
     {

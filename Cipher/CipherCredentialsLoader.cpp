@@ -7,11 +7,17 @@
 
 #include "GEN_Defines.h"
 #include "CipherCredentialsLoader.h"
+#include "Cipher.h"
 #include "CipherPEMCodec.h"
 #include "CipherCertificateX509.h"
 #include "CipherKeyPrivateRSA.h"
 #include "CipherKeyECDSA.h"
 #include "CipherECDSA.h"
+#include "CipherKeySymmetrical.h"
+
+#ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+#include "CipherEd25519.h"
+#endif
 #include <string.h>
 #include <stdio.h>
 #include "GEN_Control.h"
@@ -239,11 +245,12 @@ bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE e
 {
   PrivateKey_Delete(privatekey);
   XBUFFER inner;
-  bool isrsa=false,isec=false;
+  bool isrsa=false,isec=false,ised25519=false;
   XBUFFER* actual=&DER;
-  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(DER,isrsa,isec,inner)) actual=&inner;
+  bool ispkcs8=CIPHERPEMCODEC::PKCS8PrivateKey_Decode(DER,isrsa,isec,ised25519,inner);
+  if(ispkcs8) actual=&inner;
 
-  if((expectedpublickeytype==CIPHERKEYTYPE_RSA_PUBLIC) && (!isec))
+  if((expectedpublickeytype==CIPHERKEYTYPE_RSA_PUBLIC) && (!ispkcs8 || isrsa))
     {
       XMPINTEGER p,q,d;
       if(CIPHERPEMCODEC::RSAPrivateKey_Decode((*actual),p,q,d))
@@ -253,7 +260,32 @@ bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE e
           if(key) GEN_DELETE key;
         }
     }
-  else
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+
+  else if((expectedpublickeytype==CIPHERKEYTYPE_ED25519_PUBLIC) && ispkcs8 && ised25519)
+    {
+      XSECUREBUFFER seed;
+
+      if(CIPHERPEMCODEC::Ed25519PrivateKey_Decode((*actual),seed) &&
+         seed.GetSize()==CIPHERED25519_PRIVATEKEYSIZE)
+        {
+          CIPHERKEYSYMMETRICAL* key=GEN_NEW CIPHERKEYSYMMETRICAL();
+          if(key)
+            {
+              key->SetType(CIPHERKEYTYPE_ED25519_PRIVATE);
+              if(key->Set(seed)) privatekey=key;
+              else GEN_DELETE key;
+            }
+        }
+
+      seed.SecureDelete();
+      inner.SecureDelete();
+      return privatekey?true:false;
+    }
+
+  #endif
+
+  else if(!ispkcs8 || isec)
     {
       CIPHERKEYTYPE privatetype=CIPHERKEYTYPE_UNKNOWN; XDWORD coordinatesize=0;
       switch(expectedpublickeytype)
@@ -276,6 +308,36 @@ bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE e
         }
     }
   inner.SecureDelete(); return false;
+}
+
+
+static bool CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(CIPHERKEY* privatekey,CIPHERKEY* publickey)
+{
+  if(!privatekey || !publickey) return false;
+
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+
+  if(publickey->GetType()==CIPHERKEYTYPE_ED25519_PUBLIC)
+    {
+      if(privatekey->GetType()!=CIPHERKEYTYPE_ED25519_PRIVATE) return false;
+
+      CIPHERKEYSYMMETRICAL* privateed=(CIPHERKEYSYMMETRICAL*)privatekey;
+      CIPHERKEYSYMMETRICAL* publiced =(CIPHERKEYSYMMETRICAL*)publickey;
+      if(!privateed->Get() || !publiced->Get() ||
+         privateed->Get()->GetSize()!=CIPHERED25519_PRIVATEKEYSIZE ||
+         publiced->Get()->GetSize()!=CIPHERED25519_PUBLICKEYSIZE) return false;
+
+      XSECUREBUFFER derived;
+      CIPHERED25519 ed25519;
+      bool status=ed25519.PublicKey_Create((*privateed->Get()),derived) &&
+                  CIPHER::CompareConstantTime(derived.Get(),publiced->Get()->Get(),CIPHERED25519_PUBLICKEYSIZE);
+      derived.SecureDelete();
+      return status;
+    }
+
+  #endif
+
+  return true;
 }
 
 bool CIPHERCREDENTIALSLOADER::PrivateKey_Load(XBUFFER& filedata, XCHAR* password,
@@ -332,7 +394,8 @@ bool CIPHERCREDENTIALSLOADER::Credentials_Load(XBUFFER& certificatedata, XBUFFER
     {
       CIPHERCERTIFICATEX509 leaf;
       bool loaded=certificatechain.Get(0) && leaf.Decode((*certificatechain.Get(0))) && leaf.GetPublicCipherKey() &&
-                  PrivateKeyDER_Decode(pfxprivatekey,leaf.GetPublicCipherKey()->GetType(),privatekey);
+                  PrivateKeyDER_Decode(pfxprivatekey,leaf.GetPublicCipherKey()->GetType(),privatekey) &&
+                  CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(privatekey,leaf.GetPublicCipherKey());
       pfxprivatekey.SecureDelete();
       if(secret.Get()){volatile XCHAR* wipe=secret.Get();for(XDWORD c=0;c<secret.GetSize();c++)wipe[c]=0;} secret.Empty();
       if(loaded) return true;
@@ -345,7 +408,8 @@ bool CIPHERCREDENTIALSLOADER::Credentials_Load(XBUFFER& certificatedata, XBUFFER
   if(!Certificates_Load(certificatedata,certificatechain)) return false;
   CIPHERCERTIFICATEX509 leaf;
   if(!certificatechain.Get(0) || !leaf.Decode((*certificatechain.Get(0))) || !leaf.GetPublicCipherKey() ||
-     !PrivateKey_Load(privatekeydata,password,leaf.GetPublicCipherKey()->GetType(),privatekey))
+     !PrivateKey_Load(privatekeydata,password,leaf.GetPublicCipherKey()->GetType(),privatekey) ||
+     !CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(privatekey,leaf.GetPublicCipherKey()))
     { Certificates_Delete(certificatechain); PrivateKey_Delete(privatekey); return false; }
   return true;
 }

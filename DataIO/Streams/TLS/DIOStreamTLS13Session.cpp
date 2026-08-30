@@ -276,6 +276,20 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
 
   switch(group)
     {
+      #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+
+      case DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768 : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) return false;
+
+                                                       keyexchangex25519mlkem768.Delete();
+                                                       if(!keyexchangex25519mlkem768.ClientKeyShare_Create(publickey))
+                                                         {
+                                                           keyexchangex25519mlkem768.Delete();
+                                                           return false;
+                                                         }
+                                                       break;
+
+      #endif
+
       case DIOSTREAMTLS_MSG_CURVEID_X25519    : keyexchange.CleanAllKeys();
 
                                                 if(!keyexchange.GenerateRandomPrivateKey() ||
@@ -340,12 +354,27 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret)
 {
-  sharedsecret.Delete();
+  sharedsecret.SecureDelete();
 
   if(!isini) return false;
 
   switch(group)
     {
+      #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+
+      case DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768 : { bool invalidpeershare = false;
+
+                                                       if((role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
+                                                          !keyexchangex25519mlkem768.ClientSharedSecret_Create(publickey, sharedsecret,
+                                                                                                                 &invalidpeershare))
+                                                         {
+                                                           return false;
+                                                         }
+                                                     }
+                                                     break;
+
+      #endif
+
       case DIOSTREAMTLS_MSG_CURVEID_X25519    : if((publickey.GetSize() != CIPHERECDSAX25519_MAXKEY) ||
                                                    !keyexchange.GetKey(CIPHERECDSAX25519_TYPEKEY_PRIVATE) ||
                                                    !keyexchange.CreateSharedKey(publickey.Get()) ||
@@ -381,6 +410,67 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13SESSION::KeyExchange_ServerGenerate(XWORD group, XBUFFER& peerpublickey,
+*                                                                     XBUFFER& publickey, XBUFFER& sharedsecret,
+*                                                                     bool& invalidpeershare)
+* @brief      Generate a server share and its shared secret, including KEM groups whose response depends on the client
+* @ingroup    DATAIO
+*
+* @param[in]  group : Negotiated TLS supported group value.
+* @param[in]  peerpublickey : Encoded client key share.
+* @param[out] publickey : Encoded server key share.
+* @param[out] sharedsecret : Calculated shared secret.
+* @param[out] invalidpeershare : true when failure was caused by an invalid remote share.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13SESSION::KeyExchange_ServerGenerate(XWORD group, XBUFFER& peerpublickey,
+                                                        XBUFFER& publickey, XBUFFER& sharedsecret,
+                                                        bool& invalidpeershare)
+{
+  invalidpeershare = false;
+  publickey.Delete();
+  sharedsecret.SecureDelete();
+
+  if(!isini || (role != DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER)) return false;
+
+  KeyExchange_Delete();
+
+  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+
+  if(group == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768)
+    {
+      return keyexchangex25519mlkem768.ServerKeyShare_Create(peerpublickey, publickey, sharedsecret,
+                                                              &invalidpeershare);
+    }
+
+  #endif
+
+  if(!KeyExchange_Generate(group, publickey))
+    {
+      KeyExchange_Delete();
+      publickey.Delete();
+      return false;
+    }
+
+  if(!KeyExchange_SharedSecret(group, peerpublickey, sharedsecret))
+    {
+      // The classical paths historically classify a correctly-sized share that fails point/DH validation as
+      // illegal_parameter. Preserve that wire behaviour while keeping generation/allocation failures internal.
+      invalidpeershare = true;
+      KeyExchange_Delete();
+      publickey.Delete();
+      sharedsecret.SecureDelete();
+      return false;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
 * @brief      Erase all ephemeral key exchange material
 * @ingroup    DATAIO
@@ -389,6 +479,10 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
 void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
 {
   keyexchange.CleanAllKeys();
+
+  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+  keyexchangex25519mlkem768.Delete();
+  #endif
 
   keyexchangep256private.FillBuffer(0);
   keyexchangep256private.SecureDelete();
@@ -768,10 +862,16 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFE
   // Shared-secret size is group-dependent: X25519 and secp256r1 both happen to produce 32 bytes, secp384r1
   // produces 48 (its coordinate size) -- so this must enumerate every group KeyExchange_SharedSecret() can
   // hand back here, not assume the X25519 constant fits them all.
-  if(!isini ||
-     ((sharedsecret.GetSize() != CIPHERECDSAX25519_MAXKEY) &&
-      (sharedsecret.GetSize() != CIPHERECDSA_P256_COORDINATE_SIZE) &&
-      (sharedsecret.GetSize() != CIPHERECDSA_P384_COORDINATE_SIZE)))
+  bool sharedsecretsizevalid = (sharedsecret.GetSize() == CIPHERECDSAX25519_MAXKEY) ||
+                               (sharedsecret.GetSize() == CIPHERECDSA_P256_COORDINATE_SIZE) ||
+                               (sharedsecret.GetSize() == CIPHERECDSA_P384_COORDINATE_SIZE);
+
+  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+  sharedsecretsizevalid = sharedsecretsizevalid ||
+                          (sharedsecret.GetSize() == CIPHERX25519MLKEM768_SHAREDSECRETSIZE);
+  #endif
+
+  if(!isini || !sharedsecretsizevalid)
     {
       return false;
     }

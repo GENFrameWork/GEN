@@ -44,8 +44,13 @@
 
 #include "CipherKeyPublicRSA.h"
 #include "CipherKeyECDSA.h"
+#include "CipherKeySymmetrical.h"
 #include "CipherRSA.h"
 #include "CipherECDSA.h"
+
+#ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+#include "CipherEd25519.h"
+#endif
 #include "HashSHA2.h"
 #include "HashSHA1.h"
 
@@ -1308,6 +1313,12 @@ bool CIPHERCERTIFICATEX509::SetAlgorithmType(XCHAR* OID)
       algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS;    	                  
       algorithmtypestr  = __L("Probabilistic RSA signature scheme");  
     }
+
+  if(!_OID.Compare(__L("1.3.101.112"), false))
+    {
+      algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519;
+      algorithmtypestr  = __L("Ed25519 signature");
+    }
  
   return (algorithmtype != CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN)?true:false;
 }
@@ -1697,8 +1708,10 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
   static const XBYTE OIDextendedkeyusage[] = { 0x55, 0x1D, 0x25 };
   static const XBYTE OIDsubjectaltname[]   = { 0x55, 0x1D, 0x11 };
   static const XBYTE OIDnameconstraints[]  = { 0x55, 0x1D, 0x1E };
+  static const XBYTE OIDsubjectkeyidentifier[] = { 0x55, 0x1D, 0x0E };
   static const XBYTE OIDserverauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x01 };
   static const XBYTE OIDclientauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x02 };
+  static const XBYTE OIDOCSPsigning[]      = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x09 };
   static const XBYTE OIDauthorityinfoaccess[] = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x01, 0x01 };  // id-pe-authorityInfoAccess
   static const XBYTE OIDcaissuers[]           = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x02 };  // id-ad-caIssuers
   static const XBYTE OIDocsp[]                = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01 };  // id-ad-ocsp
@@ -1753,7 +1766,8 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
                                                           default : return false;
         }
     }
-   else if((algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1)   ||
+   else if((algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519)         ||
+           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1)   ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256) ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384) ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512))
@@ -1871,6 +1885,11 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
       return false;
     }
 
+  if(!subjectpublickeydata.Add((XBYTE*)&publickeybits.data[1], publickeybits.size - 1))
+    {
+      return false;
+    }
+
   if(!publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1"), false))
     {
       CIPHERCERTIFICATEX509_DERREADER publickeyreader(&publickeybits.data[1], publickeybits.size - 1);
@@ -1979,6 +1998,37 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
           GEN_DELETE ECDSApublickey;
           return false;
         }
+    }
+   else if(!publickeyalgorithmOID.Compare(__L("1.3.101.112"), false))
+    {
+      // RFC 8410 id-Ed25519: parameters are absent and the BIT STRING contains the raw 32-byte key.
+      if(publickeyalgorithmparameters.tag || publickeybits.size!=33)
+        {
+          return false;
+        }
+
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+
+      CIPHERKEYSYMMETRICAL* Ed25519publickey=GEN_NEW CIPHERKEYSYMMETRICAL();
+      if(!Ed25519publickey) return false;
+
+      Ed25519publickey->SetType(CIPHERKEYTYPE_ED25519_PUBLIC);
+      CIPHERED25519 Ed25519;
+      XBUFFER encodedpublickey;
+
+      if(!encodedpublickey.Add((XBYTE*)&publickeybits.data[1],CIPHERED25519_PUBLICKEYSIZE) ||
+         !Ed25519.PublicKey_IsValid(encodedpublickey) || !Ed25519publickey->Set(encodedpublickey) ||
+         !SetPublicCipherKey(Ed25519publickey))
+        {
+          GEN_DELETE Ed25519publickey;
+          return false;
+        }
+
+      #else
+
+      return false;
+
+      #endif
     }
    else
     {
@@ -2130,6 +2180,20 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
 
               publiccipherkeybasicconstraints = iscertificateauthority;
             }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDsubjectkeyidentifier, sizeof(OIDsubjectkeyidentifier)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER identifierreader(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   identifier;
+
+              if(hassubjectkeyidentifier || !identifierreader.Read(identifier) || !identifierreader.IsEnd() ||
+                 (identifier.tag != 0x04) || !identifier.size ||
+                 !subjectkeyidentifier.Add((XBYTE*)identifier.data, identifier.size))
+                {
+                  return false;
+                }
+
+              hassubjectkeyidentifier = true;
+            }
           else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDkeyusage, sizeof(OIDkeyusage)))
             {
               CIPHERCERTIFICATEX509_DERREADER keyusagereader(extensionvalue.data, extensionvalue.size);
@@ -2150,6 +2214,7 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
               haskeyusage             = true;
               keyusagedigitalsignature = (keyusage.data[1] & 0x80)?true:false;
               keyusagecertificatesign  = (keyusage.data[1] & 0x04)?true:false;
+              keyusageCRLsign          = (keyusage.data[1] & 0x02)?true:false;
               publiccipherkeyusaged    = keyusagedigitalsignature;
             }
           else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDextendedkeyusage, sizeof(OIDextendedkeyusage)))
@@ -2182,6 +2247,11 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
                   if(CIPHERCERTIFICATEX509_DER_OIDCompare(extendedOID, OIDclientauth, sizeof(OIDclientauth)))
                     {
                       extendedkeyusageclientauthentication = true;
+                    }
+
+                  if(CIPHERCERTIFICATEX509_DER_OIDCompare(extendedOID, OIDOCSPsigning, sizeof(OIDOCSPsigning)))
+                    {
+                      extendedkeyusageOCSPsigning = true;
                     }
                 }
             }
@@ -2474,6 +2544,24 @@ XBUFFER* CIPHERCERTIFICATEX509::GetSubjectData()
 }
 
 
+XBUFFER* CIPHERCERTIFICATEX509::GetSubjectPublicKeyData()
+{
+  return &subjectpublickeydata;
+}
+
+
+bool CIPHERCERTIFICATEX509::HasSubjectKeyIdentifier()
+{
+  return hassubjectkeyidentifier;
+}
+
+
+XBUFFER* CIPHERCERTIFICATEX509::GetSubjectKeyIdentifier()
+{
+  return &subjectkeyidentifier;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERCERTIFICATEX509::HasBasicConstraints()
@@ -2564,6 +2652,12 @@ bool CIPHERCERTIFICATEX509::IsKeyUsageCertificateSign()
 }
 
 
+bool CIPHERCERTIFICATEX509::IsKeyUsageCRLSign()
+{
+  return keyusageCRLsign;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool CIPHERCERTIFICATEX509::HasExtendedKeyUsage()
@@ -2606,6 +2700,12 @@ bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageServerAuthentication()
 bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageClientAuthentication()
 {
   return extendedkeyusageclientauthentication;
+}
+
+
+bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageOCSPSigning()
+{
+  return extendedkeyusageOCSPsigning;
 }
 
 
@@ -2855,6 +2955,21 @@ bool CIPHERCERTIFICATEX509::VerifyDataSignature(CIPHERKEY* issuerpublickey,
                                                  XBUFFER& data, XBUFFER& signature)
 {
   if(!issuerpublickey || data.IsEmpty() || signature.IsEmpty()) return false;
+
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+
+  if(issuerpublickey->GetType() == CIPHERKEYTYPE_ED25519_PUBLIC)
+    {
+      if(algorithm != CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519) return false;
+      CIPHERKEYSYMMETRICAL* publickey=(CIPHERKEYSYMMETRICAL*)issuerpublickey;
+      if(!publickey->Get() || publickey->Get()->GetSize()!=CIPHERED25519_PUBLICKEYSIZE ||
+         signature.GetSize()!=CIPHERED25519_SIGNATURESIZE) return false;
+      CIPHERED25519 Ed25519;
+      return Ed25519.Verify((*publickey->Get()),data,signature);
+    }
+
+  #endif
+
   if(issuerpublickey->GetType() == CIPHERKEYTYPE_RSA_PUBLIC)
     {
       CIPHERRSA RSA; if(!RSA.SetKey(issuerpublickey,true)) return false;
@@ -3101,16 +3216,19 @@ void CIPHERCERTIFICATEX509::Clean()
   hash                            = NULL;
 
   hasbasicconstraints             = false;
+  hassubjectkeyidentifier         = false;
   iscertificateauthority          = false;
   basicconstraintspathlength      = -1;
 
   haskeyusage                     = false;
   keyusagedigitalsignature        = false;
   keyusagecertificatesign         = false;
+  keyusageCRLsign                 = false;
 
   hasextendedkeyusage                   = false;
   extendedkeyusageserverauthentication  = false;
   extendedkeyusageclientauthentication  = false;
+  extendedkeyusageOCSPsigning           = false;
   hasunknowncriticalextension           = false;
   hassubjectalternativename              = false;
   hasnameconstraints                     = false;

@@ -149,6 +149,10 @@ class DIOSTREAMTLSSERVERCREDENTIALS
     CIPHERKEY*              GetPrivateKey                       ();
     bool                    SetPrivateKey                       (CIPHERKEY* privatekey);
 
+    XBUFFER*                GetOCSPStapledResponse              ();
+    bool                    SetOCSPStapledResponse              (XBUFFER& response);
+    bool                    DeleteOCSPStapledResponse           ();
+
     bool                    HasCredentials                      ();
     bool                    Delete                              ();
 
@@ -159,6 +163,7 @@ class DIOSTREAMTLSSERVERCREDENTIALS
     XSTRING                 servername;
     XVECTOR<XBUFFER*>       certificatechain;
     CIPHERKEY*              privatekey;
+    XBUFFER                 OCSPstapledresponse;
 };
 
 
@@ -221,6 +226,10 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     CIPHERKEY*              GetLocalPrivateKey                ();
     bool                    SetLocalPrivateKey                (CIPHERKEY* privatekey);
 
+    XBUFFER*                GetLocalOCSPStapledResponse       ();
+    bool                    SetLocalOCSPStapledResponse       (XBUFFER& response);
+    bool                    DeleteLocalOCSPStapledResponse    ();
+
     bool                    HasLocalCredentials               ();
     bool                    LocalCredentials_Validate         ();
     DIOSTREAMTLS_LOCALCREDENTIALSERROR GetLocalCredentialsError ();
@@ -229,6 +238,7 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     DIOSTREAMTLSSERVERCREDENTIALS* ServerCredentials_Add      (XCHAR* servername);
     XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*>* GetServerCredentials ();
     bool                    ServerCredentials_Select           (XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey);
+    bool                    ServerCredentials_Select           (XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey, XBUFFER*& OCSPstapledresponse);
     bool                    ServerCredentials_Delete           ();
 
     bool                    IsAllowUnauthenticatedServer      ();
@@ -305,6 +315,7 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XVECTOR<XBUFFER*>       clienttrustedroots;
     XVECTOR<XBUFFER*>       localcertificatechain;
     CIPHERKEY*              localprivatekey;
+    XBUFFER                 localOCSPstapledresponse;
     XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*> servercredentials;
     DIOSTREAMTLS_LOCALCREDENTIALSERROR localcredentialserror;
     bool                    allowunauthenticatedserver;

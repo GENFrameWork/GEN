@@ -105,7 +105,9 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     bool                                    NewSessionTicket_Create                          ();
 
     bool                                    CipherSuite_Select                               (XVECTOR<XWORD>& offered, XWORD& selected);
-    bool                                    Group_Select                                     (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey, bool& helloretryrequestrequired);
+    bool                                    Group_Select                                     (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup,
+                                                                                              XBUFFER& peerpublickey, bool& helloretryrequestrequired,
+                                                                                              bool& invalidkeyshare);
     bool                                    SignatureScheme_Select                           (XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected);
     void                                    ApplicationProtocol_Select                       (DIOSTREAMTLS_MSG_EXTENSION_ALPN* offered);
 
@@ -126,6 +128,8 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     XBUFFER                                 firstclienthello;
     XWORD                                   retryselectedgroup;
     XWORD                                   retryciphersuite;
+    bool                                    serverOCSPstaplingrequested;
+    bool                                    clientOCSPstaplingrequested;
     bool                                    clientcertificateprovided;
     bool                                    resumptionaccepted;
     XBUFFER                                 resumptionpsk;

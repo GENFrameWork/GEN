@@ -38,6 +38,7 @@
 
 #include "CipherKeyPublicRSA.h"
 #include "CipherKeyECDSA.h"
+#include "CipherKeySymmetrical.h"
 
 
 
@@ -81,6 +82,10 @@ CIPHERCERTIFICATEX509VALIDATIONPOLICY::CIPHERCERTIFICATEX509VALIDATIONPOLICY()
   SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384, true);
   SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512, true);
   SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS, true);
+
+  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519, true);
+  #endif
 }
 
 XDWORD CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetMinimumRSAKeyBits() { return minimumRSAKeyBits; }
@@ -528,6 +533,11 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSignatureAlgorithmSupported(CIPHERCERTIFI
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256         :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384         :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512         : return true;
+
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519                 : return true;
+      #endif
+
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               : return (certificate->GetRSASSAPSSHashType() !=
                                                                                   CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN);
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA1WITHRSAENCRYPTION   :
@@ -572,7 +582,9 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSamePublicKey(CIPHERKEY* key1, CIPHERKEY*
                                       }
                                  break;
 
-      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC : { CIPHERKEYECDSA* keyECDSA1 = (CIPHERKEYECDSA*)key1;
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC :
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC :
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC : { CIPHERKEYECDSA* keyECDSA1 = (CIPHERKEYECDSA*)key1;
                                                     CIPHERKEYECDSA* keyECDSA2 = (CIPHERKEYECDSA*)key2;
 
                                                     if(!keyECDSA1->Get() || !keyECDSA2->Get()) return false;
@@ -580,6 +592,17 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSamePublicKey(CIPHERKEY* key1, CIPHERKEY*
                                                     return keyECDSA1->Get()->Compare((*keyECDSA2->Get()));
                                                   }
                                              break;
+
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+
+      case CIPHERKEYTYPE_ED25519_PUBLIC : { CIPHERKEYSYMMETRICAL* keyEd1=(CIPHERKEYSYMMETRICAL*)key1;
+                                             CIPHERKEYSYMMETRICAL* keyEd2=(CIPHERKEYSYMMETRICAL*)key2;
+                                             if(!keyEd1->Get() || !keyEd2->Get()) return false;
+                                             return keyEd1->Get()->Compare((*keyEd2->Get()));
+                                           }
+                                      break;
+
+      #endif
 
                                default : break;
     }

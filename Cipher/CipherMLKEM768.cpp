@@ -13,6 +13,15 @@
 
 #include "GEN_Control.h"
 
+namespace
+{
+  static void CIPHERMLKEM768_SecureErase(void* data, XDWORD size)
+  {
+    volatile XBYTE* bytes = (volatile XBYTE*)data;
+    for(XDWORD c=0; c<size; c++) bytes[c] = 0;
+  }
+}
+
 CIPHERMLKEM768::CIPHERMLKEM768()
 {
   Clean();
@@ -44,17 +53,22 @@ bool CIPHERMLKEM768::KeyPair_Create(XBUFFER& publickey, XBUFFER& privatekey)
   XBYTE sk[CIPHERMLKEM768_PRIVATEKEYSIZE];
 
   publickey.Delete();
-  privatekey.FillBuffer(0);
-  privatekey.Delete();
+  privatekey.SecureDelete();
 
   bool status = Random(d, sizeof(d)) && Random(z, sizeof(z)) &&
                 CIPHERMLKEM768CORE::KeyPair(d, z, pk, sk) &&
                 publickey.Add(pk, sizeof(pk)) && privatekey.Add(sk, sizeof(sk));
 
-  memset(d,  0, sizeof(d));
-  memset(z,  0, sizeof(z));
-  memset(pk, 0, sizeof(pk));
-  memset(sk, 0, sizeof(sk));
+  if(!status)
+    {
+      publickey.Delete();
+      privatekey.SecureDelete();
+    }
+
+  CIPHERMLKEM768_SecureErase(d,  sizeof(d));
+  CIPHERMLKEM768_SecureErase(z,  sizeof(z));
+  CIPHERMLKEM768_SecureErase(pk, sizeof(pk));
+  CIPHERMLKEM768_SecureErase(sk, sizeof(sk));
   return status;
 }
 
@@ -65,18 +79,23 @@ bool CIPHERMLKEM768::Encapsulate(XBUFFER& publickey, XBUFFER& ciphertext, XBUFFE
   XBYTE ss[CIPHERMLKEM768_SHAREDSECRETSIZE];
 
   ciphertext.Delete();
-  sharedsecret.FillBuffer(0);
-  sharedsecret.Delete();
+  sharedsecret.SecureDelete();
 
-  if(publickey.GetSize() != CIPHERMLKEM768_PUBLICKEYSIZE) return false;
+  if(!PublicKey_Check(publickey)) return false;
 
   bool status = Random(randomness, sizeof(randomness)) &&
                 CIPHERMLKEM768CORE::Encapsulate(randomness, publickey.Get(), ct, ss) &&
                 ciphertext.Add(ct, sizeof(ct)) && sharedsecret.Add(ss, sizeof(ss));
 
-  memset(randomness, 0, sizeof(randomness));
-  memset(ct,         0, sizeof(ct));
-  memset(ss,         0, sizeof(ss));
+  if(!status)
+    {
+      ciphertext.Delete();
+      sharedsecret.SecureDelete();
+    }
+
+  CIPHERMLKEM768_SecureErase(randomness, sizeof(randomness));
+  CIPHERMLKEM768_SecureErase(ct,         sizeof(ct));
+  CIPHERMLKEM768_SecureErase(ss,         sizeof(ss));
   return status;
 }
 
@@ -84,8 +103,7 @@ bool CIPHERMLKEM768::Decapsulate(XBUFFER& privatekey, XBUFFER& ciphertext, XBUFF
 {
   XBYTE ss[CIPHERMLKEM768_SHAREDSECRETSIZE];
 
-  sharedsecret.FillBuffer(0);
-  sharedsecret.Delete();
+  sharedsecret.SecureDelete();
 
   if(privatekey.GetSize() != CIPHERMLKEM768_PRIVATEKEYSIZE || ciphertext.GetSize() != CIPHERMLKEM768_CIPHERTEXTSIZE)
     {
@@ -94,7 +112,8 @@ bool CIPHERMLKEM768::Decapsulate(XBUFFER& privatekey, XBUFFER& ciphertext, XBUFF
 
   bool status = CIPHERMLKEM768CORE::Decapsulate(privatekey.Get(), ciphertext.Get(), ss) &&
                 sharedsecret.Add(ss, sizeof(ss));
-  memset(ss, 0, sizeof(ss));
+  if(!status) sharedsecret.SecureDelete();
+  CIPHERMLKEM768_SecureErase(ss, sizeof(ss));
   return status;
 }
 

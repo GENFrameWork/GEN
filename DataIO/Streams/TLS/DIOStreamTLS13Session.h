@@ -35,6 +35,10 @@
 #include "CipherECDSA.h"
 #include "CipherECDSAX25519.h"
 
+#if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+#include "CipherX25519MLKEM768.h"
+#endif
+
 #include "DIOStreamTLS13KeySchedule.h"
 #include "DIOStreamTLSRecord.h"
 
@@ -87,6 +91,9 @@ class DIOSTREAMTLS13SESSION
     CIPHERECDSAX25519*                      GetKeyExchange                                    ();
     bool                                    KeyExchange_Generate                              (XWORD group, XBUFFER& publickey);
     bool                                    KeyExchange_SharedSecret                          (XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret);
+    bool                                    KeyExchange_ServerGenerate                        (XWORD group, XBUFFER& peerpublickey,
+                                                                                               XBUFFER& publickey, XBUFFER& sharedsecret,
+                                                                                               bool& invalidpeershare);
     void                                    KeyExchange_Delete                                ();
     bool                                    CipherSuite_Select                                (XWORD ciphersuite);
 
@@ -145,6 +152,11 @@ class DIOSTREAMTLS13SESSION
     DIOSTREAMTLS13KEYSCHEDULE                 keyschedule;
     DIOSTREAMTLSRECORD                      record;
     CIPHERECDSAX25519                       keyexchange;
+
+    #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+    CIPHERX25519MLKEM768                    keyexchangex25519mlkem768;
+    #endif
+
     CIPHERECDSA                             keyexchangep256;
     XSECUREBUFFER                           keyexchangep256private;
     XBUFFER                                 keyexchangep256public;
