@@ -106,7 +106,7 @@ DIOSTREAMTLS13KEYSCHEDULE::~DIOSTREAMTLS13KEYSCHEDULE()
 *             which is what makes this class usable by a server without any change.
 * @ingroup    DATAIO
 *
-* @param[in]  ciphersuite : Negotiated cipher suite. Only the TLS 1.3 AEAD suites implemented by GEN are accepted.
+* @param[in]  ciphersuite : Negotiated cipher suite. Only the TLS 1.3 AES-GCM ones are accepted.
 * @param[in]  role : Role of this end of the connection.
 *
 * @return     bool : true if the operation is successful; otherwise false.
@@ -125,10 +125,6 @@ bool DIOSTREAMTLS13KEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_R
       case DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384   : hash     = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);
                                                           keysize  = 32;
                                                           break;
-
-      case DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256 : hash    = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
-                                                              keysize = 32;
-                                                              break;
 
                                               default   : return false;
     }
@@ -441,7 +437,7 @@ bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeSecret_Calculate(XBUFFER& sharedsecret)
       return false;
     }
 
-  XBUFFER derivedsecret;
+  XSECUREBUFFER derivedsecret;
 
   if(!DeriveEmptySecret(earlysecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_DERIVED, derivedsecret))
     {
@@ -484,8 +480,8 @@ bool DIOSTREAMTLS13KEYSCHEDULE::MasterSecret_Calculate()
       return false;
     }
 
-  XBUFFER derivedsecret;
-  XBUFFER zerokeymaterial;
+  XSECUREBUFFER derivedsecret;
+  XSECUREBUFFER zerokeymaterial;
 
   if(!DeriveEmptySecret(handshakesecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_DERIVED, derivedsecret))
     {
@@ -689,7 +685,7 @@ bool DIOSTREAMTLS13KEYSCHEDULE::ResumptionPSK_Calculate(XBUFFER& ticketnonce, XB
 {
   if(!isini || !HKDF || (resumptionsecret.GetSize() != hashsize)) return false;
 
-  PSK.Delete();
+  PSK.SecureDelete();
   return HKDF->ExpandLabel(resumptionsecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_RESUMPTIONPSK, ticketnonce, hashsize, PSK);
 }
 
@@ -708,8 +704,8 @@ bool DIOSTREAMTLS13KEYSCHEDULE::ResumptionPSK_Calculate(XBUFFER& ticketnonce, XB
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13KEYSCHEDULE::Binder_Calculate(XBUFFER& transcript, XBUFFER& binder)
 {
-  XBUFFER  binderkey;
-  XBUFFER  finishedkey;
+  XSECUREBUFFER binderkey;
+  XSECUREBUFFER finishedkey;
   XBUFFER  transcripthash;
   XBUFFER  context;
   HASHHMAC hashHMAC(hash);
@@ -864,7 +860,7 @@ bool DIOSTREAMTLS13KEYSCHEDULE::CalculateFinished(DIOSTREAMTLSKEYSCHEDULE_DIRECT
       return false;
     }
 
-  XBUFFER   finishedkey;
+  XSECUREBUFFER finishedkey;
   HASHHMAC  hashHMAC(hash);
 
   if(!GetFinishedKey(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, direction, finishedkey))
@@ -950,7 +946,7 @@ bool DIOSTREAMTLS13KEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRE
 
   XBUFFER* trafficsecret = GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, direction);
   XBUFFER  context;
-  XBUFFER  newtrafficsecret;
+  XSECUREBUFFER newtrafficsecret;
 
   if(!trafficsecret)
     {
@@ -967,7 +963,7 @@ bool DIOSTREAMTLS13KEYSCHEDULE::UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRE
       return false;
     }
 
-  trafficsecret->Delete();
+  trafficsecret->SecureDelete();
 
   return trafficsecret->Add(newtrafficsecret);
 }

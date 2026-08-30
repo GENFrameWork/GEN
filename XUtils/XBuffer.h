@@ -176,6 +176,7 @@ class GEN_API_LIB_EXP XBUFFER
 
     bool                     Resize                               (XDWORD newsize,bool setblocked = true);
     bool                     Delete                               (bool setblocked = true);
+    bool                     SecureDelete                         (bool setblocked = true);
     bool                     DeleteByte                           (XBYTE data, bool setblocked = true); 
     bool                     FillBuffer                           (XBYTE fillchar = 0);
     bool                     Empty                                ();
@@ -256,9 +257,18 @@ class GEN_API_LIB_EXP XBUFFER
 };
 
 
+class GEN_API_LIB_EXP XSECUREBUFFER : public XBUFFER
+{
+  public:
+                             XSECUREBUFFER                        (bool threadsafe = XBUFFER_ISTHREADSAFE) : XBUFFER(threadsafe) {}
+                             XSECUREBUFFER                        (XDWORD size, bool threadsafe = XBUFFER_ISTHREADSAFE) : XBUFFER(size, threadsafe) {}
+                             XSECUREBUFFER                        (const XBUFFER& xbuffer) : XBUFFER(xbuffer) {}
+    virtual                 ~XSECUREBUFFER                        () { SecureDelete(); }
+};
+
+
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

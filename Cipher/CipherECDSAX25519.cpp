@@ -105,11 +105,11 @@ bool CIPHERECDSAX25519::GenerateRandomPrivateKey()
       return false;
     }
  
-  xrand->Ini();
-
-  for(int c=0; c<CIPHERECDSAX25519_MAXKEY; c++)
+  if(!xrand->Ini() || !xrand->IsCryptographicallySecure() ||
+     !xrand->Generate(keys[CIPHERECDSAX25519_TYPEKEY_PRIVATE], CIPHERECDSAX25519_MAXKEY))
     {
-      keys[CIPHERECDSAX25519_TYPEKEY_PRIVATE][c] = xrand->Max(255);      
+      GEN_XFACTORY.DeleteRand(xrand);
+      return false;
     }
 
   GEN_XFACTORY.DeleteRand(xrand);

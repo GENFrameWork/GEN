@@ -44,11 +44,10 @@
 
 #include "CipherKeyPublicRSA.h"
 #include "CipherKeyECDSA.h"
-#include "CipherKeySymmetrical.h"
-#include "CipherEd25519.h"
 #include "CipherRSA.h"
 #include "CipherECDSA.h"
 #include "HashSHA2.h"
+#include "HashSHA1.h"
 
 
 
@@ -1306,14 +1305,8 @@ bool CIPHERCERTIFICATEX509::SetAlgorithmType(XCHAR* OID)
                
   if(!_OID.Compare(__L("1.2.840.113549.1.1.10"), false))
     {
-      algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS;
-      algorithmtypestr  = __L("Probabilistic RSA signature scheme");
-    }
-
-  if(!_OID.Compare(__L("1.3.101.112"), false))
-    {
-      algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519;
-      algorithmtypestr  = __L("Ed25519 signature");
+      algorithmtype     = CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS;    	                  
+      algorithmtypestr  = __L("Probabilistic RSA signature scheme");  
     }
  
   return (algorithmtype != CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN)?true:false;
@@ -1703,10 +1696,12 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
   static const XBYTE OIDkeyusage[]         = { 0x55, 0x1D, 0x0F };
   static const XBYTE OIDextendedkeyusage[] = { 0x55, 0x1D, 0x25 };
   static const XBYTE OIDsubjectaltname[]   = { 0x55, 0x1D, 0x11 };
+  static const XBYTE OIDnameconstraints[]  = { 0x55, 0x1D, 0x1E };
   static const XBYTE OIDserverauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x01 };
   static const XBYTE OIDclientauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x02 };
   static const XBYTE OIDauthorityinfoaccess[] = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x01, 0x01 };  // id-pe-authorityInfoAccess
   static const XBYTE OIDcaissuers[]           = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x02 };  // id-ad-caIssuers
+  static const XBYTE OIDocsp[]                = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x30, 0x01 };  // id-ad-ocsp
 
   CIPHERCERTIFICATEX509_DERREADER certificatereader(certificate.Get(), certificate.GetSize());
   CIPHERCERTIFICATEX509_DERITEM   certificatesequence;
@@ -1761,10 +1756,8 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
    else if((algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1)   ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256) ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384) ||
-           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512) ||
-           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519))
+           (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512))
     {
-      // RFC 8410 requires Ed25519 AlgorithmIdentifier parameters to be absent; ECDSA uses the same encoding rule.
       if(outeralgorithmparameters.tag) return false;
     }
    else
@@ -1984,22 +1977,6 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
          !ECDSA.SetKey(ECDSApublickey, true) || !SetPublicCipherKey(ECDSApublickey))
         {
           GEN_DELETE ECDSApublickey;
-          return false;
-        }
-    }
-   else if(!publickeyalgorithmOID.Compare(__L("1.3.101.112"), false))
-    {
-      // RFC 8410: Ed25519 AlgorithmIdentifier parameters MUST be absent and SubjectPublicKey is exactly 32 bytes.
-      if(publickeyalgorithmparameters.tag || (publickeybits.size != (CIPHERED25519_PUBLICKEYSIZE + 1))) return false;
-
-      CIPHERKEYSYMMETRICAL* Ed25519publickey = GEN_NEW CIPHERKEYSYMMETRICAL();
-      if(!Ed25519publickey) return false;
-
-      Ed25519publickey->SetType(CIPHERKEYTYPE_ED25519_PUBLIC);
-      if(!Ed25519publickey->Set((XBYTE*)&publickeybits.data[1], CIPHERED25519_PUBLICKEYSIZE) ||
-         !SetPublicCipherKey(Ed25519publickey))
-        {
-          GEN_DELETE Ed25519publickey;
           return false;
         }
     }
@@ -2272,6 +2249,72 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
                     }
                 }
             }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDnameconstraints, sizeof(OIDnameconstraints)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER constraintsouter(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   constraintssequence;
+
+              if(hasnameconstraints || !constraintsouter.Read(constraintssequence) || !constraintsouter.IsEnd() ||
+                 (constraintssequence.tag != 0x30)) return false;
+
+              hasnameconstraints = true;
+              CIPHERCERTIFICATEX509_DERREADER constraintsreader(constraintssequence.data, constraintssequence.size);
+
+              while(!constraintsreader.IsEnd())
+                {
+                  CIPHERCERTIFICATEX509_DERITEM subtrees;
+                  if(!constraintsreader.Read(subtrees) || ((subtrees.tag != 0xA0) && (subtrees.tag != 0xA1))) return false;
+
+                  bool excluded = (subtrees.tag == 0xA1);
+                  CIPHERCERTIFICATEX509_DERREADER subtreesreader(subtrees.data, subtrees.size);
+                  if(subtreesreader.IsEnd()) return false;
+
+                  while(!subtreesreader.IsEnd())
+                    {
+                      CIPHERCERTIFICATEX509_DERITEM subtree;
+                      if(!subtreesreader.Read(subtree) || (subtree.tag != 0x30)) return false;
+
+                      CIPHERCERTIFICATEX509_DERREADER subtreereader(subtree.data, subtree.size);
+                      CIPHERCERTIFICATEX509_DERITEM   base;
+                      if(!subtreereader.Read(base)) return false;
+
+                      // RFC 5280 default minimum=0 is the only supported distance; maximum is deliberately
+                      // rejected instead of being silently ignored.
+                      while(!subtreereader.IsEnd())
+                        {
+                          CIPHERCERTIFICATEX509_DERITEM distance;
+                          if(!subtreereader.Read(distance) || (distance.tag != 0x80) ||
+                             (distance.size > 1) || (distance.size && distance.data[0])) return false;
+                        }
+
+                      if(base.tag == 0x82)
+                        {
+                          XSTRING* value = GEN_NEW XSTRING();
+                          if(!value) return false;
+                          for(XDWORD n=0; n<base.size; n++)
+                            {
+                              if(!base.data[n] || (base.data[n] & 0x80) || !value->Add((XCHAR)base.data[n]))
+                                { GEN_DELETE value; return false; }
+                            }
+                          if(value->IsEmpty() || !(excluded?excludedsubtreesDNS.Add(value):permittedsubtreesDNS.Add(value)))
+                            { GEN_DELETE value; return false; }
+                        }
+                       else if(base.tag == 0x87)
+                        {
+                          if((base.size != 8) && (base.size != 32)) return false;
+                          XBUFFER* value = GEN_NEW XBUFFER();
+                          if(!value || !value->Add((XBYTE*)base.data, base.size) ||
+                             !(excluded?excludedsubtreesIP.Add(value):permittedsubtreesIP.Add(value)))
+                            { if(value) GEN_DELETE value; return false; }
+                        }
+                       else
+                        {
+                          // Unsupported GeneralName forms in a critical nameConstraints extension cannot be ignored.
+                          return false;
+                        }
+                    }
+                }
+            }
           else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDauthorityinfoaccess, sizeof(OIDauthorityinfoaccess)))
             {
               CIPHERCERTIFICATEX509_DERREADER accessouter(extensionvalue.data, extensionvalue.size);
@@ -2325,6 +2368,16 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
                         }
 
                       hascaissuersurl = !caissuersurl.IsEmpty();
+                    }
+
+                  if(!hasocspurl && (accesslocation.tag == 0x86) &&
+                     CIPHERCERTIFICATEX509_DER_OIDCompare(accessmethod, OIDocsp, sizeof(OIDocsp)))
+                    {
+                      for(XDWORD n=0; n<accesslocation.size; n++)
+                        {
+                          if((accesslocation.data[n] & 0x80) || !ocspurl.Add((XCHAR)accesslocation.data[n])) return false;
+                        }
+                      hasocspurl = !ocspurl.IsEmpty();
                     }
                 }
             }
@@ -2571,6 +2624,77 @@ bool CIPHERCERTIFICATEX509::HasUnknownCriticalExtension()
 }
 
 
+static bool CIPHERCERTIFICATEX509_DNSConstraintMatch(XSTRING* name, XSTRING* constraint)
+{
+  if(!name || !constraint || name->IsEmpty() || constraint->IsEmpty()) return false;
+  XSTRING normalizedname((*name));
+  XSTRING normalizedconstraint((*constraint));
+  normalizedname.ToLowerCase();
+  normalizedconstraint.ToLowerCase();
+
+  XDWORD namelen = normalizedname.GetSize();
+  XDWORD constraintlen = normalizedconstraint.GetSize();
+  bool subdomainsonly = normalizedconstraint.Get()[0] == '.';
+  if(constraintlen > namelen) return false;
+
+  XCHAR* suffix = &normalizedname.Get()[namelen - constraintlen];
+  if(memcmp(suffix, normalizedconstraint.Get(), constraintlen * sizeof(XCHAR))) return false;
+  if(subdomainsonly) return namelen > constraintlen;
+  return (namelen == constraintlen) || (normalizedname.Get()[namelen - constraintlen - 1] == '.');
+}
+
+static bool CIPHERCERTIFICATEX509_IPConstraintMatch(XBUFFER* address, XBUFFER* constraint)
+{
+  if(!address || !constraint) return false;
+  XDWORD addresssize = address->GetSize();
+  if(((addresssize != 4) && (addresssize != 16)) || (constraint->GetSize() != addresssize * 2)) return false;
+  for(XDWORD c=0; c<addresssize; c++)
+    if((address->Get()[c] & constraint->Get()[addresssize+c]) !=
+       (constraint->Get()[c] & constraint->Get()[addresssize+c])) return false;
+  return true;
+}
+
+bool CIPHERCERTIFICATEX509::HasNameConstraints()
+{
+  return hasnameconstraints;
+}
+
+bool CIPHERCERTIFICATEX509::AreNamesPermitted(CIPHERCERTIFICATEX509* certificate)
+{
+  if(!certificate || !hasnameconstraints) return certificate?true:false;
+
+  for(XDWORD n=0; n<certificate->GetSubjectAlternativeNamesDNS()->GetSize(); n++)
+    {
+      XSTRING* name = certificate->GetSubjectAlternativeNamesDNS()->Get(n);
+      for(XDWORD c=0; c<excludedsubtreesDNS.GetSize(); c++)
+        if(CIPHERCERTIFICATEX509_DNSConstraintMatch(name, excludedsubtreesDNS.Get(c))) return false;
+      if(!permittedsubtreesDNS.IsEmpty())
+        {
+          bool permitted = false;
+          for(XDWORD c=0; c<permittedsubtreesDNS.GetSize(); c++)
+            if(CIPHERCERTIFICATEX509_DNSConstraintMatch(name, permittedsubtreesDNS.Get(c))) { permitted = true; break; }
+          if(!permitted) return false;
+        }
+    }
+
+  for(XDWORD n=0; n<certificate->GetSubjectAlternativeNamesIP()->GetSize(); n++)
+    {
+      XBUFFER* address = certificate->GetSubjectAlternativeNamesIP()->Get(n);
+      for(XDWORD c=0; c<excludedsubtreesIP.GetSize(); c++)
+        if(CIPHERCERTIFICATEX509_IPConstraintMatch(address, excludedsubtreesIP.Get(c))) return false;
+      if(!permittedsubtreesIP.IsEmpty())
+        {
+          bool permitted = false;
+          for(XDWORD c=0; c<permittedsubtreesIP.GetSize(); c++)
+            if(CIPHERCERTIFICATEX509_IPConstraintMatch(address, permittedsubtreesIP.Get(c))) { permitted = true; break; }
+          if(!permitted) return false;
+        }
+    }
+
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XVECTOR<XSTRING*>* CIPHERCERTIFICATEX509::GetSubjectAlternativeNamesDNS()
@@ -2628,6 +2752,16 @@ bool CIPHERCERTIFICATEX509::HasCAIssuersURL()
 XSTRING* CIPHERCERTIFICATEX509::GetCAIssuersURL()
 {
   return &caissuersurl;
+}
+
+bool CIPHERCERTIFICATEX509::HasOCSPURL()
+{
+  return hasocspurl;
+}
+
+XSTRING* CIPHERCERTIFICATEX509::GetOCSPURL()
+{
+  return &ocspurl;
 }
 
 
@@ -2700,93 +2834,57 @@ bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
       return false;
     }
 
-  if(issuerpublickey->GetType() == CIPHERKEYTYPE_RSA_PUBLIC)
+  if(algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS)
     {
-      CIPHERRSA RSA;
-      if(!RSA.SetKey(issuerpublickey, true)) return false;
-
-      switch(algorithmtype)
+      if(issuerpublickey->GetType() != CIPHERKEYTYPE_RSA_PUBLIC) return false;
+      CIPHERRSA RSA; if(!RSA.SetKey(issuerpublickey, true)) return false;
+      switch(RSASSAPSShashtype)
         {
-          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_256);
-                                                                                return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
-                                                                              }
-
-          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_384);
-                                                                                return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
-                                                                              }
-
-          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION : { HASHSHA2 hash(HASHSHA2TYPE_512);
-                                                                                return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV15);
-                                                                              }
-
-          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               : switch(RSASSAPSShashtype)
-                                                                              {
-                                                                                case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256 : { HASHSHA2 hash(HASHSHA2TYPE_256);
-                                                                                                                                          return RSA.Verify(tbsdata, signature, &hash,
-                                                                                                                                                            CIPHERRSAPKCS1VERSIONV21,
-                                                                                                                                                            RSASSAPSSsaltsize);
-                                                                                                                                        }
-
-                                                                                case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384 : { HASHSHA2 hash(HASHSHA2TYPE_384);
-                                                                                                                                          return RSA.Verify(tbsdata, signature, &hash,
-                                                                                                                                                            CIPHERRSAPKCS1VERSIONV21,
-                                                                                                                                                            RSASSAPSSsaltsize);
-                                                                                                                                        }
-
-                                                                                case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : { HASHSHA2 hash(HASHSHA2TYPE_512);
-                                                                                                                                          return RSA.Verify(tbsdata, signature, &hash,
-                                                                                                                                                            CIPHERRSAPKCS1VERSIONV21,
-                                                                                                                                                            RSASSAPSSsaltsize);
-                                                                                                                                        }
-
-                                                                                                                                default : break;
-                                                                              }
-                                                                              break;
-
-                                                                        default : break;
+          case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256 : { HASHSHA2 hash(HASHSHA2TYPE_256); return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV21, RSASSAPSSsaltsize); }
+          case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384 : { HASHSHA2 hash(HASHSHA2TYPE_384); return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV21, RSASSAPSSsaltsize); }
+          case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : { HASHSHA2 hash(HASHSHA2TYPE_512); return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV21, RSASSAPSSsaltsize); }
+                                                          default : return false;
         }
     }
 
-  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ED25519_PUBLIC) &&
-     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519))
-    {
-      CIPHERKEYSYMMETRICAL* key = (CIPHERKEYSYMMETRICAL*)issuerpublickey;
-      if(!key->Get() || key->Get()->GetSize() != CIPHERED25519_PUBLICKEYSIZE) return false;
+  return VerifyDataSignature(issuerpublickey, algorithmtype, tbsdata, signature);
+}
 
-      CIPHERED25519 Ed25519;
-      XBUFFER publickey;
-      if(!publickey.Add((*key->Get()))) return false;
-      return Ed25519.Verify(publickey, tbsdata, signature);
+bool CIPHERCERTIFICATEX509::VerifyDataSignature(CIPHERKEY* issuerpublickey,
+                                                 CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm,
+                                                 XBUFFER& data, XBUFFER& signature)
+{
+  if(!issuerpublickey || data.IsEmpty() || signature.IsEmpty()) return false;
+  if(issuerpublickey->GetType() == CIPHERKEYTYPE_RSA_PUBLIC)
+    {
+      CIPHERRSA RSA; if(!RSA.SetKey(issuerpublickey,true)) return false;
+      switch(algorithm)
+        {
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA1WITHRSAENCRYPTION: { HASHSHA1 hash; return RSA.Verify(data,signature,&hash,CIPHERRSAPKCS1VERSIONV15); }
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION: { HASHSHA2 hash(HASHSHA2TYPE_256); return RSA.Verify(data,signature,&hash,CIPHERRSAPKCS1VERSIONV15); }
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION: { HASHSHA2 hash(HASHSHA2TYPE_384); return RSA.Verify(data,signature,&hash,CIPHERRSAPKCS1VERSIONV15); }
+          case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION: { HASHSHA2 hash(HASHSHA2TYPE_512); return RSA.Verify(data,signature,&hash,CIPHERRSAPKCS1VERSIONV15); }
+                                                                    default: return false;
+        }
     }
 
-  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC) &&
-     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256))
+  CIPHERTYPE curvetype=CIPHERTYPE_XOR;
+  switch(issuerpublickey->GetType())
     {
-      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP256R1);
-      HASHSHA2    hash(HASHSHA2TYPE_256);
-
-      return ECDSA.SetKey(issuerpublickey, true) && ECDSA.Verify(tbsdata, signature, &hash);
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC: curvetype=CIPHERTYPE_ECDSA_SECP256R1; break;
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC: curvetype=CIPHERTYPE_ECDSA_SECP384R1; break;
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC: curvetype=CIPHERTYPE_ECDSA_SECP521R1; break;
+                                             default: return false;
     }
-
-  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC) &&
-     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384))
+  CIPHERECDSA ECDSA(curvetype); if(!ECDSA.SetKey(issuerpublickey,true)) return false;
+  switch(algorithm)
     {
-      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP384R1);
-      HASHSHA2    hash(HASHSHA2TYPE_384);
-
-      return ECDSA.SetKey(issuerpublickey, true) && ECDSA.Verify(tbsdata, signature, &hash);
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1: { HASHSHA1 hash; return ECDSA.Verify(data,signature,&hash); }
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256: { HASHSHA2 hash(HASHSHA2TYPE_256); return ECDSA.Verify(data,signature,&hash); }
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384: { HASHSHA2 hash(HASHSHA2TYPE_384); return ECDSA.Verify(data,signature,&hash); }
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512: { HASHSHA2 hash(HASHSHA2TYPE_512); return ECDSA.Verify(data,signature,&hash); }
+                                                              default: return false;
     }
-
-  if((issuerpublickey->GetType() == CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC) &&
-     (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512))
-    {
-      CIPHERECDSA ECDSA(CIPHERTYPE_ECDSA_SECP521R1);
-      HASHSHA2    hash(HASHSHA2TYPE_512);
-
-      return ECDSA.SetKey(issuerpublickey, true) && ECDSA.Verify(tbsdata, signature, &hash);
-    }
-
-  return false;
 }
 
 
@@ -3015,8 +3113,20 @@ void CIPHERCERTIFICATEX509::Clean()
   extendedkeyusageclientauthentication  = false;
   hasunknowncriticalextension           = false;
   hassubjectalternativename              = false;
+  hasnameconstraints                     = false;
 
   hasauthorityinfoaccess                = false;
   hascaissuersurl                       = false;
   caissuersurl.Empty();
+  hasocspurl = false;
+  ocspurl.Empty();
+
+  permittedsubtreesDNS.DeleteContents();
+  permittedsubtreesDNS.DeleteAll();
+  excludedsubtreesDNS.DeleteContents();
+  excludedsubtreesDNS.DeleteAll();
+  permittedsubtreesIP.DeleteContents();
+  permittedsubtreesIP.DeleteAll();
+  excludedsubtreesIP.DeleteContents();
+  excludedsubtreesIP.DeleteAll();
 }

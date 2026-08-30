@@ -38,6 +38,11 @@
 
 #include "XBuffer.h"
 
+#if defined(WINDOWS)
+#include <windows.h>
+#include <winnls.h>
+#endif
+
 #include "DIODNSResolver.h"
 
 
@@ -54,6 +59,309 @@
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+static bool DIOURL_IsIPv4Range(const XCHAR* host, XDWORD length)
+{
+  if(!host || !length) return false;
+
+  int parts = 0;
+  int value = 0;
+  int digits = 0;
+
+  for(XDWORD c=0; c<length; c++)
+    {
+      if((host[c] >= __C('0')) && (host[c] <= __C('9')))
+        {
+          value = (value * 10) + (host[c] - __C('0'));
+          if(++digits > 3 || value > 255) return false;
+        }
+       else if(host[c] == __C('.'))
+        {
+          if(!digits || ++parts > 3) return false;
+          value = 0;
+          digits = 0;
+        }
+       else return false;
+    }
+
+  return (parts == 3) && digits;
+}
+
+
+static bool DIOURL_IsIPv4(XCHAR* host)
+{
+  if(!host) return false;
+  XDWORD length = 0;
+  while(host[length]) length++;
+  return DIOURL_IsIPv4Range(host, length);
+}
+
+
+static bool DIOURL_IsIPv6(XCHAR* host)
+{
+  if(!host || !host[0]) return false;
+
+  XDWORD length = 0;
+  while(host[length]) length++;
+
+  XDWORD start = 0;
+  XDWORD end = length;
+  if(host[0] == __C('['))
+    {
+      if(length < 3 || host[length-1] != __C(']')) return false;
+      start = 1;
+      end = length - 1;
+    }
+   else if(host[length-1] == __C(']')) return false;
+
+  XDWORD groups = 0;
+  XDWORD position = start;
+  bool   compressed = false;
+
+  if(position < end && host[position] == __C(':'))
+    {
+      if((position + 1) >= end || host[position+1] != __C(':')) return false;
+      compressed = true;
+      position += 2;
+      if(position == end) return true;
+    }
+
+  while(position < end)
+    {
+      XDWORD segmentstart = position;
+      bool ipv4tail = false;
+      while(position < end && host[position] != __C(':'))
+        {
+          if(host[position] == __C('%')) return false;
+          if(host[position] == __C('.')) ipv4tail = true;
+          position++;
+        }
+
+      XDWORD segmentsize = position - segmentstart;
+      if(!segmentsize) return false;
+
+      if(ipv4tail)
+        {
+          if(position != end || !DIOURL_IsIPv4Range(&host[segmentstart], segmentsize)) return false;
+          groups += 2;
+        }
+       else
+        {
+          if(segmentsize > 4) return false;
+          for(XDWORD c=segmentstart; c<position; c++)
+            if(!((host[c] >= __C('0') && host[c] <= __C('9')) ||
+                 (host[c] >= __C('a') && host[c] <= __C('f')) ||
+                 (host[c] >= __C('A') && host[c] <= __C('F')))) return false;
+          groups++;
+        }
+
+      if(groups > 8) return false;
+      if(position == end) break;
+
+      if((position + 1) < end && host[position+1] == __C(':'))
+        {
+          if(compressed) return false;
+          compressed = true;
+          position += 2;
+          if(position == end) break;
+        }
+       else
+        {
+          position++;
+          if(position == end) return false;
+        }
+    }
+
+  return compressed?(groups < 8):(groups == 8);
+}
+
+
+static bool DIOURL_IDNACodePointAllowed(XDWORD point, bool first)
+{
+  if(point < 0xA0 || (point >= 0xD800 && point <= 0xDFFF) || point > 0x10FFFF) return false;
+  if((point >= 0xE000 && point <= 0xF8FF) || (point >= 0xF0000 && point <= 0xFFFFD) ||
+     (point >= 0x100000 && point <= 0x10FFFD)) return false;
+  if((point & 0xFFFE) == 0xFFFE) return false;
+  if((point >= 0x200B && point <= 0x200F) || (point >= 0x202A && point <= 0x202E) ||
+     (point >= 0x2060 && point <= 0x206F)) return false;
+  if((point >= 0x1F000 && point <= 0x1FAFF) || (point >= 0x2600 && point <= 0x27BF)) return false;
+  if(first && ((point >= 0x0300 && point <= 0x036F) || (point >= 0x1AB0 && point <= 0x1AFF) ||
+               (point >= 0x1DC0 && point <= 0x1DFF) || (point >= 0x20D0 && point <= 0x20FF) ||
+               (point >= 0xFE20 && point <= 0xFE2F))) return false;
+  return true;
+}
+
+static XBYTE DIOURL_PunycodeDigit(XDWORD digit)
+{
+  return (XBYTE)((digit < 26)?(__C('a') + digit):(__C('0') + digit - 26));
+}
+
+static XDWORD DIOURL_PunycodeAdapt(XDWORD delta, XDWORD points, bool first)
+{
+  delta = first?(delta / 700):(delta / 2);
+  delta += delta / points;
+  XDWORD k = 0;
+  while(delta > 455) { delta /= 35; k += 36; }
+  return k + ((36 * delta) / (delta + 38));
+}
+
+static bool DIOURL_PunycodeLabel(XSTRING& label, XSTRING& output)
+{
+  XVECTOR<XDWORD> points;
+
+  for(XDWORD c=0; c<label.GetSize(); c++)
+    {
+      XDWORD point = (XDWORD)label[c];
+#if defined(WINDOWS)
+      if((point >= 0xD800) && (point <= 0xDBFF) && ((c + 1) < label.GetSize()))
+        {
+          XDWORD low = (XDWORD)label[++c];
+          if((low < 0xDC00) || (low > 0xDFFF)) return false;
+          point = 0x10000 + (((point - 0xD800) << 10) | (low - 0xDC00));
+        }
+#endif
+      if(!point || point > 0x10FFFF || (point >= 0xD800 && point <= 0xDFFF)) return false;
+      if(point >= 0x80 && !DIOURL_IDNACodePointAllowed(point, points.IsEmpty())) return false;
+      if(!points.Add(point)) return false;
+    }
+
+  XDWORD basic = 0;
+  for(XDWORD c=0; c<points.GetSize(); c++)
+    {
+      XDWORD point = points.Get(c);
+      if(point < 0x80)
+        {
+          XCHAR character = (XCHAR)point;
+          if(character >= __C('A') && character <= __C('Z')) character += (__C('a') - __C('A'));
+          if(!((character >= __C('a') && character <= __C('z')) ||
+               (character >= __C('0') && character <= __C('9')) || character == __C('-'))) return false;
+          output.Add(character);
+          basic++;
+        }
+    }
+
+  if(basic == points.GetSize())
+    {
+      if(output.IsEmpty() || output.GetSize() > 63 || output[0] == __C('-') || output.Character_GetLast() == __C('-')) return false;
+      return true;
+    }
+
+  XSTRING encoded;
+  encoded = __L("xn--");
+  encoded += output;
+  if(basic) encoded.Add(__C('-'));
+
+  XDWORD n = 128;
+  XDWORD delta = 0;
+  XDWORD bias = 72;
+  XDWORD handled = basic;
+
+  while(handled < points.GetSize())
+    {
+      XDWORD minimum = 0x10FFFF;
+      for(XDWORD c=0; c<points.GetSize(); c++) if(points.Get(c) >= n && points.Get(c) < minimum) minimum = points.Get(c);
+      if(minimum == 0x10FFFF || (minimum - n) > ((0xFFFFFFFF - delta) / (handled + 1))) return false;
+      delta += (minimum - n) * (handled + 1);
+      n = minimum;
+
+      for(XDWORD c=0; c<points.GetSize(); c++)
+        {
+          XDWORD point = points.Get(c);
+          if(point < n && ++delta == 0) return false;
+          if(point == n)
+            {
+              XDWORD q = delta;
+              for(XDWORD k=36;;k+=36)
+                {
+                  XDWORD threshold = (k <= bias)?1:((k >= bias + 26)?26:(k - bias));
+                  if(q < threshold) break;
+                  encoded.Add((XCHAR)DIOURL_PunycodeDigit(threshold + ((q - threshold) % (36 - threshold))));
+                  q = (q - threshold) / (36 - threshold);
+                }
+              encoded.Add((XCHAR)DIOURL_PunycodeDigit(q));
+              bias = DIOURL_PunycodeAdapt(delta, handled + 1, handled == basic);
+              delta = 0;
+              handled++;
+            }
+        }
+      delta++;
+      n++;
+    }
+
+  if(encoded.GetSize() > 63) return false;
+  output = encoded;
+  return true;
+}
+
+DIOURL_HOSTTYPE DIOURL::Host_GetType(XCHAR* host)
+{
+  if(DIOURL_IsIPv4(host)) return DIOURL_HOSTTYPE_IPV4;
+  if(DIOURL_IsIPv6(host)) return DIOURL_HOSTTYPE_IPV6;
+  return (host && host[0])?DIOURL_HOSTTYPE_DNS:DIOURL_HOSTTYPE_UNKNOWN;
+}
+
+bool DIOURL::Host_Canonicalize(XCHAR* host, XSTRING& canonicalhost, DIOURL_HOSTTYPE& type)
+{
+  canonicalhost.Empty();
+  type = Host_GetType(host);
+  if(type == DIOURL_HOSTTYPE_UNKNOWN) return false;
+
+  XSTRING source;
+  source = host;
+  if(type == DIOURL_HOSTTYPE_IPV6)
+    {
+      if(source[0] == __C('[')) source.DeleteCharacters(0, 1);
+      if(source.Character_GetLast() == __C(']')) source.DeleteLastCharacter();
+      source.ToLowerCase();
+      canonicalhost = source;
+      return true;
+    }
+  if(type == DIOURL_HOSTTYPE_IPV4)
+    {
+      canonicalhost = source;
+      return true;
+    }
+
+  for(XDWORD c=0; c<source.GetSize(); c++)
+    if(source[c] == (XCHAR)0x3002 || source[c] == (XCHAR)0xFF0E || source[c] == (XCHAR)0xFF61) source.Get()[c] = __C('.');
+
+  if(source.Character_GetLast() == __C('.')) source.DeleteLastCharacter();
+  if(source.IsEmpty()) return false;
+
+#if defined(WINDOWS)
+  bool nonascii = false;
+  for(XDWORD c=0; c<source.GetSize(); c++) if((XDWORD)source[c] >= 0x80) { nonascii = true; break; }
+  if(nonascii)
+    {
+      int required = IdnToAscii(IDN_USE_STD3_ASCII_RULES, source.Get(), (int)source.GetSize(), NULL, 0);
+      if(required <= 0 || required > 253) return false;
+      XBUFFER idnabuffer;
+      if(!idnabuffer.Resize((required + 1) * sizeof(XCHAR))) return false;
+      memset(idnabuffer.Get(), 0, idnabuffer.GetSize());
+      int converted = IdnToAscii(IDN_USE_STD3_ASCII_RULES, source.Get(), (int)source.GetSize(),
+                                 (XCHAR*)idnabuffer.Get(), required);
+      if(converted != required || !source.Set((XCHAR*)idnabuffer.Get(), (XDWORD)converted)) return false;
+    }
+#endif
+
+  XDWORD start = 0;
+  while(start < source.GetSize())
+    {
+      XDWORD end = start;
+      while(end < source.GetSize() && source[end] != __C('.')) end++;
+      if(end == start) return false;
+
+      XSTRING label;
+      XSTRING encoded;
+      source.Copy(start, end, label);
+      if(!DIOURL_PunycodeLabel(label, encoded)) return false;
+      if(!canonicalhost.IsEmpty()) canonicalhost.Add(__C('.'));
+      canonicalhost += encoded;
+      start = end + 1;
+    }
+
+  return canonicalhost.GetSize() <= 253;
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -975,5 +1283,3 @@ void DIOURL::Clean()
 {
 
 }
-
-

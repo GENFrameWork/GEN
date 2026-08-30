@@ -219,6 +219,7 @@ bool XMPINTEGER::Ini()
 bool XMPINTEGER::Grow(XDWORD nblimbs)
 {
   XLIMB* newlimbs;
+  XDWORD oldnlimbs = GetNLimbs();
 
   if(nblimbs >  XMPINTEGER_MAXLIMBS) return false;
 
@@ -231,8 +232,8 @@ bool XMPINTEGER::Grow(XDWORD nblimbs)
 
       if(limbs)
         {
-          memcpy(newlimbs, limbs, nlimbs * XMPINTEGER_CHARSINLIMB);
-          memset(limbs, 0, nlimbs * XMPINTEGER_CHARSINLIMB);
+          memcpy(newlimbs, limbs, oldnlimbs * XMPINTEGER_CHARSINLIMB);
+          memset(limbs, 0, oldnlimbs * XMPINTEGER_CHARSINLIMB);
           GEN_DELETE_ARRAY limbs;
         }
 
@@ -2481,7 +2482,8 @@ bool XMPINTEGER::End()
 {
   if(!limbs) return false;
 
-  memset(limbs, 0, nlimbs* XMPINTEGER_CHARSINLIMB);
+  volatile XBYTE* securelimbs = (volatile XBYTE*)limbs;
+  for(XDWORD c=0; c<(nlimbs*XMPINTEGER_CHARSINLIMB); c++) securelimbs[c] = 0;
   GEN_DELETE_ARRAY limbs;
 
   sign    = 1;

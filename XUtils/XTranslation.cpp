@@ -212,7 +212,7 @@ bool XTRANSLATION::SetActual(XDWORD code)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XTRANSLATION::Translate_Add(XDWORD ID, XCHAR* sentence, XDWORD fixed)
 {
-  if(!ID)       return false;
+  if(!ID || ID >= XTRANSLATION_MAXSENTENCES) return false;
   if(!sentence) return false;
 
   XDWORD sizesentence = XSTRING::GetSize(sentence);
@@ -227,10 +227,12 @@ bool XTRANSLATION::Translate_Add(XDWORD ID, XCHAR* sentence, XDWORD fixed)
       memset(newsentence, 0        , (sizesentence+1) * sizeof(XCHAR));
       memcpy(newsentence, sentence ,  sizesentence    * sizeof(XCHAR));
 
+      if(sentences[ID]) GEN_DELETE_ARRAY sentences[ID];
       sentences[ID] = newsentence;
+      return true;
     }
 
-  return true;
+  return false;
 }
 
 
@@ -549,7 +551,6 @@ void XTRANSLATION::Clean()
       sentences[c] = NULL;
     }
 }
-
 
 
 

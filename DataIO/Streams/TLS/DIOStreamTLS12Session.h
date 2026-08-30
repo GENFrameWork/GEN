@@ -88,7 +88,7 @@ class DIOSTREAMTLS12SESSION
     
     
     
-    bool                                    Keys_Activate                                     (XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom);
+    bool                                    Keys_Activate                                     (XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom, XBUFFER* sessionhash = NULL);
 
     XBUFFER*                                GetRecordInput                                    ();
     bool                                    RecordInput_Add                                  (XBYTE* data, XDWORD size);
@@ -135,10 +135,10 @@ class DIOSTREAMTLS12SESSION
     DIOSTREAMTLS12RECORD                    record;
     CIPHERECDSAX25519                       keyexchange;
     CIPHERECDSA                             keyexchangep256;
-    XBUFFER                                 keyexchangep256private;
+    XSECUREBUFFER                           keyexchangep256private;
     XBUFFER                                 keyexchangep256public;
     CIPHERECDSA                             keyexchangep384;
-    XBUFFER                                 keyexchangep384private;
+    XSECUREBUFFER                           keyexchangep384private;
     XBUFFER                                 keyexchangep384public;
 
     XBUFFER                                 recordinput;

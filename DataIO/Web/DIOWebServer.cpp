@@ -1395,6 +1395,11 @@ bool DIOWEBSERVER_CONNECTION::Ini(DIOWEBSERVER* webserver, DIOSTREAMTCPIPCONFIG*
   this->webserver     = webserver;
   this->diostreamcfg  = diostreamcfg;
   this->isopening     = false;
+  if(webserver)
+    {
+      operativetimeouts = (*webserver->GetTimeouts());
+      operativelimits   = (*webserver->GetLimits());
+    }
 
   SetMode(DIOWEBSERVER_CONNECTION_MODE_UNKNOWN);
 
@@ -2023,6 +2028,96 @@ bool DIOWEBSERVER_CONNECTION::End()
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
+static bool DIOWEBSERVER_HeaderNameIs(XSTRING& line, XDWORD colon, const XCHAR* name)
+{
+  if(!name || colon != XSTRING::GetSize(name)) return false;
+  for(XDWORD c=0; c<colon; c++)
+    {
+      XCHAR left = line[c];
+      XCHAR right = name[c];
+      if(left >= __C('A') && left <= __C('Z')) left += __C('a') - __C('A');
+      if(right >= __C('A') && right <= __C('Z')) right += __C('a') - __C('A');
+      if(left != right) return false;
+    }
+  return true;
+}
+
+
+static bool DIOWEBSERVER_HeaderNameCharacterIsValid(XCHAR character)
+{
+  if((character >= __C('a') && character <= __C('z')) ||
+     (character >= __C('A') && character <= __C('Z')) ||
+     (character >= __C('0') && character <= __C('9'))) return true;
+
+  switch(character)
+    {
+      case __C('!'): case __C('#'): case __C('$'): case __C('%'): case __C('&'): case __C('\''):
+      case __C('*'): case __C('+'): case __C('-'): case __C('.'): case __C('^'): case __C('_'):
+      case __C('`'): case __C('|'): case __C('~'): return true;
+      default: return false;
+    }
+}
+
+
+static bool DIOWEBSERVER_RequestFraming_Get(DIOWEBHEADER& header, XDWORD maximumbodysize, XDWORD& contentlength)
+{
+  XVECTOR<XSTRING*>* lines = header.GetLines();
+  if(!lines || lines->IsEmpty()) return false;
+
+  contentlength = 0;
+  bool havecontentlength = false;
+  bool havehost = false;
+
+  for(XDWORD c=1; c<lines->GetSize(); c++)
+    {
+      XSTRING* line = lines->Get(c);
+      if(!line || line->IsEmpty() || (*line)[0] == __C(' ') || (*line)[0] == __C('\t')) return false;
+
+      XDWORD colon = 0;
+      while(colon < line->GetSize() && (*line)[colon] != __C(':'))
+        {
+          if(!DIOWEBSERVER_HeaderNameCharacterIsValid((*line)[colon])) return false;
+          colon++;
+        }
+      if(!colon || colon >= line->GetSize()) return false;
+
+      if(DIOWEBSERVER_HeaderNameIs((*line), colon, __L("Transfer-Encoding"))) return false;
+
+      if(DIOWEBSERVER_HeaderNameIs((*line), colon, __L("Host")))
+        {
+          if(havehost) return false;
+          havehost = true;
+        }
+
+      if(DIOWEBSERVER_HeaderNameIs((*line), colon, __L("Content-Length")))
+        {
+          if(havecontentlength) return false;
+          havecontentlength = true;
+
+          XDWORD start = colon + 1;
+          XDWORD end = line->GetSize();
+          while(start < end && ((*line)[start] == __C(' ') || (*line)[start] == __C('\t'))) start++;
+          while(end > start && ((*line)[end-1] == __C(' ') || (*line)[end-1] == __C('\t'))) end--;
+          if(start == end) return false;
+
+          XQWORD value = 0;
+          for(XDWORD d=start; d<end; d++)
+            {
+              if((*line)[d] < __C('0') || (*line)[d] > __C('9')) return false;
+              XDWORD digit = (XDWORD)((*line)[d] - __C('0'));
+              if((value > ((XQWORD)maximumbodysize / 10)) ||
+                 ((value == ((XQWORD)maximumbodysize / 10)) && (digit > (maximumbodysize % 10)))) return false;
+              value = (value * 10) + digit;
+            }
+          if(value > maximumbodysize || value > 0x7FFFFFFF) return false;
+          contentlength = (XDWORD)value;
+        }
+    }
+
+  return true;
+}
+
+
 bool DIOWEBSERVER_CONNECTION::ReadRequest()
 {
   if(!diostream) return false;
@@ -2031,9 +2126,15 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
 
   if(diostream->GetInXBuffer()->GetSize() < 5)  return false;
 
-  bool headerstatus = header.Read(diostream, DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT);
+  int headerstimeout = operativetimeouts.httpheaders;
+  XDWORD maximumheadersize = operativelimits.maximumheadersize;
+  bool headerstatus = header.Read(diostream, headerstimeout, maximumheadersize);
 
   if(!headerstatus)  return false;
+
+  XDWORD contentlength = 0;
+  XDWORD maximumbodysize = operativelimits.maximumbodysize;
+  if(!DIOWEBSERVER_RequestFraming_Get(header, maximumbodysize, contentlength)) return false;
 
   XSTRING string;
 
@@ -2069,8 +2170,7 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
   string = header.GetFieldValue(__L("User-Agent:"));
   request.GetUserAgent()->Set(string);
 
-  string = header.GetFieldValue(__L("Content-Length:"));
-  if(!string.IsEmpty()) request.SetSize(string.ConvertToInt());
+  request.SetSize(contentlength);
 
   string = header.GetFieldValue(__L("If-None-Match:"));
   request.SetIfNoneMatch(string);
@@ -2126,19 +2226,38 @@ bool DIOWEBSERVER_CONNECTION::ReadRequest()
       XBYTE* buffer = GEN_NEW XBYTE[DIOWEBSERVER_MAXBUFFER];
       if(!buffer) return false;
 
+      XTIMER* bodytimer = GEN_XFACTORY.CreateTimer();
+      if(!bodytimer)
+        {
+          GEN_DELETE_ARRAY buffer;
+          return false;
+        }
+
+      bool bodystatus = true;
+      int bodytimeout = operativetimeouts.httpbody;
+
       do{ memset(buffer,0,DIOWEBSERVER_MAXBUFFER);
           size = (request.GetSize() - data->GetSize());
           if(size>DIOWEBSERVER_MAXBUFFER) size = DIOWEBSERVER_MAXBUFFER;
 
           if(size)
             {
-              Receiver((XBYTE*)buffer, size, DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT);
+              XDWORD elapsed = bodytimer->GetMeasureSeconds();
+              int remaining = (elapsed < (XDWORD)bodytimeout)?(bodytimeout - (int)elapsed):0;
+              if(!remaining || !Receiver((XBYTE*)buffer, size, remaining))
+                {
+                  bodystatus = false;
+                  size = 0;
+                }
               if(size) data->Add((XBYTE*)buffer,size);
             }
 
         } while(size);
 
+      GEN_XFACTORY.DeleteTimer(bodytimer);
       GEN_DELETE_ARRAY buffer;
+
+      if(!bodystatus || (data->GetSize() != (XDWORD)request.GetSize())) return false;
     }
 
   //----------------------------------------------------------------------------------
@@ -2670,13 +2789,13 @@ void DIOWEBSERVER_CONNECTION::ThreadRunFunction(void* param)
   switch(wsconn->GetMode())
     {
       case DIOWEBSERVER_CONNECTION_MODE_UNKNOWN       :
-      case DIOWEBSERVER_CONNECTION_MODE_NORMAL        : if((wsconn->xtimerconnection->GetMeasureSeconds() >= DIOWEBSERVER_KEEPALIVE) || (sendrequest)) 
+      case DIOWEBSERVER_CONNECTION_MODE_NORMAL        : if((wsconn->xtimerconnection->GetMeasureSeconds() >= (XDWORD)wsconn->operativetimeouts.keepalive) || (sendrequest))
                                                           {
                                                             if(wsconn->GetTimerDisconnection()->GetMeasureSeconds() > 5) wsconn->Deactivate();
                                                           }
                                                         break;
 
-      case DIOWEBSERVER_CONNECTION_MODE_KEEPALIVE     : if((wsconn->xtimerconnection->GetMeasureSeconds() >= DIOWEBSERVER_KEEPALIVE) ||
+      case DIOWEBSERVER_CONNECTION_MODE_KEEPALIVE     : if((wsconn->xtimerconnection->GetMeasureSeconds() >= (XDWORD)wsconn->operativetimeouts.keepalive) ||
                                                           (wsconn->nresourcesprocessed                    >= DIOWEBSERVER_KEEPALIVE_MAXRESOURCES))     wsconn->Deactivate();
                                                         break;
 
@@ -2865,6 +2984,14 @@ bool DIOWEBSERVER::Ini_Internal(DIOSTREAMTCPIPCONFIG* newcfg, int port, bool doi
 
   diostreamcfg = newcfg;
 
+  if(diostreamcfg && diostreamcfg->IsTLS())
+    {
+      DIOSTREAMTLSCONFIG* tlscfg = dynamic_cast<DIOSTREAMTLSCONFIG*>(diostreamcfg);
+      if(!tlscfg || !tlscfg->SetConnectionTimeout(timeouts.connectaccept) ||
+                    !tlscfg->SetHandshakeTimeout(timeouts.tlshandshake) ||
+                    !tlscfg->Freeze()) return false;
+    }
+
   this->port                      = port;
   this->timeoutserverpage         = timeoutserverpage;
   if(addrlocal) this->addrlocal   = (*addrlocal);
@@ -2968,6 +3095,48 @@ int DIOWEBSERVER::GetPort()
 int DIOWEBSERVER::GetTimeoutServerPage()
 {
   return timeoutserverpage;
+}
+
+DIOWEBSERVER_TIMEOUTS* DIOWEBSERVER::GetTimeouts()
+{
+  return &timeouts;
+}
+
+bool DIOWEBSERVER::SetTimeouts(DIOWEBSERVER_TIMEOUTS& timeouts)
+{
+  if(isactive) return false;
+  if(timeouts.connectaccept <= 0 || timeouts.tlshandshake <= 0 || timeouts.httpheaders <= 0 ||
+     timeouts.httpbody <= 0 || timeouts.keepalive <= 0) return false;
+
+  this->timeouts = timeouts;
+
+  if(diostreamcfg && diostreamcfg->IsTLS())
+    {
+      DIOSTREAMTLSCONFIG* tlscfg = dynamic_cast<DIOSTREAMTLSCONFIG*>(diostreamcfg);
+      if(tlscfg)
+        {
+          tlscfg->SetConnectionTimeout(timeouts.connectaccept);
+          tlscfg->SetHandshakeTimeout(timeouts.tlshandshake);
+        }
+    }
+
+  return true;
+}
+
+
+DIOWEBSERVER_LIMITS* DIOWEBSERVER::GetLimits()
+{
+  return &limits;
+}
+
+
+bool DIOWEBSERVER::SetLimits(DIOWEBSERVER_LIMITS& limits)
+{
+  if(isactive || !limits.maximumheadersize || !limits.maximumbodysize ||
+     limits.maximumheadersize > DIOSTREAM_MAXBUFFER || limits.maximumbodysize > 0x7FFFFFFF) return false;
+
+  this->limits = limits;
+  return true;
 }
 
 
@@ -3615,7 +3784,7 @@ bool DIOWEBSERVER::Websocket_Write(XCHAR* string, int timeout, XCHAR* protocol, 
           if(filter_mask != filter_status) continue;
         }
 
-      if(connection->WebSocket_Write(string, timeout)) status = false;
+      if(!connection->WebSocket_Write(string, timeout)) status = false;
     }
 
   if(xmutexconnections) xmutexconnections->UnLock();
@@ -3697,7 +3866,7 @@ bool DIOWEBSERVER::Websocket_Write(XBUFFER& data, int timeout, XCHAR* protocol, 
           if(filter_mask != filter_status) continue;
         }
 
-      if(connection->WebSocket_Write(data, timeout)) status = false;
+      if(!connection->WebSocket_Write(data, timeout)) status = false;
     }
 
   if(xmutexconnections) xmutexconnections->UnLock();
@@ -4310,7 +4479,3 @@ void DIOWEBSERVER::Clean()
   websocket_search_version          = 0;
   websocket_search_resource.Empty();
 }
-
-
-
-

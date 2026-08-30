@@ -56,6 +56,7 @@ class XRAND
 
 
     virtual bool          Ini                 ();
+    virtual bool          IsCryptographicallySecure ();
     virtual int           MaxElements         (int max);
     virtual int           Max                 (int max);
     virtual int           Between             (int min, int max);

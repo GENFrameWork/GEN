@@ -46,6 +46,7 @@
 #define DIOSTREAMTLS12KEYSCHEDULE_RECORDIVSIZE                8                 // Explicit nonce sent with every record
 
 #define DIOSTREAMTLS12KEYSCHEDULE_LABEL_MASTERSECRET          "master secret"
+#define DIOSTREAMTLS12KEYSCHEDULE_LABEL_EXTENDEDMASTERSECRET  "extended master secret"
 #define DIOSTREAMTLS12KEYSCHEDULE_LABEL_KEYEXPANSION          "key expansion"
 #define DIOSTREAMTLS12KEYSCHEDULE_LABEL_CLIENTFINISHED        "client finished"
 #define DIOSTREAMTLS12KEYSCHEDULE_LABEL_SERVERFINISHED        "server finished"
@@ -82,6 +83,7 @@ class DIOSTREAMTLS12KEYSCHEDULE
     bool                                    PRF                                               (XBUFFER& secret, const char* label, XBUFFER& seed, XDWORD outputsize, XBUFFER& output);
 
     bool                                    MasterSecret_Create                               (XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom);
+    bool                                    MasterSecretExtended_Create                       (XBUFFER& premastersecret, XBUFFER& sessionhash);
     XBUFFER*                                GetMasterSecret                                   ();
 
     
@@ -109,8 +111,8 @@ class DIOSTREAMTLS12KEYSCHEDULE
     XDWORD                                  hashsize;
     XDWORD                                  keysize;
 
-    XBUFFER                                 mastersecret;
-    XBUFFER                                 key[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+    XSECUREBUFFER                           mastersecret;
+    XSECUREBUFFER                           key[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     XBUFFER                                 fixedIV[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
 };
 

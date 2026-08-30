@@ -50,6 +50,7 @@ class XLINUXRAND : public XRAND
     virtual              ~XLINUXRAND          ();
 
     virtual bool          Ini                 ();
+    virtual bool          IsCryptographicallySecure ();
     virtual bool          Generate            (XBYTE* buffer, XDWORD size);
 };
 

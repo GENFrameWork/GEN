@@ -30,7 +30,8 @@
 
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
-#include <XList.h>
+#include "XList.h"
+#include "XString.h"
 
 
 
@@ -71,7 +72,7 @@ class XDICTIONARY
 
     T&                                operator []                 (int n)
                                       {
-                                        return entries[n];
+                                        return entries.Get(n)->value;
                                       }
 
     T&                                operator []                 (XCHAR* key)
@@ -83,7 +84,7 @@ class XDICTIONARY
 
                                          entries.Add(GEN_NEW XDICTIONARYENTRY<T>);
 
-                                         ntries.GetLast()->key    = key;
+                                         entries.GetLast()->key    = key;
                                          entries.GetLast()->value = T();
 
                                          return entries.GetLast()->value;
@@ -102,8 +103,6 @@ class XDICTIONARY
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

@@ -49,7 +49,9 @@ class XESP32RAND : public XRAND
 													XESP32RAND        ();
     virtual 				     ~XESP32RAND        ();
 
-    bool                  Ini               ();
+    virtual bool          Ini               ();
+    virtual bool          IsCryptographicallySecure ();
+    virtual bool          Generate          (XBYTE* buffer, XDWORD size);
     int                   MaxElements       (int max);
     int                   Max               (int max);
     int                   Between           (int min, int max);

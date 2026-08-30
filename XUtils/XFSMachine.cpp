@@ -212,13 +212,8 @@ bool XFSMACHINESTATE::DeleteTransition(int outputID)
 
   if(c>=maxtransitions) return false;
 
-  inputs[c]       = 0;
-  outputstates[c] = 0;
-
   for(;c<(maxtransitions-1);c++)
     {
-      if(!outputstates[c]) break;
-
       inputs[c]       = inputs[c+1];
       outputstates[c] = outputstates[c+1];
     }
@@ -628,7 +623,6 @@ void XFSMACHINE::Clean()
   fsmevent     = 0;
   currentstate = 0;
 }
-
 
 
 

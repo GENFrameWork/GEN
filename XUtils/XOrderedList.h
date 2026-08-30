@@ -73,11 +73,8 @@ class XORDEREDLIST : public XLIST<T>
                             {
                               int result = comparator.Compare(element, current->data);
 
-                              switch(result)
-                                {
-                                  case  0: return false;
-                                  case  1: return this->Insert(current,element);
-                                }
+                              if(!result) return false;
+                              if(result < 0) return this->Insert(current,element);
 
                               current = current->next;
                             }
@@ -101,7 +98,6 @@ class XORDEREDLIST : public XLIST<T>
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

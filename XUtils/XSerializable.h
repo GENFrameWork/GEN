@@ -82,22 +82,17 @@ class XSERIALIZABLE
     template<class T>
     bool                           Class_Add            (T* var, XCHAR* name)
                                    {                                        
-                                     if(!dynamic_cast<XSERIALIZABLE*>(var))
-                                       {
-                                         return false;
-                                       }
-
-                                     if(!var)
+                                     if(!var || !dynamic_cast<XSERIALIZABLE*>(var))
                                        {
                                          return false;
                                        }
                                 
-                                     serializationmethod->AddStruct(name, true);
+                                     if(!serializationmethod || !serializationmethod->AddStruct(name, true)) return false;
 
                                      var->SetSerializationMethod(serializationmethod);
                                      bool status = var->Serialize();            
                                      
-                                     serializationmethod->AddStruct(name, false);
+                                     if(!serializationmethod->AddStruct(name, false)) status = false;
 
                                      return status;
                                    }
@@ -115,8 +110,10 @@ class XSERIALIZABLE
                                          return false;
                                        }
                                                                  
+                                     if(!serializationmethod || !serializationmethod->ExtractStruct(name)) return false;
                                      var->SetSerializationMethod(serializationmethod);
-                                     bool status = var->Deserialize(); 
+                                     bool status = var->Deserialize();
+                                     if(!serializationmethod->ExtractStruct(NULL)) status = false;
                                                              
                                      return status;
                                    }                              
@@ -124,35 +121,33 @@ class XSERIALIZABLE
     template<class T>
     bool                           XVector_Add          (XVECTOR<T*>* var, XCHAR* name)
                                    { 
-                                     if(!dynamic_cast<XSERIALIZABLE*>(var->Get(0)))  
+                                     if(!var || (var->GetSize() && !dynamic_cast<XSERIALIZABLE*>(var->Get(0))))  
                                        {
                                          return false;
                                        }
                                        
-                                     serializationmethod->AddArray(var->GetSize(), name, true);                                                                               
+                                     if(!serializationmethod || !serializationmethod->AddArray(var->GetSize(), name, true)) return false;
                                      
                                      for(XDWORD c=0; c<var->GetSize(); c++)
                                        {
                                          T* element = var->Get(c);
-                                         if(element)
-                                           {
-                                             element->SetSerializationMethod(serializationmethod);
-                                             element->Serialize();               
-                                           }                                       
+                                         if(!element || !serializationmethod->AddStruct(NULL, true)) return false;
+                                         element->SetSerializationMethod(serializationmethod);
+                                         bool status = element->Serialize();
+                                         if(!serializationmethod->AddStruct(NULL, false) || !status) return false;
                                        }
 
-                                      serializationmethod->AddArray(var->GetSize(), name, false); 
-
-                                     return true;                               
+                                     return serializationmethod->AddArray(var->GetSize(), name, false);
                                    }
 
     template<class T>
     bool                           XVector_Extract      (XVECTOR<T*>* var, XCHAR* name)
                                    {
-                                     if(!dynamic_cast<XSERIALIZABLE*>(var->Get(0)))  
+                                     if(!var || (var->GetSize() && !dynamic_cast<XSERIALIZABLE*>(var->Get(0))))  
                                        {
                                          return false;
-                                       }                                   
+                                       }
+                                     if(!serializationmethod || !serializationmethod->ExtractArray(var->GetSize(), name)) return false;
                                      
                                      for(XDWORD c=0; c<var->GetSize(); c++)
                                        {
@@ -163,12 +158,11 @@ class XSERIALIZABLE
 
 
 
-                                             if(serializationmethod->ExtractArrayElement(c, name, true))
-                                               {
-                                                 element->Deserialize();
-                                                 serializationmethod->ExtractArrayElement(c, name, false);
-                                               }
+                                             if(!serializationmethod->ExtractArrayElement(c, name, true)) return false;
+                                             bool status = element->Deserialize();
+                                             if(!serializationmethod->ExtractArrayElement(c, name, false) || !status) return false;
                                            }
+                                          else return false;
                                        }
 
                                      return true;
@@ -177,35 +171,30 @@ class XSERIALIZABLE
     template<class T>
     bool                           XVectorClass_Add          (XVECTOR<T*>* var, XCHAR* name, XCHAR* nameclass)
                                    { 
-                                     if(!dynamic_cast<XSERIALIZABLE*>(var->Get(0)))  
+                                     if(!var || (var->GetSize() && !dynamic_cast<XSERIALIZABLE*>(var->Get(0))))  
                                        {
                                          return false;
                                        }
                                        
-                                     serializationmethod->AddArray(var->GetSize(), name, true);                                                                               
+                                     if(!serializationmethod || !serializationmethod->AddArray(var->GetSize(), name, true)) return false;
                                      
                                      for(XDWORD c=0; c<var->GetSize(); c++)
                                        {
                                          T* element = var->Get(c);
-                                         if(element)
-                                           {
-                                            element->SetSerializationMethod(serializationmethod);
-                                            Class_Add<T>(element, nameclass);
-                                           }                                       
+                                         if(!element || !Class_Add<T>(element, nameclass)) return false;
                                        }
 
-                                      serializationmethod->AddArray(var->GetSize(), name, false); 
-
-                                     return true;                               
+                                     return serializationmethod->AddArray(var->GetSize(), name, false);
                                    }
 
     template<class T>
     bool                           XVectorClass_Extract      (XVECTOR<T*>* var, XCHAR* name, XCHAR* nameclass)
                                    {
-                                     if(!dynamic_cast<XSERIALIZABLE*>(var->Get(0)))  
+                                     if(!var || (var->GetSize() && !dynamic_cast<XSERIALIZABLE*>(var->Get(0))))  
                                        {
                                          return false;
-                                       }                                   
+                                       }
+                                     if(!serializationmethod || !serializationmethod->ExtractArray(var->GetSize(), name)) return false;
                                      
                                      for(XDWORD c=0; c<var->GetSize(); c++)
                                        {
@@ -216,12 +205,11 @@ class XSERIALIZABLE
 
 
 
-                                             if(serializationmethod->ExtractArrayElement(c, name, true))
-                                               {
-                                                 Class_Extract<T>(element, nameclass);
-                                                 serializationmethod->ExtractArrayElement(c, name, false);
-                                               }
+                                             if(!serializationmethod->ExtractArrayElement(c, name, true)) return false;
+                                             bool status = element->Deserialize();
+                                             if(!serializationmethod->ExtractArrayElement(c, name, false) || !status) return false;
                                            }
+                                          else return false;
                                        }
 
                                      return true;
@@ -256,8 +244,6 @@ class XSERIALIZABLE
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

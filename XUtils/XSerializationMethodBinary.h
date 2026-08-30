@@ -56,6 +56,7 @@ enum XSERIALIZATIONMETHODBINARY_TYPEELEMENT
   XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XQWORD       ,
   XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XSTRING      ,
   XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBUFFER       ,
+  XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XVARIANT      ,
 };
 
 #define XSERIALIZATIONMETHOD_STRUCT_ID  0x81
@@ -95,25 +96,26 @@ class XSERIALIZATIONMETHODBINARY : public XSERIALIZATIONMETHOD
     virtual bool             AddStruct                      (XCHAR* name = NULL, bool open = false);
     virtual bool             AddArray                       (XDWORD nelements, XCHAR* name = NULL, bool open = false);
 
-    virtual bool             Extract                        (bool var, XCHAR* name = NULL); 
-    virtual bool             Extract                        (char var, XCHAR* name = NULL);  
-    virtual bool             Extract                        (int var, XCHAR* name = NULL);  
-    virtual bool             Extract                        (float var, XCHAR* name = NULL);  
-    virtual bool             Extract                        (double var, XCHAR* name = NULL); 
-    virtual bool             Extract                        (long var, XCHAR* name = NULL); 
-    virtual bool             Extract                        (long long var, XCHAR* name = NULL); 
+    virtual bool             Extract                        (bool& var, XCHAR* name = NULL); 
+    virtual bool             Extract                        (char& var, XCHAR* name = NULL);  
+    virtual bool             Extract                        (int& var, XCHAR* name = NULL);  
+    virtual bool             Extract                        (float& var, XCHAR* name = NULL);  
+    virtual bool             Extract                        (double& var, XCHAR* name = NULL); 
+    virtual bool             Extract                        (long& var, XCHAR* name = NULL); 
+    virtual bool             Extract                        (long long& var, XCHAR* name = NULL); 
 
-    virtual bool             Extract                        (XBYTE var, XCHAR* name = NULL);  
-    virtual bool             Extract                        (XWORD var, XCHAR* name = NULL);  
-    virtual bool             Extract                        (XDWORD var, XCHAR* name = NULL); 
-    virtual bool             Extract                        (XQWORD var, XCHAR* name = NULL); 
+    virtual bool             Extract                        (XBYTE& var, XCHAR* name = NULL);  
+    virtual bool             Extract                        (XWORD& var, XCHAR* name = NULL);  
+    virtual bool             Extract                        (XDWORD& var, XCHAR* name = NULL); 
+    virtual bool             Extract                        (XQWORD& var, XCHAR* name = NULL); 
     
-    virtual bool             Extract                        (XSTRING* var, XCHAR* name = NULL);       
-    virtual bool             Extract                        (XBUFFER* var, XCHAR* name = NULL);
-    virtual bool             Extract                        (XVARIANT* var, XCHAR* name = NULL);
+    virtual bool             Extract                        (XSTRING& var, XCHAR* name = NULL);       
+    virtual bool             Extract                        (XBUFFER& var, XCHAR* name = NULL);
+    virtual bool             Extract                        (XVARIANT& var, XCHAR* name = NULL);
 
     virtual bool             ExtractStruct                  (XCHAR* name = NULL);
     virtual bool             ExtractArray                   (XDWORD nelements, XCHAR* name = NULL);
+    virtual bool             ExtractArrayElement            (XDWORD index, XCHAR* name = NULL, bool open = true);
 
     XBUFFER*                 GetBufferData                  (); 
     void                     SetBufferData                  (XBUFFER* bufferdata); 
@@ -123,13 +125,13 @@ class XSERIALIZATIONMETHODBINARY : public XSERIALIZATIONMETHOD
     void                     Clean                          ();   
 
     XBUFFER*                 bufferdata; 
+    XDWORD                   readposition;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

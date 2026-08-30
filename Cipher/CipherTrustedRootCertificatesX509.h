@@ -40,6 +40,10 @@
 
 typedef XCHAR* _CIPHERTRUSTEDROOTCERTIFICATESX509[];
 
+#define CIPHERTRUSTPROVIDERX509_DEFAULT_MAXROOTS              2048
+#define CIPHERTRUSTPROVIDERX509_DEFAULT_MAXCERTIFICATESIZE    (1024*1024)
+#define CIPHERTRUSTPROVIDERX509_DEFAULT_MAXTOTALSIZE          (32*1024*1024)
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -57,13 +61,18 @@ class CIPHERTRUSTPROVIDERX509
     XVECTOR<XBUFFER*>*    GetRoots                           ();
     bool                  Roots_Delete                       ();
 
-  protected:
-
     bool                  Root_Add                           (XBUFFER& root);
+    bool                  Root_Remove                        (XBUFFER& root);
+    bool                  SetLimits                          (XDWORD maximumroots, XDWORD maximumcertificatesize, XDWORD maximumtotalsize);
+    XDWORD                GetTotalSize                       ();
 
   private:
 
     XVECTOR<XBUFFER*>     roots;
+    XDWORD                maximumroots;
+    XDWORD                maximumcertificatesize;
+    XDWORD                maximumtotalsize;
+    XDWORD                totalsize;
 };
 
 
@@ -73,6 +82,24 @@ class CIPHERTRUSTPROVIDERX509GEN : public CIPHERTRUSTPROVIDERX509
                           CIPHERTRUSTPROVIDERX509GEN         ();
     virtual              ~CIPHERTRUSTPROVIDERX509GEN         ();
 
+    bool                  Load                               ();
+};
+
+class CIPHERTRUSTPROVIDERX509WINDOWS : public CIPHERTRUSTPROVIDERX509
+{
+  public:
+    bool                  Load                               ();
+};
+
+class CIPHERTRUSTPROVIDERX509LINUX : public CIPHERTRUSTPROVIDERX509
+{
+  public:
+    bool                  Load                               ();
+};
+
+class CIPHERTRUSTPROVIDERX509ANDROID : public CIPHERTRUSTPROVIDERX509
+{
+  public:
     bool                  Load                               ();
 };
 
@@ -103,7 +130,3 @@ class CIPHERTRUSTEDROOTCERTIFICATESX509
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
-

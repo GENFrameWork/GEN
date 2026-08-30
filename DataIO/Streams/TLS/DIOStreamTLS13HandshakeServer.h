@@ -83,6 +83,7 @@ class DIOSTREAMTLS13HANDSHAKESERVER
 
     bool                                    IsApplicationProtocolNegotiated                  ();
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
+    XBUFFER*                                GetApplicationProtocolRaw                        ();
     DIOSTREAMTLS_ALERT_DESCRIPTION          GetErrorAlertDescription                         ();
     bool                                    ShouldSendErrorAlert                             ();
 
@@ -100,13 +101,13 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     bool                                    Finished_Process                                 (XBUFFER& message);
     bool                                    HelloRetryRequest_Create                         (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XWORD ciphersuite, XWORD group, XBUFFER& records);
     bool                                    ClientHelloRetry_Validate                        (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello);
-    bool                                    ResumptionPSK_Select                             (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XCHAR* servername, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XWORD& ciphersuite, XBUFFER& PSK);
+    bool                                    ResumptionPSK_Select                             (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XCHAR* servername, XBUFFER* applicationprotocol, XWORD& ciphersuite, XBUFFER& PSK);
     bool                                    NewSessionTicket_Create                          ();
 
     bool                                    CipherSuite_Select                               (XVECTOR<XWORD>& offered, XWORD& selected);
     bool                                    Group_Select                                     (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup, XBUFFER& peerpublickey, bool& helloretryrequestrequired);
     bool                                    SignatureScheme_Select                           (XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected);
-    void                                    ApplicationProtocol_Select                       (XVECTOR<DIOSTREAMTLS_ALPN_TYPE>& offered);
+    void                                    ApplicationProtocol_Select                       (DIOSTREAMTLS_MSG_EXTENSION_ALPN* offered);
 
     bool                                    SetError                                         (DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR, bool sendalert = true);
     void                                    Clean                                            ();
@@ -118,6 +119,7 @@ class DIOSTREAMTLS13HANDSHAKESERVER
 
     bool                                    applicationprotocolnegotiated;
     DIOSTREAMTLS_ALPN_TYPE                  applicationprotocol;
+    XBUFFER                                 applicationprotocolraw;
     DIOSTREAMTLS_ALERT_DESCRIPTION          erroralertdescription;
     bool                                    senderroralert;
 

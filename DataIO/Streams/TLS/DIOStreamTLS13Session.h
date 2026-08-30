@@ -34,7 +34,6 @@
 
 #include "CipherECDSA.h"
 #include "CipherECDSAX25519.h"
-#include "CipherX25519MLKEM768.h"
 
 #include "DIOStreamTLS13KeySchedule.h"
 #include "DIOStreamTLSRecord.h"
@@ -88,7 +87,6 @@ class DIOSTREAMTLS13SESSION
     CIPHERECDSAX25519*                      GetKeyExchange                                    ();
     bool                                    KeyExchange_Generate                              (XWORD group, XBUFFER& publickey);
     bool                                    KeyExchange_SharedSecret                          (XWORD group, XBUFFER& publickey, XBUFFER& sharedsecret);
-    bool                                    KeyExchange_ServerGenerate                         (XWORD group, XBUFFER& peerpublickey, XBUFFER& publickey, XBUFFER& sharedsecret);
     void                                    KeyExchange_Delete                                ();
     bool                                    CipherSuite_Select                                (XWORD ciphersuite);
 
@@ -147,12 +145,11 @@ class DIOSTREAMTLS13SESSION
     DIOSTREAMTLS13KEYSCHEDULE                 keyschedule;
     DIOSTREAMTLSRECORD                      record;
     CIPHERECDSAX25519                       keyexchange;
-    CIPHERX25519MLKEM768                    keyexchangex25519mlkem768;
     CIPHERECDSA                             keyexchangep256;
-    XBUFFER                                 keyexchangep256private;
+    XSECUREBUFFER                           keyexchangep256private;
     XBUFFER                                 keyexchangep256public;
     CIPHERECDSA                             keyexchangep384;
-    XBUFFER                                 keyexchangep384private;
+    XSECUREBUFFER                           keyexchangep384private;
     XBUFFER                                 keyexchangep384public;
 
     XBUFFER                                 recordinput;
@@ -179,4 +176,3 @@ class DIOSTREAMTLS13SESSION
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-

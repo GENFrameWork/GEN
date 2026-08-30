@@ -378,7 +378,7 @@ bool XMEMORY_CONTROL::DisplayAll(bool displaydata)
 
   #endif
 
-  return true;
+  return !nassigned;
 }
 
 
@@ -833,6 +833,4 @@ void* ReAlloc(void* assign, size_t size)
 
 
 #endif
-
-
 

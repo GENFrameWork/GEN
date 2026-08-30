@@ -62,8 +62,7 @@ enum CIPHERCERTIFICATEX509_ALGORITHM_TYPE
   CIPHERCERTIFICATEX509_ALGORITHM_TYPE_DSAWITHSHA1	                          ,
   CIPHERCERTIFICATEX509_ALGORITHM_TYPE_DSAWITHSHA256	                        ,  
 
-  CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS	                                ,
-  CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519
+  CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS	                                
 };
 
 
@@ -182,14 +181,22 @@ class CIPHERCERTIFICATEX509
     bool                                    IsExtendedKeyUsageClientAuthentication  ();
     bool                                    HasUnknownCriticalExtension             ();
 
+    bool                                    HasNameConstraints                      ();
+    bool                                    AreNamesPermitted                       (CIPHERCERTIFICATEX509* certificate);
+
     XVECTOR<XSTRING*>*                      GetSubjectAlternativeNamesDNS           ();
     XVECTOR<XBUFFER*>*                      GetSubjectAlternativeNamesIP            ();
 
     bool                                    HasCAIssuersURL                         ();
     XSTRING*                                GetCAIssuersURL                         ();
+    bool                                    HasOCSPURL                              ();
+    XSTRING*                                GetOCSPURL                              ();
 
     bool                                    IsServerNameValid                       (XCHAR* servername);
     bool                                    VerifySignature                         (CIPHERKEY* issuerpublickey);
+    static bool                             VerifyDataSignature                     (CIPHERKEY* issuerpublickey,
+                                                                                     CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm,
+                                                                                     XBUFFER& data, XBUFFER& signature);
 
     bool                                    ConvertDateTime                         (XCHAR* datestr, XDATETIME* datetime);
 
@@ -246,15 +253,20 @@ class CIPHERCERTIFICATEX509
     XVECTOR<XSTRING*>                       subjectalternativenamesDNS;
     XVECTOR<XBUFFER*>                       subjectalternativenamesIP;
 
+    bool                                    hasnameconstraints;
+    XVECTOR<XSTRING*>                       permittedsubtreesDNS;
+    XVECTOR<XSTRING*>                       excludedsubtreesDNS;
+    XVECTOR<XBUFFER*>                       permittedsubtreesIP;
+    XVECTOR<XBUFFER*>                       excludedsubtreesIP;
+
     bool                                    hasauthorityinfoaccess;
     bool                                    hascaissuersurl;
     XSTRING                                 caissuersurl;
+    bool                                    hasocspurl;
+    XSTRING                                 ocspurl;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-

@@ -82,7 +82,7 @@ HASHHMAC::HASHHMAC(HASH* hash) : HASH()
 * --------------------------------------------------------------------------------------------------------------------*/
 HASHHMAC::~HASHHMAC()
 {
-  key.Delete();
+  key.SecureDelete();
 
   Clean();
 }
@@ -184,7 +184,7 @@ bool HASHHMAC::SetKey(XBYTE* key, XDWORD size)
       return false;
     }
 
-  this->key.Delete();
+  this->key.SecureDelete();
 
   if(size)
     {

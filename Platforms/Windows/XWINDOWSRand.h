@@ -51,6 +51,7 @@ class XWINDOWSRAND : public XRAND
     virtual              ~XWINDOWSRAND        ();
 
     virtual bool          Ini                 ();
+    virtual bool          IsCryptographicallySecure ();
     virtual bool          Generate            (XBYTE* buffer, XDWORD size);
 };
 

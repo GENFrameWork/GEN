@@ -36,6 +36,8 @@
 
 #include "XESP32Rand.h"
 
+#include "esp_random.h"
+
 #include "XTrace.h"
 
 
@@ -94,8 +96,47 @@ XESP32RAND::~XESP32RAND()
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XESP32RAND::Ini()
-{  
-  return false;
+{
+  XBYTE data = 0;
+  return Generate(&data, sizeof(data));
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XESP32RAND::IsCryptographicallySecure()
+* @brief      Report whether the ESP32 provider is cryptographically secure
+* @ingroup    PLATFORM_ESP32
+* 
+* @return     bool : true.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XESP32RAND::IsCryptographicallySecure()
+{
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XESP32RAND::Generate(XBYTE* buffer, XDWORD size)
+* @brief      Generate random bytes using the ESP-IDF hardware-backed random provider
+* @ingroup    PLATFORM_ESP32
+* 
+* @param[out] buffer : Destination buffer.
+* @param[in]  size : Number of bytes to generate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XESP32RAND::Generate(XBYTE* buffer, XDWORD size)
+{
+  if(!size) return true;
+  if(!buffer) return false;
+
+  esp_fill_random(buffer, size);
+
+  return true;
 }
 
 

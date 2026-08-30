@@ -58,11 +58,14 @@ class CIPHERPEMCODEC
 
     static bool              ECPrivateKey_Decode               (XBUFFER& der, XBUFFER& privatekey);
 
-    static bool              Ed25519PrivateKey_Decode          (XBUFFER& der, XBUFFER& privatekey);
+    static bool              PKCS8PrivateKey_Decode            (XBUFFER& der, bool& isrsa, bool& isec, XBUFFER& innerkey);
+    static bool              PKCS8EncryptedPrivateKey_Decode   (XBUFFER& der, XSTRING& password, XSECUREBUFFER& privatekeyinfo);
+    static bool              PKCS7Certificates_Decode          (XBUFFER& der, XVECTOR<XBUFFER*>& certificates);
+    static bool              PKCS12_Decode                     (XBUFFER& der, XSTRING& password,
+                                                               XVECTOR<XBUFFER*>& certificates,
+                                                               XSECUREBUFFER& privatekeyinfo);
 
-    static bool              PKCS8PrivateKey_Decode            (XBUFFER& der, bool& isrsa, bool& isec, bool& ised25519, XBUFFER& innerkey);
-
-  private:
+  public:
 
     static bool              DER_ReadLength                    (XBYTE* data, XDWORD size, XDWORD& index, XDWORD& length);
     static bool              DER_ReadTagLength                 (XBYTE* data, XDWORD size, XDWORD& index, XBYTE& tag, XDWORD& valueoffset, XDWORD& valuelength);
@@ -73,5 +76,3 @@ class CIPHERPEMCODEC
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-

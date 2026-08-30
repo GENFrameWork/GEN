@@ -292,7 +292,7 @@ class XTREE_NODE_ITERATOR
                                         return (! operator == (iterator) );
                                       }
 
-    T*                                operator ->             ()                              { return (current?&current->data():current);                }
+    T*                                operator ->             ()                              { return current?&current->GetData():NULL;                  }
     T&                                operator *              ()                              { return current->GetData();                                }
 
 
@@ -405,7 +405,6 @@ class XTREE
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

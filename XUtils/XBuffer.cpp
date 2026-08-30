@@ -2240,6 +2240,43 @@ bool XBUFFER::Delete(bool setblocked)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool XBUFFER::SecureDelete(bool setblocked)
+* @brief      Overwrite the complete allocated storage through volatile writes before releasing it
+* @ingroup    XUTILS
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XBUFFER::SecureDelete(bool setblocked)
+{
+  if(setblocked)
+    {
+      SetBlocked(true);
+    }
+
+  if(buffer)
+    {
+      volatile XBYTE* securebuffer = (volatile XBYTE*)buffer;
+
+      for(XDWORD c=0; c<sizeassign; c++) securebuffer[c] = 0;
+
+      GEN_DELETE_ARRAY buffer;
+    }
+
+  buffer     = NULL;
+  size       = 0;
+  sizeassign = 0;
+  position   = 0;
+
+  if(setblocked)
+    {
+      SetBlocked(false);
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XBUFFER::DeleteByte(XBYTE data, bool setblocked)
 * @brief      Delete byte
@@ -3589,6 +3626,5 @@ void XBUFFER::Clean()
 
   localhardwareuselittleendian = false;
 }
-
 
 

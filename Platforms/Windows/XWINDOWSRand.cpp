@@ -102,6 +102,21 @@ bool XWINDOWSRAND::Ini()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XWINDOWSRAND::IsCryptographicallySecure()
+* @brief      Report whether the platform provider is cryptographically secure
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @return     bool : true.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSRAND::IsCryptographicallySecure()
+{
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool XWINDOWSRAND::Generate(XBYTE* buffer, XDWORD size)
 * @brief      Generate random bytes
 * @ingroup    PLATFORM_WINDOWS

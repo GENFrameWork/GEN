@@ -39,6 +39,8 @@
 #include "XFactory.h"
 #include "XDateTime.h"
 #include "XRand.h"
+#include "XTimer.h"
+#include "XThread.h"
 
 #include "CipherCertificateX509.h"
 #include "CipherAESGCM.h"
@@ -91,6 +93,75 @@ static bool DIOSTREAMTLSCONFIG_ServerNameMatch(XSTRING& pattern, XCHAR* serverna
   XSTRING patternsuffix(&pattern.Get()[1]);
 
   return !hostnamesuffix.Compare(patternsuffix, true);
+}
+
+class DIOSTREAMTLSCONFIG_LOCK
+{
+  public:
+    DIOSTREAMTLSCONFIG_LOCK(XMUTEX* mutex) : mutex(mutex), locked(mutex?mutex->Lock():false) {}
+    ~DIOSTREAMTLSCONFIG_LOCK() { if(locked) mutex->UnLock(); }
+    bool IsLocked() { return locked; }
+  private:
+    XMUTEX* mutex;
+    bool locked;
+};
+
+
+static bool DIOSTREAMTLSCONFIG_AddUInt16BE(XBUFFER& buffer, XWORD value)
+{
+  XBYTE data[2] = { (XBYTE)(value >> 8), (XBYTE)value };
+  return buffer.Add(data, sizeof(data));
+}
+
+
+static bool DIOSTREAMTLSCONFIG_AddUInt32BE(XBUFFER& buffer, XDWORD value)
+{
+  XBYTE data[4] = { (XBYTE)(value >> 24), (XBYTE)(value >> 16), (XBYTE)(value >> 8), (XBYTE)value };
+  return buffer.Add(data, sizeof(data));
+}
+
+
+static bool DIOSTREAMTLSCONFIG_AddUInt64BE(XBUFFER& buffer, XQWORD value)
+{
+  XBYTE data[8];
+  for(XDWORD c=0; c<sizeof(data); c++) data[c] = (XBYTE)(value >> ((sizeof(data)-1-c)*8));
+  return buffer.Add(data, sizeof(data));
+}
+
+
+static bool DIOSTREAMTLSCONFIG_GetUInt16BE(XBUFFER& buffer, XDWORD& position, XWORD& value)
+{
+  if(position > buffer.GetSize() || (buffer.GetSize()-position) < 2) return false;
+  value = (XWORD)(((XWORD)buffer.Get()[position] << 8) | buffer.Get()[position+1]);
+  position += 2;
+  return true;
+}
+
+
+static bool DIOSTREAMTLSCONFIG_GetUInt32BE(XBUFFER& buffer, XDWORD& position, XDWORD& value)
+{
+  if(position > buffer.GetSize() || (buffer.GetSize()-position) < 4) return false;
+  value = ((XDWORD)buffer.Get()[position] << 24) | ((XDWORD)buffer.Get()[position+1] << 16) |
+          ((XDWORD)buffer.Get()[position+2] << 8) | buffer.Get()[position+3];
+  position += 4;
+  return true;
+}
+
+
+static bool DIOSTREAMTLSCONFIG_GetUInt64BE(XBUFFER& buffer, XDWORD& position, XQWORD& value)
+{
+  if(position > buffer.GetSize() || (buffer.GetSize()-position) < 8) return false;
+  value = 0;
+  for(XDWORD c=0; c<8; c++) value = (value << 8) | buffer.Get()[position+c];
+  position += 8;
+  return true;
+}
+
+
+static void DIOSTREAMTLSCONFIG_SecureZero(void* data, XDWORD size)
+{
+  volatile XBYTE* clean = (volatile XBYTE*)data;
+  while(size--) (*clean++) = 0;
 }
 
 
@@ -250,21 +321,6 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::SetPrivateKey(CIPHERKEY* privatekey)
         }
         break;
 
-      case CIPHERKEYTYPE_ED25519_PRIVATE :
-        {
-          CIPHERKEYSYMMETRICAL* edcopy = GEN_NEW CIPHERKEYSYMMETRICAL();
-          if(!edcopy) return false;
-
-          if(!edcopy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
-            {
-              GEN_DELETE edcopy;
-              return false;
-            }
-
-          copy = edcopy;
-        }
-        break;
-
       case CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE :
       case CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE :
       case CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE :
@@ -362,6 +418,15 @@ static XQWORD DIOSTREAMTLSCONFIG_CurrentEpoch()
   return epoch;
 }
 
+static bool DIOSTREAMTLSCONFIG_ALPNFromType(DIOSTREAMTLS_ALPN_TYPE type, XBUFFER& protocol)
+{
+  protocol.Delete();
+  if(type == DIOSTREAMTLS_ALPN_TYPE_UNKNOWN) return true;
+  if(type == DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1) { static XBYTE value[]={'h','t','t','p','/','1','.','1'}; return protocol.Add(value,sizeof(value)); }
+  if(type == DIOSTREAMTLS_ALPN_TYPE_HTTP_2)   { static XBYTE value[]={'h','2'}; return protocol.Add(value,sizeof(value)); }
+  return false;
+}
+
 
 DIOSTREAMTLS13SESSIONTICKET::DIOSTREAMTLS13SESSIONTICKET()
 {
@@ -389,6 +454,7 @@ XWORD DIOSTREAMTLS13SESSIONTICKET::GetCipherSuite() { return ciphersuite; }
 void DIOSTREAMTLS13SESSIONTICKET::SetCipherSuite(XWORD ciphersuite) { this->ciphersuite = ciphersuite; }
 DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocol() { return applicationprotocol; }
 void DIOSTREAMTLS13SESSIONTICKET::SetApplicationProtocol(DIOSTREAMTLS_ALPN_TYPE protocol) { applicationprotocol = protocol; }
+XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocolRaw() { return &applicationprotocolraw; }
 
 
 bool DIOSTREAMTLS13SESSIONTICKET::IsExpired()
@@ -412,8 +478,9 @@ XDWORD DIOSTREAMTLS13SESSIONTICKET::GetObfuscatedAge()
 bool DIOSTREAMTLS13SESSIONTICKET::Delete()
 {
   if(!psk.IsEmpty()) psk.FillBuffer(0);
-  psk.Delete();
+  psk.SecureDelete();
   ticket.Delete();
+  applicationprotocolraw.Delete();
   servername.Empty();
   Clean();
   return true;
@@ -427,6 +494,7 @@ void DIOSTREAMTLS13SESSIONTICKET::Clean()
   receivedepoch       = 0;
   ciphersuite         = 0;
   applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  applicationprotocolraw.Delete();
 }
 
 
@@ -440,6 +508,7 @@ void DIOSTREAMTLS13SESSIONTICKET::Clean()
 DIOSTREAMTLSCONFIG::DIOSTREAMTLSCONFIG() : DIOSTREAMTCPIPCONFIG()
 {
   localprivatekey = NULL;
+  configmutex = GEN_XFACTORY.Create_Mutex();
 
   Clean();
 
@@ -458,6 +527,25 @@ DIOSTREAMTLSCONFIG::DIOSTREAMTLSCONFIG() : DIOSTREAMTCPIPCONFIG()
 DIOSTREAMTLSCONFIG::~DIOSTREAMTLSCONFIG()
 {
   Clean();
+  if(configmutex) GEN_XFACTORY.Delete_Mutex(configmutex);
+  configmutex = NULL;
+}
+
+
+bool DIOSTREAMTLSCONFIG::Freeze()
+{
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return false;
+  frozen = true;
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::IsFrozen()
+{
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return true;
+  return frozen;
 }
 
 
@@ -489,6 +577,7 @@ XWORD DIOSTREAMTLSCONFIG::GetCipherSuite()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::SetCipherSuite(XWORD ciphersuite)
 {
+  if(IsFrozen()) return;
   ciphersuites.DeleteAll();
   ciphersuites.Add(ciphersuite);
 }
@@ -522,9 +611,9 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCipherSuites()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CipherSuite_Add(XWORD ciphersuite)
 {
+  if(IsFrozen()) return false;
   if((ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256) &&
-     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384) &&
-     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256)) return false;
+     (ciphersuite != DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384)) return false;
 
   for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
     {
@@ -546,6 +635,7 @@ bool DIOSTREAMTLSCONFIG::CipherSuite_Add(XWORD ciphersuite)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CipherSuites_Delete()
 {
+  if(IsFrozen()) return false;
   ciphersuites.DeleteAll();
 
   return true;
@@ -580,8 +670,8 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
 {
-  if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) &&
-     (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+  if(IsFrozen()) return false;
+  if((supportedgroup != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
      (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
      (supportedgroup != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) return false;
 
@@ -605,6 +695,7 @@ bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SupportedGroups_Delete()
 {
+  if(IsFrozen()) return false;
   supportedgroups.DeleteAll();
 
   return true;
@@ -639,9 +730,9 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSignatureSchemes()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
 {
+  if(IsFrozen()) return false;
   switch(signaturescheme)
     {
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -671,6 +762,7 @@ bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SignatureSchemes_Delete()
 {
+  if(IsFrozen()) return false;
   signatureschemes.DeleteAll();
 
   return true;
@@ -705,9 +797,9 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCertificateSignatureSchemes()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
 {
+  if(IsFrozen()) return false;
   switch(signaturescheme)
     {
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
@@ -740,6 +832,7 @@ bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CertificateSignatureSchemes_Delete()
 {
+  if(IsFrozen()) return false;
   certificatesignatureschemes.DeleteAll();
 
   return true;
@@ -760,6 +853,52 @@ XVECTOR<DIOSTREAMTLS_ALPN_TYPE>* DIOSTREAMTLSCONFIG::GetApplicationProtocols()
   return &applicationprotocols;
 }
 
+XDWORD DIOSTREAMTLSCONFIG::GetApplicationProtocolsCount()
+{
+  XDWORD position = 0;
+  XDWORD count = 0;
+  while(position < applicationprotocolsraw.GetSize())
+    {
+      XBYTE size = applicationprotocolsraw.GetByte(position);
+      if(!size || (position + 1 + size) > applicationprotocolsraw.GetSize()) return 0;
+      position += 1 + size;
+      count++;
+    }
+  return count;
+}
+
+bool DIOSTREAMTLSCONFIG::GetApplicationProtocol(XDWORD index, XBUFFER& applicationprotocol)
+{
+  XDWORD position = 0;
+  XDWORD count = 0;
+  applicationprotocol.Delete();
+  while(position < applicationprotocolsraw.GetSize())
+    {
+      XBYTE size = applicationprotocolsraw.GetByte(position);
+      if(!size || (position + 1 + size) > applicationprotocolsraw.GetSize()) return false;
+      if(count == index) return applicationprotocol.Add(&applicationprotocolsraw.Get()[position + 1], size);
+      position += 1 + size;
+      count++;
+    }
+  return false;
+}
+
+bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(XBUFFER& applicationprotocol)
+{
+  if(IsFrozen()) return false;
+  if(applicationprotocol.IsEmpty() || applicationprotocol.GetSize() > 255) return false;
+  if((applicationprotocol.GetSize() == 2) &&
+     (applicationprotocol.GetByte(0) == (XBYTE)'h') &&
+     (applicationprotocol.GetByte(1) == (XBYTE)'3')) return false;
+  if(applicationprotocolsraw.GetSize() > (0xFFFF - 1 - applicationprotocol.GetSize())) return false;
+  for(XDWORD c=0; c<GetApplicationProtocolsCount(); c++)
+    {
+      XBUFFER existing;
+      if(GetApplicationProtocol(c, existing) && existing.Compare(applicationprotocol)) return false;
+    }
+  return applicationprotocolsraw.Add((XBYTE)applicationprotocol.GetSize()) && applicationprotocolsraw.Add(applicationprotocol);
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -774,11 +913,13 @@ XVECTOR<DIOSTREAMTLS_ALPN_TYPE>* DIOSTREAMTLSCONFIG::GetApplicationProtocols()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
 {
+  if(IsFrozen()) return false;
+  XBUFFER raw;
   switch(applicationprotocol)
     {
-      case DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1 :
-      case DIOSTREAMTLS_ALPN_TYPE_HTTP_2   :
-      case DIOSTREAMTLS_ALPN_TYPE_HTTP_3   : break;
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1 : { static XBYTE value[] = { 'h','t','t','p','/','1','.','1' }; raw.Add(value, sizeof(value)); } break;
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_2   : { static XBYTE value[] = { 'h','2' }; raw.Add(value, sizeof(value)); } break;
+      case DIOSTREAMTLS_ALPN_TYPE_HTTP_3   : return false;
                                       default : return false;
     }
 
@@ -787,6 +928,7 @@ bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE applicat
       if(applicationprotocols.Get(c) == applicationprotocol) return false;
     }
 
+  if(!ApplicationProtocol_Add(raw)) return false;
   return applicationprotocols.Add(applicationprotocol);
 }
 
@@ -802,6 +944,8 @@ bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE applicat
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ApplicationProtocols_Delete()
 {
+  if(IsFrozen()) return false;
+  applicationprotocolsraw.Delete();
   applicationprotocols.DeleteAll();
 
   return true;
@@ -851,9 +995,21 @@ XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetTrustedRoots()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TrustedRoot_Add(XBUFFER& root)
 {
+  if(IsFrozen()) return false;
   XBUFFER* copy;
+  XDWORD total = 0;
 
-  if(root.IsEmpty()) return false;
+  if(root.IsEmpty() || root.GetSize() > CIPHERTRUSTPROVIDERX509_DEFAULT_MAXCERTIFICATESIZE ||
+     trustedroots.GetSize() >= CIPHERTRUSTPROVIDERX509_DEFAULT_MAXROOTS) return false;
+
+  for(XDWORD c=0; c<trustedroots.GetSize(); c++)
+    {
+      XBUFFER* existing = trustedroots.Get(c);
+      if(!existing) continue;
+      total += existing->GetSize();
+      if(existing->GetSize() == root.GetSize() && !memcmp(existing->Get(), root.Get(), root.GetSize())) return true;
+    }
+  if(total > (CIPHERTRUSTPROVIDERX509_DEFAULT_MAXTOTALSIZE-root.GetSize())) return false;
 
   copy = GEN_NEW XBUFFER();
   if(!copy) return false;
@@ -881,6 +1037,7 @@ bool DIOSTREAMTLSCONFIG::TrustedRoot_Add(XBUFFER& root)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
 {
+  if(IsFrozen()) return false;
   XVECTOR<XBUFFER*>* roots;
 
   if(!provider.Load()) return false;
@@ -916,11 +1073,40 @@ bool DIOSTREAMTLSCONFIG::TrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
 {
-  CIPHERTRUSTPROVIDERX509GEN provider;
-
+  if(IsFrozen()) return false;
   if(!trustedroots.IsEmpty()) return false;
 
-  return TrustedRoots_Load(provider);
+#if defined(WINDOWS)
+  CIPHERTRUSTPROVIDERX509WINDOWS platformprovider;
+#elif defined(ANDROID)
+  CIPHERTRUSTPROVIDERX509ANDROID platformprovider;
+#elif defined(LINUX)
+  CIPHERTRUSTPROVIDERX509LINUX platformprovider;
+#else
+  CIPHERTRUSTPROVIDERX509GEN platformprovider;
+#endif
+  if(TrustedRoots_Load(platformprovider)) return true;
+
+#if defined(WINDOWS) || defined(ANDROID) || defined(LINUX)
+  if(truststorefallbackpolicy == DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY_NEVER) return false;
+#endif
+  CIPHERTRUSTPROVIDERX509GEN fallbackprovider;
+  return TrustedRoots_Load(fallbackprovider);
+}
+
+
+DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY DIOSTREAMTLSCONFIG::GetTrustStoreFallbackPolicy()
+{
+  return truststorefallbackpolicy;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SetTrustStoreFallbackPolicy(DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY policy)
+{
+  if(IsFrozen() || ((policy != DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY_NEVER) &&
+                    (policy != DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY_ON_NATIVE_FAILURE))) return false;
+  truststorefallbackpolicy = policy;
+  return true;
 }
 
 
@@ -935,6 +1121,7 @@ bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TrustedRoots_Delete()
 {
+  if(IsFrozen()) return false;
   trustedroots.DeleteContents();
   trustedroots.DeleteAll();
 
@@ -950,6 +1137,7 @@ DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE DIOSTREAMTLSCONFIG::GetClientAuthenticati
 
 void DIOSTREAMTLSCONFIG::SetClientAuthenticationMode(DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE mode)
 {
+  if(IsFrozen()) return;
   clientauthenticationmode = mode;
 }
 
@@ -962,6 +1150,7 @@ XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetClientTrustedRoots()
 
 bool DIOSTREAMTLSCONFIG::ClientTrustedRoot_Add(XBUFFER& root)
 {
+  if(IsFrozen()) return false;
   XBUFFER* copy;
 
   if(root.IsEmpty()) return false;
@@ -981,6 +1170,7 @@ bool DIOSTREAMTLSCONFIG::ClientTrustedRoot_Add(XBUFFER& root)
 
 bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
 {
+  if(IsFrozen()) return false;
   XVECTOR<XBUFFER*>* roots;
 
   if(!provider.Load()) return false;
@@ -1006,6 +1196,7 @@ bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provid
 
 bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Delete()
 {
+  if(IsFrozen()) return false;
   clienttrustedroots.DeleteContents();
   clienttrustedroots.DeleteAll();
   return true;
@@ -1040,6 +1231,7 @@ XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetLocalCertificateChain()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::LocalCertificate_Add(XBUFFER& certificate)
 {
+  if(IsFrozen()) return false;
   XBUFFER* copy;
 
   if(certificate.IsEmpty()) return false;
@@ -1068,6 +1260,7 @@ bool DIOSTREAMTLSCONFIG::LocalCertificate_Add(XBUFFER& certificate)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::LocalCertificates_Delete()
 {
+  if(IsFrozen()) return false;
   localcertificatechain.DeleteContents();
   localcertificatechain.DeleteAll();
 
@@ -1094,8 +1287,9 @@ CIPHERKEY* DIOSTREAMTLSCONFIG::GetLocalPrivateKey()
 *
 * @fn         bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
 * @brief      Copy the private key of the local end
-* @note       Accepts RSA, Ed25519, or an ECDSA private key for one of the curves CIPHERECDSA implements
-*             (P-256/P-384/P-521 -- see CIPHERECDSA::Parameters_Set()); any other key type is rejected. The matching CertificateSignatureScheme_Add()/SignatureScheme_Add() calls (see
+* @note       Accepts either an RSA private key or an ECDSA private key for one of the curves CIPHERECDSA
+*             implements (P-256/P-384/P-521 -- see CIPHERECDSA::Parameters_Set()); any other key type is
+*             rejected. The matching CertificateSignatureScheme_Add()/SignatureScheme_Add() calls (see
 *             DoDefault() below) still need to be picked to match whichever key ends up here -- callers building
 *             a server profile from a loaded key, such as APPFLOWWEBSERVER::Ini_BuildTLSConfig(), should offer
 *             only the scheme(s) that pair with this key's type.
@@ -1108,6 +1302,7 @@ CIPHERKEY* DIOSTREAMTLSCONFIG::GetLocalPrivateKey()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
 {
+  if(IsFrozen()) return false;
   if(!privatekey || !privatekey->GetSizeInBytes()) return false;
 
   switch(privatekey->GetType())
@@ -1120,25 +1315,6 @@ bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
           if(!copy) return false;
 
           if(!copy->CopyFrom((CIPHERKEYPRIVATERSA*)privatekey))
-            {
-              GEN_DELETE copy;
-              return false;
-            }
-
-          if(localprivatekey) GEN_DELETE localprivatekey;
-
-          localprivatekey = copy;
-        }
-        return true;
-
-      case CIPHERKEYTYPE_ED25519_PRIVATE :
-        {
-          CIPHERKEYSYMMETRICAL* copy;
-
-          copy = GEN_NEW CIPHERKEYSYMMETRICAL();
-          if(!copy) return false;
-
-          if(!copy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
             {
               GEN_DELETE copy;
               return false;
@@ -1486,6 +1662,7 @@ DIOSTREAMTLS_LOCALCREDENTIALSERROR DIOSTREAMTLSCONFIG::GetLocalCredentialsError(
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::LocalCredentials_Delete()
 {
+  if(IsFrozen()) return false;
   LocalCertificates_Delete();
 
   if(localprivatekey)
@@ -1511,6 +1688,7 @@ bool DIOSTREAMTLSCONFIG::LocalCredentials_Delete()
 * --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLSSERVERCREDENTIALS* DIOSTREAMTLSCONFIG::ServerCredentials_Add(XCHAR* servername)
 {
+  if(IsFrozen()) return NULL;
   DIOSTREAMTLSSERVERCREDENTIALS* credentials;
   XSTRING                         pattern;
 
@@ -1637,6 +1815,7 @@ bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBU
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ServerCredentials_Delete()
 {
+  if(IsFrozen()) return false;
   servercredentials.DeleteContents();
   servercredentials.DeleteAll();
 
@@ -1670,6 +1849,7 @@ bool DIOSTREAMTLSCONFIG::IsAllowUnauthenticatedServer()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::SetAllowUnauthenticatedServer(bool allowunauthenticatedserver)
 {
+  if(IsFrozen()) return;
   this->allowunauthenticatedserver = allowunauthenticatedserver;
 }
 
@@ -1700,6 +1880,7 @@ bool DIOSTREAMTLSCONFIG::IsActiveAIAFetch()
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::AIAFetch_Activate(bool activate)
 {
+  if(IsFrozen()) return;
   aiafetchactive = activate;
 }
 
@@ -1732,11 +1913,85 @@ int DIOSTREAMTLSCONFIG::GetAIAFetchTimeout()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetAIAFetchTimeout(int timeout)
 {
+  if(IsFrozen()) return false;
   if(timeout <= 0) return false;
 
   aiafetchtimeout = timeout;
 
   return true;
+}
+
+int DIOSTREAMTLSCONFIG::GetConnectionTimeout()
+{
+  return connectiontimeout;
+}
+
+bool DIOSTREAMTLSCONFIG::SetConnectionTimeout(int timeout)
+{
+  if(IsFrozen()) return false;
+  if((timeout <= 0) && (timeout != XTIMER_INFINITE)) return false;
+  connectiontimeout = timeout;
+  return true;
+}
+
+int DIOSTREAMTLSCONFIG::GetHandshakeTimeout()
+{
+  return handshaketimeout;
+}
+
+bool DIOSTREAMTLSCONFIG::SetHandshakeTimeout(int timeout)
+{
+  if(IsFrozen()) return false;
+  if((timeout <= 0) && (timeout != XTIMER_INFINITE)) return false;
+  handshaketimeout = timeout;
+  return true;
+}
+
+CIPHERCERTIFICATEX509VALIDATIONPOLICY* DIOSTREAMTLSCONFIG::GetCertificateValidationPolicy()
+{
+  return &certificatevalidationpolicy;
+}
+
+void DIOSTREAMTLSCONFIG::SetCertificateValidationPolicy(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
+{
+  if(IsFrozen()) return;
+  certificatevalidationpolicy = policy;
+}
+
+XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetCertificateRevocationLists()
+{
+  return &certificaterevocationlists;
+}
+
+bool DIOSTREAMTLSCONFIG::CertificateRevocationList_Add(XBUFFER& CRL)
+{
+  if(IsFrozen()) return false;
+  if(CRL.IsEmpty()) return false;
+  XBUFFER* copy=GEN_NEW XBUFFER();
+  if(!copy || !copy->Add(CRL) || !certificaterevocationlists.Add(copy)) { if(copy) GEN_DELETE copy; return false; }
+  return true;
+}
+
+bool DIOSTREAMTLSCONFIG::CertificateRevocationLists_Delete()
+{
+  if(IsFrozen()) return false;
+  certificaterevocationlists.DeleteContents(); certificaterevocationlists.DeleteAll(); return true;
+}
+
+void DIOSTREAMTLSCONFIG::OCSPDirect_Set(DIOSTREAMTLS_OCSPDIRECTFETCHER fetcher, void* context)
+{
+  if(IsFrozen()) return;
+  ocspdirectfetcher=fetcher; ocspdirectcontext=context;
+}
+
+DIOSTREAMTLS_OCSPDIRECTFETCHER DIOSTREAMTLSCONFIG::GetOCSPDirectFetcher()
+{
+  return ocspdirectfetcher;
+}
+
+void* DIOSTREAMTLSCONFIG::GetOCSPDirectContext()
+{
+  return ocspdirectcontext;
 }
 
 
@@ -1775,6 +2030,7 @@ XWORD DIOSTREAMTLSCONFIG::GetMinVersion()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetMinVersion(XWORD version)
 {
+  if(IsFrozen()) return false;
   if((version != DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (version != DIOSTREAMTLS_MSG_VERSION_TLS_1_3)) return false;
   if(version > maxversion) return false;
 
@@ -1813,6 +2069,7 @@ XWORD DIOSTREAMTLSCONFIG::GetMaxVersion()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
 {
+  if(IsFrozen()) return false;
   if((version != DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (version != DIOSTREAMTLS_MSG_VERSION_TLS_1_3)) return false;
   if(version < minversion) return false;
 
@@ -1825,59 +2082,383 @@ bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
 
 bool DIOSTREAMTLSCONFIG::IsSessionResumptionActive()
 {
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return false;
   return sessionresumptionactive;
 }
 
 
 void DIOSTREAMTLSCONFIG::SessionResumption_Activate(bool active)
 {
+  if(IsFrozen()) return;
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return;
   sessionresumptionactive = active;
 
   if(!active)
     {
-      SessionTickets_Delete();
-      if(!sessionticketserverkey.IsEmpty()) sessionticketserverkey.FillBuffer(0);
-      sessionticketserverkey.Delete();
+      sessiontickets.DeleteContents();
+      sessiontickets.DeleteAll();
+      sessionticketserverkeycurrent.SecureDelete();
+      sessionticketserverkeyprevious.SecureDelete();
+      sessionticketserverkeycurrentID = sessionticketserverkeypreviousID = 0;
+      sessionticketserverkeycurrentcreated = sessionticketserverkeypreviousexpires = 0;
+      sessionticketkeyringdirty = false;
     }
 }
 
 
 XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketLifetime()
 {
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return 0;
   return sessionticketlifetime;
 }
 
 
 bool DIOSTREAMTLSCONFIG::SetSessionTicketLifetime(XDWORD lifetime)
 {
+  if(IsFrozen()) return false;
   if(!lifetime || (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME)) return false;
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return false;
   sessionticketlifetime = lifetime;
   return true;
+}
+
+XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketKeyRotationInterval()
+{
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return 0;
+  return sessionticketkeyrotationinterval;
+}
+
+bool DIOSTREAMTLSCONFIG::SetSessionTicketKeyRotationInterval(XDWORD interval)
+{
+  if(IsFrozen()) return false;
+  if(!interval || interval > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME) return false;
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return false;
+  sessionticketkeyrotationinterval = interval;
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Rotate()
+{
+  XRAND* random = GEN_XFACTORY.CreateRand();
+  if(!random || !random->IsCryptographicallySecure())
+    {
+      if(random) GEN_XFACTORY.DeleteRand(random);
+      return false;
+    }
+
+  XBYTE key[32] = { 0 };
+  XQWORD keyID = 0;
+  bool status = random->Ini();
+  if(status) status = random->Generate(key, sizeof(key));
+  XQWORD currentID = 0;
+  XQWORD previousID = 0;
+  {
+    DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+    if(!lock.IsLocked() || !sessionresumptionactive) status = false;
+    if(status)
+      {
+        currentID  = sessionticketserverkeycurrentID;
+        previousID = sessionticketserverkeypreviousID;
+      }
+  }
+  for(XDWORD attempt=0; status && attempt<16; attempt++)
+    {
+      status = random->Generate((XBYTE*)&keyID, sizeof(keyID));
+      if(status && keyID && keyID != currentID && keyID != previousID) break;
+      keyID = 0;
+    }
+  GEN_XFACTORY.DeleteRand(random);
+  if(!keyID) status = false;
+
+  if(status)
+    {
+      DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+      XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
+      if(!lock.IsLocked() || !now || keyID == sessionticketserverkeycurrentID ||
+         keyID == sessionticketserverkeypreviousID) status = false;
+      if(status)
+        {
+          XSECUREBUFFER oldcurrent;
+          XSECUREBUFFER oldprevious;
+          XQWORD rotatedpreviousID = sessionticketserverkeycurrentID;
+          if(sessionticketserverkeycurrent.GetSize() == 32 && !oldcurrent.Add(sessionticketserverkeycurrent)) status = false;
+          if(status && sessionticketserverkeyprevious.GetSize() == 32 &&
+             !oldprevious.Add(sessionticketserverkeyprevious)) status = false;
+          if(status)
+            {
+              sessionticketserverkeyprevious.SecureDelete();
+              if(!oldcurrent.IsEmpty() && !sessionticketserverkeyprevious.Add(oldcurrent)) status = false;
+            }
+          if(status)
+            {
+              sessionticketserverkeycurrent.SecureDelete();
+              if(!sessionticketserverkeycurrent.Add(key, sizeof(key)))
+                {
+                  if(!oldcurrent.IsEmpty()) sessionticketserverkeycurrent.Add(oldcurrent);
+                  status = false;
+                }
+            }
+          if(status)
+            {
+              sessionticketserverkeypreviousID      = oldcurrent.IsEmpty()?0:rotatedpreviousID;
+              sessionticketserverkeypreviousexpires = oldcurrent.IsEmpty()?0:(now + sessionticketlifetime);
+              sessionticketserverkeycurrentID       = keyID;
+              sessionticketserverkeycurrentcreated  = now;
+              sessionticketkeyringdirty             = sessionticketkeyringsave != NULL;
+            }
+          else
+            {
+              sessionticketserverkeycurrent.SecureDelete();
+              sessionticketserverkeyprevious.SecureDelete();
+              if(!oldcurrent.IsEmpty()) sessionticketserverkeycurrent.Add(oldcurrent);
+              if(!oldprevious.IsEmpty()) sessionticketserverkeyprevious.Add(oldprevious);
+            }
+        }
+    }
+
+  DIOSTREAMTLSCONFIG_SecureZero(key, sizeof(key));
+  if(status)
+    {
+      DIOSTREAMTLS_SESSIONTICKETKEYRING_SAVE save = NULL;
+      {
+        DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+        if(lock.IsLocked()) save = sessionticketkeyringsave;
+      }
+      if(save) status = SessionTicketKeyRing_Synchronize(true);
+    }
+  return status;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Export(XBUFFER& wrappingkey, XBUFFER& encryptedkeyring)
+{
+  static XBYTE header[] = { 'G','E','N','-','T','L','S','1','3','-','K','R','-','1' };
+  if(wrappingkey.GetSize() != 32) return false;
+
+  XSECUREBUFFER plain;
+  XSECUREBUFFER currentkey;
+  XSECUREBUFFER previouskey;
+  XBUFFER nonce;
+  XBUFFER aad;
+  XBUFFER tag;
+  XQWORD currentID = 0, currentcreated = 0, previousID = 0, previousexpires = 0;
+  XDWORD rotationinterval = 0, ticketlifetime = 0;
+  {
+    DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+    if(!lock.IsLocked() || sessionticketserverkeycurrent.GetSize() != 32 || !sessionticketserverkeycurrentID ||
+       !sessionticketserverkeycurrentcreated || !currentkey.Add(sessionticketserverkeycurrent)) return false;
+    currentID        = sessionticketserverkeycurrentID;
+    currentcreated   = sessionticketserverkeycurrentcreated;
+    previousID       = sessionticketserverkeypreviousID;
+    previousexpires  = sessionticketserverkeypreviousexpires;
+    rotationinterval = sessionticketkeyrotationinterval;
+    ticketlifetime   = sessionticketlifetime;
+    if(sessionticketserverkeyprevious.GetSize() == 32 && !previouskey.Add(sessionticketserverkeyprevious)) return false;
+  }
+
+  XBYTE zeros[32] = { 0 };
+  if(!DIOSTREAMTLSCONFIG_AddUInt64BE(plain, currentID) ||
+     !DIOSTREAMTLSCONFIG_AddUInt64BE(plain, currentcreated) || !plain.Add(currentkey) ||
+     !plain.Add((XBYTE)(previouskey.GetSize() == 32)) ||
+     !DIOSTREAMTLSCONFIG_AddUInt64BE(plain, previousID) ||
+     !DIOSTREAMTLSCONFIG_AddUInt64BE(plain, previousexpires) ||
+     !(previouskey.GetSize() == 32?plain.Add(previouskey):plain.Add(zeros, sizeof(zeros))) ||
+     !DIOSTREAMTLSCONFIG_AddUInt32BE(plain, rotationinterval) ||
+     !DIOSTREAMTLSCONFIG_AddUInt32BE(plain, ticketlifetime)) return false;
+
+  XRAND* random = GEN_XFACTORY.CreateRand();
+  if(!random || !random->IsCryptographicallySecure())
+    {
+      if(random) GEN_XFACTORY.DeleteRand(random);
+      return false;
+    }
+  bool status = nonce.Resize(CIPHERAESGCM_NONCESIZE) && random->Ini() && random->Generate(nonce.Get(), nonce.GetSize());
+  GEN_XFACTORY.DeleteRand(random);
+  if(!status) return false;
+
+  CIPHERKEYSYMMETRICAL key;
+  CIPHERAESGCM cipher;
+  if(!aad.Add(header, sizeof(header)) || !key.Set(wrappingkey) || !cipher.SetKey(&key) ||
+     !cipher.CipherAEAD(plain.Get(), plain.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
+
+  encryptedkeyring.Delete();
+  return encryptedkeyring.Add(header, sizeof(header)) && encryptedkeyring.Add(nonce) &&
+         encryptedkeyring.Add((*cipher.GetResult())) && encryptedkeyring.Add(tag);
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Import(XBUFFER& wrappingkey, XBUFFER& encryptedkeyring)
+{
+  static XBYTE header[] = { 'G','E','N','-','T','L','S','1','3','-','K','R','-','1' };
+  const XDWORD plainsize = 105;
+  const XDWORD expectedsize = sizeof(header) + CIPHERAESGCM_NONCESIZE + plainsize + CIPHERAESGCM_TAGSIZE;
+  if(wrappingkey.GetSize() != 32 || encryptedkeyring.GetSize() != expectedsize ||
+     memcmp(encryptedkeyring.Get(), header, sizeof(header))) return false;
+
+  XBUFFER nonce;
+  XBUFFER ciphertext;
+  XBUFFER tag;
+  XBUFFER aad;
+  if(!nonce.Add(encryptedkeyring.Get()+sizeof(header), CIPHERAESGCM_NONCESIZE) ||
+     !ciphertext.Add(encryptedkeyring.Get()+sizeof(header)+CIPHERAESGCM_NONCESIZE, plainsize) ||
+     !tag.Add(encryptedkeyring.Get()+sizeof(header)+CIPHERAESGCM_NONCESIZE+plainsize, CIPHERAESGCM_TAGSIZE) ||
+     !aad.Add(header, sizeof(header))) return false;
+
+  CIPHERKEYSYMMETRICAL key;
+  CIPHERAESGCM cipher;
+  if(!key.Set(wrappingkey) || !cipher.SetKey(&key) ||
+     !cipher.UncipherAEAD(ciphertext.Get(), ciphertext.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
+
+  XSECUREBUFFER plain;
+  XSECUREBUFFER currentkey;
+  XSECUREBUFFER previouskey;
+  if(!plain.Add((*cipher.GetResult())) || plain.GetSize() != plainsize) return false;
+
+  XDWORD position = 0;
+  XQWORD currentID = 0, currentcreated = 0, previousID = 0, previousexpires = 0;
+  XDWORD rotationinterval = 0, ticketlifetime = 0;
+  if(!DIOSTREAMTLSCONFIG_GetUInt64BE(plain, position, currentID) ||
+     !DIOSTREAMTLSCONFIG_GetUInt64BE(plain, position, currentcreated) ||
+     !currentkey.Add(plain.Get()+position, 32)) return false;
+  position += 32;
+  if(position >= plain.GetSize()) return false;
+  XBYTE hasprevious = plain.Get()[position++];
+  if(hasprevious > 1 || !DIOSTREAMTLSCONFIG_GetUInt64BE(plain, position, previousID) ||
+     !DIOSTREAMTLSCONFIG_GetUInt64BE(plain, position, previousexpires) ||
+     !previouskey.Add(plain.Get()+position, 32)) return false;
+  position += 32;
+  if(!DIOSTREAMTLSCONFIG_GetUInt32BE(plain, position, rotationinterval) ||
+     !DIOSTREAMTLSCONFIG_GetUInt32BE(plain, position, ticketlifetime) || position != plain.GetSize() ||
+     !currentID || !currentcreated || !rotationinterval ||
+     rotationinterval > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME || !ticketlifetime ||
+     ticketlifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME) return false;
+
+  if(hasprevious)
+    {
+      if(!previousID || previousID == currentID || !previousexpires) return false;
+    }
+  else
+    {
+      if(previousID || previousexpires) return false;
+      for(XDWORD c=0; c<previouskey.GetSize(); c++) if(previouskey.Get()[c]) return false;
+      previouskey.SecureDelete();
+    }
+
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked() || !sessionresumptionactive) return false;
+  sessionticketserverkeycurrent.SecureDelete();
+  sessionticketserverkeyprevious.SecureDelete();
+  if(!sessionticketserverkeycurrent.Add(currentkey) || (hasprevious && !sessionticketserverkeyprevious.Add(previouskey)))
+    {
+      sessionticketserverkeycurrent.SecureDelete();
+      sessionticketserverkeyprevious.SecureDelete();
+      sessionticketserverkeycurrentID = sessionticketserverkeypreviousID = 0;
+      sessionticketserverkeycurrentcreated = sessionticketserverkeypreviousexpires = 0;
+      return false;
+    }
+  sessionticketserverkeycurrentID       = currentID;
+  sessionticketserverkeycurrentcreated  = currentcreated;
+  sessionticketserverkeypreviousID      = hasprevious?previousID:0;
+  sessionticketserverkeypreviousexpires = hasprevious?previousexpires:0;
+  sessionticketkeyrotationinterval      = rotationinterval;
+  sessionticketlifetime                 = ticketlifetime;
+  sessionticketkeyringdirty             = false;
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicketKeyRingSynchronizer_Set(DIOSTREAMTLS_SESSIONTICKETKEYRING_LOAD load,
+                                                               DIOSTREAMTLS_SESSIONTICKETKEYRING_SAVE save,
+                                                               XBUFFER& wrappingkey, void* context)
+{
+  if(IsFrozen() || (!load && !save) || wrappingkey.GetSize() != 32) return false;
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return false;
+  sessionticketkeyringwrappingkey.SecureDelete();
+  if(!sessionticketkeyringwrappingkey.Add(wrappingkey)) return false;
+  sessionticketkeyringload    = load;
+  sessionticketkeyringsave    = save;
+  sessionticketkeyringcontext = context;
+  sessionticketkeyringdirty   = save && sessionticketserverkeycurrent.GetSize() == 32;
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Synchronize(bool publish)
+{
+  DIOSTREAMTLS_SESSIONTICKETKEYRING_LOAD load = NULL;
+  DIOSTREAMTLS_SESSIONTICKETKEYRING_SAVE save = NULL;
+  void* context = NULL;
+  XSECUREBUFFER wrappingkey;
+  {
+    DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+    if(!lock.IsLocked() || sessionticketkeyringwrappingkey.GetSize() != 32 ||
+       !wrappingkey.Add(sessionticketkeyringwrappingkey)) return false;
+    load    = sessionticketkeyringload;
+    save    = sessionticketkeyringsave;
+    context = sessionticketkeyringcontext;
+  }
+
+  XBUFFER encryptedkeyring;
+  if(publish)
+    {
+      XQWORD exportedID = 0;
+      {
+        DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+        if(!lock.IsLocked()) return false;
+        exportedID = sessionticketserverkeycurrentID;
+      }
+      bool status = save && SessionTicketKeyRing_Export(wrappingkey, encryptedkeyring) && save(encryptedkeyring, context);
+      if(status)
+        {
+          DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+          if(lock.IsLocked() && sessionticketserverkeycurrentID == exportedID) sessionticketkeyringdirty = false;
+        }
+      return status;
+    }
+  return load && load(encryptedkeyring, context) && SessionTicketKeyRing_Import(wrappingkey, encryptedkeyring);
 }
 
 
 bool DIOSTREAMTLSCONFIG::SessionResumption_ServerInitialize()
 {
-  if(!sessionresumptionactive) return true;
-  if(sessionticketserverkey.GetSize() == 32) return true;
+  bool loadavailable = false;
+  bool publishpending = false;
+  {
+    DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+    if(!lock.IsLocked()) return false;
+    if(!sessionresumptionactive) return true;
+    XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
+    if(!now) return false;
+    if((sessionticketserverkeycurrent.GetSize() == 32) && now >= sessionticketserverkeycurrentcreated &&
+       ((now-sessionticketserverkeycurrentcreated) < sessionticketkeyrotationinterval))
+      {
+        if(!sessionticketkeyringdirty) return true;
+        publishpending = sessionticketkeyringsave && sessionticketkeyringwrappingkey.GetSize() == 32;
+      }
+    loadavailable = sessionticketkeyringload && sessionticketkeyringwrappingkey.GetSize() == 32;
+  }
 
-  XRAND* random = GEN_XFACTORY.CreateRand();
-  if(!random) return false;
+  if(publishpending) return SessionTicketKeyRing_Synchronize(true);
 
-  XBYTE key[32];
-  bool status = random->Ini();
-  if(status) status = random->Generate(key, sizeof(key));
-  GEN_XFACTORY.DeleteRand(random);
-
-  if(status)
+  if(loadavailable)
     {
-      sessionticketserverkey.Delete();
-      status = sessionticketserverkey.Add(key, sizeof(key));
+      if(!SessionTicketKeyRing_Synchronize(false)) return false;
+      DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+      XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
+      if(!lock.IsLocked() || !now) return false;
+      if((sessionticketserverkeycurrent.GetSize() == 32) && now >= sessionticketserverkeycurrentcreated &&
+         ((now-sessionticketserverkeycurrentcreated) < sessionticketkeyrotationinterval)) return true;
     }
 
-  volatile XBYTE* clean = key;
-  for(XDWORD c=0; c<sizeof(key); c++) clean[c] = 0;
-  return status;
+  return SessionTicketKeyRing_Rotate();
 }
 
 
@@ -1885,6 +2466,17 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket,
                                               XDWORD lifetime, XWORD ciphersuite,
                                               DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
 {
+  XBUFFER protocol;
+  if(!DIOSTREAMTLSCONFIG_ALPNFromType(applicationprotocol, protocol)) return false;
+  return SessionTicket_StoreRaw(servername, ticket, PSK, ageadd, lifetime, ciphersuite,
+                                protocol.IsEmpty()?NULL:&protocol);
+}
+
+bool DIOSTREAMTLSCONFIG::SessionTicket_StoreRaw(XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd,
+                                                 XDWORD lifetime, XWORD ciphersuite, XBUFFER* applicationprotocol)
+{
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return false;
   if(!sessionresumptionactive || !servername || !servername[0] || ticket.IsEmpty() || PSK.IsEmpty() ||
      !lifetime || (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME)) return false;
 
@@ -1913,7 +2505,9 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket,
   stored->SetLifetime(lifetime);
   stored->SetReceivedEpoch(DIOSTREAMTLSCONFIG_CurrentEpoch());
   stored->SetCipherSuite(ciphersuite);
-  stored->SetApplicationProtocol(applicationprotocol);
+  stored->SetApplicationProtocol(DIOSTREAMTLS_ALPN_TYPE_UNKNOWN);
+  if(applicationprotocol && (!stored->GetApplicationProtocolRaw()->Add((*applicationprotocol)) || applicationprotocol->GetSize() > 255))
+    { GEN_DELETE stored; return false; }
 
   if(!stored->GetTicket()->Add(ticket) || !stored->GetPSK()->Add(PSK) || !stored->GetReceivedEpoch() ||
      !sessiontickets.Add(stored))
@@ -1926,31 +2520,42 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket,
 }
 
 
-DIOSTREAMTLS13SESSIONTICKET* DIOSTREAMTLSCONFIG::SessionTicket_Get(XCHAR* servername)
+bool DIOSTREAMTLSCONFIG::SessionTicket_Copy(XCHAR* servername, DIOSTREAMTLS13SESSIONTICKET& destination)
 {
-  if(!sessionresumptionactive || !servername || !servername[0]) return NULL;
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked() || !sessionresumptionactive || !servername || !servername[0]) return false;
 
   for(int c=(int)sessiontickets.GetSize()-1; c>=0; c--)
     {
       DIOSTREAMTLS13SESSIONTICKET* ticket = sessiontickets.Get(c);
       if(!ticket) continue;
-
       if(ticket->IsExpired())
         {
           sessiontickets.Delete(ticket);
           GEN_DELETE ticket;
           continue;
         }
-
-      if(!ticket->GetServerName()->Compare(servername, true)) return ticket;
+      if(!ticket->GetServerName()->Compare(servername, true))
+        {
+          destination.Delete();
+          destination.GetServerName()->Set(ticket->GetServerName()->Get());
+          destination.SetTicketAgeAdd(ticket->GetTicketAgeAdd());
+          destination.SetLifetime(ticket->GetLifetime());
+          destination.SetReceivedEpoch(ticket->GetReceivedEpoch());
+          destination.SetCipherSuite(ticket->GetCipherSuite());
+          destination.SetApplicationProtocol(ticket->GetApplicationProtocol());
+          return destination.GetTicket()->Add((*ticket->GetTicket())) && destination.GetPSK()->Add((*ticket->GetPSK())) &&
+                 (ticket->GetApplicationProtocolRaw()->IsEmpty() || destination.GetApplicationProtocolRaw()->Add((*ticket->GetApplicationProtocolRaw())));
+        }
     }
-
-  return NULL;
+  return false;
 }
 
 
 bool DIOSTREAMTLSCONFIG::SessionTickets_Delete()
 {
+  DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+  if(!lock.IsLocked()) return false;
   sessiontickets.DeleteContents();
   sessiontickets.DeleteAll();
   return true;
@@ -1961,21 +2566,39 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Seal(XBUFFER& PSK, XWORD ciphersuite,
                                              DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername,
                                              XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket)
 {
+  XBUFFER protocol;
+  if(!DIOSTREAMTLSCONFIG_ALPNFromType(applicationprotocol, protocol)) return false;
+  return SessionTicket_SealRaw(PSK, ciphersuite, protocol.IsEmpty()?NULL:&protocol, servername, lifetime, ageadd, ticket);
+}
+
+bool DIOSTREAMTLSCONFIG::SessionTicket_SealRaw(XBUFFER& PSK, XWORD ciphersuite,
+                                                XBUFFER* applicationprotocol, XCHAR* servername,
+                                                XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket)
+{
   if(!sessionresumptionactive || PSK.IsEmpty() || !lifetime ||
      (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME) ||
      !SessionResumption_ServerInitialize()) return false;
 
-  XBUFFER plain;
+  XSECUREBUFFER plain;
   XBUFFER nonce;
   XBUFFER aad;
   XBUFFER tag;
+  XSECUREBUFFER sealingkey;
+  XQWORD keyID = 0;
   CIPHERKEYSYMMETRICAL key;
   CIPHERAESGCM cipher;
   XRAND* random = GEN_XFACTORY.CreateRand();
   XQWORD issueepoch = DIOSTREAMTLSCONFIG_CurrentEpoch();
   XBYTE namelength = 0;
 
-  if(!issueepoch || PSK.GetSize() > 255) return false;
+  {
+    DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+    if(!lock.IsLocked() || sessionticketserverkeycurrent.GetSize() != 32) return false;
+    keyID = sessionticketserverkeycurrentID;
+    if(!sealingkey.Add(sessionticketserverkeycurrent)) return false;
+  }
+
+  if(!issueepoch || PSK.GetSize() > 255 || (applicationprotocol && applicationprotocol->GetSize() > 255)) return false;
   if(servername)
     {
       XDWORD length = 0;
@@ -1987,24 +2610,33 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Seal(XBUFFER& PSK, XWORD ciphersuite,
       namelength = (XBYTE)length;
     }
 
-  if(!random) return false;
+  if(!random || !random->IsCryptographicallySecure())
+    {
+      if(random) GEN_XFACTORY.DeleteRand(random);
+      return false;
+    }
   if(!nonce.Resize(CIPHERAESGCM_NONCESIZE)) { GEN_XFACTORY.DeleteRand(random); return false; }
   bool status = random->Ini() && random->Generate(nonce.Get(), nonce.GetSize());
   GEN_XFACTORY.DeleteRand(random);
   if(!status) return false;
 
-  if(!plain.Add((XBYTE)1) || !plain.Add(issueepoch) || !plain.Add(lifetime) || !plain.Add(ageadd) ||
-     !plain.Add(ciphersuite) || !plain.Add((XWORD)applicationprotocol) || !plain.Add((XBYTE)PSK.GetSize()) ||
+  XBYTE protocolsize = applicationprotocol?(XBYTE)applicationprotocol->GetSize():0;
+  if(!plain.Add((XBYTE)3) || !DIOSTREAMTLSCONFIG_AddUInt64BE(plain, issueepoch) ||
+     !DIOSTREAMTLSCONFIG_AddUInt32BE(plain, lifetime) || !DIOSTREAMTLSCONFIG_AddUInt32BE(plain, ageadd) ||
+     !DIOSTREAMTLSCONFIG_AddUInt16BE(plain, ciphersuite) || !plain.Add(protocolsize) ||
+     (protocolsize && !plain.Add((*applicationprotocol))) || !plain.Add((XBYTE)PSK.GetSize()) ||
      !plain.Add(PSK) || !plain.Add(namelength)) return false;
 
   for(XDWORD c=0; c<namelength; c++) if(!plain.Add((XBYTE)servername[c])) return false;
 
-  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','1' };
-  if(!aad.Add(aadbytes, sizeof(aadbytes)) || !key.Set(sessionticketserverkey) || !cipher.SetKey(&key) ||
+  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','3' };
+  if(!aad.Add(aadbytes, sizeof(aadbytes)) || !DIOSTREAMTLSCONFIG_AddUInt64BE(aad, keyID) ||
+     !key.Set(sealingkey) || !cipher.SetKey(&key) ||
      !cipher.CipherAEAD(plain.Get(), plain.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
 
   ticket.Delete();
-  if(!ticket.Add(nonce) || !ticket.Add((*cipher.GetResult())) || !ticket.Add(tag)) return false;
+  if(!DIOSTREAMTLSCONFIG_AddUInt64BE(ticket, keyID) || !ticket.Add(nonce) ||
+     !ticket.Add((*cipher.GetResult())) || !ticket.Add(tag)) return false;
   return true;
 }
 
@@ -2013,8 +2645,19 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD
                                              DIOSTREAMTLS_ALPN_TYPE& applicationprotocol, XSTRING& servername,
                                              XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
 {
-  if(!sessionresumptionactive || sessionticketserverkey.GetSize() != 32 ||
-     ticket.GetSize() <= (CIPHERAESGCM_NONCESIZE + CIPHERAESGCM_TAGSIZE)) return false;
+  XBUFFER protocol;
+  if(!SessionTicket_OpenRaw(ticket, PSK, ciphersuite, protocol, servername, issueepoch, lifetime, ageadd)) return false;
+  applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
+  if(protocol.GetSize() == 8 && !memcmp(protocol.Get(), "http/1.1", 8)) applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1;
+  if(protocol.GetSize() == 2 && !memcmp(protocol.Get(), "h2", 2)) applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_HTTP_2;
+  return true;
+}
+
+bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite,
+                                                XBUFFER& applicationprotocol, XSTRING& servername,
+                                                XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
+{
+  if(ticket.GetSize() <= (sizeof(XQWORD) + CIPHERAESGCM_NONCESIZE + CIPHERAESGCM_TAGSIZE)) return false;
 
   XBUFFER nonce;
   XBUFFER ciphertext;
@@ -2022,47 +2665,76 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD
   XBUFFER aad;
   CIPHERKEYSYMMETRICAL key;
   CIPHERAESGCM cipher;
-  XDWORD ciphertextsize = ticket.GetSize() - CIPHERAESGCM_NONCESIZE - CIPHERAESGCM_TAGSIZE;
+  XSECUREBUFFER openingkey;
+  XQWORD keyID = 0;
+  XDWORD ticketposition = 0;
+  if(!DIOSTREAMTLSCONFIG_GetUInt64BE(ticket, ticketposition, keyID)) return false;
+  {
+    DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
+    XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
+    if(!lock.IsLocked()) return false;
+    if(!sessionresumptionactive) return false;
+    if(keyID == sessionticketserverkeycurrentID) openingkey.Add(sessionticketserverkeycurrent);
+    else if((keyID == sessionticketserverkeypreviousID) && now && now < sessionticketserverkeypreviousexpires)
+      openingkey.Add(sessionticketserverkeyprevious);
+  }
+  if(openingkey.GetSize() != 32) return false;
+  XDWORD ciphertextsize = ticket.GetSize() - sizeof(XQWORD) - CIPHERAESGCM_NONCESIZE - CIPHERAESGCM_TAGSIZE;
 
-  if(!nonce.Add(ticket.Get(), CIPHERAESGCM_NONCESIZE) ||
-     !ciphertext.Add(ticket.Get() + CIPHERAESGCM_NONCESIZE, ciphertextsize) ||
-     !tag.Add(ticket.Get() + CIPHERAESGCM_NONCESIZE + ciphertextsize, CIPHERAESGCM_TAGSIZE)) return false;
+  if(!nonce.Add(ticket.Get() + sizeof(XQWORD), CIPHERAESGCM_NONCESIZE) ||
+     !ciphertext.Add(ticket.Get() + sizeof(XQWORD) + CIPHERAESGCM_NONCESIZE, ciphertextsize) ||
+     !tag.Add(ticket.Get() + sizeof(XQWORD) + CIPHERAESGCM_NONCESIZE + ciphertextsize, CIPHERAESGCM_TAGSIZE)) return false;
 
-  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','1' };
-  if(!aad.Add(aadbytes, sizeof(aadbytes)) || !key.Set(sessionticketserverkey) || !cipher.SetKey(&key) ||
+  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','3' };
+  if(!aad.Add(aadbytes, sizeof(aadbytes)) || !DIOSTREAMTLSCONFIG_AddUInt64BE(aad, keyID) ||
+     !key.Set(openingkey) || !cipher.SetKey(&key) ||
      !cipher.UncipherAEAD(ciphertext.Get(), ciphertext.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
 
-  XBUFFER plain;
+  XSECUREBUFFER plain;
   if(!plain.Add((*cipher.GetResult()))) return false;
 
   XBYTE version = 0;
-  XWORD protocol = 0;
+  XBYTE protocolsize = 0;
   XBYTE psklength = 0;
   XBYTE namelength = 0;
 
-  if(!plain.Extract(version) || version != 1 || !plain.Extract(issueepoch) || !plain.Extract(lifetime) ||
-     !plain.Extract(ageadd) || !plain.Extract(ciphersuite) || !plain.Extract(protocol) ||
-     !plain.Extract(psklength) || !psklength || plain.GetSize() < ((XDWORD)psklength + 1)) return false;
+  XDWORD position = 0;
+  if(position >= plain.GetSize()) return false;
+  version = plain.Get()[position++];
+  if(version != 3 || !DIOSTREAMTLSCONFIG_GetUInt64BE(plain, position, issueepoch) ||
+     !DIOSTREAMTLSCONFIG_GetUInt32BE(plain, position, lifetime) ||
+     !DIOSTREAMTLSCONFIG_GetUInt32BE(plain, position, ageadd) ||
+     !DIOSTREAMTLSCONFIG_GetUInt16BE(plain, position, ciphersuite) || position >= plain.GetSize()) return false;
+  protocolsize = plain.Get()[position++];
+  if(position > plain.GetSize() || (plain.GetSize()-position) < ((XDWORD)protocolsize+2)) return false;
 
-  PSK.Delete();
-  if(!PSK.Resize(psklength) || plain.Extract(PSK.Get(), 0, psklength) != psklength || !plain.Extract(namelength) ||
-     plain.GetSize() != namelength) return false;
+  applicationprotocol.Delete();
+  if(protocolsize && (!applicationprotocol.Add(plain.Get()+position, protocolsize))) return false;
+  position += protocolsize;
+  if(position >= plain.GetSize()) return false;
+  psklength = plain.Get()[position++];
+  if(!psklength || position > plain.GetSize() || (plain.GetSize()-position) < ((XDWORD)psklength+1)) return false;
+
+  PSK.SecureDelete();
+  if(!PSK.Add(plain.Get()+position, psklength)) return false;
+  position += psklength;
+  if(position >= plain.GetSize()) { PSK.SecureDelete(); return false; }
+  namelength = plain.Get()[position++];
+  if((plain.GetSize()-position) != namelength) { PSK.SecureDelete(); return false; }
 
   servername.Empty();
   for(XDWORD c=0; c<namelength; c++)
     {
-      XBYTE character = 0;
-      if(!plain.Extract(character)) return false;
+      XBYTE character = plain.Get()[position++];
       servername.Add((XCHAR)character);
     }
 
-  applicationprotocol = (DIOSTREAMTLS_ALPN_TYPE)protocol;
   XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
   if(!now || !issueepoch || now < issueepoch || !lifetime ||
      lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME || (now - issueepoch) >= lifetime)
     {
       PSK.FillBuffer(0);
-      PSK.Delete();
+      PSK.SecureDelete();
       return false;
     }
 
@@ -2080,6 +2752,7 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::Clean()
 {
+  frozen = false;
   // Default negotiation window is TLS 1.3 only, matching every previous phase exactly: nothing changes for an
   // existing caller unless it explicitly calls SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2).
   minversion = DIOSTREAMTLS_MSG_VERSION_TLS_1_3;
@@ -2088,10 +2761,8 @@ void DIOSTREAMTLSCONFIG::Clean()
   CipherSuites_Delete();
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
-  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
 
   SupportedGroups_Delete();
-  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
@@ -2100,13 +2771,11 @@ void DIOSTREAMTLSCONFIG::Clean()
   // anchor source is configured independently through CIPHERTRUSTPROVIDERX509, so applications can extend these
   // schemes without coupling that decision to the selected Root CA provider.
   SignatureSchemes_Delete();
-  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
 
   CertificateSignatureSchemes_Delete();
-  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
@@ -2121,6 +2790,7 @@ void DIOSTREAMTLSCONFIG::Clean()
 
   servername.Empty();
   TrustedRoots_Delete();
+  truststorefallbackpolicy = DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY_ON_NATIVE_FAILURE;
   ClientTrustedRoots_Delete();
   clientauthenticationmode = DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE;
   LocalCredentials_Delete();
@@ -2128,12 +2798,27 @@ void DIOSTREAMTLSCONFIG::Clean()
   localcredentialserror       = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE;
   allowunauthenticatedserver  = false;
 
-  aiafetchactive  = true;
-  aiafetchtimeout = 5;
+  aiafetchactive    = true;
+  aiafetchtimeout   = 5;
+  connectiontimeout = DIOSTREAMTLS_DEFAULT_CONNECTION_TIMEOUT;
+  handshaketimeout  = DIOSTREAMTLS_DEFAULT_HANDSHAKE_TIMEOUT;
+  CertificateRevocationLists_Delete();
+  ocspdirectfetcher = NULL;
+  ocspdirectcontext = NULL;
 
   SessionTickets_Delete();
-  if(!sessionticketserverkey.IsEmpty()) sessionticketserverkey.FillBuffer(0);
-  sessionticketserverkey.Delete();
+  sessionticketserverkeycurrent.SecureDelete();
+  sessionticketserverkeyprevious.SecureDelete();
+  sessionticketserverkeycurrentID       = 0;
+  sessionticketserverkeypreviousID      = 0;
+  sessionticketserverkeycurrentcreated  = 0;
+  sessionticketserverkeypreviousexpires = 0;
+  sessionticketkeyringload    = NULL;
+  sessionticketkeyringsave    = NULL;
+  sessionticketkeyringcontext = NULL;
+  sessionticketkeyringwrappingkey.SecureDelete();
+  sessionticketkeyringdirty = false;
   sessionresumptionactive = true;
   sessionticketlifetime   = DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_LIFETIME;
+  sessionticketkeyrotationinterval = DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_KEYROTATION;
 }

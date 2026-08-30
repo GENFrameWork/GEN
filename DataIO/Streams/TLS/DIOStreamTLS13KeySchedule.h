@@ -146,21 +146,20 @@ class DIOSTREAMTLS13KEYSCHEDULE
     HASH*                                   hash;
     CIPHERHKDF*                             HKDF;
 
-    XBUFFER                                 earlysecret;
-    XBUFFER                                 handshakesecret;
-    XBUFFER                                 mastersecret;
-    XBUFFER                                 resumptionsecret;
+    XSECUREBUFFER                           earlysecret;
+    XSECUREBUFFER                           handshakesecret;
+    XSECUREBUFFER                           mastersecret;
+    XSECUREBUFFER                           resumptionsecret;
 
-    XBUFFER                                 clienthandshaketrafficsecret;
-    XBUFFER                                 serverhandshaketrafficsecret;
-    XBUFFER                                 clientapplicationtrafficsecret;
-    XBUFFER                                 serverapplicationtrafficsecret;
+    XSECUREBUFFER                           clienthandshaketrafficsecret;
+    XSECUREBUFFER                           serverhandshaketrafficsecret;
+    XSECUREBUFFER                           clientapplicationtrafficsecret;
+    XSECUREBUFFER                           serverapplicationtrafficsecret;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 

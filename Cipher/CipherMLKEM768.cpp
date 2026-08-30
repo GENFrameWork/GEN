@@ -31,7 +31,7 @@ bool CIPHERMLKEM768::Random(XBYTE* data, XDWORD size)
   if(!xrand) return false;
 
   bool status = false;
-  if(xrand->Ini()) status = xrand->Generate(data, size);
+  if(xrand->Ini() && xrand->IsCryptographicallySecure()) status = xrand->Generate(data, size);
   GEN_XFACTORY.DeleteRand(xrand);
   return status;
 }

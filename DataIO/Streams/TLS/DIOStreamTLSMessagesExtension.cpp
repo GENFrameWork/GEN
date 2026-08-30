@@ -1137,6 +1137,33 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, DIOSTREAMTLS_ALPN_T
   return false;
 }
 
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, XBUFFER& protocol)
+{
+  XDWORD position = 0;
+  XDWORD count = 0;
+
+  protocol.Delete();
+  while(position < list_buffer.GetSize())
+    {
+      XBYTE protocolsize = list_buffer.GetByte(position);
+      if(!protocolsize || ((position + 1 + protocolsize) > list_buffer.GetSize())) return false;
+      if(count == index) return protocol.Add(&list_buffer.Get()[position + 1], protocolsize);
+      position += 1 + protocolsize;
+      count++;
+    }
+  return false;
+}
+
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Is(XBUFFER& protocol)
+{
+  for(XDWORD c=0; c<List_GetNProtocols(); c++)
+    {
+      XBUFFER current;
+      if(List_Get(c, current) && current.Compare(protocol)) return true;
+    }
+  return false;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -1217,6 +1244,17 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
 
   SetLength(list_length  + sizeof(XWORD));
 
+  return true;
+}
+
+bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(XBUFFER& protocol)
+{
+  if(protocol.IsEmpty() || protocol.GetSize() > 255 || List_Is(protocol) ||
+     ((list_buffer.GetSize() + 1 + protocol.GetSize()) > (0xFFFF - sizeof(XWORD)))) return false;
+
+  if(!list_buffer.Add((XBYTE)protocol.GetSize()) || !list_buffer.Add(protocol)) return false;
+  list_length = list_buffer.GetSize();
+  SetLength(list_length + sizeof(XWORD));
   return true;
 }
 

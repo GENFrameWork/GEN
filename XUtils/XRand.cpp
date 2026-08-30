@@ -226,6 +226,21 @@ bool XRAND::Generate(XBYTE* buffer, XDWORD size)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool XRAND::IsCryptographicallySecure()
+* @brief      Report whether Generate() is backed by a cryptographically secure random source
+* @ingroup    XUTILS
+*
+* @return     bool : true only for platform implementations backed by a CSPRNG.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XRAND::IsCryptographicallySecure()
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         int XRAND::MaxElements(int max)
 * @brief      Max elements

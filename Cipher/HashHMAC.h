@@ -81,13 +81,12 @@ class HASHHMAC : public HASH
 
     HASH*                           hash;
     XDWORD                          blocksize;
-    XBUFFER                         key;
+    XSECUREBUFFER                   key;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 

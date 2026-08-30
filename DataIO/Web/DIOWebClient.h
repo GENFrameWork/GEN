@@ -59,6 +59,14 @@ enum DIOWEBCLIENT_AUTHENTICATION_METHOD
 };
 
 
+enum DIOWEBCLIENT_TRANSPORTPOLICY
+{
+  DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_ONLY               = 0 ,
+  DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_PREFER                 ,
+  DIOWEBCLIENT_TRANSPORTPOLICY_HTTP_ONLY                    ,
+};
+
+
 enum DIOWEBCLIENT_BODYMODE
 {
   DIOWEBCLIENT_BODYMODE_UNKNOWN                     = 0 ,
@@ -158,6 +166,11 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      IsActiveDoStopHTTPError           ();
     void                                      DoStopHTTPError                   (bool activate);
 
+    DIOWEBCLIENT_TRANSPORTPOLICY              GetTransportPolicy                ();
+    void                                      SetTransportPolicy                (DIOWEBCLIENT_TRANSPORTPOLICY policy);
+    bool                                      IsInsecureRedirectAllowed         ();
+    void                                      AllowInsecureRedirect             (bool allow);
+
 
 
 
@@ -186,7 +199,7 @@ class DIOWEBCLIENT : public XSUBJECT
   private:
 
  
-    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool* connectionfailed = NULL);
+    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool* allowhttpfallback = NULL);
     bool                                      Header_Read                       (int timeout);
     bool                                      Body_Read                         (DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent);
     bool                                      Body_Decompress                   (bool istobuffer, void* to);
@@ -194,6 +207,8 @@ class DIOWEBCLIENT : public XSUBJECT
     DIOWEBCLIENT_CHUNKEDRESULT                ChunkSize_Get                     (XBUFFER& input, XQWORD& chunksize);
     bool                                      Stream_Create                     (bool isTLS);
     bool                                      IsSecureURL                       (DIOURL& url);
+    bool                                      RedirectOrigin_IsSame              (DIOURL& first, DIOURL& second);
+    bool                                      Headers_FilterSensitive            (XCHAR* source, XSTRING& filtered);
 
     bool                                      GetSubStringWWWWAuthenticate      (XSTRING& www_authenticate, XCHAR* field, XSTRING& value, bool betweenquotation = true);
 
@@ -217,6 +232,8 @@ class DIOWEBCLIENT : public XSUBJECT
 
     DIOWEBCLIENT_HEADER                       header;
     bool                                      dostophttperror;
+    DIOWEBCLIENT_TRANSPORTPOLICY              transportpolicy;
+    bool                                      allowinsecureredirect;
 
     bool                                      contentencodingactive;
     bool                                      compressrequestbody;
@@ -232,5 +249,4 @@ class DIOWEBCLIENT : public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 

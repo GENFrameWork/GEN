@@ -354,17 +354,17 @@ bool XPROCESS::Compare(XPROCESS& xprocess, bool onlyfixed)
       return false;
     }
 
-  if(path.Compare(xprocess.GetPath()->Get(), true))
+  if(path.Compare(xprocess.GetPath()->Get(), true) != 0)
     {
       return false;   
     }
 
-  if(name.Compare(xprocess.GetName()->Get(), true))
+  if(name.Compare(xprocess.GetName()->Get(), true) != 0)
     {
       return false;   
     }
 
-  if(windowtitle.Compare(xprocess.GetWindowTitle()->Get(), false))
+  if(windowtitle.Compare(xprocess.GetWindowTitle()->Get(), false) != 0)
     {
       return false;   
     }
@@ -1004,7 +1004,6 @@ void XPROCESSMANAGER::Clean()
 {
   
 }
-
 
 
 

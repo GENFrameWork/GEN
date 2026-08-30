@@ -68,8 +68,9 @@ class XSTACK
     void                          Push          (T element)     { stack.Add(element);                     }
     T                             Pop           ()
                                   {
+                                    if(stack.IsEmpty()) return T();
                                     T element = stack.GetLast();
-                                    stack.Delete(element);
+                                    stack.DeleteLast();
                                     return element;
                                   }
 
@@ -86,7 +87,6 @@ class XSTACK
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

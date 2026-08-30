@@ -123,7 +123,6 @@ class CIPHERRSA : public CIPHER
     bool                            Verify                            (XBUFFER& input, XBUFFER& signature, HASH* hash, CIPHERRSAPKCS1VERSION pkcs1version = CIPHERRSAPKCS1VERSIONV15, XDWORD saltsize = 0);
 
 
-    static CIPHERRSA*               GetInstance                       ();
     XRAND*                          GetXRand                          ();
     bool                            GenerateKeys                      (XDWORD nbits, int exponent, CIPHERKEYPUBLICRSA& publickey, CIPHERKEYPRIVATERSA& privatekey, XMPINTEGER_FUNCRANDOM funcrandom = NULL, void* paramrandom = NULL);
 
@@ -157,7 +156,6 @@ class CIPHERRSA : public CIPHER
     void                            Clean                             ();
 
 
-    static CIPHERRSA*               instance;
     CIPHERRSA_CONTEXT               context;
     XRAND*                          xrand;
 };

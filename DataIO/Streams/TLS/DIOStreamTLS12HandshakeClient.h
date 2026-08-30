@@ -38,6 +38,7 @@
 
 #include "DIOStreamTLS12Session.h"
 #include "DIOStreamTLS12Messages.h"
+#include "DIOStreamTLSConfig.h"
 
 #include "CipherCertificateX509Validator.h"
 
@@ -106,6 +107,9 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
 
     bool                                    Authentication_Set                               (XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
     void                                    AIAFetch_Set                                      (bool active, int timeout);
+    void                                    ValidationPolicy_Set                              (CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy);
+    void                                    RevocationLists_Set                               (XVECTOR<XBUFFER*>* CRLs);
+    void                                    OCSPDirect_Set                                    (DIOSTREAMTLS_OCSPDIRECTFETCHER fetcher, void* context);
     DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR GetAuthenticationError                 ();
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    GetCertificateValidationError                    ();
 
@@ -176,6 +180,9 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     int                                     aiafetchtimeout;
 
     CIPHERCERTIFICATEX509VALIDATOR          certificatevalidator;
+    XVECTOR<XBUFFER*>*                      revocationlists;
+    DIOSTREAMTLS_OCSPDIRECTFETCHER          ocspdirectfetcher;
+    void*                                   ocspdirectcontext;
 
     XVECTOR<XWORD>                          ciphersuites;
     XVECTOR<XWORD>                          supportedgroups;
@@ -186,7 +193,7 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
 
     XWORD                                   servergroup;
     XBUFFER                                 clientkeyshare;
-    XBUFFER                                 premastersecret;
+    XSECUREBUFFER                           premastersecret;
 
     DIOSTREAMTLS12_MSG_CERTIFICATE*         servercertificate;
     DIOSTREAMTLS12_MSG_SERVERKEYEXCHANGE_ECDHE* serverkeyexchange;

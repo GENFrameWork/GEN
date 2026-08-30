@@ -38,7 +38,6 @@
 
 #include "CipherKeyPublicRSA.h"
 #include "CipherKeyECDSA.h"
-#include "CipherKeySymmetrical.h"
 
 
 
@@ -54,6 +53,64 @@
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+static bool CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(CIPHERCERTIFICATEX509* root,
+                                                                  XVECTOR<CIPHERCERTIFICATEX509*>& certificates,
+                                                                  bool rootisinchain)
+{
+  if(!root || !root->HasNameConstraints()) return true;
+  XDWORD limit=certificates.GetSize(); if(rootisinchain&&limit) limit--;
+  for(XDWORD c=0;c<limit;c++) if(!root->AreNamesPermitted(certificates.Get(c))) return false;
+  return true;
+}
+
+CIPHERCERTIFICATEX509VALIDATIONPOLICY::CIPHERCERTIFICATEX509VALIDATIONPOLICY()
+{
+  minimumRSAKeyBits          = 2048;
+  allowSHA1                  = false;
+  allowExpired               = false;
+  requireServerAuthEKU       = true;
+  requireClientAuthEKU       = true;
+  maximumChainDepth          = CIPHERCERTIFICATEX509VALIDATOR_MAXCHAINSIZE;
+  allowedSignatureAlgorithms = 0;
+
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION, true);
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION, true);
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION, true);
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256, true);
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384, true);
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512, true);
+  SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS, true);
+}
+
+XDWORD CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetMinimumRSAKeyBits() { return minimumRSAKeyBits; }
+void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetMinimumRSAKeyBits(XDWORD bits) { minimumRSAKeyBits = bits; }
+bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetAllowSHA1() { return allowSHA1; }
+void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetAllowSHA1(bool allow) { allowSHA1 = allow; }
+bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetAllowExpired() { return allowExpired; }
+void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetAllowExpired(bool allow) { allowExpired = allow; }
+bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetRequireServerAuthEKU() { return requireServerAuthEKU; }
+void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetRequireServerAuthEKU(bool require) { requireServerAuthEKU = require; }
+bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetRequireClientAuthEKU() { return requireClientAuthEKU; }
+void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetRequireClientAuthEKU(bool require) { requireClientAuthEKU = require; }
+XDWORD CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetMaximumChainDepth() { return maximumChainDepth; }
+void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetMaximumChainDepth(XDWORD depth) { maximumChainDepth = depth; }
+
+bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::IsSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm)
+{
+  if((algorithm == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA1WITHRSAENCRYPTION) ||
+     (algorithm == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1)) return allowSHA1;
+  if(((XDWORD)algorithm >= 64) || (algorithm == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN)) return false;
+  return (allowedSignatureAlgorithms & (((XQWORD)1) << (XDWORD)algorithm))?true:false;
+}
+
+void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm, bool allowed)
+{
+  if(((XDWORD)algorithm >= 64) || (algorithm == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN)) return;
+  XQWORD mask = ((XQWORD)1) << (XDWORD)algorithm;
+  if(allowed) allowedSignatureAlgorithms |= mask;
+          else allowedSignatureAlgorithms &= ~mask;
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -109,6 +166,16 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClient(XVECTOR<XBUFFER*>* certifica
   return ValidateInternal(certificatechain, trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_CLIENT_AUTH, NULL, datetime);
 }
 
+CIPHERCERTIFICATEX509VALIDATIONPOLICY* CIPHERCERTIFICATEX509VALIDATOR::GetPolicy()
+{
+  return &policy;
+}
+
+void CIPHERCERTIFICATEX509VALIDATOR::SetPolicy(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
+{
+  this->policy = policy;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -130,7 +197,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
 
   // Reject an oversized certificate_list before decoding a single certificate: a malicious server could otherwise
   // force unbounded CPU/memory work with a chain that was always going to be rejected as too long.
-  if(certificatechain->GetSize() > CIPHERCERTIFICATEX509VALIDATOR_MAXCHAINSIZE)
+  if((certificatechain->GetSize() > CIPHERCERTIFICATEX509VALIDATOR_MAXCHAINSIZE) ||
+     (certificatechain->GetSize() > policy.GetMaximumChainDepth()))
     {
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH);
     }
@@ -163,10 +231,7 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
       XBUFFER* rootDER = trustedroots->Get(c);
       CIPHERCERTIFICATEX509* root;
 
-      if(!rootDER)
-        {
-          return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDPARAMETER);
-        }
+      if(!rootDER || rootDER->IsEmpty()) continue;
 
       root = GEN_NEW CIPHERCERTIFICATEX509();
       if(!root)
@@ -174,12 +239,30 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCERTIFICATE);
         }
 
-      if(!root->Decode((*rootDER)) || !roots.Add(root))
+      // A native trust store can contain certificates using formats or algorithms that this
+      // build of GEN does not support.  Such an entry is not a usable trust anchor, but it is
+      // unrelated to the path being checked and therefore must not reject that path globally.
+      if(!root->Decode((*rootDER)))
+        {
+          GEN_DELETE root;
+          continue;
+        }
+
+      if(root->GetPublicCipherKey() && (root->GetPublicCipherKey()->GetType()==CIPHERKEYTYPE_RSA_PUBLIC) &&
+         ((XDWORD)root->GetPublicCipherKey()->GetSizeInBits()<policy.GetMinimumRSAKeyBits()))
+        {
+          GEN_DELETE root;
+          continue;
+        }
+
+      if(!roots.Add(root))
         {
           GEN_DELETE root;
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCERTIFICATE);
         }
     }
+
+  if(roots.IsEmpty()) return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT);
 
   CIPHERCERTIFICATEX509* leaf = certificates.Get(0);
   if(!leaf)
@@ -201,14 +284,14 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNKNOWNCRITICALEXTENSION);
         }
 
-      if(datetime)
+      if(!policy.GetAllowExpired() && datetime)
         {
           if(!certificate->IsValidDates(datetime))
             {
               return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDDATE);
             }
         }
-       else if(!certificate->IsValidDates())
+       else if(!policy.GetAllowExpired() && !certificate->IsValidDates())
         {
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDDATE);
         }
@@ -217,8 +300,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
                      (certificate->HasKeyUsage() && !certificate->IsKeyUsageCertificateSign()) ||
                      (certificate->HasExtendedKeyUsage() &&
                       ((purpose == CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH)?
-                        !certificate->IsExtendedKeyUsageServerAuthentication():
-                        !certificate->IsExtendedKeyUsageClientAuthentication()))))
+                        (policy.GetRequireServerAuthEKU() && !certificate->IsExtendedKeyUsageServerAuthentication()):
+                        (policy.GetRequireClientAuthEKU() && !certificate->IsExtendedKeyUsageClientAuthentication())))))
         {
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCA);
         }
@@ -228,14 +311,22 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
         {
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH);
         }
+
+
+      CIPHERKEY* publickey = certificate->GetPublicCipherKey();
+      if(publickey && (publickey->GetType() == CIPHERKEYTYPE_RSA_PUBLIC) &&
+         ((XDWORD)publickey->GetSizeInBits() < policy.GetMinimumRSAKeyBits()))
+        {
+          return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_WEAKKEY);
+        }
     }
 
   if(leaf->IsCertificateAuthority() ||
      (leaf->HasKeyUsage() && !leaf->IsKeyUsageDigitalSignature()) ||
      (leaf->HasExtendedKeyUsage() &&
       ((purpose == CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH)?
-        !leaf->IsExtendedKeyUsageServerAuthentication():
-        !leaf->IsExtendedKeyUsageClientAuthentication())))
+        (policy.GetRequireServerAuthEKU() && !leaf->IsExtendedKeyUsageServerAuthentication()):
+        (policy.GetRequireClientAuthEKU() && !leaf->IsExtendedKeyUsageClientAuthentication()))))
     {
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDKEYUSAGE);
     }
@@ -243,6 +334,16 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
   if((purpose == CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH) && !leaf->IsServerNameValid(servername))
     {
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDNAME);
+    }
+
+  // Constraints are cumulative: every CA constrains every certificate below it in the selected path.
+  for(XDWORD issuerindex=1; issuerindex<certificates.GetSize(); issuerindex++)
+    {
+      CIPHERCERTIFICATEX509* issuer = certificates.Get(issuerindex);
+      if(!issuer || !issuer->HasNameConstraints()) continue;
+      for(XDWORD subjectindex=0; subjectindex<issuerindex; subjectindex++)
+        if(!issuer->AreNamesPermitted(certificates.Get(subjectindex)))
+          return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
     }
 
   for(XDWORD c=0; c+1<certificates.GetSize(); c++)
@@ -282,6 +383,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
 
       if(chainend->GetCertificateData()->Compare((*root->GetCertificateData())))
         {
+          if(!CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(root,certificates,true))
+            return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
           error = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
           return true;
         }
@@ -291,6 +394,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
          (!root->HasKeyUsage() || root->IsKeyUsageCertificateSign()) &&
          IsSamePublicKey(chainend->GetPublicCipherKey(), root->GetPublicCipherKey()))
         {
+          if(!CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(root,certificates,true))
+            return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
           error = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
           return true;
         }
@@ -319,6 +424,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
 
       if(chainend->VerifySignature(root->GetPublicCipherKey()))
         {
+          if(!CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(root,certificates,false))
+            return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
           error = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
           return true;
         }
@@ -411,6 +518,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSignatureAlgorithmSupported(CIPHERCERTIFI
       return false;
     }
 
+  if(!policy.IsSignatureAlgorithmAllowed(certificate->GetAlgorithmType())) return false;
+
   switch(certificate->GetAlgorithmType())
     {
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION :
@@ -419,9 +528,10 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSignatureAlgorithmSupported(CIPHERCERTIFI
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256         :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384         :
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512         : return true;
-      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519                  : return true;
       case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               : return (certificate->GetRSASSAPSSHashType() !=
                                                                                   CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN);
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA1WITHRSAENCRYPTION   :
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1           : return policy.GetAllowSHA1();
                                                                     default : break;
     }
 
@@ -462,23 +572,12 @@ bool CIPHERCERTIFICATEX509VALIDATOR::IsSamePublicKey(CIPHERKEY* key1, CIPHERKEY*
                                       }
                                  break;
 
-      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC :
-      case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC :
-      case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC : { CIPHERKEYECDSA* keyECDSA1 = (CIPHERKEYECDSA*)key1;
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC : { CIPHERKEYECDSA* keyECDSA1 = (CIPHERKEYECDSA*)key1;
                                                     CIPHERKEYECDSA* keyECDSA2 = (CIPHERKEYECDSA*)key2;
 
                                                     if(!keyECDSA1->Get() || !keyECDSA2->Get()) return false;
 
                                                     return keyECDSA1->Get()->Compare((*keyECDSA2->Get()));
-                                                  }
-                                             break;
-
-      case CIPHERKEYTYPE_ED25519_PUBLIC          : { CIPHERKEYSYMMETRICAL* keyEd255191 = (CIPHERKEYSYMMETRICAL*)key1;
-                                                    CIPHERKEYSYMMETRICAL* keyEd255192 = (CIPHERKEYSYMMETRICAL*)key2;
-
-                                                    if(!keyEd255191->Get() || !keyEd255192->Get()) return false;
-
-                                                    return keyEd255191->Get()->Compare((*keyEd255192->Get()));
                                                   }
                                              break;
 

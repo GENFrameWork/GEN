@@ -133,7 +133,7 @@ CIPHERED25519::~CIPHERED25519(){Clean();}
 
 bool CIPHERED25519::Random(XBYTE* data,XDWORD size)
 {
-  XRAND* xrand=GEN_XFACTORY.CreateRand();if(!xrand)return false;bool status=false;if(xrand->Ini())status=xrand->Generate(data,size);GEN_XFACTORY.DeleteRand(xrand);return status;
+  XRAND* xrand=GEN_XFACTORY.CreateRand();if(!xrand)return false;bool status=false;if(xrand->Ini()&&xrand->IsCryptographicallySecure())status=xrand->Generate(data,size);GEN_XFACTORY.DeleteRand(xrand);return status;
 }
 
 bool CIPHERED25519::KeyPair_Create(XBUFFER& privatekey,XBUFFER& publickey)

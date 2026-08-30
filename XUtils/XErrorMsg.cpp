@@ -671,7 +671,7 @@ bool XERRORSMSG::EraseMsg(int code)
     {
       XERRORMSG* error = errors.Get(c);
 
-      if(!error)
+      if(error)
         {
           if(error->GetCode()==code)
             {
@@ -747,6 +747,5 @@ bool XERRORSMSG::Clean()
 
   return true;
 }
-
 
 

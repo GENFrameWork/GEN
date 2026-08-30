@@ -54,6 +54,7 @@ class XSERIALIZATIONMETHODJSON : public XSERIALIZATIONMETHOD
     virtual bool                Add                            (int var, XCHAR* name = NULL);  
     virtual bool                Add                            (float var, XCHAR* name = NULL);  
     virtual bool                Add                            (double var, XCHAR* name = NULL); 
+    virtual bool                Add                            (long var, XCHAR* name = NULL); 
     virtual bool                Add                            (long long var, XCHAR* name = NULL); 
     
     virtual bool                Add                            (XBYTE var, XCHAR* name = NULL);  
@@ -118,7 +119,6 @@ class XSERIALIZATIONMETHODJSON : public XSERIALIZATIONMETHOD
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

@@ -560,7 +560,17 @@ DIOWEBCLIENT::DIOWEBCLIENT(XDWORD maxsizebuffer)
   // 1.2 (see DIOSTREAMTLS<T>::Open() / Handshake_Attempt()). A caller that wants strict TLS 1.3-only behavior
   // can still narrow the window back with GetStreamTLSCFG()->SetMaxVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3) /
   // SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_3) after construction.
-  if(diostreamcfg) ((DIOSTREAMTLSCONFIG*)diostreamcfg)->SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+  if(diostreamcfg)
+    {
+      DIOSTREAMTLSCONFIG* tlsconfig = (DIOSTREAMTLSCONFIG*)diostreamcfg;
+
+      tlsconfig->SetMinVersion(DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+
+      // DIOWEBCLIENT only speaks HTTP/1.1.  Configure ALPN once, while the static TLS
+      // configuration is still mutable; subsequent requests may reuse the same frozen
+      // configuration without attempting to modify it.
+      tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1);
+    }
 
   #else
 
@@ -870,6 +880,66 @@ bool DIOWEBCLIENT::IsActiveDoStopHTTPError()
 void DIOWEBCLIENT::DoStopHTTPError(bool activate)
 {
   dostophttperror = activate;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBCLIENT_TRANSPORTPOLICY DIOWEBCLIENT::GetTransportPolicy()
+* @brief      Get the transport policy used for URLs without an explicit scheme
+* @ingroup    DATAIO
+* 
+* @return     DIOWEBCLIENT_TRANSPORTPOLICY : Current transport policy.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOWEBCLIENT_TRANSPORTPOLICY DIOWEBCLIENT::GetTransportPolicy()
+{
+  return transportpolicy;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBCLIENT::SetTransportPolicy(DIOWEBCLIENT_TRANSPORTPOLICY policy)
+* @brief      Set the transport policy used for URLs without an explicit scheme
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Transport policy.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWEBCLIENT::SetTransportPolicy(DIOWEBCLIENT_TRANSPORTPOLICY policy)
+{
+  transportpolicy = policy;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::IsInsecureRedirectAllowed()
+* @brief      Check whether HTTPS to HTTP redirects are explicitly allowed
+* @ingroup    DATAIO
+* 
+* @return     bool : true if insecure redirects are allowed; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::IsInsecureRedirectAllowed()
+{
+  return allowinsecureredirect;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBCLIENT::AllowInsecureRedirect(bool allow)
+* @brief      Allow or deny HTTPS to HTTP redirects
+* @ingroup    DATAIO
+* 
+* @param[in]  allow : true to allow the downgrade explicitly; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void DIOWEBCLIENT::AllowInsecureRedirect(bool allow)
+{
+  allowinsecureredirect = allow;
 }
 
 
@@ -1810,33 +1880,51 @@ bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool* connectionfailed)
+bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool* allowhttpfallback)
 {
+  if(allowhttpfallback) (*allowhttpfallback) = false;
+
   if(!diostreamcfg)     return false;
   if(!timerout)         return false;
   if(!to)               return false;
 
-  // No scheme in the URL at all: behave like curl's implicit default -- try HTTPS first, and only fall
-  // back to plain HTTP if TLS itself could not be established (see the "connectionfailed" points below).
-  // This can only trigger here, on the original call from Get()/Put()/Post(): every recursive call this
-  // function makes (redirects, and the two dispatch calls right here) always passes a URL that already
-  // has an explicit scheme, so this branch cannot re-enter itself or interfere with redirect handling.
-  if(!url.HaveHTTPID())
+  bool explicitHTTP  = (url.Find(DIOURL_WEBURLID       , true) == 0);
+  bool explicitHTTPS = (url.Find(DIOURL_WEBURLID_SECURE, true) == 0);
+
+  // http:// and https:// are mandatory when explicitly present. Only a genuinely scheme-less URL is governed by
+  // transportpolicy. Reject another explicit URI scheme instead of accidentally prefixing it with https://.
+  if(!explicitHTTP && !explicitHTTPS)
     {
-      DIOURL urlhttps;
-      DIOURL urlhttp;
-      bool   tlsunavailable = false;
+      DIOURL targeturl;
 
-      urlhttps  = DIOURL_WEBURLID_SECURE;
-      urlhttps += url.Get();
+      if(url.Find(__L("://"), true) != XSTRING_NOTFOUND) return false;
 
-      if(MakeOperation(method, urlhttps, postdata, addhead, timeout, localIP, istobuffer, to, 0, &tlsunavailable)) return true;
-      if(!tlsunavailable) return false;                // failed for a real reason after connecting -- never silently downgrade
+      if(transportpolicy == DIOWEBCLIENT_TRANSPORTPOLICY_HTTP_ONLY)
+        {
+          targeturl  = DIOURL_WEBURLID;
+          targeturl += url.Get();
+          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+        }
 
-      urlhttp  = DIOURL_WEBURLID;
-      urlhttp += url.Get();
+      targeturl  = DIOURL_WEBURLID_SECURE;
+      targeturl += url.Get();
 
-      return MakeOperation(method, urlhttp, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+      if(transportpolicy == DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_ONLY)
+        {
+          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+        }
+
+      // HTTPS_PREFER is only an availability fallback. The recursive operation enables it solely while creating or
+      // connecting the HTTPS transport (including TLS negotiation), and never after an HTTP request has been sent or
+      // when TLS authentication fails. Explicit http:// / https:// URLs never enter this branch.
+      bool canfallbacktohttp = false;
+
+      if(MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, &canfallbacktohttp)) return true;
+      if(!canfallbacktohttp) return false;
+
+      targeturl  = DIOURL_WEBURLID;
+      targeturl += url.Get();
+      return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
     }
 
   if(istobuffer) ((XBUFFER*)to)->Delete();
@@ -1893,16 +1981,38 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   if(isTLS)
     {
       DIOSTREAMTLSCONFIG* tlsconfig = GetStreamTLSCFG();
+      XBUFFER             applicationprotocol;
+      static const XBYTE  HTTP11ALPN[] = { 'h','t','t','p','/','1','.','1' };
 
-      if(!tlsconfig) { if(connectionfailed) *connectionfailed = true; return false; }
-      tlsconfig->GetServerName()->Set(server.Get());
-      tlsconfig->ApplicationProtocols_Delete();
-      if(!tlsconfig->ApplicationProtocol_Add(DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1)) { if(connectionfailed) *connectionfailed = true; return false; }
+      if(!tlsconfig) return false;
+
+      // The TLS stream derives SNI and the certificate name from RemoteURL.  Keeping
+      // ServerName empty is intentional: it makes the host connection-specific and
+      // avoids mutating frozen shared configuration on redirects or client reuse.
+      if((tlsconfig->GetApplicationProtocolsCount() != 1) ||
+         !tlsconfig->GetApplicationProtocol(0, applicationprotocol) ||
+         (applicationprotocol.GetSize() != sizeof(HTTP11ALPN)) ||
+         memcmp(applicationprotocol.Get(), HTTP11ALPN, sizeof(HTTP11ALPN)))
+        {
+          return false;
+        }
     }
 
   #endif
 
-  if(!Stream_Create(isTLS)) { if(connectionfailed) *connectionfailed = true; return false; }
+  if(!Stream_Create(isTLS))
+    {
+      // A build without the TLS module cannot service an implicit HTTPS attempt. This is an availability failure,
+      // so HTTPS_PREFER may still use HTTP. With TLS compiled in, creation failures are local configuration/resource
+      // errors and must not silently weaken the requested transport.
+      #ifndef DIO_STREAMTLS_ACTIVE
+
+      if(isTLS && allowhttpfallback) (*allowhttpfallback) = true;
+
+      #endif
+
+      return false;
+    }
 
   //--- Connection WEB server -------------------
 
@@ -1912,12 +2022,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       diostream->Close();
 
-      // For an implicit URL the caller may retry over HTTP, but never after TLS has positively failed
-      // authentication/security checks. In that case downgrading would turn a security failure into an
-      // unprotected request. Explicit https:// URLs never reach the fallback branch in any case.
-      if(connectionfailed)
+      // The caller only supplies allowhttpfallback for the first HTTPS attempt of a scheme-less URL. A certificate,
+      // hostname, trust-chain or other TLS authentication failure is authoritative and must never become HTTP.
+      if(isTLS && allowhttpfallback)
         {
-          *connectionfailed = (streamerror == DIOSTREAMERROR_TLSAUTHENTICATION)?false:true;
+          (*allowhttpfallback) = (streamerror != DIOSTREAMERROR_TLSAUTHENTICATION);
         }
 
       return false;
@@ -1926,7 +2035,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   if(!diostream->WaitToConnected(timeout))
     {
       diostream->Close();
-      if(connectionfailed) *connectionfailed = true;
+      if(isTLS && allowhttpfallback) (*allowhttpfallback) = true;
 
 
       return false;
@@ -2175,11 +2284,46 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
           // Close() -- reconnecting via a brand-new instance sidesteps any such reuse bug entirely, at
           // the cost of one extra allocation per redirect hop (redirect chains are already bounded by
           // DIOWEBCLIENT_MAXREDIRECTS).
+          bool redirectisTLS = IsSecureURL(redirecturl);
+          if(isTLS && !redirectisTLS && !allowinsecureredirect) return false;
+
+          bool    sameorigin      = RedirectOrigin_IsSame(url, redirecturl);
+          XSTRING filteredheaders;
+          XCHAR*  redirectheaders = addhead;
+
+          if(addhead && !sameorigin)
+            {
+              if(!Headers_FilterSensitive(addhead, filteredheaders)) return false;
+              redirectheaders = filteredheaders.IsEmpty()?NULL:filteredheaders.Get();
+            }
+
+          XSTRING                            savedlogin;
+          XSTRING                            savedpassword;
+          DIOWEBCLIENT_AUTHENTICATION_METHOD savedauthenticationmethod = authenticationmethod;
+
+          if(!sameorigin)
+            {
+              savedlogin     = login;
+              savedpassword  = password;
+              login.Empty();
+              password.Empty();
+              authenticationmethod = DIOWEBCLIENT_AUTHENTICATION_METHOD_UNKNOWN;
+            }
+
           diostream->Close();
           GEN_DIOFACTORY.DeleteStreamIO(diostream);
           diostream = NULL;
 
-          return MakeOperation(method, redirecturl, postdata, addhead, timeout, localIP, istobuffer, to, redirectcount+1);
+          bool redirectstatus = MakeOperation(method, redirecturl, postdata, redirectheaders, timeout, localIP, istobuffer, to, redirectcount+1);
+
+          if(!sameorigin)
+            {
+              login                = savedlogin;
+              password             = savedpassword;
+              authenticationmethod = savedauthenticationmethod;
+            }
+
+          return redirectstatus;
         }
     }
   }
@@ -2555,6 +2699,82 @@ bool DIOWEBCLIENT::GetSubStringWWWWAuthenticate(XSTRING& www_authenticate, XCHAR
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool DIOWEBCLIENT::RedirectOrigin_IsSame(DIOURL& first, DIOURL& second)
+* @brief      Check whether two URLs belong to the same security origin
+* @note       INTERNAL
+* @ingroup    DATAIO
+* 
+* @return     bool : true when scheme and authority are equal; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::RedirectOrigin_IsSame(DIOURL& first, DIOURL& second)
+{
+  XSTRING firstserver;
+  XSTRING firstlogin;
+  XSTRING firstpassword;
+  XSTRING secondserver;
+  XSTRING secondlogin;
+  XSTRING secondpassword;
+
+  if(IsSecureURL(first) != IsSecureURL(second)) return false;
+  if(!first.GetHTTPServer(firstserver, firstlogin, firstpassword)) return false;
+  if(!second.GetHTTPServer(secondserver, secondlogin, secondpassword)) return false;
+
+  return !firstserver.Compare(secondserver, true);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::Headers_FilterSensitive(XCHAR* source, XSTRING& filtered)
+* @brief      Remove credential-bearing request headers before a cross-origin redirect
+* @note       INTERNAL
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBCLIENT::Headers_FilterSensitive(XCHAR* source, XSTRING& filtered)
+{
+  filtered.Empty();
+  if(!source) return true;
+
+  XSTRING headers;
+  headers = source;
+
+  int start = 0;
+  while(start < (int)headers.GetSize())
+    {
+      int end = headers.Find(__L("\n"), true, start);
+      if(end == XSTRING_NOTFOUND) end = headers.GetSize();
+
+      XSTRING line;
+      headers.Copy(start, end-start, line);
+      if(!line.IsEmpty() && (line.Get()[line.GetSize()-1] == __C('\r'))) line.DeleteLastCharacter();
+
+      XSTRING lowerline;
+      lowerline = line;
+      lowerline.ToLowerCase();
+
+      bool sensitive = !lowerline.Find(__L("authorization:"), true) ||
+                       !lowerline.Find(__L("proxy-authorization:"), true) ||
+                       !lowerline.Find(__L("cookie:"), true);
+
+      if(!sensitive && !line.IsEmpty())
+        {
+          filtered += line;
+          filtered += __L("\r\n");
+        }
+
+      start = end + 1;
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         void DIOWEBCLIENT::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -2577,6 +2797,10 @@ void DIOWEBCLIENT::Clean()
   authenticationmethod    = DIOWEBCLIENT_AUTHENTICATION_METHOD_UNKNOWN;
 
   dostophttperror         = true;
+  // A scheme-less URL first uses HTTPS and retries over HTTP only when the HTTPS transport cannot be established.
+  // Explicit http:// and https:// schemes are mandatory and are never replaced by this policy.
+  transportpolicy         = DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_PREFER;
+  allowinsecureredirect   = false;
 
   contentencodingactive   = true;
   compressrequestbody     = false;

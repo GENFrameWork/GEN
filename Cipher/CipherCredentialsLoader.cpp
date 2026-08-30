@@ -1,0 +1,351 @@
+/**-------------------------------------------------------------------------------------------------------------------
+* @file       CipherCredentialsLoader.cpp
+* @class      CIPHERCREDENTIALSLOADER
+* @brief      Central certificate/private-key format loader for TLS and other Cipher consumers
+* @ingroup    CIPHER
+* --------------------------------------------------------------------------------------------------------------------*/
+
+#include "GEN_Defines.h"
+#include "CipherCredentialsLoader.h"
+#include "CipherPEMCodec.h"
+#include "CipherCertificateX509.h"
+#include "CipherKeyPrivateRSA.h"
+#include "CipherKeyECDSA.h"
+#include "CipherECDSA.h"
+#include <string.h>
+#include <stdio.h>
+#include "GEN_Control.h"
+
+void CIPHERCREDENTIALSLOADER::Certificates_Delete(XVECTOR<XBUFFER*>& certificatechain)
+{
+  certificatechain.DeleteContents(); certificatechain.DeleteAll();
+}
+
+void CIPHERCREDENTIALSLOADER::PrivateKey_Delete(CIPHERKEY*& privatekey)
+{
+  if(privatekey) GEN_DELETE privatekey;
+  privatekey=NULL;
+}
+
+static void CIPHERCREDENTIALSLOADER_StringWipe(XSTRING& string)
+{
+  if(string.Get())
+    {
+      volatile XCHAR* data=string.Get();
+      for(XDWORD c=0;c<string.GetSize();c++) data[c]=0;
+    }
+  string.Empty();
+}
+
+static bool CIPHERCREDENTIALSLOADER_LegacyHexLine(XBUFFER& filedata, XDWORD requested, XSTRING& line)
+{
+  line.Empty();
+  XDWORD ordinal=0;
+  XDWORD start=0;
+
+  for(XDWORD end=0; end<=filedata.GetSize(); end++)
+    {
+      bool separator=(end==filedata.GetSize()) || filedata.GetByte(end)=='\r' || filedata.GetByte(end)=='\n';
+      if(!separator) continue;
+
+      XDWORD first=start;
+      XDWORD last=end;
+      while(first<last && (filedata.GetByte(first)==' ' || filedata.GetByte(first)=='\t')) first++;
+      while(last>first && (filedata.GetByte(last-1)==' ' || filedata.GetByte(last-1)=='\t')) last--;
+
+      if(first<last)
+        {
+          if(ordinal==requested)
+            {
+              for(XDWORD c=first;c<last;c++)
+                {
+                  XBYTE value=filedata.GetByte(c);
+                  bool hexadecimal=((value>='0')&&(value<='9')) || ((value>='a')&&(value<='f')) || ((value>='A')&&(value<='F'));
+                  if(!hexadecimal || !line.Add((XCHAR)value))
+                    {
+                      CIPHERCREDENTIALSLOADER_StringWipe(line);
+                      return false;
+                    }
+                }
+              return !line.IsEmpty();
+            }
+          ordinal++;
+        }
+
+      while((end+1)<filedata.GetSize() &&
+            (filedata.GetByte(end+1)=='\r' || filedata.GetByte(end+1)=='\n')) end++;
+      start=end+1;
+    }
+
+  return false;
+}
+
+static bool CIPHERCREDENTIALSLOADER_LegacyPrivateKey(XBUFFER& filedata, CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
+{
+  XSTRING first,second,third,extra;
+  bool status=false;
+
+  if(expectedpublickeytype==CIPHERKEYTYPE_RSA_PUBLIC)
+    {
+      if(CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,0,first) &&
+         CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,1,second) &&
+         CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,2,third) &&
+         !CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,3,extra))
+        {
+          XMPINTEGER p,q,d;
+          if(p.SetFromString(16,first) && q.SetFromString(16,second) && d.SetFromString(16,third))
+            {
+              CIPHERKEYPRIVATERSA* key=GEN_NEW CIPHERKEYPRIVATERSA();
+              if(key && key->Set(p,q,d)) { privatekey=key; status=true; }
+              else if(key) GEN_DELETE key;
+            }
+        }
+    }
+  else
+    {
+      CIPHERKEYTYPE privatetype=CIPHERKEYTYPE_UNKNOWN;
+      XDWORD coordinatesize=0;
+      switch(expectedpublickeytype)
+        {
+          case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC: privatetype=CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE; coordinatesize=CIPHERECDSA_P256_COORDINATE_SIZE; break;
+          case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC: privatetype=CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE; coordinatesize=CIPHERECDSA_P384_COORDINATE_SIZE; break;
+          case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC: privatetype=CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE; coordinatesize=CIPHERECDSA_P521_COORDINATE_SIZE; break;
+                                                   default: break;
+        }
+
+      if(coordinatesize && CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,0,first) &&
+         !CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,1,extra))
+        {
+          XMPINTEGER scalar;
+          XBYTE value[CIPHERECDSA_MAXCOORDINATE_SIZE];
+          memset(value,0,sizeof(value));
+          if(scalar.SetFromString(16,first) && scalar.ExportToBinary(value,coordinatesize))
+            {
+              CIPHERKEYECDSA* key=GEN_NEW CIPHERKEYECDSA();
+              if(key)
+                {
+                  key->SetType(privatetype);
+                  if(key->Set(value,coordinatesize)) { privatekey=key; status=true; }
+                  else GEN_DELETE key;
+                }
+            }
+          volatile XBYTE* wipe=value;
+          for(XDWORD c=0;c<sizeof(value);c++) wipe[c]=0;
+        }
+    }
+
+  CIPHERCREDENTIALSLOADER_StringWipe(first);
+  CIPHERCREDENTIALSLOADER_StringWipe(second);
+  CIPHERCREDENTIALSLOADER_StringWipe(third);
+  CIPHERCREDENTIALSLOADER_StringWipe(extra);
+  return status;
+}
+
+static int CIPHERCREDENTIALSLOADER_Find(XBYTE* data, XDWORD size, const char* marker, XDWORD from)
+{
+  XDWORD markersize=(XDWORD)strlen(marker);
+  if(!data || !markersize || markersize>size) return -1;
+  for(XDWORD c=from;c+markersize<=size;c++) if(!memcmp(data+c,marker,markersize)) return (int)c;
+  return -1;
+}
+
+bool CIPHERCREDENTIALSLOADER::PEMBlocks_Decode(XBUFFER& filedata, const char* label, XVECTOR<XBUFFER*>& blocks)
+{
+  blocks.DeleteContents(); blocks.DeleteAll();
+  if(!label || filedata.IsEmpty()) return false;
+  char begin[96]; char end[96];
+  snprintf(begin,sizeof(begin),"-----BEGIN %s-----",label);
+  snprintf(end,sizeof(end),"-----END %s-----",label);
+  XDWORD cursor=0;
+  while(cursor<filedata.GetSize())
+    {
+      int b=CIPHERCREDENTIALSLOADER_Find(filedata.Get(),filedata.GetSize(),begin,cursor);
+      if(b<0) break;
+      XDWORD bodystart=(XDWORD)b+(XDWORD)strlen(begin);
+      int e=CIPHERCREDENTIALSLOADER_Find(filedata.Get(),filedata.GetSize(),end,bodystart);
+      if(e<0) { Certificates_Delete(blocks); return false; }
+      XSTRING base64;
+      for(XDWORD c=bodystart;c<(XDWORD)e;c++)
+        {
+          XBYTE value=filedata.Get()[c];
+          if((value==' ')||(value=='\t')||(value=='\r')||(value=='\n')) continue;
+          if(value&0x80) { Certificates_Delete(blocks); return false; }
+          base64.Add((XCHAR)value);
+        }
+      XBUFFER* DER=GEN_NEW XBUFFER();
+      if(!DER || !DER->ConvertFromBase64(base64) || DER->IsEmpty() || !blocks.Add(DER))
+        { if(DER) GEN_DELETE DER; Certificates_Delete(blocks); return false; }
+      cursor=(XDWORD)e+(XDWORD)strlen(end);
+    }
+  return !blocks.IsEmpty();
+}
+
+bool CIPHERCREDENTIALSLOADER::Certificates_Load(XBUFFER& filedata, XVECTOR<XBUFFER*>& certificatechain)
+{
+  Certificates_Delete(certificatechain);
+  XVECTOR<XBUFFER*> blocks;
+  bool status=PEMBlocks_Decode(filedata,"CERTIFICATE",blocks);
+  if(!status) status=PEMBlocks_Decode(filedata,"PKCS7",blocks);
+  if(!status) status=PEMBlocks_Decode(filedata,"CMS",blocks);
+
+  if(status && blocks.GetSize()==1)
+    {
+      CIPHERCERTIFICATEX509 certificate;
+      if(!certificate.Decode((*blocks.Get(0))))
+        {
+          XVECTOR<XBUFFER*> pkcs7;
+          status=CIPHERPEMCODEC::PKCS7Certificates_Decode((*blocks.Get(0)),pkcs7);
+          blocks.DeleteContents(); blocks.DeleteAll();
+          if(status)
+            {
+              for(XDWORD c=0;c<pkcs7.GetSize();c++)
+                if(!certificatechain.Add(pkcs7.Get(c))) { status=false; break; }
+              if(status) pkcs7.DeleteAll();
+              else { certificatechain.DeleteAll(); Certificates_Delete(pkcs7); }
+            }
+          return status;
+        }
+    }
+
+  if(status)
+    {
+      for(XDWORD c=0;c<blocks.GetSize();c++)
+        {
+          CIPHERCERTIFICATEX509 certificate;
+          if(!certificate.Decode((*blocks.Get(c)))) { status=false; break; }
+        }
+      if(status)
+        {
+          for(XDWORD c=0;c<blocks.GetSize();c++)
+            if(!certificatechain.Add(blocks.Get(c))) { status=false; break; }
+          if(status) { blocks.DeleteAll(); return true; }
+          certificatechain.DeleteAll();
+        }
+      blocks.DeleteContents(); blocks.DeleteAll(); return false;
+    }
+
+  CIPHERCERTIFICATEX509 certificate;
+  if(certificate.Decode(filedata))
+    {
+      XBUFFER* copy=GEN_NEW XBUFFER();
+      if(copy && copy->Add(filedata) && certificatechain.Add(copy)) return true;
+      if(copy) GEN_DELETE copy;
+    }
+  if(CIPHERPEMCODEC::PKCS7Certificates_Decode(filedata,certificatechain)) return true;
+  Certificates_Delete(certificatechain); return false;
+}
+
+bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
+{
+  PrivateKey_Delete(privatekey);
+  XBUFFER inner;
+  bool isrsa=false,isec=false;
+  XBUFFER* actual=&DER;
+  if(CIPHERPEMCODEC::PKCS8PrivateKey_Decode(DER,isrsa,isec,inner)) actual=&inner;
+
+  if((expectedpublickeytype==CIPHERKEYTYPE_RSA_PUBLIC) && (!isec))
+    {
+      XMPINTEGER p,q,d;
+      if(CIPHERPEMCODEC::RSAPrivateKey_Decode((*actual),p,q,d))
+        {
+          CIPHERKEYPRIVATERSA* key=GEN_NEW CIPHERKEYPRIVATERSA();
+          if(key && key->Set(p,q,d)) { privatekey=key; inner.SecureDelete(); return true; }
+          if(key) GEN_DELETE key;
+        }
+    }
+  else
+    {
+      CIPHERKEYTYPE privatetype=CIPHERKEYTYPE_UNKNOWN; XDWORD coordinatesize=0;
+      switch(expectedpublickeytype)
+        {
+          case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC: privatetype=CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE; coordinatesize=CIPHERECDSA_P256_COORDINATE_SIZE; break;
+          case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC: privatetype=CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE; coordinatesize=CIPHERECDSA_P384_COORDINATE_SIZE; break;
+          case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC: privatetype=CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE; coordinatesize=CIPHERECDSA_P521_COORDINATE_SIZE; break;
+                                                   default: break;
+        }
+      XSECUREBUFFER scalar;
+      if(coordinatesize && CIPHERPEMCODEC::ECPrivateKey_Decode((*actual),scalar) && scalar.GetSize()<=coordinatesize)
+        {
+          XBYTE value[CIPHERECDSA_MAXCOORDINATE_SIZE]; memset(value,0,sizeof(value));
+          memcpy(value+coordinatesize-scalar.GetSize(),scalar.Get(),scalar.GetSize());
+          CIPHERKEYECDSA* key=GEN_NEW CIPHERKEYECDSA();
+          if(key) { key->SetType(privatetype); if(key->Set(value,coordinatesize)) privatekey=key; else GEN_DELETE key; }
+          volatile XBYTE* wipe=value; for(XDWORD c=0;c<sizeof(value);c++) wipe[c]=0;
+          scalar.SecureDelete(); inner.SecureDelete();
+          return privatekey?true:false;
+        }
+    }
+  inner.SecureDelete(); return false;
+}
+
+bool CIPHERCREDENTIALSLOADER::PrivateKey_Load(XBUFFER& filedata, XCHAR* password,
+                                               CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
+{
+  PrivateKey_Delete(privatekey);
+  XVECTOR<XBUFFER*> blocks;
+  XSECUREBUFFER decrypted;
+  bool encrypted=false;
+  bool status=PEMBlocks_Decode(filedata,"ENCRYPTED PRIVATE KEY",blocks);
+  if(status) encrypted=true;
+  if(!status) status=PEMBlocks_Decode(filedata,"PRIVATE KEY",blocks);
+  if(!status) status=PEMBlocks_Decode(filedata,"RSA PRIVATE KEY",blocks);
+  if(!status) status=PEMBlocks_Decode(filedata,"EC PRIVATE KEY",blocks);
+
+  XBUFFER* DER=NULL;
+  if(status && blocks.GetSize()==1) DER=blocks.Get(0);
+  else if(!status && !CIPHERPEMCODEC::IsPEM(filedata)) { DER=&filedata; status=true; }
+  else status=false;
+
+  if(status && encrypted)
+    {
+      XSTRING secret; if(password) secret.Set(password);
+      status=password && CIPHERPEMCODEC::PKCS8EncryptedPrivateKey_Decode((*DER),secret,decrypted);
+      if(secret.Get()) { volatile XCHAR* wipe=secret.Get(); for(XDWORD c=0;c<secret.GetSize();c++) wipe[c]=0; } secret.Empty();
+      DER=&decrypted;
+    }
+  else if(!CIPHERPEMCODEC::IsPEM(filedata) && password)
+    {
+      XSTRING secret(password);
+      if(CIPHERPEMCODEC::PKCS8EncryptedPrivateKey_Decode(filedata,secret,decrypted)) { DER=&decrypted; status=true; }
+      if(secret.Get()) { volatile XCHAR* wipe=secret.Get(); for(XDWORD c=0;c<secret.GetSize();c++) wipe[c]=0; } secret.Empty();
+    }
+
+  if(status && DER)
+    {
+      status=PrivateKeyDER_Decode((*DER),expectedpublickeytype,privatekey);
+      if(!status && (DER==&filedata)) status=CIPHERCREDENTIALSLOADER_LegacyPrivateKey(filedata,expectedpublickeytype,privatekey);
+    }
+  for(XDWORD c=0;c<blocks.GetSize();c++) if(blocks.Get(c)) blocks.Get(c)->SecureDelete();
+  blocks.DeleteContents(); blocks.DeleteAll(); decrypted.SecureDelete();
+  return status;
+}
+
+bool CIPHERCREDENTIALSLOADER::Credentials_Load(XBUFFER& certificatedata, XBUFFER& privatekeydata, XCHAR* password,
+                                                XVECTOR<XBUFFER*>& certificatechain, CIPHERKEY*& privatekey)
+{
+  Certificates_Delete(certificatechain); PrivateKey_Delete(privatekey);
+
+  XSTRING secret; if(password) secret.Set(password);
+  XSECUREBUFFER pfxprivatekey;
+  if(CIPHERPEMCODEC::PKCS12_Decode(privatekeydata,secret,certificatechain,pfxprivatekey) ||
+     ((&certificatedata!=&privatekeydata) && CIPHERPEMCODEC::PKCS12_Decode(certificatedata,secret,certificatechain,pfxprivatekey)))
+    {
+      CIPHERCERTIFICATEX509 leaf;
+      bool loaded=certificatechain.Get(0) && leaf.Decode((*certificatechain.Get(0))) && leaf.GetPublicCipherKey() &&
+                  PrivateKeyDER_Decode(pfxprivatekey,leaf.GetPublicCipherKey()->GetType(),privatekey);
+      pfxprivatekey.SecureDelete();
+      if(secret.Get()){volatile XCHAR* wipe=secret.Get();for(XDWORD c=0;c<secret.GetSize();c++)wipe[c]=0;} secret.Empty();
+      if(loaded) return true;
+      Certificates_Delete(certificatechain); PrivateKey_Delete(privatekey);
+      return false;
+    }
+  pfxprivatekey.SecureDelete();
+  if(secret.Get()){volatile XCHAR* wipe=secret.Get();for(XDWORD c=0;c<secret.GetSize();c++)wipe[c]=0;} secret.Empty();
+
+  if(!Certificates_Load(certificatedata,certificatechain)) return false;
+  CIPHERCERTIFICATEX509 leaf;
+  if(!certificatechain.Get(0) || !leaf.Decode((*certificatechain.Get(0))) || !leaf.GetPublicCipherKey() ||
+     !PrivateKey_Load(privatekeydata,password,leaf.GetPublicCipherKey()->GetType(),privatekey))
+    { Certificates_Delete(certificatechain); PrivateKey_Delete(privatekey); return false; }
+  return true;
+}

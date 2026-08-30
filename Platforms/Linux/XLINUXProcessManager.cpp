@@ -151,33 +151,22 @@ bool XLINUXPROCESSMANAGER::MakeCommand(XCHAR* command, XBUFFER* out, int* return
   XBUFFER cmdchar;
   
   _command.ConvertToASCII(cmdchar);   
-  pipe = popen(cmdchar.GetPtrChar(), "rt" );
+  pipe = popen(cmdchar.GetPtrChar(), "r");
   if(pipe == NULL) status = false;
   
   if(!status) return false;
 
-  if(out)
+  memset(buffer, 0, _MAXBUFFER);
+  while(fgets((char*)buffer, _MAXBUFFER, pipe))
     {
+      if(out) out->Add((XBYTE*)buffer, SizeBufferASCII(buffer, _MAXBUFFER));
       memset(buffer, 0, _MAXBUFFER);
-
-      while(fgets((char*)buffer, _MAXBUFFER, pipe))
-        {
-          out->Add((XBYTE*)buffer, SizeBufferASCII(buffer, _MAXBUFFER));
-          memset(buffer, 0, _MAXBUFFER);
-        }
     }
 
-  // Close pipe and print return value of pPipe.
-  if(feof(pipe))
-    {
-      if(returncode) (*returncode) =  pclose(pipe);
-    }
-   else
-    {
-      return false;
-    }
+  int result = pclose(pipe);
+  if(returncode) (*returncode) = result;
 
-  return true;
+  return result != -1;
 }
 
 
@@ -638,6 +627,5 @@ void XLINUXPROCESSMANAGER::Clean()
 {
 
 }
-
 
 

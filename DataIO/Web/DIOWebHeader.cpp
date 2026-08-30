@@ -101,12 +101,14 @@ DIOWEBHEADER::~DIOWEBHEADER()
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBHEADER::Read(DIOSTREAMTCPIP* diostream, int timeout)
+bool DIOWEBHEADER::Read(DIOSTREAMTCPIP* diostream, int timeout, XDWORD maximumsize)
 {
-  if(!diostream) return false;
+  if(!diostream || !maximumsize) return false;
 
   XSTRING line;
   bool    status;
+  bool    completed = false;
+  XDWORD  totalsize = 0;
 
   DeleteAllLines();
 
@@ -118,18 +120,34 @@ bool DIOWEBHEADER::Read(DIOSTREAMTCPIP* diostream, int timeout)
         {
           if(line.IsEmpty())
             {
+              completed = true;
               break;
             }
             else
             {
+              XDWORD linesize = line.GetSize() + 2;
+              if((line.GetSize() > DIOWEBHEADER_MAXLINE) || (linesize > maximumsize) ||
+                 (totalsize > maximumsize - linesize))
+                {
+                  completed = false;
+                  break;
+                }
+
+              totalsize += linesize;
               //XTRACE_PRINTCOLOR(3, __L("WEB CLIENT HEADER LINE: %s"), line.Get());
-              AddLine(line);
+              if(!AddLine(line)) break;
             }
+        }
+
+      if(diostream->GetInXBuffer()->GetSize() > maximumsize)
+        {
+          completed = false;
+          break;
         }
 
       if(timeout)
         {
-          if(xtimerout->GetMeasureSeconds()>(XDWORD)timeout) break;
+           if(xtimerout->GetMeasureSeconds()>=(XDWORD)timeout) break;
 
           GEN_XSLEEP.MilliSeconds(1);
         }
@@ -139,9 +157,7 @@ bool DIOWEBHEADER::Read(DIOSTREAMTCPIP* diostream, int timeout)
   GEN_XFACTORY.DeleteTimer(xtimerout);
 
 
-  if(lines.IsEmpty()) return false;
-
-  return true;
+  return completed && !lines.IsEmpty();
 }
 
 
@@ -284,18 +300,31 @@ bool DIOWEBHEADER::GetLines(XSTRING& result)
 * --------------------------------------------------------------------------------------------------------------------*/
 XCHAR* DIOWEBHEADER::GetFieldValue(XCHAR* field)
 {
+  if(!field || !field[0]) return NULL;
+  XDWORD fieldsize = XSTRING::GetSize(field);
+  bool fieldhascolon = false;
+  for(XDWORD c=0; c<fieldsize; c++) if(field[c] == __C(':')) { fieldhascolon = true; break; }
+
   for(int c=0;c<(int)lines.GetSize();c++)
     {
        XSTRING* line = (XSTRING*)lines.Get(c);
-       if(line)
+       if(line && line->GetSize() >= fieldsize)
          {
-           int index = line->Find(field, true);
-           if(index!= XSTRING_NOTFOUND)
+           bool equal = true;
+           for(XDWORD d=0; d<fieldsize; d++)
              {
-               XDWORD size = (int)XSTRING::GetSize(field);
-
-               return line->Get() + index + size + 1;
+               XCHAR left = (*line)[d];
+               XCHAR right = field[d];
+               if(left >= __C('A') && left <= __C('Z')) left += __C('a') - __C('A');
+               if(right >= __C('A') && right <= __C('Z')) right += __C('a') - __C('A');
+               if(left != right) { equal = false; break; }
              }
+
+           if(!equal || (!fieldhascolon && (line->GetSize() == fieldsize || (*line)[fieldsize] != __C(':')))) continue;
+
+           XDWORD position = fieldsize + (fieldhascolon?0:1);
+           while(position < line->GetSize() && ((*line)[position] == __C(' ') || (*line)[position] == __C('\t'))) position++;
+           return line->Get() + position;
          }
     }
 
@@ -422,6 +451,3 @@ void DIOWEBHEADER::Clean()
 {
 
 }
-
-
-

@@ -41,6 +41,9 @@
 #include "DIOStreamTLSMessagesHandShakeServerFlight.h"
 #include "DIOStreamTLSSignature.h"
 #include "DIOStreamTLSAIAFetcher.h"
+#include "CipherCertificateX509PathBuilder.h"
+#include "CipherCertificateX509Revocation.h"
+#include "Cipher.h"
 
 #include "XRand.h"
 
@@ -234,7 +237,7 @@ void DIOSTREAMTLS12HANDSHAKECLIENT::End()
   serverrandom.Delete();
   clientkeyshare.Delete();
   premastersecret.FillBuffer(0);
-  premastersecret.Delete();
+  premastersecret.SecureDelete();
 
   Clean();
 }
@@ -413,6 +416,21 @@ void DIOSTREAMTLS12HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
   aiafetchtimeout = (timeout > 0)?timeout:DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }
 
+void DIOSTREAMTLS12HANDSHAKECLIENT::ValidationPolicy_Set(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
+{
+  certificatevalidator.SetPolicy(policy);
+}
+
+void DIOSTREAMTLS12HANDSHAKECLIENT::RevocationLists_Set(XVECTOR<XBUFFER*>* CRLs)
+{
+  revocationlists = CRLs;
+}
+
+void DIOSTREAMTLS12HANDSHAKECLIENT::OCSPDirect_Set(DIOSTREAMTLS_OCSPDIRECTFETCHER fetcher, void* context)
+{
+  ocspdirectfetcher=fetcher; ocspdirectcontext=context;
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
@@ -501,7 +519,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
     }
 
   if(!allowunauthenticatedserver &&
-     (!authenticationconfigured || !servername || !servername[0] || expectedservername.Compare(servername, true)))
+     (!authenticationconfigured || expectedservername.IsEmpty()))
     {
       SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
       return SetError();
@@ -511,8 +529,9 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
   records.Delete();
 
   xrand = GEN_XFACTORY.CreateRand();
-  if(!xrand)
+  if(!xrand || !xrand->IsCryptographicallySecure())
     {
+      if(xrand) GEN_XFACTORY.DeleteRand(xrand);
       return SetError();
     }
 
@@ -628,6 +647,22 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
   if(!body->Extensions_Add(offeredschemes))
     {
       GEN_DELETE offeredschemes;
+      return SetError();
+    }
+
+  DIOSTREAMTLS_MSG_EXTENSION_EMS* EMS = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_EMS();
+  if(!EMS || !body->Extensions_Add(EMS))
+    {
+      if(EMS) GEN_DELETE EMS;
+      return SetError();
+    }
+
+  DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* renegotiationinfo = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+  if(!renegotiationinfo) return SetError();
+  renegotiationinfo->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_RENEGOTIATIONINFO);
+  if(!renegotiationinfo->GetData()->Add((XBYTE)0) || !body->Extensions_Add(renegotiationinfo))
+    {
+      GEN_DELETE renegotiationinfo;
       return SetError();
     }
 
@@ -933,6 +968,27 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerHello_Process(XBUFFER& message)
       return SetError();
     }
 
+  bool hasEMS = false;
+  bool hassecurerenegotiation = false;
+  XVECTOR<DIOSTREAMTLS_MSG_EXTENSION*>* serverextensions = serverhello.GetBody()->Extensions_GetAll();
+
+  for(XDWORD c=0; c<serverextensions->GetSize(); c++)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION* extension = serverextensions->Get(c);
+      if(!extension) return SetError();
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_EMS) hasEMS = true;
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_RENEGOTIATIONINFO)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* unknown = (DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
+          if((unknown->GetData()->GetSize()!=1) || unknown->GetData()->GetByte(0)) return SetError();
+          hassecurerenegotiation = true;
+        }
+    }
+
+  if(!hasEMS || !hassecurerenegotiation) return SetError();
+
   serverrandom.Delete();
   if(!serverrandom.Add(serverhello.GetBody()->GetRandom(), DIOSTREAMTLS_MSG_RANDOM_SIZE))
     {
@@ -1087,8 +1143,21 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
             }
         }
 
-      if(!certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                        hasvalidationdatetime?&validationdatetime:NULL) &&
+      XVECTOR<XBUFFER*> intermediates;
+      XVECTOR<XBUFFER*> builtpath;
+      CIPHERCERTIFICATEX509PATHBUILDER pathbuilder;
+      for(XDWORD c=1; c<certificatechain.GetSize(); c++) intermediates.Add(certificatechain.Get(c));
+
+      bool validated = false;
+      if(certificatechain.Get(0) && pathbuilder.Build((*certificatechain.Get(0)), &intermediates, &trustedroots,
+                                                      builtpath, certificatevalidator.GetPolicy()->GetMaximumChainDepth()))
+        validated = certificatevalidator.Validate(&builtpath, &trustedroots, expectedservername.Get(),
+                                                   hasvalidationdatetime?&validationdatetime:NULL);
+
+      CIPHERCERTIFICATEX509PATHBUILDER::Path_Delete(builtpath);
+
+      if(!validated && !certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
+                                                       hasvalidationdatetime?&validationdatetime:NULL) &&
          !CertificateChain_CompleteViaAIA(certificatechain))
         {
           certificatevalidationerror = certificatevalidator.GetError();
@@ -1099,6 +1168,33 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
         }
 
       certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
+
+      if(revocationlists && !revocationlists->IsEmpty())
+        {
+          XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
+          bool havevalidCRL=false;
+          if(!chain || chain->GetSize()<2) return SetError();
+          for(XDWORD c=0;c<revocationlists->GetSize();c++)
+            {
+              XBUFFER* CRL=revocationlists->Get(c); if(!CRL) continue;
+              CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*chain->Get(0)),(*chain->Get(1)));
+              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)
+                { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
+              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) havevalidCRL=true;
+            }
+          if(!havevalidCRL)
+            { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
+        }
+
+
+      if(ocspdirectfetcher)
+        {
+          XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain(); XBUFFER response;
+          if(!chain || chain->GetSize()<2 || !chain->Get(0)->HasOCSPURL() ||
+             !ocspdirectfetcher((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,ocspdirectcontext) ||
+             CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(0)),(*chain->Get(1)))!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
+            { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
+        }
     }
 
   DIOSTREAMTLS12_MSG_CERTIFICATE* decodedcertificate = GEN_NEW DIOSTREAMTLS12_MSG_CERTIFICATE();
@@ -1324,14 +1420,15 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ClientFlight_Create(XBUFFER& records)
   }
 
   // 3) NOW derive master_secret and key_block, and activate both record directions.
-  if(!session.Keys_Activate(premastersecret, clientrandom, serverrandom))
+  if(!session.TranscriptHash(transcripthash) ||
+     !session.Keys_Activate(premastersecret, clientrandom, serverrandom, &transcripthash))
     {
       records.Delete();
       return SetError();
     }
 
   premastersecret.FillBuffer(0);
-  premastersecret.Delete();
+  premastersecret.SecureDelete();
 
   // 4) Finished, the first record actually encrypted with the just-activated LOCAL key (sequence 0).
   if(!session.TranscriptHash(transcripthash) ||
@@ -1395,7 +1492,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Finished_Process(XBUFFER& message)
   if(!session.TranscriptHash(transcripthash) ||
      !session.GetKeySchedule()->VerifyData_Create(false, transcripthash, expectedverifydata) ||
      (expectedverifydata.GetSize() != finished.GetBody()->GetVerifyData()->GetSize()) ||
-     memcmp(expectedverifydata.Get(), finished.GetBody()->GetVerifyData()->Get(), expectedverifydata.GetSize()))
+     !CIPHER::CompareConstantTime(expectedverifydata.Get(), finished.GetBody()->GetVerifyData()->Get(), expectedverifydata.GetSize()))
     {
       return SetError();
     }
@@ -1541,4 +1638,7 @@ void DIOSTREAMTLS12HANDSHAKECLIENT::Clean()
   servergroup                 = 0;
   aiafetchactive               = true;
   aiafetchtimeout              = DIOSTREAMTLSAIAFETCHER_TIMEOUT;
+  revocationlists              = NULL;
+  ocspdirectfetcher            = NULL;
+  ocspdirectcontext            = NULL;
 }

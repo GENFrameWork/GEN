@@ -41,6 +41,14 @@
 #define DIOURL_WEBURLID        __L("http://")
 #define DIOURL_WEBURLID_SECURE __L("https://")
 
+enum DIOURL_HOSTTYPE
+{
+  DIOURL_HOSTTYPE_UNKNOWN = 0,
+  DIOURL_HOSTTYPE_DNS,
+  DIOURL_HOSTTYPE_IPV4,
+  DIOURL_HOSTTYPE_IPV6,
+};
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -107,6 +115,9 @@ class DIOURL : public XSTRING
     bool                      GetExtension                      (XSTRING& extension);
     bool                      GetFileName                       (XSTRING& filename);
 
+    static DIOURL_HOSTTYPE    Host_GetType                     (XCHAR* host);
+    static bool               Host_Canonicalize                (XCHAR* host, XSTRING& canonicalhost, DIOURL_HOSTTYPE& type);
+
   private:
 
     void                      Clean                             ();
@@ -117,7 +128,6 @@ class DIOURL : public XSTRING
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

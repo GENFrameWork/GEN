@@ -35,6 +35,8 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "XSerializationMethodJSON.h"
+#include "XBuffer.h"
+#include "XVariant.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -207,6 +209,14 @@ bool XSERIALIZATIONMETHODJSON::Add(double var, XCHAR* name)
 }
 
 
+bool XSERIALIZATIONMETHODJSON::Add(long var, XCHAR* name)
+{
+  if(!CheckHandleActive()) return false;
+  XFILEJSON_ADDVALUE(GetActualObject(), name, (long long)var);
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool XSERIALIZATIONMETHODJSON::Add(long long var, XCHAR* name)
@@ -371,12 +381,14 @@ bool XSERIALIZATIONMETHODJSON::Add(XSTRING* var, XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(XBUFFER* var, XCHAR* name)
 {
-  if(!CheckHandleActive()) 
+  if(!CheckHandleActive() || !var)
     {
       return false;
     }
 
-  //XFILEJSON_ADDVALUE(GetActualObject(), name, (XBYTE*)var.Get());
+  XSTRING base64;
+  if(!var->IsEmpty() && !var->ConvertToBase64(base64)) return false;
+  XFILEJSON_ADDVALUE(GetActualObject(), name, base64.Get());
 
   return true;
 }
@@ -872,11 +884,12 @@ bool XSERIALIZATIONMETHODJSON::Extract(XBUFFER& var, XCHAR* name)
   XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
   if(jsonvalue)
     {
-      //var = jsonvalue->
-      return true;  
+      XSTRING base64 = jsonvalue->GetValueString();
+      var.Delete();
+      return base64.IsEmpty() || var.ConvertFromBase64(base64);
     }
 
-  return true;
+  return false;
 }
 
 
@@ -899,7 +912,9 @@ bool XSERIALIZATIONMETHODJSON::Extract(XVARIANT& var, XCHAR* name)
       return false;
     }
 
-  return true;
+  XFILEJSONVALUE* jsonvalue = fileJSON->GetValue(name, extractobject);
+  if(!jsonvalue || !jsonvalue->GetValue()) return false;
+  return var.GetDataVariant((*jsonvalue->GetValue()));
 }
 
 
@@ -916,11 +931,18 @@ bool XSERIALIZATIONMETHODJSON::Extract(XVARIANT& var, XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::ExtractStruct(XCHAR* name)
 {
-  if(!CheckHandleActive()) 
+  if(!fileJSON) return false;
+  if(name)
     {
-      return false;
+      XFILEJSONVALUE* value = GetContainerValue(name, extractobject);
+      if(!value || value->GetType() != XFILEJSONVALUETYPE_OBJECT || !value->GetValueObject()) return false;
+      extractfathers.Add(extractobject);
+      extractobject = value->GetValueObject();
+      return true;
     }
-
+  if(extractfathers.IsEmpty()) return false;
+  extractobject = extractfathers.GetLast();
+  extractfathers.DeleteLast();
   return true;
 }
 
@@ -939,12 +961,11 @@ bool XSERIALIZATIONMETHODJSON::ExtractStruct(XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::ExtractArray(XDWORD nelements, XCHAR* name)
 {
-  if(!CheckHandleActive())
-    {
-      return false;
-    }
-
-  return true;
+  if(!fileJSON || !name) return false;
+  XFILEJSONVALUE* value = GetContainerValue(name, extractobject);
+  if(!value || value->GetType() != XFILEJSONVALUETYPE_ARRAY || !value->GetValueArray() ||
+     !value->GetValueArray()->GetValues()) return false;
+  return value->GetValueArray()->GetValues()->GetSize() == nelements;
 }
 
 
@@ -1204,6 +1225,5 @@ void XSERIALIZATIONMETHODJSON::Clean()
   actualobject  = NULL;
   extractobject = NULL;
 }
-
 
 

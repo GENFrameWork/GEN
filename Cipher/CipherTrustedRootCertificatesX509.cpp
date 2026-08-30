@@ -40,6 +40,19 @@
 
 #include "CipherCertificateX509.h"
 #include "CipherKey.h"
+#include "CipherCredentialsLoader.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#if defined(WINDOWS)
+#include <windows.h>
+#include <wincrypt.h>
+#endif
+#if defined(LINUX) || defined(ANDROID)
+#include <dirent.h>
+#include <sys/stat.h>
+#endif
 
 
 
@@ -68,6 +81,10 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 CIPHERTRUSTPROVIDERX509::CIPHERTRUSTPROVIDERX509()
 {
+  maximumroots           = CIPHERTRUSTPROVIDERX509_DEFAULT_MAXROOTS;
+  maximumcertificatesize = CIPHERTRUSTPROVIDERX509_DEFAULT_MAXCERTIFICATESIZE;
+  maximumtotalsize       = CIPHERTRUSTPROVIDERX509_DEFAULT_MAXTOTALSIZE;
+  totalsize              = 0;
 }
 
 
@@ -115,7 +132,15 @@ bool CIPHERTRUSTPROVIDERX509::Root_Add(XBUFFER& root)
 {
   XBUFFER* copy;
 
-  if(root.IsEmpty()) return false;
+  if(root.IsEmpty() || root.GetSize() > maximumcertificatesize || roots.GetSize() >= maximumroots ||
+     totalsize > (maximumtotalsize - root.GetSize())) return false;
+
+  for(XDWORD c=0; c<roots.GetSize(); c++)
+    {
+      XBUFFER* existing = roots.Get(c);
+      if(existing && existing->GetSize() == root.GetSize() &&
+         !memcmp(existing->Get(), root.Get(), root.GetSize())) return true;
+    }
 
   copy = GEN_NEW XBUFFER();
   if(!copy) return false;
@@ -126,7 +151,43 @@ bool CIPHERTRUSTPROVIDERX509::Root_Add(XBUFFER& root)
       return false;
     }
 
+  totalsize += root.GetSize();
   return true;
+}
+
+
+bool CIPHERTRUSTPROVIDERX509::Root_Remove(XBUFFER& root)
+{
+  if(root.IsEmpty()) return false;
+  for(XDWORD c=0; c<roots.GetSize(); c++)
+    {
+      XBUFFER* existing = roots.Get(c);
+      if(existing && existing->GetSize() == root.GetSize() && !memcmp(existing->Get(), root.Get(), root.GetSize()))
+        {
+          totalsize -= existing->GetSize();
+          roots.Delete(existing);
+          GEN_DELETE existing;
+          return true;
+        }
+    }
+  return true;
+}
+
+
+bool CIPHERTRUSTPROVIDERX509::SetLimits(XDWORD maximumroots, XDWORD maximumcertificatesize, XDWORD maximumtotalsize)
+{
+  if(!maximumroots || !maximumcertificatesize || !maximumtotalsize || !roots.IsEmpty()) return false;
+  if(maximumcertificatesize > maximumtotalsize) return false;
+  this->maximumroots           = maximumroots;
+  this->maximumcertificatesize = maximumcertificatesize;
+  this->maximumtotalsize       = maximumtotalsize;
+  return true;
+}
+
+
+XDWORD CIPHERTRUSTPROVIDERX509::GetTotalSize()
+{
+  return totalsize;
 }
 
 
@@ -143,6 +204,7 @@ bool CIPHERTRUSTPROVIDERX509::Roots_Delete()
 {
   roots.DeleteContents();
   roots.DeleteAll();
+  totalsize = 0;
 
   return true;
 }
@@ -214,6 +276,163 @@ bool CIPHERTRUSTPROVIDERX509GEN::Load()
     }
 
   return !GetRoots()->IsEmpty();
+}
+
+static bool CIPHERTRUSTPROVIDERX509_LoadFile(CIPHERTRUSTPROVIDERX509* provider, const char* path, bool remove = false)
+{
+  if(!provider || !path) return false;
+  FILE* file = fopen(path, "rb");
+  if(!file) return false;
+  fseek(file, 0, SEEK_END);
+  long size = ftell(file);
+  fseek(file, 0, SEEK_SET);
+  XBUFFER data;
+  bool status = size > 0 && size <= (16*1024*1024) && data.Resize((XDWORD)size) &&
+                (fread(data.Get(), 1, (size_t)size, file) == (size_t)size);
+  fclose(file);
+  if(!status) return false;
+
+  XVECTOR<XBUFFER*> certificates;
+  if(!CIPHERCREDENTIALSLOADER::Certificates_Load(data, certificates)) return false;
+  for(XDWORD c=0; c<certificates.GetSize(); c++)
+    {
+      XBUFFER* certificate = certificates.Get(c);
+      if(certificate && !(remove?provider->Root_Remove((*certificate)):provider->Root_Add((*certificate)))) status = false;
+    }
+  CIPHERCREDENTIALSLOADER::Certificates_Delete(certificates);
+  return status;
+}
+
+#if defined(LINUX) || defined(ANDROID)
+static bool CIPHERTRUSTPROVIDERX509_LoadDirectory(CIPHERTRUSTPROVIDERX509* provider, const char* directorypath,
+                                                   bool remove = false)
+{
+  if(!provider || !directorypath || !directorypath[0]) return false;
+  DIR* directory = opendir(directorypath);
+  if(!directory) return false;
+
+  bool loaded = false;
+  struct dirent* entry;
+  while((entry = readdir(directory)) != NULL)
+    {
+      if(entry->d_name[0] == '.') continue;
+      char path[1024];
+      int length = snprintf(path, sizeof(path), "%s/%s", directorypath, entry->d_name);
+      if(length <= 0 || length >= (int)sizeof(path)) continue;
+      struct stat information;
+      if(stat(path, &information) || !S_ISREG(information.st_mode) || information.st_size <= 0 ||
+         information.st_size > (16*1024*1024)) continue;
+      if(CIPHERTRUSTPROVIDERX509_LoadFile(provider, path, remove)) loaded = true;
+    }
+
+  closedir(directory);
+  return loaded;
+}
+
+static bool CIPHERTRUSTPROVIDERX509_LoadDirectoryList(CIPHERTRUSTPROVIDERX509* provider, const char* paths)
+{
+  if(!provider || !paths || !paths[0]) return false;
+  bool loaded = false;
+  const char* start = paths;
+  while(*start)
+    {
+      const char* end = start;
+      while(*end && *end != ':') end++;
+      if(end > start && (end-start) < 1024)
+        {
+          char path[1024];
+          memcpy(path, start, (size_t)(end-start));
+          path[end-start] = 0;
+          if(CIPHERTRUSTPROVIDERX509_LoadDirectory(provider, path)) loaded = true;
+        }
+      start = *end?(end+1):end;
+    }
+  return loaded;
+}
+#endif
+
+bool CIPHERTRUSTPROVIDERX509WINDOWS::Load()
+{
+  Roots_Delete();
+#if defined(WINDOWS)
+  HCERTSTORE store = CertOpenSystemStoreW(0, L"ROOT");
+  if(!store) return false;
+  PCCERT_CONTEXT certificate = NULL;
+  bool status = true;
+  while((certificate = CertEnumCertificatesInStore(store, certificate)) != NULL)
+    {
+      XBUFFER DER;
+      if(!DER.Add(certificate->pbCertEncoded, certificate->cbCertEncoded) || !Root_Add(DER)) { status = false; break; }
+    }
+  CertCloseStore(store, 0);
+  return status && !GetRoots()->IsEmpty();
+#else
+  return false;
+#endif
+}
+
+bool CIPHERTRUSTPROVIDERX509LINUX::Load()
+{
+  Roots_Delete();
+#if defined(LINUX) && !defined(ANDROID)
+  const char* certificatefile = getenv("SSL_CERT_FILE");
+  const char* certificatedirs = getenv("SSL_CERT_DIR");
+  bool environmentconfigured = (certificatefile && certificatefile[0]) || (certificatedirs && certificatedirs[0]);
+
+  if(certificatefile && certificatefile[0]) CIPHERTRUSTPROVIDERX509_LoadFile(this, certificatefile);
+  if(certificatedirs && certificatedirs[0]) CIPHERTRUSTPROVIDERX509_LoadDirectoryList(this, certificatedirs);
+
+  if(!environmentconfigured)
+    {
+      static const char* files[] = { "/etc/ssl/certs/ca-certificates.crt", "/etc/pki/tls/certs/ca-bundle.crt",
+                                     "/etc/ssl/ca-bundle.pem", "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem" };
+      static const char* directories[] = { "/etc/ssl/certs", "/etc/pki/tls/certs", "/etc/pki/ca-trust/source/anchors" };
+      for(XDWORD c=0; c<(sizeof(files)/sizeof(files[0])); c++) CIPHERTRUSTPROVIDERX509_LoadFile(this, files[c]);
+      for(XDWORD c=0; c<(sizeof(directories)/sizeof(directories[0])); c++) CIPHERTRUSTPROVIDERX509_LoadDirectory(this, directories[c]);
+    }
+
+  return !GetRoots()->IsEmpty();
+#endif
+  return false;
+}
+
+bool CIPHERTRUSTPROVIDERX509ANDROID::Load()
+{
+  Roots_Delete();
+#if defined(ANDROID)
+  // Android 14+ selects the updatable Conscrypt APEX store when populated;
+  // older releases use ANDROID_ROOT.  Do not merge both system stores.
+  if(!CIPHERTRUSTPROVIDERX509_LoadDirectory(this, "/apex/com.android.conscrypt/cacerts"))
+    {
+      const char* androidroot = getenv("ANDROID_ROOT");
+      char path[1024];
+      if(!androidroot || !androidroot[0]) androidroot = "/system";
+      int length = snprintf(path, sizeof(path), "%s/etc/security/cacerts", androidroot);
+      if(length > 0 && length < (int)sizeof(path)) CIPHERTRUSTPROVIDERX509_LoadDirectory(this, path);
+    }
+
+  // Apply the Android user/system removal overlay before adding user and
+  // device-policy managed anchors. Access is subject to the application sandbox.
+  const char* androiddata = getenv("ANDROID_DATA");
+  if(!androiddata || !androiddata[0]) androiddata = "/data";
+  char removedpath[1024];
+  int removedlength = snprintf(removedpath, sizeof(removedpath), "%s/misc/keychain/cacerts-removed", androiddata);
+  if(removedlength > 0 && removedlength < (int)sizeof(removedpath))
+    {
+      CIPHERTRUSTPROVIDERX509_LoadDirectory(this, removedpath, true);
+    }
+
+  char managedpath[1024];
+  int managedlength = snprintf(managedpath, sizeof(managedpath), "%s/misc/keychain/cacerts-added", androiddata);
+  if(managedlength > 0 && managedlength < (int)sizeof(managedpath))
+    {
+      CIPHERTRUSTPROVIDERX509_LoadDirectory(this, managedpath);
+    }
+
+  return !GetRoots()->IsEmpty();
+#else
+  return false;
+#endif
 }
 
 
@@ -558,8 +777,4 @@ void CIPHERTRUSTEDROOTCERTIFICATESX509::Clean()
 {
 
 }
-
-
-
-
 

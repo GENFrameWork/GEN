@@ -67,7 +67,7 @@ CIPHERKEYSYMMETRICAL::CIPHERKEYSYMMETRICAL() : CIPHERKEY()
 
   type = CIPHERKEYTYPE_SYMMETRICAL;
 
-  xbufferkey = GEN_NEW XBUFFER();
+  xbufferkey = GEN_NEW XSECUREBUFFER();
 }
 
 
@@ -139,7 +139,7 @@ bool CIPHERKEYSYMMETRICAL::Set(XBYTE* key, XDWORD size)
 {
   if(!key) return false;
 
-  this->xbufferkey->Delete();
+  this->xbufferkey->SecureDelete();
 
   this->xbufferkey->Add(key, (XDWORD)size);
 
@@ -196,7 +196,7 @@ bool CIPHERKEYSYMMETRICAL::CopyFrom(CIPHERKEYSYMMETRICAL* key)
 
   if(!CIPHERKEY::CopyFrom((CIPHERKEY*)key)) return false;
 
-  xbufferkey->Delete();
+  xbufferkey->SecureDelete();
   xbufferkey->Add(key->Get()->Get(), key->Get()->GetSize());
 
   return true;
@@ -215,8 +215,6 @@ void CIPHERKEYSYMMETRICAL::Clean()
 {
   xbufferkey = NULL;
 }
-
-
 
 
 

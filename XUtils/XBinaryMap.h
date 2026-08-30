@@ -49,7 +49,7 @@
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
-template <class K, class E, class comparator = XLESS<XPAIR<K, E> > , class container = XAVLTREE<XPAIR<K, E>, comparator> >
+template <class K, class E, class comparator = XLESS<XPAIR<K, E> > , class Container = XAVLTREE<XPAIR<K, E>, comparator> >
 class XBINARYMAP
 {
   public:
@@ -79,7 +79,7 @@ class XBINARYMAP
 
     bool                                        Delete                                          (const K& key)
                                                 {
-                                                  return container.Delete(key);
+                                                  return container.Delete(XPAIR<K, E>(key, E()));
                                                 }
 
     bool                                        Delete                                          (XITERATOR it)
@@ -110,7 +110,7 @@ class XBINARYMAP
                                                 {
                                                   XLIST<E> ret;
 
-                                                  GetMultiple(XPAIR<K, E>(key, E()), ret);
+                                                  GetMultiple(key, ret);
 
                                                   return ret;
                                                 }
@@ -194,7 +194,7 @@ class XBINARYMAP
 
     private:
 
-      typename container::XITERATOR             ite;
+      typename Container::XITERATOR             ite;
 };
 
 
@@ -205,14 +205,12 @@ class XBINARYMAP
 
                                                 }
 
-    container                                   container;
+    Container                                   container;
 };
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

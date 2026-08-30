@@ -54,7 +54,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
-#define DIOSTREAMTLS_TIMEOUT                3      // in seconds
+#define DIOSTREAMTLS_TIMEOUT                DIOSTREAMTLS_DEFAULT_CONNECTION_TIMEOUT
 
 
 enum DIOSTREAMTLS_ERROR
@@ -110,6 +110,9 @@ class DIOSTREAMTLS : public T
                                             {
                                               DIOSTREAMTLSCONFIG* config;
                                               XCHAR*                servername;
+                                              XCHAR*                sniservername;
+                                              XSTRING               canonicalservername;
+                                              DIOURL_HOSTTYPE       servernametype;
                                               XWORD                 minversion;
                                               XWORD                 maxversion;
                                               bool                  starttls12;
@@ -124,11 +127,21 @@ class DIOSTREAMTLS : public T
                                               isclosing = false;
 
                                               config = dynamic_cast<DIOSTREAMTLSCONFIG*>(T::GetConfig());
-                                              if(!config)
-                                                {
-                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
-                                                  return false;
-                                                }
+                                               if(!config)
+                                                 {
+                                                   tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                   return false;
+                                                 }
+
+                                               if(!config->Freeze())
+                                                 {
+                                                   tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                   return false;
+                                                 }
+
+                                               connectiontimeout = config->GetConnectionTimeout();
+                                              handshaketimeout  = config->GetHandshakeTimeout();
+                                              timeout           = connectiontimeout;
 
                                               minversion = config->GetMinVersion();
                                               maxversion = config->GetMaxVersion();
@@ -169,10 +182,19 @@ class DIOSTREAMTLS : public T
                                                   return false;
                                                 }
 
+                                              if(!DIOURL::Host_Canonicalize(servername, canonicalservername, servernametype))
+                                                {
+                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  return false;
+                                                }
+
+                                              servername    = canonicalservername.Get();
+                                              sniservername = (servernametype == DIOURL_HOSTTYPE_DNS)?servername:NULL;
+
                                               dualversionmode = (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
                                               starttls12       = (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
 
-                                              if(Handshake_Attempt(config, servername, starttls12))
+                                              if(Handshake_Attempt(config, servername, sniservername, starttls12))
                                                 {
                                                   T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
                                                   return true;
@@ -191,7 +213,7 @@ class DIOSTREAMTLS : public T
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_NONE;
 
-                                                  if(Handshake_Attempt(config, servername, false, true))
+                                                  if(Handshake_Attempt(config, servername, sniservername, false, true))
                                                     {
                                                       T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
                                                       return true;
@@ -205,7 +227,7 @@ class DIOSTREAMTLS : public T
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_NONE;
 
-                                                  if(Handshake_Attempt(config, servername, true))
+                                                  if(Handshake_Attempt(config, servername, sniservername, true))
                                                     {
                                                       T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
                                                       return true;
@@ -219,7 +241,7 @@ class DIOSTREAMTLS : public T
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_NONE;
 
-                                                  if(Handshake_Attempt(config, servername, true, true))
+                                                  if(Handshake_Attempt(config, servername, sniservername, true, true))
                                                     {
                                                       T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
                                                       return true;
@@ -232,7 +254,7 @@ class DIOSTREAMTLS : public T
 
     
     
-    bool                                    Handshake_Attempt                       (DIOSTREAMTLSCONFIG* config, XCHAR* servername, bool astls12, bool widenschemes = false)
+    bool                                    Handshake_Attempt                       (DIOSTREAMTLSCONFIG* config, XCHAR* servername, XCHAR* sniservername, bool astls12, bool widenschemes = false)
                                             {
                                               handshakeclient.End();
                                               session.End();
@@ -253,6 +275,9 @@ class DIOSTREAMTLS : public T
                                                     }
 
                                                   handshakeclient12.AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
+                                                  handshakeclient12.ValidationPolicy_Set((*config->GetCertificateValidationPolicy()));
+                                                  handshakeclient12.RevocationLists_Set(config->GetCertificateRevocationLists());
+                                                  handshakeclient12.OCSPDirect_Set(config->GetOCSPDirectFetcher(), config->GetOCSPDirectContext());
                                                 }
                                                else
                                                 {
@@ -281,14 +306,14 @@ class DIOSTREAMTLS : public T
 
                                               isclosed = false;
 
-                                              if(!T::WaitToConnected(timeout))
+                                              if(!T::WaitToConnected(connectiontimeout))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
                                                   Close_OnError();
                                                   return false;
                                                 }
 
-                                              if(!T::Proxy_Connect(timeout))
+                                              if(!T::Proxy_Connect(connectiontimeout))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
                                                   Close_OnError();
@@ -297,7 +322,7 @@ class DIOSTREAMTLS : public T
 
                                               T::SetStatus(DIOSTREAMSTATUS_GETTINGCONNECTION);
 
-                                              if(!Handshake_Client(servername))
+                                              if(!Handshake_Client(sniservername))
                                                 {
                                                   if(tlserror == DIOSTREAMTLS_ERROR_NONE) tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
 
@@ -353,7 +378,7 @@ class DIOSTREAMTLS : public T
 
                                               isclosed = false;
 
-                                              if(!T::WaitToConnected(timeout))
+                                              if(!T::WaitToConnected(connectiontimeout))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
                                                   Close_OnError();
@@ -734,7 +759,8 @@ class DIOSTREAMTLS : public T
 
                                               xtimer->Reset();
 
-                                              while(xtimer->GetMeasureSeconds() < (XDWORD)timeout)
+                                              while((handshaketimeout == XTIMER_INFINITE) ||
+                                                    (xtimer->GetMeasureSeconds() < (XDWORD)handshaketimeout))
                                                 {
                                                   XBUFFER input;
 
@@ -914,7 +940,8 @@ class DIOSTREAMTLS : public T
 
                                               xtimer->Reset();
 
-                                              while(xtimer->GetMeasureSeconds() < (XDWORD)timeout)
+                                              while((handshaketimeout == XTIMER_INFINITE) ||
+                                                    (xtimer->GetMeasureSeconds() < (XDWORD)handshaketimeout))
                                                 {
                                                   XBUFFER input;
 
@@ -1257,6 +1284,8 @@ class DIOSTREAMTLS : public T
     void                                    Clean                                   ()
                                             {
                                               timeout         = 0;
+                                              connectiontimeout = DIOSTREAMTLS_DEFAULT_CONNECTION_TIMEOUT;
+                                              handshaketimeout  = DIOSTREAMTLS_DEFAULT_HANDSHAKE_TIMEOUT;
                                               tlserror        = DIOSTREAMTLS_ERROR_NONE;
                                               isclosed        = true;
                                               isclosing       = false;
@@ -1268,6 +1297,8 @@ class DIOSTREAMTLS : public T
 
 
     int                                     timeout;
+    int                                     connectiontimeout;
+    int                                     handshaketimeout;
     DIOSTREAMTLS_ERROR                      tlserror;
     bool                                    isclosed;
     bool                                    isclosing;

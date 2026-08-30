@@ -65,6 +65,41 @@ enum CIPHERCERTIFICATEX509VALIDATOR_ERROR
   CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT                    ,
   CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNKNOWNCRITICALEXTENSION         ,
   CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH                       ,
+  CIPHERCERTIFICATEX509VALIDATOR_ERROR_WEAKKEY                          ,
+  CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT                   ,
+  CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED                          ,
+  CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN                ,
+};
+
+
+class CIPHERCERTIFICATEX509VALIDATIONPOLICY
+{
+  public:
+                                            CIPHERCERTIFICATEX509VALIDATIONPOLICY ();
+
+    XDWORD                                  GetMinimumRSAKeyBits                  ();
+    void                                    SetMinimumRSAKeyBits                  (XDWORD bits);
+    bool                                    GetAllowSHA1                          ();
+    void                                    SetAllowSHA1                          (bool allow);
+    bool                                    GetAllowExpired                       ();
+    void                                    SetAllowExpired                       (bool allow);
+    bool                                    GetRequireServerAuthEKU               ();
+    void                                    SetRequireServerAuthEKU               (bool require);
+    bool                                    GetRequireClientAuthEKU               ();
+    void                                    SetRequireClientAuthEKU               (bool require);
+    XDWORD                                  GetMaximumChainDepth                  ();
+    void                                    SetMaximumChainDepth                  (XDWORD depth);
+    bool                                    IsSignatureAlgorithmAllowed           (CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm);
+    void                                    SetSignatureAlgorithmAllowed          (CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm, bool allowed);
+
+  private:
+    XDWORD                                  minimumRSAKeyBits;
+    bool                                    allowSHA1;
+    bool                                    allowExpired;
+    bool                                    requireServerAuthEKU;
+    bool                                    requireClientAuthEKU;
+    XDWORD                                  maximumChainDepth;
+    XQWORD                                  allowedSignatureAlgorithms;
 };
 
 
@@ -81,6 +116,9 @@ class CIPHERCERTIFICATEX509VALIDATOR
     bool                                    Validate                                 (XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XCHAR* servername, XDATETIME* datetime = NULL);
     bool                                    ValidateClient                           (XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
 
+    CIPHERCERTIFICATEX509VALIDATIONPOLICY*  GetPolicy                                ();
+    void                                    SetPolicy                                (CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy);
+
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    GetError                                 ();
     CIPHERCERTIFICATEX509*                  GetLeafCertificate                       ();
     XVECTOR<CIPHERCERTIFICATEX509*>*        GetCertificateChain                      ();
@@ -96,6 +134,7 @@ class CIPHERCERTIFICATEX509VALIDATOR
     void                                    Clean                                     ();
 
     CIPHERCERTIFICATEX509VALIDATOR_ERROR    error;
+    CIPHERCERTIFICATEX509VALIDATIONPOLICY   policy;
     XVECTOR<CIPHERCERTIFICATEX509*>         certificates;
     XVECTOR<CIPHERCERTIFICATEX509*>         roots;
 };
@@ -103,4 +142,3 @@ class CIPHERCERTIFICATEX509VALIDATOR
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-

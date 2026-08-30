@@ -103,6 +103,21 @@ bool XLINUXRAND::Ini()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XLINUXRAND::IsCryptographicallySecure()
+* @brief      Report whether the platform provider is cryptographically secure
+* @ingroup    PLATFORM_LINUX
+* 
+* @return     bool : true.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XLINUXRAND::IsCryptographicallySecure()
+{
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool XLINUXRAND::Generate(XBYTE* buffer, XDWORD size)
 * @brief      Generate random bytes
 * @ingroup    PLATFORM_LINUX

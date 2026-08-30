@@ -102,6 +102,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    IsApplicationProtocolNegotiated                  ();
     bool                                    IsSessionResumed                                 ();
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
+    XBUFFER*                                GetApplicationProtocolRaw                        ();
 
     bool                                    Authentication_Set                               (XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
     void                                    AIAFetch_Set                                      (bool active, int timeout);
@@ -141,6 +142,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    KeyShare_IsOffered                               (XWORD supportedgroup);
     bool                                    SignatureScheme_IsOffered                        (XWORD signaturescheme);
     bool                                    ApplicationProtocol_IsOffered                    (DIOSTREAMTLS_ALPN_TYPE applicationprotocol);
+    bool                                    ApplicationProtocol_IsOffered                    (XBUFFER& applicationprotocol);
     void                                    Clean                                            ();
 
     DIOSTREAMTLS13SESSION*                    session;
@@ -172,6 +174,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     XVECTOR<XWORD>                          signatureschemes;
     XVECTOR<XWORD>                          certificatesignatureschemes;
     XVECTOR<DIOSTREAMTLS_ALPN_TYPE>          applicationprotocols;
+    XVECTOR<XBUFFER*>                        applicationprotocolsraw;
 
     XVECTOR<XWORD>                          offeredciphersuites;
     XVECTOR<XWORD>                          offeredsupportedgroups;
@@ -179,9 +182,11 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     XVECTOR<XWORD>                          offeredsignatureschemes;
     XVECTOR<XWORD>                          requestedclientsignatureschemes;
     XVECTOR<DIOSTREAMTLS_ALPN_TYPE>          offeredapplicationprotocols;
+    XVECTOR<XBUFFER*>                        offeredapplicationprotocolsraw;
 
     bool                                    applicationprotocolnegotiated;
     DIOSTREAMTLS_ALPN_TYPE                  applicationprotocol;
+    XBUFFER                                 applicationprotocolraw;
 
     bool                                    resumptionoffered;
     bool                                    resumptionaccepted;

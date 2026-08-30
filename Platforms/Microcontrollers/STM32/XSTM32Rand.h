@@ -46,6 +46,7 @@ class XSTM32RAND : public XRAND
     virtual 				     ~XSTM32RAND        ();
 
     virtual bool          Ini               ();
+    virtual bool          IsCryptographicallySecure ();
     virtual int           MaxElements       (int max);
     virtual int           Max               (int max);
     virtual int           Between           (int min, int max);

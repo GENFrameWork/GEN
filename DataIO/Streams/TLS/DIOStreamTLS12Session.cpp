@@ -232,7 +232,7 @@ bool DIOSTREAMTLS12SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                 break;
 
       case DIOSTREAMTLS_MSG_CURVEID_SECP256R1 : keyexchangep256private.FillBuffer(0);
-                                                keyexchangep256private.Delete();
+                                                keyexchangep256private.SecureDelete();
                                                 keyexchangep256public.Delete();
 
                                                 if(!keyexchangep256.KeyPair_Create(keyexchangep256private,
@@ -240,14 +240,14 @@ bool DIOSTREAMTLS12SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                    !publickey.Add(keyexchangep256public))
                                                   {
                                                     keyexchangep256private.FillBuffer(0);
-                                                    keyexchangep256private.Delete();
+                                                    keyexchangep256private.SecureDelete();
                                                     keyexchangep256public.Delete();
                                                     return false;
                                                   }
                                                 break;
 
       case DIOSTREAMTLS_MSG_CURVEID_SECP384R1 : keyexchangep384private.FillBuffer(0);
-                                                keyexchangep384private.Delete();
+                                                keyexchangep384private.SecureDelete();
                                                 keyexchangep384public.Delete();
 
                                                 if(!keyexchangep384.KeyPair_Create(keyexchangep384private,
@@ -255,7 +255,7 @@ bool DIOSTREAMTLS12SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                    !publickey.Add(keyexchangep384public))
                                                   {
                                                     keyexchangep384private.FillBuffer(0);
-                                                    keyexchangep384private.Delete();
+                                                    keyexchangep384private.SecureDelete();
                                                     keyexchangep384public.Delete();
                                                     return false;
                                                   }
@@ -334,11 +334,11 @@ void DIOSTREAMTLS12SESSION::KeyExchange_Delete()
   keyexchange.CleanAllKeys();
 
   keyexchangep256private.FillBuffer(0);
-  keyexchangep256private.Delete();
+  keyexchangep256private.SecureDelete();
   keyexchangep256public.Delete();
 
   keyexchangep384private.FillBuffer(0);
-  keyexchangep384private.Delete();
+  keyexchangep384private.SecureDelete();
   keyexchangep384public.Delete();
 }
 
@@ -356,10 +356,15 @@ void DIOSTREAMTLS12SESSION::KeyExchange_Delete()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS12SESSION::Keys_Activate(XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom)
+bool DIOSTREAMTLS12SESSION::Keys_Activate(XBUFFER& premastersecret, XBUFFER& clientrandom, XBUFFER& serverrandom, XBUFFER* sessionhash)
 {
-  if(!isini ||
-     !keyschedule.MasterSecret_Create(premastersecret, clientrandom, serverrandom) ||
+  if(!isini) return false;
+
+  bool mastersecretcreated = sessionhash?
+                             keyschedule.MasterSecretExtended_Create(premastersecret, (*sessionhash)):
+                             keyschedule.MasterSecret_Create(premastersecret, clientrandom, serverrandom);
+
+  if(!mastersecretcreated ||
      !keyschedule.KeyBlock_Create(clientrandom, serverrandom) ||
      !record.SetKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL,
                      *keyschedule.GetKey(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL),

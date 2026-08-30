@@ -40,6 +40,7 @@
 #include <string.h>
 
 #include "XBuffer.h"
+#include "XVariant.h"
 
 
 
@@ -55,6 +56,51 @@
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
+
+
+static bool XSERIALIZATIONMETHODBINARY_ReadType(XBUFFER* buffer, XDWORD& position,
+                                                 XSERIALIZATIONMETHODBINARY_TYPEELEMENT expected)
+{
+  XBYTE type = 0;
+  if(!buffer || !buffer->Get(type, position) || type != (XBYTE)expected) return false;
+  position++;
+  return true;
+}
+
+
+template <class T>
+static bool XSERIALIZATIONMETHODBINARY_ReadValue(XBUFFER* buffer, XDWORD& position, T& value)
+{
+  if(!buffer || position > buffer->GetSize() || (buffer->GetSize()-position) < sizeof(T) ||
+     !buffer->Get(value, position)) return false;
+  position += sizeof(T);
+  return true;
+}
+
+
+static bool XSERIALIZATIONMETHODBINARY_AddData(XBUFFER* target,
+                                                XSERIALIZATIONMETHODBINARY_TYPEELEMENT type,
+                                                XBUFFER& data)
+{
+  if(!target) return false;
+  return target->Add((XBYTE)type) && target->Add((XDWORD)data.GetSize()) &&
+         (data.IsEmpty() || target->Add(data));
+}
+
+
+static bool XSERIALIZATIONMETHODBINARY_ReadData(XBUFFER* source, XDWORD& position,
+                                                 XSERIALIZATIONMETHODBINARY_TYPEELEMENT type,
+                                                 XBUFFER& data)
+{
+  XDWORD size = 0;
+  if(!XSERIALIZATIONMETHODBINARY_ReadType(source, position, type) ||
+     !XSERIALIZATIONMETHODBINARY_ReadValue(source, position, size) ||
+     position > source->GetSize() || (source->GetSize()-position) < size) return false;
+  data.Delete();
+  if(size && !data.Add(source->Get()+position, size)) return false;
+  position += size;
+  return true;
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -103,10 +149,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(bool var, XCHAR* name)
       return false;
     }
  
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_BOOLEAN);   
-  bufferdata->Add(var);  
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_BOOLEAN) && bufferdata->Add(var);
 }
 
 
@@ -129,10 +172,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(char var, XCHAR* name)
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_CHAR);
-  bufferdata->Add((XBYTE)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_CHAR) && bufferdata->Add((XBYTE)var);
 }
 
 
@@ -155,10 +195,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(int var, XCHAR* name)
       return false;
     }
   
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_INTEGER);
-  bufferdata->Add((XDWORD)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_INTEGER) && bufferdata->Add((XDWORD)var);
 }
 
 
@@ -181,10 +218,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(float var, XCHAR* name)
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_FLOAT);
-  bufferdata->Add((float)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_FLOAT) && bufferdata->Add(var);
 }
 
 
@@ -207,10 +241,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(double var, XCHAR* name)
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_DOUBLE);
-  bufferdata->Add((double)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_DOUBLE) && bufferdata->Add(var);
 }
 
 
@@ -233,10 +264,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(long var, XCHAR* name)
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_LONG);
-  bufferdata->Add((XDWORD)var); 
-  
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_LONG) && bufferdata->Add((XQWORD)(long long)var);
 }
 
 
@@ -259,10 +287,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(long long var, XCHAR* name)
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_LONGLONG);
-  bufferdata->Add((XQWORD)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_LONGLONG) && bufferdata->Add((XQWORD)var);
 }
 
 
@@ -285,10 +310,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(XBYTE var, XCHAR* name)
       return false;
     }
  
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBYTE);
-  bufferdata->Add(var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBYTE) && bufferdata->Add(var);
 }
 
 
@@ -311,10 +333,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(XWORD var, XCHAR* name)
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XWORD);
-  bufferdata->Add((XWORD)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XWORD) && bufferdata->Add(var);
 }
 
 
@@ -337,10 +356,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(XDWORD var, XCHAR* name)
       return false;
     }
     
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XDWORD);  
-  bufferdata->Add((XDWORD)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XDWORD) && bufferdata->Add(var);
 }
 
 
@@ -363,10 +379,7 @@ bool XSERIALIZATIONMETHODBINARY::Add(XQWORD var, XCHAR* name)
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XQWORD);  
-  bufferdata->Add((XQWORD)var); 
-
-  return true;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XQWORD) && bufferdata->Add(var);
 }
 
     
@@ -384,20 +397,14 @@ bool XSERIALIZATIONMETHODBINARY::Add(XQWORD var, XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODBINARY::Add(XSTRING* var, XCHAR* name)
 {
-  if(!bufferdata) 
+  if(!bufferdata || !var) 
     {
       return false;
     }
 
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XSTRING);
-  
   XBUFFER buffer;
-  
-  var->ConvertToXBuffer(buffer);
-
-  bufferdata->Add(buffer); 
-
-  return true;
+  if(!var->IsEmpty() && !var->ConvertToUTF8(buffer, false)) return false;
+  return XSERIALIZATIONMETHODBINARY_AddData(bufferdata, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XSTRING, buffer);
 }
 
 
@@ -415,9 +422,8 @@ bool XSERIALIZATIONMETHODBINARY::Add(XSTRING* var, XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODBINARY::Add(XBUFFER* var, XCHAR* name)
 {
-  bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBUFFER);
-
-  return true;
+  if(!bufferdata || !var) return false;
+  return XSERIALIZATIONMETHODBINARY_AddData(bufferdata, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBUFFER, (*var));
 }
 
 
@@ -435,7 +441,13 @@ bool XSERIALIZATIONMETHODBINARY::Add(XBUFFER* var, XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODBINARY::Add(XVARIANT* var, XCHAR* name)
 { 
-  return true;
+  if(!bufferdata || !var) return false;
+  XSTRING text;
+  XBUFFER encoded;
+  if(!var->ToString(text) || (!text.IsEmpty() && !text.ConvertToUTF8(encoded, false))) return false;
+  return bufferdata->Add((XBYTE)XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XVARIANT) &&
+         bufferdata->Add((XDWORD)var->GetType()) && bufferdata->Add((XDWORD)encoded.GetSize()) &&
+         (encoded.IsEmpty() || bufferdata->Add(encoded));
 }
 
 
@@ -457,8 +469,6 @@ bool XSERIALIZATIONMETHODBINARY::AddStruct(XCHAR* name, bool open)
     {
       return false;
     }
-  
-  bufferdata->Add((XWORD)XSERIALIZATIONMETHOD_STRUCT_ID); 
   
   return true;
 }
@@ -484,10 +494,8 @@ bool XSERIALIZATIONMETHODBINARY::AddArray(XDWORD nelements, XCHAR* name, bool op
       return false;
     }
   
-  bufferdata->Add((XWORD)XSERIALIZATIONMETHOD_ARRAY_ID); 
-  bufferdata->Add((XDWORD)nelements); 
-
-  return true;
+  if(!open) return true;
+  return bufferdata->Add((XWORD)XSERIALIZATIONMETHOD_ARRAY_ID) && bufferdata->Add(nelements);
 }
 
 
@@ -503,9 +511,10 @@ bool XSERIALIZATIONMETHODBINARY::AddArray(XDWORD nelements, XCHAR* name, bool op
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(bool var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(bool& var, XCHAR* name)
 {
-  return true;
+  return XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_BOOLEAN) &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, var);
 }
 
 
@@ -521,8 +530,12 @@ bool XSERIALIZATIONMETHODBINARY::Extract(bool var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(char var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(char& var, XCHAR* name)
 {
+  XBYTE value = 0;
+  if(!XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_CHAR) ||
+     !XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, value)) return false;
+  var = (char)value;
   return true;
 }
 
@@ -539,8 +552,12 @@ bool XSERIALIZATIONMETHODBINARY::Extract(char var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(int var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(int& var, XCHAR* name)
 {
+  XDWORD value = 0;
+  if(!XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_INTEGER) ||
+     !XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, value)) return false;
+  var = (int)value;
   return true;
 }
 
@@ -557,9 +574,10 @@ bool XSERIALIZATIONMETHODBINARY::Extract(int var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(float var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(float& var, XCHAR* name)
 {
-  return true;
+  return XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_FLOAT) &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, var);
 }
 
 
@@ -575,9 +593,10 @@ bool XSERIALIZATIONMETHODBINARY::Extract(float var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(double var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(double& var, XCHAR* name)
 {
-  return true;
+  return XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_DOUBLE) &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, var);
 }
 
 
@@ -593,8 +612,12 @@ bool XSERIALIZATIONMETHODBINARY::Extract(double var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(long var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(long& var, XCHAR* name)
 {
+  XQWORD value = 0;
+  if(!XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_LONG) ||
+     !XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, value)) return false;
+  var = (long)(long long)value;
   return true;
 }
 
@@ -611,8 +634,12 @@ bool XSERIALIZATIONMETHODBINARY::Extract(long var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(long long var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(long long& var, XCHAR* name)
 {
+  XQWORD value = 0;
+  if(!XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_LONGLONG) ||
+     !XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, value)) return false;
+  var = (long long)value;
   return true;
 }
 
@@ -629,9 +656,10 @@ bool XSERIALIZATIONMETHODBINARY::Extract(long long var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(XBYTE var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(XBYTE& var, XCHAR* name)
 {
-  return true;
+  return XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBYTE) &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, var);
 }
 
 
@@ -647,9 +675,10 @@ bool XSERIALIZATIONMETHODBINARY::Extract(XBYTE var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(XWORD var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(XWORD& var, XCHAR* name)
 {
-  return true;
+  return XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XWORD) &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, var);
 }
 
 
@@ -665,9 +694,10 @@ bool XSERIALIZATIONMETHODBINARY::Extract(XWORD var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(XDWORD var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(XDWORD& var, XCHAR* name)
 {
-  return true;
+  return XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XDWORD) &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, var);
 }
 
 
@@ -683,9 +713,10 @@ bool XSERIALIZATIONMETHODBINARY::Extract(XDWORD var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(XQWORD var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(XQWORD& var, XCHAR* name)
 {
-  return true;
+  return XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XQWORD) &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, var);
 }
 
     
@@ -701,9 +732,12 @@ bool XSERIALIZATIONMETHODBINARY::Extract(XQWORD var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(XSTRING* var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(XSTRING& var, XCHAR* name)
 {
-  return true;
+  XBUFFER data;
+  if(!XSERIALIZATIONMETHODBINARY_ReadData(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XSTRING, data)) return false;
+  var.Empty();
+  return data.IsEmpty() || var.ConvertFromUTF8(data);
 }
 
 
@@ -719,9 +753,9 @@ bool XSERIALIZATIONMETHODBINARY::Extract(XSTRING* var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(XBUFFER* var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(XBUFFER& var, XCHAR* name)
 {
-   return true;
+  return XSERIALIZATIONMETHODBINARY_ReadData(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XBUFFER, var);
 }
 
 
@@ -737,9 +771,20 @@ bool XSERIALIZATIONMETHODBINARY::Extract(XBUFFER* var, XCHAR* name)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XSERIALIZATIONMETHODBINARY::Extract(XVARIANT* var, XCHAR* name)
+bool XSERIALIZATIONMETHODBINARY::Extract(XVARIANT& var, XCHAR* name)
 {
-  return true;
+  XDWORD type = 0;
+  XDWORD size = 0;
+  if(!XSERIALIZATIONMETHODBINARY_ReadType(bufferdata, readposition, XSERIALIZATIONMETHODBINARY_TYPEELEMENT_XVARIANT) ||
+     !XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, type) ||
+     !XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, size) ||
+     type >= XVARIANT_TYPE_UNKNOWN || readposition > bufferdata->GetSize() ||
+     (bufferdata->GetSize()-readposition) < size) return false;
+  XSTRING text;
+  if(size && !text.ConvertFromUTF8(bufferdata->Get()+readposition, size)) return false;
+  readposition += size;
+  if(type == XVARIANT_TYPE_NULL) return var.Set(XVARIANT_TYPE_NULL);
+  return var.FromString(text, (XVARIANT_TYPE)type);
 }
 
 
@@ -774,6 +819,16 @@ bool XSERIALIZATIONMETHODBINARY::ExtractStruct(XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODBINARY::ExtractArray(XDWORD nelements, XCHAR* name)
 {
+  XWORD marker = 0;
+  XDWORD stored = 0;
+  return XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, marker) &&
+         marker == XSERIALIZATIONMETHOD_ARRAY_ID &&
+         XSERIALIZATIONMETHODBINARY_ReadValue(bufferdata, readposition, stored) && stored == nelements;
+}
+
+
+bool XSERIALIZATIONMETHODBINARY::ExtractArrayElement(XDWORD index, XCHAR* name, bool open)
+{
   return true;
 }
 
@@ -805,6 +860,7 @@ XBUFFER* XSERIALIZATIONMETHODBINARY::GetBufferData()
 void XSERIALIZATIONMETHODBINARY::SetBufferData(XBUFFER* bufferdata)
 {
   this->bufferdata = bufferdata;
+  readposition = 0;
 }
 
 
@@ -819,7 +875,6 @@ void XSERIALIZATIONMETHODBINARY::SetBufferData(XBUFFER* bufferdata)
 void XSERIALIZATIONMETHODBINARY::Clean()
 {
   bufferdata = NULL; 
+  readposition = 0;
 }
-
-
 

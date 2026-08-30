@@ -43,6 +43,7 @@
 
 #include "CipherKeyECDSA.h"
 #include "Hash.h"
+#include "HashHMAC.h"
 
 
 
@@ -244,19 +245,143 @@ static bool CIPHERECDSA_PointAddAffine(CIPHERECDSA_POINT& point, XMPINTEGER& aff
 }
 
 
-static bool CIPHERECDSA_PointMultiply(CIPHERECDSA_POINT& point, XMPINTEGER& scalar, XMPINTEGER& affineX,
-                                      XMPINTEGER& affineY, XMPINTEGER& prime, XDWORD curvebits)
+static bool CIPHERECDSA_PointCopy(CIPHERECDSA_POINT& destination, CIPHERECDSA_POINT& source)
 {
+  if(!destination.X.CopyFrom(&source.X) || !destination.Y.CopyFrom(&source.Y) ||
+     !destination.Z.CopyFrom(&source.Z)) return false;
+
+  destination.isinfinity = source.isinfinity;
+
+  return true;
+}
+
+
+static bool CIPHERECDSA_IntegerSelect(XMPINTEGER& result, XMPINTEGER& value0, XMPINTEGER& value1,
+                                      XBYTE select1, XDWORD fixedlimbs)
+{
+  if(!fixedlimbs || !value0.Grow(fixedlimbs) || !value1.Grow(fixedlimbs) || !result.Grow(fixedlimbs)) return false;
+
+  XLIMB mask = (XLIMB)0 - (XLIMB)(select1 & 1);
+
+  for(XDWORD c=0; c<fixedlimbs; c++)
+    {
+      result.GetLimbs()[c] = (value0.GetLimbs()[c] & ~mask) | (value1.GetLimbs()[c] & mask);
+    }
+
+  result.SetSign(1);
+
+  return true;
+}
+
+
+static bool CIPHERECDSA_PointSelect(CIPHERECDSA_POINT& result, CIPHERECDSA_POINT& point0,
+                                    CIPHERECDSA_POINT& point1, XBYTE select1, XDWORD fixedlimbs)
+{
+  if(!CIPHERECDSA_IntegerSelect(result.X, point0.X, point1.X, select1, fixedlimbs) ||
+     !CIPHERECDSA_IntegerSelect(result.Y, point0.Y, point1.Y, select1, fixedlimbs) ||
+     !CIPHERECDSA_IntegerSelect(result.Z, point0.Z, point1.Z, select1, fixedlimbs)) return false;
+
+  XDWORD mask       = (XDWORD)0 - (XDWORD)(select1 & 1);
+  XDWORD infinity0  = point0.isinfinity?1:0;
+  XDWORD infinity1  = point1.isinfinity?1:0;
+  result.isinfinity = ((infinity0 & ~mask) | (infinity1 & mask))?true:false;
+
+  return true;
+}
+
+
+static bool CIPHERECDSA_PointMultiplyFixed(CIPHERECDSA_POINT& point, XMPINTEGER& scalar,
+                                           XMPINTEGER& affineX, XMPINTEGER& affineY,
+                                           XMPINTEGER& prime, XDWORD scalarbits, XDWORD fieldbits)
+{
+  XDWORD fixedlimbs = XMPINTEGER_BITSTOLIMBS(fieldbits);
+
   point.isinfinity = true;
 
-  for(int bit=(int)curvebits-1; bit>=0; bit--)
+  for(int bit=(int)scalarbits-1; bit>=0; bit--)
     {
-      if(!CIPHERECDSA_PointDouble(point, prime)) return false;
+      CIPHERECDSA_POINT doubled;
+      CIPHERECDSA_POINT added;
 
-      if(scalar.GetBit(bit) && !CIPHERECDSA_PointAddAffine(point, affineX, affineY, prime)) return false;
+      if(!CIPHERECDSA_PointCopy(doubled, point) || !CIPHERECDSA_PointDouble(doubled, prime) ||
+         !CIPHERECDSA_PointCopy(added, doubled) || !CIPHERECDSA_PointAddAffine(added, affineX, affineY, prime) ||
+         !CIPHERECDSA_PointSelect(point, doubled, added, (XBYTE)scalar.GetBit(bit), fixedlimbs)) return false;
     }
 
   return !point.isinfinity;
+}
+
+
+static bool CIPHERECDSA_PointMultiplySecret(CIPHERECDSA_POINT& point, XMPINTEGER& scalar,
+                                            XMPINTEGER& affineX, XMPINTEGER& affineY, XMPINTEGER& prime,
+                                            XMPINTEGER& order, XDWORD curvebits)
+{
+  const XDWORD blindbytes = 8;
+  XBYTE         blindbuffer[blindbytes];
+  XMPINTEGER    blind;
+  XMPINTEGER    multiple;
+  XMPINTEGER    blindedscalar;
+  XRAND*        xrand;
+  bool          blinded = false;
+
+  memset(blindbuffer, 0, sizeof(blindbuffer));
+
+  xrand = GEN_XFACTORY.CreateRand();
+  if(xrand)
+    {
+      if(xrand->IsCryptographicallySecure() && xrand->Ini() && xrand->Generate(blindbuffer, sizeof(blindbuffer)))
+        {
+          // Keep a full-width non-zero blind. The point result is unchanged because order*G is infinity.
+          blindbuffer[0] |= 0x80;
+
+          blinded = blind.ImportFromBinary(blindbuffer, sizeof(blindbuffer)) &&
+                    multiple.Multiplication(&order, &blind) &&
+                    blindedscalar.AdditionSigned(&multiple, &scalar);
+        }
+
+      GEN_XFACTORY.DeleteRand(xrand);
+    }
+
+  volatile XBYTE* secureblind = blindbuffer;
+  for(XDWORD c=0; c<sizeof(blindbuffer); c++) secureblind[c] = 0;
+
+  if(blinded)
+    {
+      return CIPHERECDSA_PointMultiplyFixed(point, blindedscalar, affineX, affineY, prime,
+                                            curvebits + (blindbytes * 8), curvebits);
+    }
+
+  // A fixed operation schedule remains preferable if a caller uses Cipher without an available platform RNG.
+  return CIPHERECDSA_PointMultiplyFixed(point, scalar, affineX, affineY, prime, curvebits, curvebits);
+}
+
+
+static bool CIPHERECDSA_ModularInversePrime(XMPINTEGER& result, XMPINTEGER& value, XMPINTEGER& modulus)
+{
+  XMPINTEGER exponent;
+  XMPINTEGER accumulator;
+  XMPINTEGER square;
+  XMPINTEGER product;
+
+  if((modulus.CompareSignedValues(2) <= 0) || !exponent.SubtractionSigned(&modulus, 2) ||
+     !accumulator.LeftSet(1)) return false;
+
+  for(int bit=exponent.GetMSB()-1; bit>=0; bit--)
+    {
+      if(!CIPHERECDSA_ModularMultiplication(square, accumulator, accumulator, modulus)) return false;
+
+      if(exponent.GetBit(bit))
+        {
+          if(!CIPHERECDSA_ModularMultiplication(product, square, value, modulus) ||
+             !accumulator.CopyFrom(&product)) return false;
+        }
+       else
+        {
+          if(!accumulator.CopyFrom(&square)) return false;
+        }
+    }
+
+  return result.CopyFrom(&accumulator);
 }
 
 
@@ -268,7 +393,7 @@ static bool CIPHERECDSA_PointToAffine(CIPHERECDSA_POINT& point, XMPINTEGER& affi
   XMPINTEGER inverseZ3;
 
   if(point.isinfinity || !point.Z.CompareSignedValues(0) ||
-     !inverseZ.ModularInverse(&point.Z, &prime) ||
+     !CIPHERECDSA_ModularInversePrime(inverseZ, point.Z, prime) ||
      !CIPHERECDSA_ModularMultiplication(inverseZ2, inverseZ, inverseZ, prime) ||
      !CIPHERECDSA_ModularMultiplication(inverseZ3, inverseZ2, inverseZ, prime) ||
      !CIPHERECDSA_ModularMultiplication(affineX, point.X, inverseZ2, prime) ||
@@ -457,6 +582,135 @@ static bool CIPHERECDSA_DERIntegerEncode(XMPINTEGER& value, XDWORD maxsize, XBUF
 }
 
 
+static bool CIPHERECDSA_HMAC(HASH* hash, XBUFFER& key, XBUFFER& input, XSECUREBUFFER& output)
+{
+  HASHHMAC      hmac(hash);
+  XSECUREBUFFER temporary;
+
+  if(!hash || !hmac.SetKey(key) || !hmac.ResetResult() || !hmac.Do(input) ||
+     !hmac.GetResult() || hmac.GetResult()->IsEmpty() || !temporary.Add((*hmac.GetResult()))) return false;
+
+  output.SecureDelete();
+
+  return output.Add(temporary);
+}
+
+
+class CIPHERECDSA_RFC6979
+{
+  public:
+
+    CIPHERECDSA_RFC6979()
+      {
+        hash           = NULL;
+        coordinatesize = 0;
+        curvebits      = 0;
+      }
+
+    ~CIPHERECDSA_RFC6979()
+      {
+        K.SecureDelete();
+        V.SecureDelete();
+      }
+
+    bool Initialize(HASH* hash, XMPINTEGER& privatekey, XMPINTEGER& order, XBYTE* digest, XDWORD digestsize,
+                    XDWORD coordinatesize, XDWORD curvebits)
+      {
+        XMPINTEGER    digestinteger;
+        XMPINTEGER    reduceddigest;
+        XSECUREBUFFER privateoctets;
+        XSECUREBUFFER digestoctets;
+        XSECUREBUFFER seed;
+        XSECUREBUFFER input;
+        XDWORD        hashsize;
+
+        if(!hash || !digest || !digestsize || !coordinatesize || !curvebits) return false;
+
+        hashsize = (XDWORD)hash->GetDefaultSize();
+        if(!hashsize || (digestsize != hashsize)) return false;
+
+        this->hash           = hash;
+        this->coordinatesize = coordinatesize;
+        this->curvebits      = curvebits;
+        this->order.CopyFrom(&order);
+
+        if(!privateoctets.Resize(coordinatesize) ||
+           !privatekey.ExportToBinary(privateoctets.Get(), coordinatesize) ||
+           !digestinteger.ImportFromBinary(digest, digestsize)) return false;
+
+        if((digestsize * 8) > curvebits)
+          {
+            if(!digestinteger.RightShift((digestsize * 8) - curvebits)) return false;
+          }
+
+        if(!reduceddigest.Module(&reduceddigest, &digestinteger, &order) ||
+           !digestoctets.Resize(coordinatesize) ||
+           !reduceddigest.ExportToBinary(digestoctets.Get(), coordinatesize) ||
+           !seed.Add(privateoctets) || !seed.Add(digestoctets) ||
+           !K.Resize(hashsize) || !V.Resize(hashsize)) return false;
+
+        memset(K.Get(), 0x00, hashsize);
+        memset(V.Get(), 0x01, hashsize);
+
+        if(!input.Add(V) || !input.Add((XBYTE)0x00) || !input.Add(seed) ||
+           !CIPHERECDSA_HMAC(hash, K, input, K) || !CIPHERECDSA_HMAC(hash, K, V, V)) return false;
+
+        input.SecureDelete();
+        if(!input.Add(V) || !input.Add((XBYTE)0x01) || !input.Add(seed) ||
+           !CIPHERECDSA_HMAC(hash, K, input, K) || !CIPHERECDSA_HMAC(hash, K, V, V)) return false;
+
+        return true;
+      }
+
+    bool Next(XMPINTEGER& candidate)
+      {
+        XSECUREBUFFER T;
+
+        if(!hash || K.IsEmpty() || V.IsEmpty()) return false;
+
+        for(int attempt=0; attempt<128; attempt++)
+          {
+            T.SecureDelete();
+
+            while(T.GetSize() < coordinatesize)
+              {
+                if(!CIPHERECDSA_HMAC(hash, K, V, V) || !T.Add(V)) return false;
+              }
+
+            if(!candidate.ImportFromBinary(T.Get(), coordinatesize)) return false;
+
+            XDWORD excessbits = (coordinatesize * 8) - curvebits;
+            if(excessbits && !candidate.RightShift(excessbits)) return false;
+
+            if((candidate.CompareSignedValues(0) > 0) && (candidate.CompareSignedValues(order) < 0)) return true;
+
+            if(!Reject()) return false;
+          }
+
+        return false;
+      }
+
+    bool Reject()
+      {
+        XSECUREBUFFER input;
+
+        if(!hash || !input.Add(V) || !input.Add((XBYTE)0x00) ||
+           !CIPHERECDSA_HMAC(hash, K, input, K) || !CIPHERECDSA_HMAC(hash, K, V, V)) return false;
+
+        return true;
+      }
+
+  private:
+
+    HASH*          hash;
+    XSECUREBUFFER  K;
+    XSECUREBUFFER  V;
+    XMPINTEGER     order;
+    XDWORD         coordinatesize;
+    XDWORD         curvebits;
+};
+
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
@@ -540,7 +794,7 @@ bool CIPHERECDSA::SetKey(CIPHERKEY* key, bool integritycheck)
           XMPINTEGER        affineX;
           XMPINTEGER        affineY;
 
-          if(!CIPHERECDSA_PointMultiply(point, privatekeyD, generatorX, generatorY, prime, curvebits) ||
+          if(!CIPHERECDSA_PointMultiplySecret(point, privatekeyD, generatorX, generatorY, prime, order, curvebits) ||
              !CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) ||
              affineX.CompareSignedValues(publickeyX) || affineY.CompareSignedValues(publickeyY))
             {
@@ -615,7 +869,7 @@ bool CIPHERECDSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* ha
      !hash->ResetResult() || !hash->Do(input, size) || !hash->GetResult() ||
      !hash->GetResult()->GetSize() || (hash->GetResult()->GetSize() > coordinatesize) ||
      !digest.ImportFromBinary(hash->GetResult()->Get(), hash->GetResult()->GetSize()) ||
-     !inverseS.ModularInverse(&S, &order) ||
+     !CIPHERECDSA_ModularInversePrime(inverseS, S, order) ||
      !multiplication.Multiplication(&digest, &inverseS) || !U1.Module(&U1, &multiplication, &order) ||
      !multiplication.Multiplication(&R, &inverseS) || !U2.Module(&U2, &multiplication, &order))
     {
@@ -631,7 +885,7 @@ bool CIPHERECDSA::Verify(XBYTE* input, XDWORD size, XBUFFER& signature, HASH* ha
     }
 
   if(point.isinfinity || !point.Z.CompareSignedValues(0) ||
-     !inverseZ.ModularInverse(&point.Z, &prime) ||
+     !CIPHERECDSA_ModularInversePrime(inverseZ, point.Z, prime) ||
      !CIPHERECDSA_ModularMultiplication(inverseZ2, inverseZ, inverseZ, prime) ||
      !CIPHERECDSA_ModularMultiplication(affineX, point.X, inverseZ2, prime) ||
      !verification.Module(&verification, &affineX, &order))
@@ -666,10 +920,9 @@ bool CIPHERECDSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash)
 *
 * @fn         bool CIPHERECDSA::Sign(XBYTE* input, XDWORD size, HASH* hash)
 * @brief      Sign with the private key set via SetKey(), for the curve given to the constructor
-* @note       Standard ECDSA: e = leftmost curvebits of HASH(input); pick a random per-signature nonce k in
-*             [1, order-1]; R = (k*G).x mod order; S = k^-1 * (e + R*privatekeyD) mod order; retry with a fresh k
-*             if either R or S comes out 0 (the point at infinity / an unusable signature -- astronomically rare,
-*             the retry is just standard defensive practice). Result (a DER ECDSA-Sig-Value) is left in
+* @note       Deterministic ECDSA (RFC 6979): e = leftmost curvebits of HASH(input); derive the per-signature nonce k
+*             from HMAC(privatekey, hash); R = (k*G).x mod order; S = k^-1 * (e + R*privatekeyD) mod order; retry
+*             deterministically if either R or S comes out 0. Result (a DER ECDSA-Sig-Value) is left in
 *             GetResult(), same convention as CIPHERRSA::Sign().
 * @ingroup    CIPHER
 *
@@ -683,19 +936,19 @@ bool CIPHERECDSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERECDSA::Sign(XBYTE* input, XDWORD size, HASH* hash)
 {
-  XRAND*            xrand;
-  XBYTE             kbuffer[CIPHERECDSA_MAXCOORDINATE_SIZE];
-  XMPINTEGER        digest;
-  XMPINTEGER        k;
-  XMPINTEGER        inverseK;
-  XMPINTEGER        R;
-  XMPINTEGER        S;
-  XMPINTEGER        rd;
-  XMPINTEGER        sum;
-  CIPHERECDSA_POINT point;
-  XMPINTEGER        affineX;
-  XMPINTEGER        affineY;
-  bool              status = false;
+  XSECUREBUFFER       digestbytes;
+  XMPINTEGER          digest;
+  XMPINTEGER          k;
+  XMPINTEGER          inverseK;
+  XMPINTEGER          R;
+  XMPINTEGER          S;
+  XMPINTEGER          rd;
+  XMPINTEGER          sum;
+  CIPHERECDSA_POINT   point;
+  XMPINTEGER          affineX;
+  XMPINTEGER          affineY;
+  CIPHERECDSA_RFC6979 deterministicnonce;
+  bool                status = false;
 
   if(!result) return false;
 
@@ -705,60 +958,42 @@ bool CIPHERECDSA::Sign(XBYTE* input, XDWORD size, HASH* hash)
      (hash->GetType() != CIPHERECDSA_RequiredHashType(GetType())) ||
      !hash->ResetResult() || !hash->Do(input, size) || !hash->GetResult() ||
      !hash->GetResult()->GetSize() || (hash->GetResult()->GetSize() > coordinatesize) ||
+     !digestbytes.Add((*hash->GetResult())) ||
      !digest.ImportFromBinary(hash->GetResult()->Get(), hash->GetResult()->GetSize()))
     {
       return false;
     }
 
-  xrand = GEN_XFACTORY.CreateRand();
-  if(!xrand) return false;
+  if(!deterministicnonce.Initialize(hash, privatekeyD, order, digestbytes.Get(), digestbytes.GetSize(),
+                                    coordinatesize, curvebits)) return false;
 
-  if(xrand->Ini())
+  for(int attempt=0; attempt<128; attempt++)
     {
-      // See KeyPair_Create() for why the top bits need masking before the rejection-sampling check (P-521:
-      // coordinatesize is 66 bytes = 528 bits for a 521-bit curve).
-      XBYTE topbytemask = (XBYTE)(0xFF >> (((XDWORD)coordinatesize * 8) - curvebits));
+      if(!deterministicnonce.Next(k) ||
+         !CIPHERECDSA_PointMultiplySecret(point, k, generatorX, generatorY, prime, order, curvebits) ||
+         !CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) ||
+         !R.Module(&R, &affineX, &order)) break;
 
-      for(int attempt=0; attempt<128; attempt++)
+      if(!R.CompareSignedValues(0))
         {
-          memset(kbuffer, 0, sizeof(kbuffer));
-
-          if(!xrand->Generate(kbuffer, coordinatesize)) break;
-
-          kbuffer[0] &= topbytemask;
-
-          if(!k.ImportFromBinary(kbuffer, coordinatesize)) break;
-
-          if((k.CompareSignedValues(0) <= 0) || (k.CompareSignedValues(order) >= 0)) continue;
-
-          if(!CIPHERECDSA_PointMultiply(point, k, generatorX, generatorY, prime, curvebits) ||
-             !CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) ||
-             !R.Module(&R, &affineX, &order))
-            {
-              continue;
-            }
-
-          if(!R.CompareSignedValues(0)) continue;      // R == 0: unusable, retry with a fresh k
-
-          if(!inverseK.ModularInverse(&k, &order)) continue;
-
-          if(!CIPHERECDSA_ModularMultiplication(rd, R, privatekeyD, order) ||
-             !CIPHERECDSA_ModularAddition(sum, digest, rd, order) ||
-             !CIPHERECDSA_ModularMultiplication(S, inverseK, sum, order))
-            {
-              continue;
-            }
-
-          if(!S.CompareSignedValues(0)) continue;      // S == 0: unusable, retry with a fresh k
-
-          status = true;
-          break;
+          if(!deterministicnonce.Reject()) break;
+          continue;
         }
+
+      if(!CIPHERECDSA_ModularInversePrime(inverseK, k, order) ||
+         !CIPHERECDSA_ModularMultiplication(rd, R, privatekeyD, order) ||
+         !CIPHERECDSA_ModularAddition(sum, digest, rd, order) ||
+         !CIPHERECDSA_ModularMultiplication(S, inverseK, sum, order)) break;
+
+      if(!S.CompareSignedValues(0))
+        {
+          if(!deterministicnonce.Reject()) break;
+          continue;
+        }
+
+      status = true;
+      break;
     }
-
-  GEN_XFACTORY.DeleteRand(xrand);
-
-  memset(kbuffer, 0, sizeof(kbuffer));
 
   if(!status) return false;
 
@@ -815,7 +1050,11 @@ bool CIPHERECDSA::KeyPair_Create(XBUFFER& privatekey, XBUFFER& publickey)
   memset(coordinate, 0, sizeof(coordinate));
 
   xrand = GEN_XFACTORY.CreateRand();
-  if(!xrand) return false;
+  if(!xrand || !xrand->IsCryptographicallySecure())
+    {
+      if(xrand) GEN_XFACTORY.DeleteRand(xrand);
+      return false;
+    }
 
   if(xrand->Ini())
     {
@@ -845,7 +1084,7 @@ bool CIPHERECDSA::KeyPair_Create(XBUFFER& privatekey, XBUFFER& publickey)
 
   if(status)
     {
-      status = CIPHERECDSA_PointMultiply(point, scalar, generatorX, generatorY, prime, curvebits) &&
+      status = CIPHERECDSA_PointMultiplySecret(point, scalar, generatorX, generatorY, prime, order, curvebits) &&
                CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) &&
                privatekey.Add(scalarbuffer, coordinatesize) &&
                publickey.Add((XBYTE)0x04) &&
@@ -909,7 +1148,7 @@ bool CIPHERECDSA::SharedSecret_Create(XBUFFER& privatekey, XBUFFER& publickey, X
       return false;
     }
 
-  status = CIPHERECDSA_PointMultiply(point, scalar, peerX, peerY, prime, curvebits) &&
+  status = CIPHERECDSA_PointMultiplySecret(point, scalar, peerX, peerY, prime, order, curvebits) &&
            CIPHERECDSA_PointToAffine(point, affineX, affineY, prime) &&
            affineX.ExportToBinary(secret, coordinatesize) &&
            sharedsecret.Add(secret, coordinatesize);
@@ -1127,9 +1366,3 @@ void CIPHERECDSA::Clean()
   publickeysize  = 0;
   curvebits      = 0;
 }
-
-
-
-
-
-

@@ -138,13 +138,18 @@ class XAVLTREE
 
                                           XAVLTREE                                      (XAVLTREE<K, Comparator>& rhs)
                                           {
-                                            *this = rhs;
+                                            Clean();
+                                            ismulti = rhs.ismulti;
+                                            Copy(rhs.GetRoot());
                                           }
 
     XAVLTREE<K, Comparator>&              operator=                                     (XAVLTREE<K, Comparator>& rhs)
                                           {
-                                            this->Copy(rhs.GetRoot());
-                                            this->ismulti = rhs.ismulti;
+                                            if(this == &rhs) return *this;
+                                            DeleteNodes(root);
+                                            Clean();
+                                            ismulti = rhs.ismulti;
+                                            Copy(rhs.GetRoot());
                                             return *this;
                                           }
 
@@ -163,10 +168,7 @@ class XAVLTREE
 
     bool                                  Add                                           (const K& key)
                                           {
-
-
-                                            Insert(root, key);
-                                            return true;
+                                            return Insert(root, key) != NULL;
                                           }
 
     XAVLNODE<K>*                          Insert                                        (XAVLNODE<K>* i, const K& key)
@@ -205,11 +207,11 @@ class XAVLTREE
                                               }
 
                                             XAVLNODE<K>* add = node = GEN_NEW XAVLNODE<K>(key);
-                                            nelements++;
                                             if(!node)
                                               {
                                                 return NULL;
                                               }
+                                            nelements++;
 
                                             if(!(node->parent = parent))
                                               {
@@ -260,7 +262,7 @@ class XAVLTREE
                                                   }
                                               }
 
-                                            return NULL;
+                                            return add;
                                           }
 
     K                                     Get                                           (const K& key)
@@ -340,20 +342,14 @@ class XAVLTREE
 
     bool                                  Delete                                        (const K& key)
                                           {
-                                            if(root == NULL)
-                                              {
-                                                return false;
-                                              }
-
-                                            root = remove(root, key);
-
-                                            return true;
+                                            XAVLNODE<K>* target = FindNode(key);
+                                            if(!target) return false;
+                                            return DeleteNode(target);
                                           }
 
     bool                                  Delete(XITERATOR it)
                                           {
-                                            remove(it.current);
-                                            return false;
+                                            return DeleteNode(it.current);
                                           }
 
     typename XAVLTREE::XITERATOR          Begin                                         ()
@@ -527,46 +523,136 @@ class XITERATOR
                                             FillList(n->right, key, list);
                                           }
 
-    XAVLNODE<K>*                          Remove                                        (XAVLNODE<K>* p)
+    XAVLNODE<K>*                          FindNode                                      (const K& key)
                                           {
-                                            if(p->left == NULL && p->right == NULL)
+                                            XAVLNODE<K>* node = root;
+                                            while(node)
                                               {
-                                                if(p->parent->left == p)
-                                                  {
-                                                    p->parent->left = NULL;
-                                                    GEN_DELETE p;
-                                                  }
-                                                else if(p->parent->right == p)
-                                                  {
-                                                    p->parent->right == NULL;
-                                                    GEN_DELETE p;
-                                                  }
+                                                if(islessimp(key, node->key)) node = node->left;
+                                                else if(islessimp(node->key, key)) node = node->right;
+                                                else return node;
                                               }
-
-
-
                                             return NULL;
                                           }
 
-    XAVLNODE<K>*                          Remove                                        (XAVLNODE<K>* p, const K& key)
+    int                                   RebuildMetadata                               (XAVLNODE<K>* node, XAVLNODE<K>* parent)
                                           {
-                                            return NULL;
+                                            if(!node) return -1;
+                                            node->parent = parent;
+                                            int leftheight  = RebuildMetadata(node->left, node);
+                                            int rightheight = RebuildMetadata(node->right, node);
+                                            node->height  = __MAX(leftheight, rightheight)+1;
+                                            node->balance = rightheight-leftheight;
+                                            return node->height;
                                           }
 
-    XAVLNODE<K>*                          FindMin                                       (XAVLNODE<K>* p)
+    void                                  UpdateMetadata                                (XAVLNODE<K>* node)
                                           {
-                                            return (p->left) ? FindMin(p->left) : p;
+                                            if(!node) return;
+                                            int leftheight  = node->left?node->left->height:-1;
+                                            int rightheight = node->right?node->right->height:-1;
+                                            node->height  = __MAX(leftheight, rightheight)+1;
+                                            node->balance = rightheight-leftheight;
                                           }
 
-    XAVLNODE<K>*                          RemoveMin                                     (XAVLNODE<K>* p)
+    XAVLNODE<K>*                          RotateSubtreeLeft                              (XAVLNODE<K>* node)
                                           {
-                                            if(!p->left)
+                                            XAVLNODE<K>* pivot = node->right;
+                                            XAVLNODE<K>* parent = node->parent;
+                                            node->right = pivot->left;
+                                            if(node->right) node->right->parent = node;
+                                            pivot->left = node;
+                                            node->parent = pivot;
+                                            pivot->parent = parent;
+                                            UpdateMetadata(node);
+                                            UpdateMetadata(pivot);
+                                            return pivot;
+                                          }
+
+    XAVLNODE<K>*                          RotateSubtreeRight                             (XAVLNODE<K>* node)
+                                          {
+                                            XAVLNODE<K>* pivot = node->left;
+                                            XAVLNODE<K>* parent = node->parent;
+                                            node->left = pivot->right;
+                                            if(node->left) node->left->parent = node;
+                                            pivot->right = node;
+                                            node->parent = pivot;
+                                            pivot->parent = parent;
+                                            UpdateMetadata(node);
+                                            UpdateMetadata(pivot);
+                                            return pivot;
+                                          }
+
+    XAVLNODE<K>*                          RebalanceSubtree                               (XAVLNODE<K>* node)
+                                          {
+                                            if(!node) return NULL;
+                                            UpdateMetadata(node);
+                                            if(node->balance < -1)
                                               {
-                                                return p->right;
+                                                UpdateMetadata(node->left);
+                                                if(node->left && node->left->balance > 0)
+                                                  {
+                                                    node->left = RotateSubtreeLeft(node->left);
+                                                    node->left->parent = node;
+                                                  }
+                                                return RotateSubtreeRight(node);
                                               }
+                                            if(node->balance > 1)
+                                              {
+                                                UpdateMetadata(node->right);
+                                                if(node->right && node->right->balance < 0)
+                                                  {
+                                                    node->right = RotateSubtreeRight(node->right);
+                                                    node->right->parent = node;
+                                                  }
+                                                return RotateSubtreeLeft(node);
+                                              }
+                                            return node;
+                                          }
 
-                                            p->left = RemoveMin(p->left);
-                                            return Rebalance(p);
+    XAVLNODE<K>*                          RemoveTarget                                  (XAVLNODE<K>* node, XAVLNODE<K>* target,
+                                                                                       bool& removed)
+                                          {
+                                            if(!node) return NULL;
+                                            if(node == target)
+                                              {
+                                                if(!node->left || !node->right)
+                                                  {
+                                                    XAVLNODE<K>* child = node->left?node->left:node->right;
+                                                    if(child) child->parent = node->parent;
+                                                    GEN_DELETE node;
+                                                    removed = true;
+                                                    return child;
+                                                  }
+
+                                                XAVLNODE<K>* successor = node->right;
+                                                while(successor->left) successor = successor->left;
+                                                node->key = successor->key;
+                                                node->right = RemoveTarget(node->right, successor, removed);
+                                                if(node->right) node->right->parent = node;
+                                              }
+                                            else
+                                              {
+                                                node->left = RemoveTarget(node->left, target, removed);
+                                                if(node->left) node->left->parent = node;
+                                                if(!removed)
+                                                  {
+                                                    node->right = RemoveTarget(node->right, target, removed);
+                                                    if(node->right) node->right->parent = node;
+                                                  }
+                                              }
+                                            return removed?RebalanceSubtree(node):node;
+                                          }
+
+    bool                                  DeleteNode                                    (XAVLNODE<K>* target)
+                                          {
+                                            if(!root || !target) return false;
+                                            RebuildMetadata(root, NULL);
+                                            bool removed = false;
+                                            root = RemoveTarget(root, target, removed);
+                                            if(root) root->parent = NULL;
+                                            if(removed && nelements) nelements--;
+                                            return removed;
                                           }
 
 
@@ -679,7 +765,7 @@ class XITERATOR
 
 
                                             this->Copy(node->left);
-                                            this->Add(node->element);
+                                            this->Add(node->key);
                                             this->Copy(node->right);
                                           }
 
@@ -722,7 +808,6 @@ class XITERATOR
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

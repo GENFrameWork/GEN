@@ -111,6 +111,7 @@ enum DIOWEBHEADER_METHOD
 #define DIOWEBHEADER_LOCATION                             __L("Location")
 
 #define DIOWEBHEADER_MAXLINE                              1024
+#define DIOWEBHEADER_MAXSIZE                              (64*1024)
 
 
 
@@ -128,7 +129,7 @@ class DIOWEBHEADER
                                 DIOWEBHEADER                      ();
     virtual                    ~DIOWEBHEADER                      ();
 
-    bool                        Read                              (DIOSTREAMTCPIP*  diostream, int timeout);
+    bool                        Read                              (DIOSTREAMTCPIP* diostream, int timeout, XDWORD maximumsize = DIOWEBHEADER_MAXSIZE);
     bool                        Write                             (DIOSTREAMTCPIP*  diostream, int timeout);
 
     bool                        AddLine                           (XCHAR* line);
@@ -157,6 +158,5 @@ class DIOWEBHEADER
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 

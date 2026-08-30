@@ -102,6 +102,7 @@ enum DIOWEBSERVER_WEBSOCKET_OPCODE
 
 #define DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT     3     // Seconds
 #define DIOWEBSERVER_DEFAULTTIMEOUTSERVERPAGE     30    // Seconds
+#define DIOWEBSERVER_DEFAULTTLSHANDSHAKETIMEOUT    10    // Seconds
 
 #define DIOWEBSERVER_MAXPAGECONNECTIONS           10
 
@@ -120,6 +121,32 @@ enum DIOWEBSERVER_WEBSOCKET_OPCODE
 #define DIOWEBSERVER_MAXBUFFER                    (512*1024)
 
 #define DIOWEBSERVER_MAXBUFFERFILE                ((1024*1024)*300)
+#define DIOWEBSERVER_DEFAULTMAXHEADERSIZE          (64*1024)
+#define DIOWEBSERVER_DEFAULTMAXBODYSIZE            (16*1024*1024)
+
+struct DIOWEBSERVER_TIMEOUTS
+{
+  DIOWEBSERVER_TIMEOUTS() : connectaccept(DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT),
+                            tlshandshake(DIOWEBSERVER_DEFAULTTLSHANDSHAKETIMEOUT),
+                            httpheaders(DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT),
+                            httpbody(DIOWEBSERVER_DEFAULTCONNECTIONTIMEOUT),
+                            keepalive(DIOWEBSERVER_KEEPALIVE) {}
+
+  int connectaccept;
+  int tlshandshake;
+  int httpheaders;
+  int httpbody;
+  int keepalive;
+};
+
+struct DIOWEBSERVER_LIMITS
+{
+  DIOWEBSERVER_LIMITS() : maximumheadersize(DIOWEBSERVER_DEFAULTMAXHEADERSIZE),
+                          maximumbodysize(DIOWEBSERVER_DEFAULTMAXBODYSIZE) {}
+
+  XDWORD maximumheadersize;
+  XDWORD maximumbodysize;
+};
 
 typedef struct
 {
@@ -360,6 +387,8 @@ class DIOWEBSERVER_CONNECTION
     DIOWEBSERVER*                               webserver;
     DIOSTREAMTCPIPCONFIG *                      diostreamcfg;
     DIOSTREAMTCPIP*                             diostream;
+    DIOWEBSERVER_TIMEOUTS                       operativetimeouts;
+    DIOWEBSERVER_LIMITS                         operativelimits;
 
     bool                                        isactive;
     bool                                        isopening;
@@ -408,6 +437,10 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
 
     int                                         GetPort                                 ();
     int                                         GetTimeoutServerPage                    ();
+    DIOWEBSERVER_TIMEOUTS*                      GetTimeouts                             ();
+    bool                                        SetTimeouts                             (DIOWEBSERVER_TIMEOUTS& timeouts);
+    DIOWEBSERVER_LIMITS*                        GetLimits                               ();
+    bool                                        SetLimits                               (DIOWEBSERVER_LIMITS& limits);
 
     DIOSTREAMTCPIPCONFIG *                      GetDIOStreamCFG                         ();
 
@@ -460,6 +493,8 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
     DIOSTREAMTCPIPCONFIG*                       diostreamcfg;
     int                                         port;
     int                                         timeoutserverpage;
+    DIOWEBSERVER_TIMEOUTS                       timeouts;
+    DIOWEBSERVER_LIMITS                         limits;
     XSTRING                                     addrlocal;
     XMUTEX*                                     xmutexconnections;
     XVECTOR<DIOWEBSERVER_CONNECTION*>           connections;
@@ -504,8 +539,4 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
-
-
 

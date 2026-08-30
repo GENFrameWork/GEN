@@ -102,6 +102,21 @@ bool XSTM32RAND::Ini()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XSTM32RAND::IsCryptographicallySecure()
+* @brief      Report whether this platform provider is cryptographically secure
+* @ingroup    PLATFORM_STM32
+* 
+* @return     bool : false until a board-specific HAL hardware RNG provider is supplied.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XSTM32RAND::IsCryptographicallySecure()
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int XSTM32RAND::MaxElements(int max)
 * @brief      Max elements
 * @ingroup    PLATFORM_STM32

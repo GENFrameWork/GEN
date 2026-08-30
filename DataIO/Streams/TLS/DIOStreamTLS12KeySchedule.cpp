@@ -429,6 +429,24 @@ bool DIOSTREAMTLS12KEYSCHEDULE::MasterSecret_Create(XBUFFER& premastersecret, XB
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS12KEYSCHEDULE::MasterSecretExtended_Create(XBUFFER& premastersecret, XBUFFER& sessionhash)
+* @brief      Derive the extended master secret according to RFC 7627
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS12KEYSCHEDULE::MasterSecretExtended_Create(XBUFFER& premastersecret, XBUFFER& sessionhash)
+{
+  if(!isini || premastersecret.IsEmpty() || (sessionhash.GetSize() != hashsize)) return false;
+
+  mastersecret.SecureDelete();
+
+  return PRF(premastersecret, DIOSTREAMTLS12KEYSCHEDULE_LABEL_EXTENDEDMASTERSECRET, sessionhash,
+             DIOSTREAMTLS12KEYSCHEDULE_MASTERSECRETSIZE, mastersecret);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         XBUFFER* DIOSTREAMTLS12KEYSCHEDULE::GetMasterSecret()
 * @brief      Get the master secret
 * @ingroup    DATAIO

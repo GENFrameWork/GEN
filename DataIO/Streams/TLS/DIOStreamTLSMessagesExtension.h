@@ -38,6 +38,7 @@
 
 
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SNI                   0x0000 // 1.0+  SNI 
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_STATUSREQUEST         0x0005 // 1.2+  OCSP stapling
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDGROUPS	      0x000a // 1.2+  Curve
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_ECPOINTFORMATS	      0x000b // 1.2	  ECP Point Formats
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS	  0x000d // 1.2+
@@ -50,6 +51,7 @@
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT 0x0032 // 1.2+  X.509 certificate signatures
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY         0x0029 // 1.3	  Session resumption (PSK); parsed/replayed only, not offered by this client
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_RENEGOTIATIONINFO     0xFF01 // 1.2   Secure renegotiation indication
 
 
 enum DIOSTREAMTLS_MSG_EXTENSION_CONTEXT
@@ -398,8 +400,11 @@ class DIOSTREAMTLS_MSG_EXTENSION_ALPN : public DIOSTREAMTLS_MSG_EXTENSION
 
     XBUFFER*                                              List_GetBuffer                                    (); 
     XDWORD                                                List_GetNProtocols                                ();
+    bool                                                  List_Get                                          (XDWORD index, XBUFFER& protocol);
     bool                                                  List_Get                                          (XDWORD index, DIOSTREAMTLS_ALPN_TYPE& alpn_type);
+    bool                                                  List_Is                                           (XBUFFER& protocol);
     bool                                                  List_Is                                           (DIOSTREAMTLS_ALPN_TYPE alpn_type);
+    bool                                                  List_Add                                          (XBUFFER& protocol);
     bool                                                  List_Add                                          (DIOSTREAMTLS_ALPN_TYPE alpn_type);
     bool                                                  List_DeleteAll                                    ();
 

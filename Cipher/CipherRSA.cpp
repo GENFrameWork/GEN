@@ -57,8 +57,6 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
-CIPHERRSA* CIPHERRSA::instance = NULL;
-
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -184,8 +182,12 @@ CIPHERRSA::CIPHERRSA() : CIPHER()
   type = CIPHERTYPE_RSA;
 
   xrand=GEN_XFACTORY.CreateRand();
+  if(xrand && (!xrand->Ini() || !xrand->IsCryptographicallySecure()))
+    {
+      GEN_XFACTORY.DeleteRand(xrand);
+      xrand = NULL;
+    }
 
-  CIPHERRSA::instance = this;
 }
 
 
@@ -309,7 +311,7 @@ bool CIPHERRSA::Cipher(XBYTE* input, XDWORD size, CIPHERKEYTYPE keytouse, CIPHER
 
       switch(pkcs1version)
         {
-          case CIPHERRSAPKCS1VERSIONV15   : status = Cipher_PKCS1_V15(inputparcial.Get(), dosizeblock,  output, keytouse, pkcs1version, GenerateRandom, NULL);
+          case CIPHERRSAPKCS1VERSIONV15   : status = Cipher_PKCS1_V15(inputparcial.Get(), dosizeblock,  output, keytouse, pkcs1version, GenerateRandom, xrand);
                                             result->Add(output);
                                             break;
 
@@ -387,7 +389,7 @@ bool CIPHERRSA::Uncipher(XBYTE* input,XDWORD size, CIPHERKEYTYPE keytouse, CIPHE
 
       switch(pkcs1version)
         {
-          case CIPHERRSAPKCS1VERSIONV15   : status = Uncipher_PKCS1_V15(inputparcial.Get(), dosizeblock,  output, keytouse, pkcs1version, GenerateRandom, NULL);
+          case CIPHERRSAPKCS1VERSIONV15   : status = Uncipher_PKCS1_V15(inputparcial.Get(), dosizeblock,  output, keytouse, pkcs1version, GenerateRandom, xrand);
                                             result->Add(output);
                                             break;
 
@@ -568,7 +570,7 @@ bool CIPHERRSA::Sign_PKCS1_V21(XBYTE* input, XDWORD size, HASH* hash, XDWORD sal
       return false;
     }
 
-  if(!salt.Resize(saltsize) || !GenerateRandom(salt.Get(), saltsize, NULL))
+  if(!salt.Resize(saltsize) || !GenerateRandom(salt.Get(), saltsize, xrand))
     {
       return false;
     }
@@ -628,7 +630,7 @@ bool CIPHERRSA::Sign_PKCS1_V21(XBYTE* input, XDWORD size, HASH* hash, XDWORD sal
       return false;
     }
 
-  if(!DoRSAPrivateOperation(EM, signature, GenerateRandom, NULL) || (signature.GetSize() != (XDWORD)keysize))
+  if(!DoRSAPrivateOperation(EM, signature, GenerateRandom, xrand) || (signature.GetSize() != (XDWORD)keysize))
     {
       return false;
     }
@@ -719,21 +721,6 @@ bool CIPHERRSA::Verify(XBUFFER& input, XBUFFER& signature, HASH* hash, CIPHERRSA
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         CIPHERRSA* CIPHERRSA::GetInstance()
-* @brief      Get instance
-* @ingroup    CIPHER
-* 
-* @return     CIPHERRSA* : Pointer to the requested object; NULL if it is not available.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-CIPHERRSA* CIPHERRSA::GetInstance()
-{ 
-  return instance; 
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
 * @fn         XRAND* CIPHERRSA::GetXRand()
 * @brief      Get X rand
 * @ingroup    CIPHER
@@ -782,8 +769,8 @@ bool CIPHERRSA::GenerateKeys(XDWORD nbits, int exponent, CIPHERKEYPUBLICRSA& pub
   status = context.E.LeftSet(exponent);
   if(status)
     {
-      do{ if(!context.P.GeneratePrime((nbits+1)>>1, 0, funcrandom?funcrandom:(XMPINTEGER_FUNCRANDOM)GenerateRandom, NULL)) return false;
-          if(!context.Q.GeneratePrime((nbits+1)>>1, 0, funcrandom?funcrandom:(XMPINTEGER_FUNCRANDOM)GenerateRandom, NULL)) return false;
+      do{ if(!context.P.GeneratePrime((nbits+1)>>1, 0, funcrandom?funcrandom:(XMPINTEGER_FUNCRANDOM)GenerateRandom, funcrandom?paramrandom:xrand)) return false;
+          if(!context.Q.GeneratePrime((nbits+1)>>1, 0, funcrandom?funcrandom:(XMPINTEGER_FUNCRANDOM)GenerateRandom, funcrandom?paramrandom:xrand)) return false;
 
           if(context.P.CompareSignedValues(context.Q) < 0)  context.P.Swap(&context.Q);
 
@@ -980,6 +967,7 @@ bool CIPHERRSA::Cipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, CI
         {
           if(funcrandom(&data, 1, paramrandom))
             {
+              if(!data) continue;
               input.Add((XBYTE)data);
               nb_pad--;
             }
@@ -1612,20 +1600,12 @@ int CIPHERRSA::GetKeySizeInBytes(CIPHERKEYTYPE keytouse)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERRSA::GenerateRandom(XBYTE* buffer, XDWORD size, void* param)
 {
-  if(!GetInstance()) return false;
+  XRAND* xrand = (XRAND*)param;
 
-  XRAND* xrand = instance->GetXRand();
-  if(!xrand) return false;
+  if(!xrand || !xrand->IsCryptographicallySecure() || (!buffer && size)) return false;
+  if(!size) return true;
 
-  if(param != NULL) param = NULL;
-
-  for(XDWORD c=0; c<size; c++)
-    {
-      buffer[c] = xrand->Max(255);
-      if(!buffer[c]) buffer[c]++;
-    }
-
-  return true;
+  return xrand->Generate(buffer, size);
 }
 
 
