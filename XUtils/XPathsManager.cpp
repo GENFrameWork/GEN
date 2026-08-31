@@ -176,6 +176,8 @@ bool XPATHSMANAGER::DelInstance()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPATHSMANAGER::GetPathOfSection(XPATHSMANAGERSECTIONTYPE sectiontype, XPATH& xpath, bool addroot)
 {
+  bool found = false;
+
   xpath.Empty();
 
   if(addroot && (sectiontype!=XPATHSMANAGERSECTIONTYPE_ROOT))
@@ -203,12 +205,14 @@ bool XPATHSMANAGER::GetPathOfSection(XPATHSMANAGERSECTIONTYPE sectiontype, XPATH
           if(pathsection->type == sectiontype)
             {
               xpath += pathsection->xpath->Get();
+
+              found = true;
               break;
             }
         }
     }
 
-  return xpath.IsEmpty()?false:true;
+  return found;
 }
 
 
@@ -445,7 +449,12 @@ bool XPATHSMANAGER::AdjustRootPathDefault(XCHAR* assetsdirname)
   xdir=GEN_XFACTORY.Create_Dir();
   if(!xdir) return false;
 
-  GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathroot);
+  if(!GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathroot))
+    {
+      GEN_XFACTORY.Delete_Dir(xdir);
+      return false;
+    }
+
   xpathroot.Slash_Add();
 
   do{ indexfound = xpathroot.Find(__L("/"), false, indexfound);

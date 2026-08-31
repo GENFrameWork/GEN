@@ -1391,7 +1391,7 @@ bool XFILEINI::WriteValue(XCHAR* key,XSTRING& value)
 {
   XSTRING _key(key);
 
-  return ReadValue(_key,value);
+  return WriteValue(_key,value);
 }
 
 
@@ -1617,7 +1617,7 @@ bool XFILEINI::ConvertFromLines()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEINI::ConvertToLines()
 {
-  if(sections.IsEmpty()) return false;
+  if(sections.IsEmpty()) return true;
 
   for(XDWORD c=0;c<sections.GetSize();c++)
     {

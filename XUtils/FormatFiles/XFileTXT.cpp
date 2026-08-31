@@ -462,7 +462,7 @@ bool XFILETXT::CreateTypeLF(XFILETXTFORMATCHAR formatchar, XFILETXTTYPELF typeLF
                                                                             sizeLF = 1;
                                                                             break;
 
-                                              case XFILETXTTYPELF_0A0D    : LF[0]  = 0xA0;
+                                              case XFILETXTTYPELF_0A0D    : LF[0]  = 0x0A;
                                                                             LF[1]  = 0x0D;
                                                                             sizeLF = 2;
                                                                             break;
@@ -697,14 +697,10 @@ int XFILETXT::GetNLines()
 * --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* XFILETXT::GetLine(int index)
 {
-  //if(index<0)                     return NULL;
-  //if(index>=(int)lines.GetSize()) return NULL;
-  //si index es <0 o index es >GetSize Get retorna NULL
+  if(index<0)                     return NULL;
+  if(index>=(int)lines.GetSize()) return NULL;
 
-  //XSTRING* string = (XSTRING*)lines.Get(index); //y ese casting?
-  //return string;
-
-  return lines.FastGet(index);
+  return lines.Get(index);
 }
 
 
@@ -752,15 +748,16 @@ bool XFILETXT::GetAllInOneLine(XSTRING& alllines, XFILETXTTYPELF typeLF, XDWORD 
   for(int c=start; c<_end; c++)
     {      
       XSTRING* line = GetLine(c);
-      if(line) 
+      if(line)
         {
-          XSTRING  LF = GetLF(typeLF)->Get();
-          if(!LF.IsEmpty()) 
-            {
-              line->Add(LF.Get());
-            }
+          XSTRING LF = GetLF(typeLF)->Get();
 
-          alllines += line->Get();          
+          alllines += line->Get();
+
+          if(!LF.IsEmpty())
+            {
+              alllines += LF.Get();
+            }
         }
     }
 
@@ -794,16 +791,17 @@ bool XFILETXT::GetAllInBuffer(XBUFFER& xbuffer, XFILETXTTYPELF typeLF, XDWORD st
   for(int c=start; c<_end; c++)
     {
       XSTRING* line = GetLine(c);
-      if(line) 
+      if(line)
         {
           XSTRING LF = GetLF(typeLF)->Get();
-          if(!LF.IsEmpty()) 
-            {
-              line->Add(LF.Get());
-            }
 
-          xbuffer.Add((*line));         
-        } 
+          xbuffer.Add((*line));
+
+          if(!LF.IsEmpty())
+            {
+              xbuffer.Add(LF);
+            }
+        }
     }
 
   if(!xbuffer.GetSize()) return false;
@@ -1660,7 +1658,7 @@ bool XFILETXT::CopyFrom(XFILETXT* filetxt)
 {
   if(!filetxt) return false;
 
-  return filetxt->CopyTo(filetxt);
+  return filetxt->CopyTo(this);
 }
 
 

@@ -2700,6 +2700,7 @@ bool XBUFFER::Padding_Add(XBYTE bitsadjust, XBUFFER_PADDINGTYPE type)
       default: break;
     }
 
+  paddingtype     = type;
   paddinghas      = true;
 
   return true;

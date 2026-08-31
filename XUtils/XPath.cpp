@@ -847,7 +847,7 @@ const XCHAR* XPATH::SetOnlyDrive()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 
@@ -870,7 +870,7 @@ const XCHAR* XPATH::SetOnlyPath()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 
@@ -893,7 +893,7 @@ const XCHAR* XPATH::SetOnlyDriveAndPath()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 
@@ -916,7 +916,7 @@ const XCHAR* XPATH::SetOnlyPathAndNamefile()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 
@@ -939,7 +939,7 @@ const XCHAR* XPATH::SetOnlyPathAndNamefileExt()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 
@@ -962,7 +962,7 @@ const XCHAR* XPATH::SetOnlyNamefile()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 
@@ -985,7 +985,7 @@ const XCHAR* XPATH::SetOnlyNamefileExt()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 
@@ -1008,7 +1008,7 @@ const XCHAR* XPATH::SetOnlyExt()
 
   Set(string);
 
-  return string.Get();
+  return Get();
 }
 
 

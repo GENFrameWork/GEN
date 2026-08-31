@@ -274,7 +274,7 @@ bool XMPINTEGER::Shrink(XDWORD nblimbs)
   if(c<nblimbs ) c = nblimbs;
 
   newlimbs = (XLIMB*)GEN_NEW XBYTE[ c * XMPINTEGER_CHARSINLIMB];
-  if(newlimbs) return false;
+  if(!newlimbs) return false;
 
   memset(newlimbs, 0, (c * XMPINTEGER_CHARSINLIMB));
 
@@ -1168,8 +1168,8 @@ bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
 
   if(!_xmpinteger.Grow(1)) return false;
 
-  _xmpinteger.SetSign(1);
-  _xmpinteger.GetLimbs()[0] = (XLIMB)integer;
+  _xmpinteger.SetSign((integer<0)?-1:1);
+  _xmpinteger.GetLimbs()[0] = (XLIMB)((integer<0)?-integer:integer);
 
   return Multiplication(xmpinteger, &_xmpinteger);
 }

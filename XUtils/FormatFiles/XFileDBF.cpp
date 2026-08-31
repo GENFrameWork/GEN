@@ -682,7 +682,7 @@ bool XFILEDBF_HEADER::Create(XFILE* fileb)
           
           field->name.ConvertToASCII(charstr);
          
-          XDWORD size = (int)strlen(charstr);
+          XDWORD size = (int)strlen((char*)charstr.Get());
           if(size>XFILEDBF_FIELDSIZE) size = XFILEDBF_FIELDSIZE;
 
           memcpy((char*)(&headerdata[index]), charstr.Get(), size);
