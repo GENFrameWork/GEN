@@ -10,7 +10,9 @@
 #include <string.h>
 
 #include "Cipher.h"
+#ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
 #include "CipherRSA.h"
+#endif
 #include "HashSHA1.h"
 #include "HashSHA2.h"
 #include "XFactory.h"
@@ -177,6 +179,9 @@ static bool CIPHERREV_Verify(const CIPHERREV_DER& TBS,const CIPHERREV_DER& algor
   if(type!=CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN)
     return CIPHERCERTIFICATEX509::VerifyDataSignature(signer.GetPublicCipherKey(),type,data,signature);
   CIPHERREV_HASH PSShash; XDWORD saltsize;
+#ifndef CIPHER_ASYMMETRIC_RSA_ACTIVE
+  return false;
+#else
   if(!CIPHERREV_PSSParameters(algorithm,PSShash,saltsize) || !signer.GetPublicCipherKey() ||
      signer.GetPublicCipherKey()->GetType()!=CIPHERKEYTYPE_RSA_PUBLIC) return false;
   CIPHERRSA RSA; if(!RSA.SetKey(signer.GetPublicCipherKey(),true)) return false;
@@ -184,6 +189,7 @@ static bool CIPHERREV_Verify(const CIPHERREV_DER& TBS,const CIPHERREV_DER& algor
   if(PSShash==CIPHERREV_HASH_SHA384) { HASHSHA2 hash(HASHSHA2TYPE_384); return RSA.Verify(data,signature,&hash,CIPHERRSAPKCS1VERSIONV21,saltsize); }
   if(PSShash==CIPHERREV_HASH_SHA512) { HASHSHA2 hash(HASHSHA2TYPE_512); return RSA.Verify(data,signature,&hash,CIPHERRSAPKCS1VERSIONV21,saltsize); }
   return false;
+#endif
 }
 
 static bool CIPHERREV_Serial(const CIPHERREV_DER& serial)

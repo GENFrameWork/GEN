@@ -2018,6 +2018,24 @@ bool DIOWEBSERVER_CONNECTION::End()
   return true;
 }
 
+bool DIOWEBSERVER_CONNECTION::TryAcquireReference()
+{
+  if(!isactive) return false;
+  websocketreferences.fetch_add(1, std::memory_order_acquire);
+  if(!isactive) { websocketreferences.fetch_sub(1, std::memory_order_release); return false; }
+  return true;
+}
+
+void DIOWEBSERVER_CONNECTION::ReleaseReference()
+{
+  websocketreferences.fetch_sub(1, std::memory_order_release);
+}
+
+int DIOWEBSERVER_CONNECTION::GetReferenceCount() const
+{
+  return websocketreferences.load(std::memory_order_acquire);
+}
+
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -2822,6 +2840,7 @@ void DIOWEBSERVER_CONNECTION::ThreadRunFunction(void* param)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_CONNECTION::Clean()
 {
+  websocketreferences.store(0, std::memory_order_relaxed);
   webserver             = NULL;
   diostreamcfg          = NULL;
   diostream             = NULL;
@@ -3766,7 +3785,7 @@ bool DIOWEBSERVER::Websocket_Write(XCHAR* string, int timeout, XCHAR* protocol, 
   if(_resource.GetSize()) filter_mask |= 0x04;
 
   if(xmutexconnections) xmutexconnections->Lock();
-
+  XVECTOR<DIOWEBSERVER_CONNECTION*> targets;
   for(int c = 0; c<(int)connections.GetSize(); c++)
     {
       DIOWEBSERVER_CONNECTION* connection = connections.Get(c);
@@ -3784,10 +3803,10 @@ bool DIOWEBSERVER::Websocket_Write(XCHAR* string, int timeout, XCHAR* protocol, 
           if(filter_mask != filter_status) continue;
         }
 
-      if(!connection->WebSocket_Write(string, timeout)) status = false;
+      if(connection->TryAcquireReference()) targets.Add(connection);
     }
-
   if(xmutexconnections) xmutexconnections->UnLock();
+  for(XDWORD c=0;c<targets.GetSize();c++) { if(!targets.Get(c)->WebSocket_Write(string, timeout)) status=false; targets.Get(c)->ReleaseReference(); }
 
   return status;
 }
@@ -3848,7 +3867,7 @@ bool DIOWEBSERVER::Websocket_Write(XBUFFER& data, int timeout, XCHAR* protocol, 
   if(_resource.GetSize()) filter_mask |= 0x04;
 
   if(xmutexconnections) xmutexconnections->Lock();
-
+  XVECTOR<DIOWEBSERVER_CONNECTION*> targets;
   for(int c = 0; c<(int)connections.GetSize(); c++)
     {
       DIOWEBSERVER_CONNECTION* connection = connections.Get(c);
@@ -3866,10 +3885,10 @@ bool DIOWEBSERVER::Websocket_Write(XBUFFER& data, int timeout, XCHAR* protocol, 
           if(filter_mask != filter_status) continue;
         }
 
-      if(!connection->WebSocket_Write(data, timeout)) status = false;
+      if(connection->TryAcquireReference()) targets.Add(connection);
     }
-
   if(xmutexconnections) xmutexconnections->UnLock();
+  for(XDWORD c=0;c<targets.GetSize();c++) { if(!targets.Get(c)->WebSocket_Write(data, timeout)) status=false; targets.Get(c)->ReleaseReference(); }
 
   return status;
 }
@@ -3909,7 +3928,7 @@ bool DIOWEBSERVER::Websocket_Ping(XCHAR* string, int timeout, XCHAR* protocol, i
   if(_resource.GetSize()) filter_mask |= 0x04;
 
   if(xmutexconnections) xmutexconnections->Lock();
-
+  XVECTOR<DIOWEBSERVER_CONNECTION*> targets;
   for(int c = 0; c<(int)connections.GetSize(); c++)
     {
       DIOWEBSERVER_CONNECTION* connection = connections.Get(c);
@@ -3927,10 +3946,10 @@ bool DIOWEBSERVER::Websocket_Ping(XCHAR* string, int timeout, XCHAR* protocol, i
           if(filter_mask != filter_status) continue;
         }
 
-      if(!connection->WebSocket_WritePingPong(true, string, timeout)) status = false;
+      if(connection->TryAcquireReference()) targets.Add(connection);
     }
-
   if(xmutexconnections) xmutexconnections->UnLock();
+  for(XDWORD c=0;c<targets.GetSize();c++) { if(!targets.Get(c)->WebSocket_WritePingPong(true, string, timeout)) status=false; targets.Get(c)->ReleaseReference(); }
 
   return status;
 }
@@ -4253,7 +4272,7 @@ bool DIOWEBSERVER::Connections_DeleteUsed()
       do{ DIOWEBSERVER_CONNECTION* connection = (DIOWEBSERVER_CONNECTION*)connections.Get(c);
           if(connection)
             {
-              if((!connection->IsOpening()) && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_DISCONNECTED) && (!connection->IsRequestInProgress()))
+              if((!connection->IsOpening()) && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_DISCONNECTED) && (!connection->IsRequestInProgress()) && connection->GetReferenceCount()==0)
                 {
                   UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_CONNECTED    , connection->GetDIOStream());
                   UnSubscribeEvent(DIOSTREAM_XEVENT_TYPE_DISCONNECTED , connection->GetDIOStream());
@@ -4295,7 +4314,7 @@ bool DIOWEBSERVER::Connections_DeleteWaiting()
       do{ DIOWEBSERVER_CONNECTION* connection = (DIOWEBSERVER_CONNECTION*)connections.Get(c);
           if(connection)
             {
-              if(connection->IsOpening() || ((!connection->IsRequestInProgress()) && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_GETTINGCONNECTION)))
+              if((connection->GetReferenceCount()==0) && (connection->IsOpening() || ((!connection->IsRequestInProgress()) && (connection->GetDIOStream()->GetStatus() == DIOSTREAMSTATUS_GETTINGCONNECTION))))
                 {
                   connections.Delete(connection);
                   GEN_DELETE connection;

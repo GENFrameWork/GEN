@@ -42,10 +42,12 @@
 #include "XDateTime.h"
 #include "XTrace.h"
 
+#ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
 #include "CipherKeyPublicRSA.h"
+#include "CipherRSA.h"
+#endif
 #include "CipherKeyECDSA.h"
 #include "CipherKeySymmetrical.h"
-#include "CipherRSA.h"
 #include "CipherECDSA.h"
 
 #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
@@ -1749,6 +1751,9 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
 
   if(algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS)
     {
+#ifndef CIPHER_ASYMMETRIC_RSA_ACTIVE
+      return false;
+#else
       if(!CIPHERCERTIFICATEX509_DER_RSASSAPSSParameters(outeralgorithmparameters,
                                                         RSASSAPSShashtype, RSASSAPSSsaltsize)) return false;
 
@@ -1766,19 +1771,20 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
                                                           default : return false;
         }
     }
+#endif
+    
    else if((algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519)         ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA1)   ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256) ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384) ||
            (algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512))
-    {
-      if(outeralgorithmparameters.tag) return false;
-    }
-   else
-    {
-      if(outeralgorithmparameters.tag &&
-         ((outeralgorithmparameters.tag != 0x05) || outeralgorithmparameters.size)) return false;
-    }
+          {
+            if(outeralgorithmparameters.tag) return false;
+          }
+         else
+          {
+            if(outeralgorithmparameters.tag && ((outeralgorithmparameters.tag != 0x05) || outeralgorithmparameters.size)) return false;
+          }
 
   CIPHERCERTIFICATEX509_DERREADER tbsreader(TBS.data, TBS.size);
   CIPHERCERTIFICATEX509_DERITEM   item;
@@ -1890,6 +1896,7 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
       return false;
     }
 
+  #ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
   if(!publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1"), false))
     {
       CIPHERCERTIFICATEX509_DERREADER publickeyreader(&publickeybits.data[1], publickeybits.size - 1);
@@ -1939,6 +1946,9 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
           return false;
         }
     }
+  #else
+   if(false)
+  #endif
    else if(!publickeyalgorithmOID.Compare(__L("1.2.840.10045.2.1"), false))
     {
       // id-ecPublicKey: the actual curve comes from the ASN.1 parameters (a namedCurve OID). Only the three
@@ -2936,6 +2946,9 @@ bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
 
   if(algorithmtype == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS)
     {
+#ifndef CIPHER_ASYMMETRIC_RSA_ACTIVE
+      return false;
+#else
       if(issuerpublickey->GetType() != CIPHERKEYTYPE_RSA_PUBLIC) return false;
       CIPHERRSA RSA; if(!RSA.SetKey(issuerpublickey, true)) return false;
       switch(RSASSAPSShashtype)
@@ -2945,6 +2958,7 @@ bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
           case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : { HASHSHA2 hash(HASHSHA2TYPE_512); return RSA.Verify(tbsdata, signature, &hash, CIPHERRSAPKCS1VERSIONV21, RSASSAPSSsaltsize); }
                                                           default : return false;
         }
+#endif
     }
 
   return VerifyDataSignature(issuerpublickey, algorithmtype, tbsdata, signature);
@@ -2970,6 +2984,7 @@ bool CIPHERCERTIFICATEX509::VerifyDataSignature(CIPHERKEY* issuerpublickey,
 
   #endif
 
+  #ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
   if(issuerpublickey->GetType() == CIPHERKEYTYPE_RSA_PUBLIC)
     {
       CIPHERRSA RSA; if(!RSA.SetKey(issuerpublickey,true)) return false;
@@ -2982,6 +2997,7 @@ bool CIPHERCERTIFICATEX509::VerifyDataSignature(CIPHERKEY* issuerpublickey,
                                                                     default: return false;
         }
     }
+  #endif
 
   CIPHERTYPE curvetype=CIPHERTYPE_XOR;
   switch(issuerpublickey->GetType())

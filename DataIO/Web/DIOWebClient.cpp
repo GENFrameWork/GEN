@@ -1999,8 +1999,11 @@ bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool internaloperation)
+bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool internaloperation, XTIMER* inheritedtimer)
 {
+  XTIMER operationtimer;
+  XTIMER* timer = inheritedtimer?inheritedtimer:&operationtimer;
+  if(!inheritedtimer) operationtimer.Reset();
   if(!internaloperation) OperationError_Reset();
 
   if(!diostreamcfg || !timerout || !to)
@@ -2028,7 +2031,8 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
         {
           targeturl  = DIOURL_WEBURLID;
           targeturl += url.Get();
-          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true);
+          int remaining=timeout; if(timeout!=XTIMER_INFINITE) { XDWORD e=timer->GetMeasureSeconds(); if(e>=(XDWORD)timeout) return false; remaining=timeout-(int)e; }
+          return MakeOperation(method, targeturl, postdata, addhead, remaining, localIP, istobuffer, to, 0, true, timer);
         }
 
       targeturl  = DIOURL_WEBURLID_SECURE;
@@ -2036,12 +2040,14 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       if(transportpolicy == DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_ONLY)
         {
-          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true);
+          int remaining=timeout; if(timeout!=XTIMER_INFINITE) { XDWORD e=timer->GetMeasureSeconds(); if(e>=(XDWORD)timeout) return false; remaining=timeout-(int)e; }
+          return MakeOperation(method, targeturl, postdata, addhead, remaining, localIP, istobuffer, to, 0, true, timer);
         }
 
       // Preserve the exact HTTPS failure before considering a weaker transport. Authentication, DNS, local
       // configuration and every failure after an HTTP request was sent are authoritative and never permit fallback.
-      if(MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true)) return true;
+      int remaining=timeout; if(timeout!=XTIMER_INFINITE) { XDWORD e=timer->GetMeasureSeconds(); if(e>=(XDWORD)timeout) return false; remaining=timeout-(int)e; }
+      if(MakeOperation(method, targeturl, postdata, addhead, remaining, localIP, istobuffer, to, 0, true, timer)) return true;
 
       lastHTTPSattempterror = lastoperationerror;
       if(!OperationError_AllowsHTTPFallback()) return false;
@@ -2050,7 +2056,8 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       targeturl += url.Get();
       lastoperationerror.Clean();
       HTTPfallbackused = true;
-      return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true);
+      int remaininghttp=timeout; if(timeout!=XTIMER_INFINITE) { XDWORD e=timer->GetMeasureSeconds(); if(e>=(XDWORD)timeout) return false; remaininghttp=timeout-(int)e; }
+      return MakeOperation(method, targeturl, postdata, addhead, remaininghttp, localIP, istobuffer, to, 0, true, timer);
     }
 
   if(istobuffer) ((XBUFFER*)to)->Delete();
@@ -2468,7 +2475,8 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
           GEN_DIOFACTORY.DeleteStreamIO(diostream);
           diostream = NULL;
 
-          bool redirectstatus = MakeOperation(method, redirecturl, postdata, redirectheaders, timeout, localIP, istobuffer, to, redirectcount+1, true);
+          int remaining=timeout; if(timeout!=XTIMER_INFINITE) { XDWORD e=timer->GetMeasureSeconds(); if(e>=(XDWORD)timeout) return false; remaining=timeout-(int)e; }
+          bool redirectstatus = MakeOperation(method, redirecturl, postdata, redirectheaders, remaining, localIP, istobuffer, to, redirectcount+1, true, timer);
 
           if(!sameorigin)
             {

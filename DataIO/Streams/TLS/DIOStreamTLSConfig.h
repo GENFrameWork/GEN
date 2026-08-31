@@ -58,6 +58,14 @@ enum DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY
   DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY_ON_NATIVE_FAILURE,
 };
 
+enum DIOSTREAMTLS_REVOCATIONPOLICY
+{
+  DIOSTREAMTLS_REVOCATIONPOLICY_OFF = 0,
+  DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL,
+  DIOSTREAMTLS_REVOCATIONPOLICY_HARD_FAIL,
+  DIOSTREAMTLS_REVOCATIONPOLICY_MUST_STAPLE,
+};
+
 
 #define DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_LIFETIME      86400
 #define DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME         604800
@@ -214,6 +222,8 @@ class DIOSTREAMTLSSERVERCREDENTIALS
 
     XBUFFER*                GetOCSPStapledResponse              ();
     bool                    SetOCSPStapledResponse              (XBUFFER& response);
+    bool                    OCSPStapledResponse_Add             (XBUFFER& response);
+    XVECTOR<XBUFFER*>*      GetOCSPStapledResponses              ();
     bool                    DeleteOCSPStapledResponse           ();
 
     bool                    HasCredentials                      ();
@@ -227,6 +237,7 @@ class DIOSTREAMTLSSERVERCREDENTIALS
     XVECTOR<XBUFFER*>       certificatechain;
     CIPHERKEY*              privatekey;
     XBUFFER                 OCSPstapledresponse;
+    XVECTOR<XBUFFER*>       OCSPstapledresponses;
 };
 
 
@@ -311,6 +322,9 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     bool                    IsAllowUnauthenticatedServer      ();
     void                    SetAllowUnauthenticatedServer     (bool allowunauthenticatedserver);
 
+    DIOSTREAMTLS_REVOCATIONPOLICY GetRevocationPolicy         ();
+    bool                    SetRevocationPolicy               (DIOSTREAMTLS_REVOCATIONPOLICY policy);
+
     bool                    IsActiveAIAFetch                  ();
     void                    AIAFetch_Activate                 (bool activate);
 
@@ -391,6 +405,7 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*> servercredentials;
     DIOSTREAMTLS_LOCALCREDENTIALSERROR localcredentialserror;
     bool                    allowunauthenticatedserver;
+    DIOSTREAMTLS_REVOCATIONPOLICY revocationpolicy;
 
     bool                    aiafetchactive;
     int                     aiafetchtimeout;
@@ -408,6 +423,7 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XSECUREBUFFER           sessionticketserverkeycurrent;
     XSECUREBUFFER           sessionticketserverkeyprevious;
     XQWORD                  sessionticketserverkeycurrentID;
+    XQWORD                  sessionticketserverkeygeneration;
     XQWORD                  sessionticketserverkeypreviousID;
     XQWORD                  sessionticketserverkeycurrentcreated;
     XQWORD                  sessionticketserverkeypreviousexpires;

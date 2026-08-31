@@ -43,6 +43,7 @@
 #include "DIOStream.h"
 
 #include "DIOWebHeader.h"
+#include <atomic>
 #include "DIOWebClient.h"
 
 #include "DIOWebServer_Plugin.h"
@@ -381,6 +382,9 @@ class DIOWEBSERVER_CONNECTION
     XTIMER*                                     GetTimerDisconnection                   ();
 
     bool                                        End                                     ();
+    bool                                        TryAcquireReference                   ();
+    void                                        ReleaseReference                      ();
+    int                                         GetReferenceCount                     () const;
 
   protected:
 
@@ -404,6 +408,7 @@ class DIOWEBSERVER_CONNECTION
     XSTRING                                     origin;
 
     XBUFFER                                     websocket_xbufferframepart;
+    std::atomic<int>                            websocketreferences;
 
   private:
 
@@ -539,4 +544,3 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-

@@ -322,8 +322,27 @@ bool DIOURL::Host_Canonicalize(XCHAR* host, XSTRING& canonicalhost, DIOURL_HOSTT
       return true;
     }
 
+  XSTRING mapped;
   for(XDWORD c=0; c<source.GetSize(); c++)
-    if(source[c] == (XCHAR)0x3002 || source[c] == (XCHAR)0xFF0E || source[c] == (XCHAR)0xFF61) source.Get()[c] = __C('.');
+    {
+      XDWORD point=(XDWORD)source[c];
+      if(point == 0x3002 || point == 0xFF0E || point == 0xFF61) point = __C('.');
+      else if(point >= 0xFF01 && point <= 0xFF5E) point -= 0xFEE0; // UTS #46 width mapping
+      else if(point == 0x3000) point = __C(' ');
+
+      // UTS #46 deviation mappings (non-transitional form) and canonical
+      // sigma folding.  Keep this table local so non-Windows builds do not
+      // depend on an external IDNA library.
+      if(point == 0x03C2) point = 0x03C3;
+      if(point == 0x1E9E) point = 0x00DF;
+      if(point == 0x00DF) { mapped.Add(__C('s')); mapped.Add(__C('s')); continue; }
+      mapped.Add((XCHAR)point);
+    }
+  source = mapped;
+
+  // UTS #46 non-transitional processing applies Unicode case mapping before
+  // the label validity and punycode steps.
+  source.ToLowerCase();
 
   if(source.Character_GetLast() == __C('.')) source.DeleteLastCharacter();
   if(source.IsEmpty()) return false;

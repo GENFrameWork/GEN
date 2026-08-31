@@ -10,7 +10,9 @@
 #include "Cipher.h"
 #include "CipherPEMCodec.h"
 #include "CipherCertificateX509.h"
+#ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
 #include "CipherKeyPrivateRSA.h"
+#endif
 #include "CipherKeyECDSA.h"
 #include "CipherECDSA.h"
 #include "CipherKeySymmetrical.h"
@@ -93,6 +95,9 @@ static bool CIPHERCREDENTIALSLOADER_LegacyPrivateKey(XBUFFER& filedata, CIPHERKE
 
   if(expectedpublickeytype==CIPHERKEYTYPE_RSA_PUBLIC)
     {
+#ifndef CIPHER_ASYMMETRIC_RSA_ACTIVE
+      return false;
+#else
       if(CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,0,first) &&
          CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,1,second) &&
          CIPHERCREDENTIALSLOADER_LegacyHexLine(filedata,2,third) &&
@@ -107,6 +112,7 @@ static bool CIPHERCREDENTIALSLOADER_LegacyPrivateKey(XBUFFER& filedata, CIPHERKE
             }
         }
     }
+#endif
   else
     {
       CIPHERKEYTYPE privatetype=CIPHERKEYTYPE_UNKNOWN;
@@ -250,6 +256,7 @@ bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE e
   bool ispkcs8=CIPHERPEMCODEC::PKCS8PrivateKey_Decode(DER,isrsa,isec,ised25519,inner);
   if(ispkcs8) actual=&inner;
 
+  #ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
   if((expectedpublickeytype==CIPHERKEYTYPE_RSA_PUBLIC) && (!ispkcs8 || isrsa))
     {
       XMPINTEGER p,q,d;
@@ -260,9 +267,10 @@ bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE e
           if(key) GEN_DELETE key;
         }
     }
+  #endif
   #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
 
-  else if((expectedpublickeytype==CIPHERKEYTYPE_ED25519_PUBLIC) && ispkcs8 && ised25519)
+  if((expectedpublickeytype==CIPHERKEYTYPE_ED25519_PUBLIC) && ispkcs8 && ised25519)
     {
       XSECUREBUFFER seed;
 

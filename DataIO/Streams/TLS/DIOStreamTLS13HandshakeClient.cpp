@@ -2061,6 +2061,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message
 
           if(offeredapplicationprotocolsraw.IsEmpty() || (ALPN->List_GetNProtocols() != 1) ||
              !ALPN->List_Get(0, applicationprotocolraw) ||
+             (applicationprotocolraw.GetSize() >= 3 && applicationprotocolraw.GetByte(0)=='h' &&
+              applicationprotocolraw.GetByte(1)=='3' && applicationprotocolraw.GetByte(2)=='-') ||
              !ApplicationProtocol_IsOffered(applicationprotocolraw)) return SetError();
 
           ALPN->List_Get(0, applicationprotocol);
@@ -2288,7 +2290,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
         }
 
       bool hasstapledOCSP=false;
-      for(XDWORD c=0; c<leafentry->Extensions_GetAll()->GetSize(); c++)
+      const bool revocationenabled = !config || config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_OFF;
+      for(XDWORD c=0; revocationenabled && c<leafentry->Extensions_GetAll()->GetSize(); c++)
         {
           DIOSTREAMTLS_MSG_EXTENSION* extension = leafentry->Extensions_GetAll()->Get(c);
           if(!extension || extension->GetType()!=DIOSTREAMTLS_MSG_EXTENSION_TYPE_STATUSREQUEST) continue;
@@ -2315,7 +2318,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
           if(!OCSP.Add(data->Get()+4,data->GetSize()-4)) return SetError();
           CIPHERCERTIFICATEX509REVOCATION_RESULT result = CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(
             OCSP,(*validatedchain->Get(0)),(*validatedchain->Get(1)));
-          if(result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
+          if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED ||
+             (config && config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL &&
+              result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD))
             {
               certificatevalidationerror=(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)?
                 CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED:CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
@@ -2324,7 +2329,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
             }
         }
 
-      if(!hasstapledOCSP && config && config->GetOCSPDirectFetcher())
+      if(revocationenabled && !hasstapledOCSP && config && config->GetOCSPDirectFetcher())
         {
           XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
           XBUFFER response;
@@ -2333,7 +2338,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
              config->GetOCSPDirectFetcher()((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,config->GetOCSPDirectContext()) &&
              response.GetSize() <= config->GetMemoryPolicy()->GetMaximumOCSPResponseSize())
             result=CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(0)),(*chain->Get(1)));
-          if(result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
+          if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED ||
+             (config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL &&
+              result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD))
             {
               certificatevalidationerror=(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)?
                 CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED:CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
@@ -2342,22 +2349,31 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
             }
         }
 
-      if(config && config->GetCertificateRevocationLists() && !config->GetCertificateRevocationLists()->IsEmpty())
+      if(revocationenabled && config && config->GetCertificateRevocationLists() && !config->GetCertificateRevocationLists()->IsEmpty())
         {
           XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
-          bool havevalidCRL=false;
           if(!chain || chain->GetSize()<2) return SetError();
-          for(XDWORD c=0;c<config->GetCertificateRevocationLists()->GetSize();c++)
+          for(XDWORD certindex=0; certindex+1<chain->GetSize(); certindex++)
             {
-              XBUFFER* CRL=config->GetCertificateRevocationLists()->Get(c);
-              if(!CRL || CRL->GetSize() > config->GetMemoryPolicy()->GetMaximumCRLSize()) continue;
-              CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*chain->Get(0)),(*chain->Get(1)));
-              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)
-                { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED; SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
-              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) havevalidCRL=true;
+              bool valid=false;
+              for(XDWORD c=0;c<config->GetCertificateRevocationLists()->GetSize();c++)
+                {
+                  XBUFFER* CRL=config->GetCertificateRevocationLists()->Get(c);
+                  if(!CRL || CRL->GetSize() > config->GetMemoryPolicy()->GetMaximumCRLSize()) continue;
+                  CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*chain->Get(certindex)),(*chain->Get(certindex+1)));
+                  if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)
+                    { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED; SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
+                  if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) valid=true;
+                }
+              if(!valid && config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL)
+                { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN; SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
             }
-          if(!havevalidCRL)
-            { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN; SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
+        }
+      if(config && config->GetRevocationPolicy()==DIOSTREAMTLS_REVOCATIONPOLICY_MUST_STAPLE && !hasstapledOCSP)
+        {
+          certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
+          SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
+          return SetError();
         }
     }
 

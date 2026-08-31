@@ -347,12 +347,14 @@ static bool CIPHERECDSA_PointMultiplySecret(CIPHERECDSA_POINT& point, XMPINTEGER
 
   if(blinded)
     {
-      return CIPHERECDSA_PointMultiplyFixed(point, blindedscalar, affineX, affineY, prime,
-                                            curvebits + (blindbytes * 8), curvebits);
+      bool status = CIPHERECDSA_PointMultiplyFixed(point, blindedscalar, affineX, affineY, prime,
+                                                    curvebits + (blindbytes * 8), curvebits);
+      return status;
     }
 
   // A fixed operation schedule remains preferable if a caller uses Cipher without an available platform RNG.
-  return CIPHERECDSA_PointMultiplyFixed(point, scalar, affineX, affineY, prime, curvebits, curvebits);
+  bool status = CIPHERECDSA_PointMultiplyFixed(point, scalar, affineX, affineY, prime, curvebits, curvebits);
+  return status;
 }
 
 
@@ -666,7 +668,8 @@ class CIPHERECDSA_RFC6979
       {
         XSECUREBUFFER T;
 
-        if(!hash || K.IsEmpty() || V.IsEmpty()) return false;
+        if(!hash || K.IsEmpty() || V.IsEmpty() || !coordinatesize ||
+           ((coordinatesize * 8) < curvebits)) return false;
 
         for(int attempt=0; attempt<128; attempt++)
           {

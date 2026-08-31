@@ -268,7 +268,7 @@ class DIOWEBCLIENT : public XSUBJECT
   private:
 
  
-    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool internaloperation = false);
+    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool internaloperation = false, XTIMER* operationtimer = NULL);
     bool                                      Header_Read                       (int timeout);
     bool                                      Body_Read                         (DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent);
     bool                                      Body_Decompress                   (bool istobuffer, void* to);
