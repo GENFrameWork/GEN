@@ -43,11 +43,54 @@
 #include "DIOStreamTLSMessagesHandShakeClientHello.h"
 #include "DIOStreamTLSMessagesHandShakeServerHello.h"
 
-// Phase 5: version negotiation. PARALLEL TLS 1.2 objects (handshakeclient12 below, owning its own session) live
-// alongside the TLS 1.3 ones untouched; DIOSTREAMTLS<T> itself is the dispatch point, decided per
-// DIOSTREAMTLSCONFIG's min/max version window (see DIOStreamTLSConfig.h).
+// TLS 1.2 is optional.  Keep the dispatcher source-compatible when a target
+// deliberately disables the TLS 1.2 implementation: the inline null object
+// below is never selected by Open(), but avoids making TLS 1.3 builds depend
+// on TLS 1.2 translation units at link time.
+#ifdef DIO_STREAMTLS12_ACTIVE
 #include "DIOStreamTLS12Session.h"
 #include "DIOStreamTLS12HandshakeClient.h"
+#else
+enum DIOSTREAMTLS12SESSION_RESULT { DIOSTREAMTLS12SESSION_RESULT_NONE = 0 };
+enum DIOSTREAMTLS12HANDSHAKECLIENT_STATE { DIOSTREAMTLS12HANDSHAKECLIENT_STATE_ERROR = 0, DIOSTREAMTLS12HANDSHAKECLIENT_STATE_READY_CLIENTFLIGHT = 1 };
+enum DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR { DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE = 0 };
+class DIOSTREAMTLS12SESSION
+{
+  public:
+    template<typename... A> bool Alert_Create(A&&...) { return false; }
+    template<typename... A> bool CloseNotify_Create(A&&...) { return false; }
+    template<typename... A> XDWORD ApplicationData_Read(A&&...) { return 0; }
+    template<typename... A> bool ApplicationData_CanProtect(A&&...) { return false; }
+    template<typename... A> bool ApplicationData_Protect(A&&...) { return false; }
+    template<typename... A> DIOSTREAMTLS12SESSION_RESULT ApplicationData_Process(A&&...) { return DIOSTREAMTLS12SESSION_RESULT_NONE; }
+    template<typename... A> bool RecordInput_Add(A&&...) { return false; }
+    bool IsIni() const { return false; }
+    bool IsTransportClosedWithoutNotify() const { return false; }
+    bool IsCloseNotifyReceived() const { return false; }
+    bool IsCloseNotifySent() const { return false; }
+    bool IsError() const { return true; }
+    bool TransportClosed() const { return false; }
+    XBUFFER* GetApplicationInput() { return NULL; }
+    DIOSTREAMTLS_ALERT_DESCRIPTION GetLastRecordAlertDescription() const { return static_cast<DIOSTREAMTLS_ALERT_DESCRIPTION>(0); }
+};
+class DIOSTREAMTLS12HANDSHAKECLIENT
+{
+  public:
+    void End() {}
+    template<typename... A> bool Ini(A&&...) { return false; }
+    template<typename... A> bool Capabilities_Set(A&&...) { return false; }
+    template<typename... A> bool Authentication_Set(A&&...) { return false; }
+    template<typename... A> bool ClientHello_Create(A&&...) { return false; }
+    template<typename... A> bool ClientFlight_Create(A&&...) { return false; }
+    template<typename... A> bool RecordInput_Add(A&&...) { return false; }
+    template<typename... A> bool Process(A&&...) { return false; }
+    bool IsAlgorithmRejected() const { return false; }
+    bool IsHandshakeCompleted() const { return false; }
+    DIOSTREAMTLS12HANDSHAKECLIENT_STATE GetState() const { return DIOSTREAMTLS12HANDSHAKECLIENT_STATE_ERROR; }
+    DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR GetAuthenticationError() const { return DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE; }
+    DIOSTREAMTLS12SESSION* GetSession() { static DIOSTREAMTLS12SESSION session; return &session; }
+};
+#endif
 
 
 
@@ -154,6 +197,14 @@ class DIOSTREAMTLS : public T
                                                   return false;
                                                 }
 
+#ifndef DIO_STREAMTLS12_ACTIVE
+                                              if(minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2)
+                                                {
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
+                                                  return false;
+                                                }
+#endif
+
                                               if(config->IsServer())
                                                 {
                                                   // The server-side implementation currently implements TLS 1.3 only.  Do not silently
@@ -191,8 +242,13 @@ class DIOSTREAMTLS : public T
                                               servername    = canonicalservername.Get();
                                               sniservername = (servernametype == DIOURL_HOSTTYPE_DNS)?servername:NULL;
 
+#ifdef DIO_STREAMTLS12_ACTIVE
                                               dualversionmode = (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
                                               starttls12       = (maxversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+#else
+                                              dualversionmode = false;
+                                              starttls12       = false;
+#endif
 
                                               if(Handshake_Attempt(config, servername, sniservername, starttls12))
                                                 {
