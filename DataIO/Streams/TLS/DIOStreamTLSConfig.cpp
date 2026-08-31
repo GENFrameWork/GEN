@@ -51,6 +51,7 @@
 #include "CipherTrustedRootCertificatesX509.h"
 
 #include "DIOStreamTLSSignature.h"
+#include "DIOStreamTLSRecord.h"
 
 #include "DIOFactory.h"
 
@@ -70,6 +71,104 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+DIOSTREAMTLSMEMORYPOLICY::DIOSTREAMTLSMEMORYPOLICY()
+{
+  maximumrecordinputsize      = DIOSTREAMTLS_MEMORY_DEFAULT_RECORD_INPUT;
+  maximumhandshakeinputsize   = DIOSTREAMTLS_MEMORY_DEFAULT_HANDSHAKE_INPUT;
+  maximumtranscriptsize       = DIOSTREAMTLS_MEMORY_DEFAULT_TRANSCRIPT;
+  maximumapplicationinputsize = DIOSTREAMTLS_MEMORY_DEFAULT_APPLICATION_INPUT;
+  maximumAIAheadersize        = DIOSTREAMTLS_MEMORY_DEFAULT_AIA_HEADER;
+  maximumAIAbodysize          = DIOSTREAMTLS_MEMORY_DEFAULT_AIA_BODY;
+  maximumAIAfetches           = DIOSTREAMTLS_MEMORY_DEFAULT_AIA_FETCHES;
+  maximumOCSPresponsesize     = DIOSTREAMTLS_MEMORY_DEFAULT_OCSP_RESPONSE;
+  maximumCRLsize              = DIOSTREAMTLS_MEMORY_DEFAULT_CRL;
+  maximumCRLs                 = DIOSTREAMTLS_MEMORY_DEFAULT_CRLS;
+  maximumsessiontickets       = DIOSTREAMTLS_MEMORY_DEFAULT_SESSION_TICKETS;
+  maximumtrustroots           = DIOSTREAMTLS_MEMORY_DEFAULT_TRUST_ROOTS;
+  maximumtrustcertificatesize = DIOSTREAMTLS_MEMORY_DEFAULT_TRUST_CERTIFICATE;
+  maximumtruststoresize       = DIOSTREAMTLS_MEMORY_DEFAULT_TRUST_TOTAL;
+}
+
+
+bool DIOSTREAMTLSMEMORYPOLICY::SetConnectionBufferLimits(XDWORD recordinput, XDWORD handshakeinput,
+                                                          XDWORD transcript, XDWORD applicationinput)
+{
+  if((recordinput < DIOSTREAMTLS_MEMORY_MINIMUM_RECORD_INPUT) ||
+     (recordinput > DIOSTREAMTLS_MEMORY_MAXIMUM_BUFFER) ||
+     (handshakeinput < (64*1024)) || (handshakeinput > DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE) ||
+     (transcript < handshakeinput) || (transcript > DIOSTREAMTLS_MEMORY_MAXIMUM_BUFFER) ||
+     (applicationinput < DIOSTREAMTLSRECORD_MAXPLAINSIZE) ||
+     (applicationinput > DIOSTREAMTLS_MEMORY_MAXIMUM_BUFFER)) return false;
+
+  maximumrecordinputsize      = recordinput;
+  maximumhandshakeinputsize   = handshakeinput;
+  maximumtranscriptsize       = transcript;
+  maximumapplicationinputsize = applicationinput;
+  return true;
+}
+
+
+bool DIOSTREAMTLSMEMORYPOLICY::SetAIALimits(XDWORD headersize, XDWORD bodysize, XDWORD maximumfetches)
+{
+  if((headersize < 1024) || (headersize > (64*1024)) ||
+     (bodysize < 1024) || (bodysize > (1024*1024)) ||
+     !maximumfetches || (maximumfetches > CIPHERCERTIFICATEX509VALIDATOR_MAXCHAINSIZE)) return false;
+  maximumAIAheadersize = headersize;
+  maximumAIAbodysize   = bodysize;
+  maximumAIAfetches    = maximumfetches;
+  return true;
+}
+
+
+bool DIOSTREAMTLSMEMORYPOLICY::SetRevocationLimits(XDWORD OCSPsize, XDWORD CRLsize, XDWORD maximumCRLs)
+{
+  if(!OCSPsize || (OCSPsize > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE) ||
+     !CRLsize || (CRLsize > CIPHERCERTIFICATEX509REVOCATION_MAX_CRL_SIZE) ||
+     !maximumCRLs || (maximumCRLs > 256)) return false;
+  maximumOCSPresponsesize = OCSPsize;
+  maximumCRLsize          = CRLsize;
+  this->maximumCRLs       = maximumCRLs;
+  return true;
+}
+
+
+bool DIOSTREAMTLSMEMORYPOLICY::SetTrustStoreLimits(XDWORD maximumroots, XDWORD maximumcertificatesize,
+                                                    XDWORD maximumtotalsize)
+{
+  if(!maximumroots || (maximumroots > 8192) || !maximumcertificatesize ||
+     (maximumcertificatesize > (4*1024*1024)) ||
+     (maximumtotalsize < maximumcertificatesize) || (maximumtotalsize > (128*1024*1024))) return false;
+  maximumtrustroots           = maximumroots;
+  maximumtrustcertificatesize = maximumcertificatesize;
+  maximumtruststoresize       = maximumtotalsize;
+  return true;
+}
+
+
+bool DIOSTREAMTLSMEMORYPOLICY::SetMaximumSessionTickets(XDWORD maximumtickets)
+{
+  if(!maximumtickets || (maximumtickets > 64)) return false;
+  maximumsessiontickets = maximumtickets;
+  return true;
+}
+
+
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumRecordInputSize()      { return maximumrecordinputsize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumHandshakeInputSize()   { return maximumhandshakeinputsize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTranscriptSize()       { return maximumtranscriptsize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumApplicationInputSize() { return maximumapplicationinputsize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIAHeaderSize()        { return maximumAIAheadersize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIABodySize()          { return maximumAIAbodysize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIAFetches()           { return maximumAIAfetches; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumOCSPResponseSize()     { return maximumOCSPresponsesize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumCRLSize()              { return maximumCRLsize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumCRLs()                 { return maximumCRLs; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumSessionTickets()       { return maximumsessiontickets; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustRoots()           { return maximumtrustroots; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustCertificateSize() { return maximumtrustcertificatesize; }
+XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustStoreSize()       { return maximumtruststoresize; }
+
+
 static bool DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(XWORD ciphersuite)
 {
   switch(ciphersuite)
@@ -84,6 +183,54 @@ static bool DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(XWORD ciphersuite)
       #endif
 
       default : return false;
+    }
+}
+
+
+static bool DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(XWORD ciphersuite)
+{
+  switch(ciphersuite)
+    {
+      case DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256   :
+      case DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384   :
+      case DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 :
+      case DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 : return true;
+                                                                    default : return false;
+    }
+}
+
+
+static bool DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(XWORD group)
+{
+  bool supported = (group == DIOSTREAMTLS_MSG_CURVEID_X25519)   ||
+                   (group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
+                   (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
+
+  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
+  supported = supported || (group == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
+  #endif
+
+  return supported;
+}
+
+
+static bool DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(XWORD scheme, bool certificate)
+{
+  switch(scheme)
+    {
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                  : return true;
+      #endif
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256    :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384    :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    : return true;
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256       :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384       :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512       : return certificate;
+                                                               default : return false;
     }
 }
 
@@ -578,6 +725,7 @@ bool DIOSTREAMTLSCONFIG::Freeze()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
   if(!lock.IsLocked()) return false;
+  if(!CryptographicPolicy_Validate() || !MemoryPolicy_Validate()) return false;
   frozen = true;
   return true;
 }
@@ -682,6 +830,33 @@ bool DIOSTREAMTLSCONFIG::CipherSuites_Delete()
 }
 
 
+XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetTLS12CipherSuites()
+{
+  return &TLS12ciphersuites;
+}
+
+
+bool DIOSTREAMTLSCONFIG::TLS12CipherSuite_Add(XWORD ciphersuite)
+{
+  if(IsFrozen() || !DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(ciphersuite)) return false;
+
+  for(XDWORD c=0; c<TLS12ciphersuites.GetSize(); c++)
+    {
+      if(TLS12ciphersuites.Get(c) == ciphersuite) return false;
+    }
+
+  return TLS12ciphersuites.Add(ciphersuite);
+}
+
+
+bool DIOSTREAMTLSCONFIG::TLS12CipherSuites_Delete()
+{
+  if(IsFrozen()) return false;
+  TLS12ciphersuites.DeleteAll();
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
@@ -711,16 +886,7 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSupportedGroups()
 bool DIOSTREAMTLSCONFIG::SupportedGroup_Add(XWORD supportedgroup)
 {
   if(IsFrozen()) return false;
-
-  bool supported = (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_X25519) ||
-                   (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
-                   (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
-
-  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
-  supported = supported || (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
-  #endif
-
-  if(!supported) return false;
+  if(!DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(supportedgroup)) return false;
 
   for(XDWORD c=0; c<supportedgroups.GetSize(); c++)
     {
@@ -777,20 +943,7 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetSignatureSchemes()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SignatureScheme_Add(XWORD signaturescheme)
 {
-  if(IsFrozen()) return false;
-  switch(signaturescheme)
-    {
-      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                  :
-      #endif
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 : break;
-                                                        default : return false;
-    }
+  if(IsFrozen() || !DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(signaturescheme, false)) return false;
 
   for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
     {
@@ -847,23 +1000,7 @@ XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetCertificateSignatureSchemes()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CertificateSignatureScheme_Add(XWORD signaturescheme)
 {
-  if(IsFrozen()) return false;
-  switch(signaturescheme)
-    {
-      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519                  :
-      #endif
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256     :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384     :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512     : break;
-                                                        default : return false;
-    }
+  if(IsFrozen() || !DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(signaturescheme, true)) return false;
 
   for(XDWORD c=0; c<certificatesignatureschemes.GetSize(); c++)
     {
@@ -1052,8 +1189,8 @@ bool DIOSTREAMTLSCONFIG::TrustedRoot_Add(XBUFFER& root)
   XBUFFER* copy;
   XDWORD total = 0;
 
-  if(root.IsEmpty() || root.GetSize() > CIPHERTRUSTPROVIDERX509_DEFAULT_MAXCERTIFICATESIZE ||
-     trustedroots.GetSize() >= CIPHERTRUSTPROVIDERX509_DEFAULT_MAXROOTS) return false;
+  if(root.IsEmpty() || root.GetSize() > memorypolicy.GetMaximumTrustCertificateSize() ||
+     trustedroots.GetSize() >= memorypolicy.GetMaximumTrustRoots()) return false;
 
   for(XDWORD c=0; c<trustedroots.GetSize(); c++)
     {
@@ -1062,7 +1199,8 @@ bool DIOSTREAMTLSCONFIG::TrustedRoot_Add(XBUFFER& root)
       total += existing->GetSize();
       if(existing->GetSize() == root.GetSize() && !memcmp(existing->Get(), root.Get(), root.GetSize())) return true;
     }
-  if(total > (CIPHERTRUSTPROVIDERX509_DEFAULT_MAXTOTALSIZE-root.GetSize())) return false;
+  if(root.GetSize() > memorypolicy.GetMaximumTrustStoreSize() ||
+     total > (memorypolicy.GetMaximumTrustStoreSize()-root.GetSize())) return false;
 
   copy = GEN_NEW XBUFFER();
   if(!copy) return false;
@@ -1205,8 +1343,20 @@ bool DIOSTREAMTLSCONFIG::ClientTrustedRoot_Add(XBUFFER& root)
 {
   if(IsFrozen()) return false;
   XBUFFER* copy;
+  XDWORD total = 0;
 
-  if(root.IsEmpty()) return false;
+  if(root.IsEmpty() || root.GetSize() > memorypolicy.GetMaximumTrustCertificateSize() ||
+     clienttrustedroots.GetSize() >= memorypolicy.GetMaximumTrustRoots()) return false;
+
+  for(XDWORD c=0; c<clienttrustedroots.GetSize(); c++)
+    {
+      XBUFFER* existing = clienttrustedroots.Get(c);
+      if(!existing) continue;
+      total += existing->GetSize();
+      if(existing->GetSize() == root.GetSize() && !memcmp(existing->Get(), root.Get(), root.GetSize())) return true;
+    }
+  if(root.GetSize() > memorypolicy.GetMaximumTrustStoreSize() ||
+     total > (memorypolicy.GetMaximumTrustStoreSize()-root.GetSize())) return false;
 
   copy = GEN_NEW XBUFFER();
   if(!copy) return false;
@@ -1344,7 +1494,7 @@ XBUFFER* DIOSTREAMTLSCONFIG::GetLocalOCSPStapledResponse()
 
 bool DIOSTREAMTLSCONFIG::SetLocalOCSPStapledResponse(XBUFFER& response)
 {
-  if(IsFrozen() || response.IsEmpty() || (response.GetSize() > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE)) return false;
+  if(IsFrozen() || response.IsEmpty() || (response.GetSize() > memorypolicy.GetMaximumOCSPResponseSize())) return false;
 
   localOCSPstapledresponse.Delete();
   return localOCSPstapledresponse.Add(response);
@@ -1460,6 +1610,12 @@ bool DIOSTREAMTLSCONFIG::LocalCredentials_Validate()
 {
   localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE;
 
+  if(localOCSPstapledresponse.GetSize() > memorypolicy.GetMaximumOCSPResponseSize())
+    {
+      localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE;
+      return false;
+    }
+
   if(!Credentials_Validate(&localcertificatechain, localprivatekey)) return false;
 
   for(XDWORD c=0; c<servercredentials.GetSize(); c++)
@@ -1467,7 +1623,8 @@ bool DIOSTREAMTLSCONFIG::LocalCredentials_Validate()
       DIOSTREAMTLSSERVERCREDENTIALS* credentials = servercredentials.Get(c);
 
       if(!credentials || credentials->GetServerName()->IsEmpty() ||
-         !Credentials_Validate(credentials->GetCertificateChain(), credentials->GetPrivateKey()))
+         !Credentials_Validate(credentials->GetCertificateChain(), credentials->GetPrivateKey()) ||
+         (credentials->GetOCSPStapledResponse()->GetSize() > memorypolicy.GetMaximumOCSPResponseSize()))
         {
           if(localcredentialserror == DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE)
             {
@@ -1537,12 +1694,14 @@ bool DIOSTREAMTLSCONFIG::Credentials_Validate(XVECTOR<XBUFFER*>* certificatechai
   XBUFFER                         content;
   XBUFFER                         signature;
 
-  if(!certificatechain || certificatechain->IsEmpty() || !privatekey)
+  if(!certificatechain || certificatechain->IsEmpty() || !privatekey ||
+     (certificatechain->GetSize() > certificatevalidationpolicy.GetMaximumChainDepth()))
     {
       localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NOTCONFIGURED;
       return false;
     }
 
+  XDWORD certificatebytes = 0;
   for(XDWORD c=0; c<certificatechain->GetSize(); c++)
     {
       XBUFFER*               certificateDER = certificatechain->Get(c);
@@ -1555,6 +1714,16 @@ bool DIOSTREAMTLSCONFIG::Credentials_Validate(XVECTOR<XBUFFER*>* certificatechai
           certificates.DeleteAll();
           return false;
         }
+
+      if(certificateDER->GetSize() > memorypolicy.GetMaximumHandshakeInputSize() ||
+         certificatebytes > (memorypolicy.GetMaximumHandshakeInputSize()-certificateDER->GetSize()))
+        {
+          localcredentialserror = DIOSTREAMTLS_LOCALCREDENTIALSERROR_INVALIDCERTIFICATE;
+          certificates.DeleteContents();
+          certificates.DeleteAll();
+          return false;
+        }
+      certificatebytes += certificateDER->GetSize();
 
       certificate = GEN_NEW CIPHERCERTIFICATEX509();
       if(!certificate || !certificate->Decode((*certificateDER)))
@@ -2047,6 +2216,26 @@ void DIOSTREAMTLSCONFIG::SetCertificateValidationPolicy(CIPHERCERTIFICATEX509VAL
   certificatevalidationpolicy = policy;
 }
 
+
+DIOSTREAMTLSMEMORYPOLICY* DIOSTREAMTLSCONFIG::GetMemoryPolicy()
+{
+  return &memorypolicy;
+}
+
+
+bool DIOSTREAMTLSCONFIG::SetMemoryPolicy(DIOSTREAMTLSMEMORYPOLICY& policy)
+{
+  if(IsFrozen()) return false;
+  DIOSTREAMTLSMEMORYPOLICY previous = memorypolicy;
+  memorypolicy = policy;
+  if(!MemoryPolicy_Validate())
+    {
+      memorypolicy = previous;
+      return false;
+    }
+  return true;
+}
+
 XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetCertificateRevocationLists()
 {
   return &certificaterevocationlists;
@@ -2055,8 +2244,8 @@ XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetCertificateRevocationLists()
 bool DIOSTREAMTLSCONFIG::CertificateRevocationList_Add(XBUFFER& CRL)
 {
   if(IsFrozen()) return false;
-  if(CRL.IsEmpty() || (CRL.GetSize() > CIPHERCERTIFICATEX509REVOCATION_MAX_CRL_SIZE) ||
-     (certificaterevocationlists.GetSize() >= 64)) return false;
+  if(CRL.IsEmpty() || (CRL.GetSize() > memorypolicy.GetMaximumCRLSize()) ||
+     (certificaterevocationlists.GetSize() >= memorypolicy.GetMaximumCRLs())) return false;
   XBUFFER* copy=GEN_NEW XBUFFER();
   if(!copy || !copy->Add(CRL) || !certificaterevocationlists.Add(copy)) { if(copy) GEN_DELETE copy; return false; }
   return true;
@@ -2106,11 +2295,9 @@ XWORD DIOSTREAMTLSCONFIG::GetMinVersion()
 * @brief      Set the minimum TLS version configured for this endpoint
 * @note       The current server-side DIOSTREAMTLS implementation supports TLS 1.3 only; a server configured
 *             with any other version window is rejected by DIOSTREAMTLS::Open() and DIOWEBSERVER::Ini().
-* @note       A TLS 1.2 fallback (minversion == TLS_1_2, maxversion == TLS_1_3) does not add anything to
-*             GetCipherSuites(): DIOSTREAMTLS<T> tries TLS 1.3 first with that list completely unchanged, and
-*             only on a handshake-stage failure retries the whole connection using the parallel
-*             DIOSTREAMTLS12HANDSHAKECLIENT, whose own two ECDHE-RSA-GCM suites are hardcoded and unrelated to
-*             this list.
+* @note       TLS 1.3 cipher suites are configured through GetCipherSuites(); TLS 1.2 suites use the separate
+*             GetTLS12CipherSuites() list because the protocol versions assign different semantics to them.
+*             Both versions share the configured groups, signature schemes and X.509 validation policy.
 * @ingroup    DATAIO
 *
 * @param[in]  version : DIOSTREAMTLS_MSG_VERSION_TLS_1_2 or DIOSTREAMTLS_MSG_VERSION_TLS_1_3.
@@ -2580,7 +2767,7 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_StoreRaw(XCHAR* servername, XBUFFER& tick
         }
     }
 
-  while(sessiontickets.GetSize() >= DIOSTREAMTLS13_SESSIONTICKET_MAX_CACHED)
+  while(sessiontickets.GetSize() >= memorypolicy.GetMaximumSessionTickets())
     {
       DIOSTREAMTLS13SESSIONTICKET* oldest = sessiontickets.Get(0);
       sessiontickets.Delete(oldest);
@@ -2832,6 +3019,139 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XW
 }
 
 
+bool DIOSTREAMTLSCONFIG::CryptographicPolicy_Validate()
+{
+  const bool TLS12enabled = (minversion <= DIOSTREAMTLS_MSG_VERSION_TLS_1_2) &&
+                            (maxversion >= DIOSTREAMTLS_MSG_VERSION_TLS_1_2);
+  const bool TLS13enabled = (minversion <= DIOSTREAMTLS_MSG_VERSION_TLS_1_3) &&
+                            (maxversion >= DIOSTREAMTLS_MSG_VERSION_TLS_1_3);
+
+  if(!TLS12enabled && !TLS13enabled) return false;
+  if((TLS13enabled && ciphersuites.IsEmpty()) ||
+     (TLS12enabled && TLS12ciphersuites.IsEmpty()) ||
+     supportedgroups.IsEmpty() || signatureschemes.IsEmpty() || certificatesignatureschemes.IsEmpty()) return false;
+
+  for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
+    if(!DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(ciphersuites.Get(c))) return false;
+
+  for(XDWORD c=0; c<TLS12ciphersuites.GetSize(); c++)
+    if(!DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(TLS12ciphersuites.Get(c))) return false;
+
+  bool TLS12group = false;
+  for(XDWORD c=0; c<supportedgroups.GetSize(); c++)
+    {
+      XWORD group = supportedgroups.Get(c);
+      if(!DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(group)) return false;
+      if((group == DIOSTREAMTLS_MSG_CURVEID_X25519) ||
+         (group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
+         (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) TLS12group = true;
+    }
+
+  bool RSAsignature = false;
+  bool ECDSAsignature = false;
+  for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+    {
+      XWORD scheme = signatureschemes.Get(c);
+      if(!DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(scheme, false)) return false;
+      if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512)) RSAsignature = true;
+      if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512)) ECDSAsignature = true;
+    }
+
+  for(XDWORD c=0; c<certificatesignatureschemes.GetSize(); c++)
+    if(!DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(certificatesignatureschemes.Get(c), true)) return false;
+
+  if(TLS12enabled)
+    {
+      bool compatible = false;
+      for(XDWORD c=0; c<TLS12ciphersuites.GetSize(); c++)
+        {
+          XWORD suite = TLS12ciphersuites.Get(c);
+          if(((suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256) ||
+              (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384)) && RSAsignature) compatible = true;
+          if(((suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256) ||
+              (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384)) && ECDSAsignature) compatible = true;
+        }
+
+      if(!TLS12group || !compatible) return false;
+    }
+
+  return true;
+}
+
+
+bool DIOSTREAMTLSCONFIG::MemoryPolicy_Validate()
+{
+  if(memorypolicy.GetMaximumAIABodySize() > memorypolicy.GetMaximumHandshakeInputSize()) return false;
+
+  XVECTOR<XBUFFER*>* stores[2] = { &trustedroots, &clienttrustedroots };
+
+  for(int s=0; s<2; s++)
+    {
+      XVECTOR<XBUFFER*>* store = stores[s];
+      XQWORD total = 0;
+      if(store->GetSize() > memorypolicy.GetMaximumTrustRoots()) return false;
+      for(XDWORD c=0; c<store->GetSize(); c++)
+        {
+          XBUFFER* certificate = store->Get(c);
+          if(!certificate || certificate->IsEmpty() ||
+             (certificate->GetSize() > memorypolicy.GetMaximumTrustCertificateSize())) return false;
+          total += certificate->GetSize();
+          if(total > memorypolicy.GetMaximumTrustStoreSize()) return false;
+        }
+    }
+
+  if(certificaterevocationlists.GetSize() > memorypolicy.GetMaximumCRLs() ||
+     sessiontickets.GetSize() > memorypolicy.GetMaximumSessionTickets() ||
+     localOCSPstapledresponse.GetSize() > memorypolicy.GetMaximumOCSPResponseSize()) return false;
+
+  for(XDWORD c=0; c<certificaterevocationlists.GetSize(); c++)
+    {
+      XBUFFER* CRL = certificaterevocationlists.Get(c);
+      if(!CRL || CRL->IsEmpty() || (CRL->GetSize() > memorypolicy.GetMaximumCRLSize())) return false;
+    }
+
+  for(XDWORD c=0; c<servercredentials.GetSize(); c++)
+    {
+      DIOSTREAMTLSSERVERCREDENTIALS* credentials = servercredentials.Get(c);
+      if(!credentials ||
+         (credentials->GetOCSPStapledResponse()->GetSize() > memorypolicy.GetMaximumOCSPResponseSize())) return false;
+    }
+
+  {
+    XQWORD total = 0;
+    if(localcertificatechain.GetSize() > certificatevalidationpolicy.GetMaximumChainDepth()) return false;
+    for(XDWORD c=0; c<localcertificatechain.GetSize(); c++)
+    {
+      XBUFFER* certificate = localcertificatechain.Get(c);
+      if(!certificate || certificate->IsEmpty()) return false;
+      total += certificate->GetSize();
+      if(total > memorypolicy.GetMaximumHandshakeInputSize()) return false;
+    }
+  }
+
+  for(XDWORD s=0; s<servercredentials.GetSize(); s++)
+    {
+      DIOSTREAMTLSSERVERCREDENTIALS* credentials = servercredentials.Get(s);
+      XVECTOR<XBUFFER*>* chain = credentials?credentials->GetCertificateChain():NULL;
+      XQWORD total = 0;
+      if(!chain || (chain->GetSize() > certificatevalidationpolicy.GetMaximumChainDepth())) return false;
+      for(XDWORD c=0; c<chain->GetSize(); c++)
+        {
+          XBUFFER* certificate = chain->Get(c);
+          if(!certificate || certificate->IsEmpty()) return false;
+          total += certificate->GetSize();
+          if(total > memorypolicy.GetMaximumHandshakeInputSize()) return false;
+        }
+    }
+
+  return true;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOSTREAMTLSCONFIG::Clean()
@@ -2853,6 +3173,12 @@ void DIOSTREAMTLSCONFIG::Clean()
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
   CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
 
+  TLS12CipherSuites_Delete();
+  TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
+  TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
+  TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384);
+  TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384);
+
   SupportedGroups_Delete();
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
@@ -2867,6 +3193,9 @@ void DIOSTREAMTLSCONFIG::Clean()
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512);
 
   CertificateSignatureSchemes_Delete();
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);

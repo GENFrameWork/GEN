@@ -37,6 +37,7 @@
 #include "Hash.h"
 
 #include "DIOStreamTLS12Session.h"
+#include "DIOStreamTLSConfig.h"
 
 
 
@@ -114,6 +115,17 @@ bool DIOSTREAMTLS12SESSION::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE 
   isini      = true;
 
   return true;
+}
+
+
+bool DIOSTREAMTLS12SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
+{
+  if(!recordinput.IsEmpty() || !handshakeinput.IsEmpty() || !transcript.IsEmpty() || !applicationinput.IsEmpty()) return false;
+  maximumrecordinputsize      = policy.GetMaximumRecordInputSize();
+  maximumhandshakeinputsize   = policy.GetMaximumHandshakeInputSize();
+  maximumtranscriptsize       = policy.GetMaximumTranscriptSize();
+  maximumapplicationinputsize = policy.GetMaximumApplicationInputSize();
+  return maximumrecordinputsize && maximumhandshakeinputsize && maximumtranscriptsize && maximumapplicationinputsize;
 }
 
 
@@ -411,9 +423,9 @@ XBUFFER* DIOSTREAMTLS12SESSION::GetRecordInput()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12SESSION::RecordInput_Add(XBYTE* data, XDWORD size)
 {
-  if(!isini || (!data && size) ||
-     (size > DIOSTREAMTLS12SESSION_MAXRECORDINPUTSIZE) ||
-     (recordinput.GetSize() > (DIOSTREAMTLS12SESSION_MAXRECORDINPUTSIZE - size)))
+  if((!data && size) ||
+     (size > maximumrecordinputsize) ||
+     (recordinput.GetSize() > (maximumrecordinputsize - size)))
     {
       return false;
     }
@@ -547,9 +559,9 @@ XBUFFER* DIOSTREAMTLS12SESSION::GetHandshakeInput()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12SESSION::HandshakeInput_Add(XBYTE* data, XDWORD size)
 {
-  if(!isini || (!data && size) ||
-     (size > DIOSTREAMTLS12SESSION_MAXHANDSHAKESIZE) ||
-     (handshakeinput.GetSize() > (DIOSTREAMTLS12SESSION_MAXHANDSHAKESIZE - size)))
+  if((!data && size) ||
+     (size > maximumhandshakeinputsize) ||
+     (handshakeinput.GetSize() > (maximumhandshakeinputsize - size)))
     {
       return false;
     }
@@ -590,11 +602,6 @@ DIOSTREAMTLS12SESSION_RESULT DIOSTREAMTLS12SESSION::Handshake_Extract(XBUFFER& m
 {
   message.Delete();
 
-  if(!isini)
-    {
-      return DIOSTREAMTLS12SESSION_RESULT_ERROR;
-    }
-
   if(handshakeinput.GetSize() < DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE)
     {
       return DIOSTREAMTLS12SESSION_RESULT_INCOMPLETE;
@@ -609,7 +616,7 @@ DIOSTREAMTLS12SESSION_RESULT DIOSTREAMTLS12SESSION::Handshake_Extract(XBUFFER& m
   XDWORD length        = ((XDWORD)data[1] << 16) | ((XDWORD)data[2] << 8) | (XDWORD)data[3];
   XDWORD messagelength = DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE + length;
 
-  if(messagelength > DIOSTREAMTLS12SESSION_MAXHANDSHAKESIZE)
+  if(messagelength > maximumhandshakeinputsize)
     {
       return DIOSTREAMTLS12SESSION_RESULT_ERROR;
     }
@@ -656,6 +663,8 @@ XBUFFER* DIOSTREAMTLS12SESSION::GetTranscript()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12SESSION::Transcript_Add(XBUFFER& message)
 {
+  if(message.GetSize() > maximumtranscriptsize ||
+     transcript.GetSize() > (maximumtranscriptsize-message.GetSize())) return false;
   return transcript.Add(message);
 }
 
@@ -696,6 +705,10 @@ bool DIOSTREAMTLS12SESSION::TranscriptHash(XBUFFER& transcripthash)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS12SESSION::Clean()
 {
+  maximumrecordinputsize       = DIOSTREAMTLS_MEMORY_DEFAULT_RECORD_INPUT;
+  maximumhandshakeinputsize    = DIOSTREAMTLS_MEMORY_DEFAULT_HANDSHAKE_INPUT;
+  maximumtranscriptsize        = DIOSTREAMTLS_MEMORY_DEFAULT_TRANSCRIPT;
+  maximumapplicationinputsize  = DIOSTREAMTLS_MEMORY_DEFAULT_APPLICATION_INPUT;
   role          = DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT;
   isini         = false;
   keysactivated = false;
@@ -854,7 +867,10 @@ DIOSTREAMTLS12SESSION_RESULT DIOSTREAMTLS12SESSION::ApplicationData_Process()
 
       switch(contenttype)
         {
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA : if(closenotifyreceived || (plain.GetSize() && !applicationinput.Add(plain)))
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA : if(closenotifyreceived ||
+                                                                  (plain.GetSize() > maximumapplicationinputsize) ||
+                                                                  (applicationinput.GetSize() > (maximumapplicationinputsize-plain.GetSize())) ||
+                                                                  (plain.GetSize() && !applicationinput.Add(plain)))
                                                                   {
                                                                     iserror = true;
                                                                     return DIOSTREAMTLS12SESSION_RESULT_ERROR;

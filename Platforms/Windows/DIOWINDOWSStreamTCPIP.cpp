@@ -336,6 +336,7 @@ int DIOWINDOWSSTREAMTCPIP::IsReadyConnect(SOCKET handlesocket)
 {
   if(handlesocket==INVALID_SOCKET) 
     {
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
       return -1;
     }
 
@@ -359,6 +360,7 @@ int DIOWINDOWSSTREAMTCPIP::IsReadyConnect(SOCKET handlesocket)
   rc = select((int)(handlesocket)+1, &fdr, &fdw, &fds, &tv);
   if(rc == SOCKET_ERROR) 
     {
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
       return -1;
     }
 
@@ -382,6 +384,13 @@ int DIOWINDOWSSTREAMTCPIP::IsReadyConnect(SOCKET handlesocket)
 
           if(getsockopt(handlesocket,SOL_SOCKET, SO_ERROR, (char*)&optval, &optlen) < 0) 
             {
+              SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+              return -1;
+            }
+
+          if(optval)
+            {
+              SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
               return -1;
             }
 
@@ -389,7 +398,11 @@ int DIOWINDOWSSTREAMTCPIP::IsReadyConnect(SOCKET handlesocket)
         }
     }
 
-  if(status3) return -1;
+  if(status3)
+    {
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+      return -1;
+    }
 
   return 0;
 }
@@ -552,6 +565,7 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
   if(config->GetConnectionURL()->IsEmpty())
     {
       SetEvent(DIOWINDOWSTCPIPFSMEVENT_DISCONNECTING);
+      SetLastDIOError(DIOSTREAMERROR_URLNOTVALID);
       return false;
     }
 
@@ -559,7 +573,7 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
   if(handlesocket == INVALID_SOCKET)
     {
       SetEvent(DIOWINDOWSTCPIPFSMEVENT_DISCONNECTING);
-      SetLastDIOError(DIOSTREAMERROR_UNKNOWN);
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
       return false;
     }
 
@@ -589,7 +603,7 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
       if(bind(handlesocket, (LPSOCKADDR)&loc_addr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
         {
           SetEvent(DIOWINDOWSTCPIPFSMEVENT_DISCONNECTING);
-          SetLastDIOError(DIOSTREAMERROR_UNKNOWN);
+          SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
           return false;
         }
     }
@@ -603,7 +617,7 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
   if(!config->GetConnectionURL()->ResolveURL(remoteIP))
     {
       SetEvent(DIOWINDOWSTCPIPFSMEVENT_DISCONNECTING);
-      SetLastDIOError(DIOSTREAMERROR_URLNOTVALID);
+      SetLastDIOError(DIOSTREAMERROR_DNS);
 
       return false;
     }
@@ -630,7 +644,7 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
   if(setsockopt(handlesocket, SOL_SOCKET, SO_KEEPALIVE, (char*)&opt, sizeof(opt)) == SOCKET_ERROR)
     {
       SetEvent(DIOWINDOWSTCPIPFSMEVENT_DISCONNECTING);
-      SetLastDIOError(DIOSTREAMERROR_UNKNOWN);
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
 
       return false;
     }
@@ -641,11 +655,10 @@ bool DIOWINDOWSSTREAMTCPIP::GetHandleClient()
   if(connect(handlesocket, (LPSOCKADDR)&rem_addr, sizeof(SOCKADDR_IN)) == SOCKET_ERROR)
     {
       int errortype = WSAGetLastError();
-      // consider what's better, check for individual error codes or just anything now WSAEWOULDBLOCK
-      if(errortype == WSAEADDRINUSE)
+      if((errortype != WSAEWOULDBLOCK) && (errortype != WSAEINPROGRESS) && (errortype != WSAEALREADY))
         {
           SetEvent(DIOWINDOWSTCPIPFSMEVENT_DISCONNECTING);
-          SetLastDIOError(DIOSTREAMERROR_ADDRINUSE);
+          SetLastDIOError((errortype == WSAEADDRINUSE)?DIOSTREAMERROR_ADDRINUSE:DIOSTREAMERROR_TCPCONNECTION);
           return false;
         }
     }
@@ -857,4 +870,3 @@ void  DIOWINDOWSSTREAMTCPIP::Clean()
   threadconnection  = NULL;
   handlesocket      = INVALID_SOCKET;
 }
-

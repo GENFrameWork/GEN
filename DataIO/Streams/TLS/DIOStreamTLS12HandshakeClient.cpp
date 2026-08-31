@@ -41,7 +41,6 @@
 #include "DIOStreamTLSMessagesHandShakeServerFlight.h"
 #include "DIOStreamTLSSignature.h"
 #include "DIOStreamTLSAIAFetcher.h"
-#include "CipherCertificateX509PathBuilder.h"
 #include "CipherCertificateX509Revocation.h"
 #include "Cipher.h"
 
@@ -118,20 +117,80 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool allowunauthenticatedserver, bool ch
   state                            = DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE;
   isini                            = true;
 
-  // ECDHE-RSA AEAD-GCM, signed with RSA-PSS: the same known-good default that has been in production use.
-  // Deliberately not widened with the ECDHE-ECDSA suites here -- see CipherSuitesAndSchemes_WidenECDSA() and
-  // DIOSTREAMTLS<T>::Open() for why that only ever happens on a last-resort retry, never in the default offer.
-  ciphersuites.Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
-  ciphersuites.Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384);
+  return true;
+}
 
-  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
-  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
-  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
 
-  signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
-  signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
-  signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
+bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
+{
+  if(!isini || (state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE) || !config ||
+     !config->GetTLS12CipherSuites() || config->GetTLS12CipherSuites()->IsEmpty() ||
+     !config->GetSupportedGroups() || config->GetSupportedGroups()->IsEmpty() ||
+     !config->GetSignatureSchemes() || config->GetSignatureSchemes()->IsEmpty()) return false;
 
+  this->config = config;
+  ciphersuites.DeleteAll();
+  supportedgroups.DeleteAll();
+  signatureschemes.DeleteAll();
+
+  for(XDWORD c=0; c<config->GetSignatureSchemes()->GetSize(); c++)
+    {
+      XWORD scheme = config->GetSignatureSchemes()->Get(c);
+      switch(scheme)
+        {
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256    :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384    :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 : break;
+                                                                     default : continue;
+        }
+
+      if(!signatureschemes.Add(scheme)) return false;
+    }
+
+  for(XDWORD c=0; c<config->GetSupportedGroups()->GetSize(); c++)
+    {
+      XWORD group = config->GetSupportedGroups()->Get(c);
+      if((group != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
+         (group != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
+         (group != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) continue;
+      if(!supportedgroups.Add(group)) return false;
+    }
+
+  bool allowRSA = false;
+  bool allowECDSA = false;
+  for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
+    {
+      XWORD scheme = signatureschemes.Get(c);
+      if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512)) allowRSA = true;
+      if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512)) allowECDSA = true;
+    }
+
+  for(XDWORD c=0; c<config->GetTLS12CipherSuites()->GetSize(); c++)
+    {
+      XWORD suite = config->GetTLS12CipherSuites()->Get(c);
+      bool  RSA   = (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256) ||
+                    (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384);
+      bool  ECDSA = (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256) ||
+                    (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384);
+
+      if((RSA && allowRSA) || (ECDSA && allowECDSA))
+        if(!ciphersuites.Add(suite)) return false;
+    }
+
+  if(ciphersuites.IsEmpty() || supportedgroups.IsEmpty() || signatureschemes.IsEmpty()) return false;
+
+  if(!session.MemoryPolicy_Set((*config->GetMemoryPolicy()))) return false;
+  certificatevalidator.SetPolicy((*config->GetCertificateValidationPolicy()));
+  AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
+  RevocationLists_Set(config->GetCertificateRevocationLists());
+  OCSPDirect_Set(config->GetOCSPDirectFetcher(), config->GetOCSPDirectContext());
   return true;
 }
 
@@ -147,42 +206,10 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool allowunauthenticatedserver, bool ch
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12HANDSHAKECLIENT::CipherSuitesAndSchemes_WidenECDSA()
 {
-  if(!isini || (state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE) || ciphersuites.IsEmpty() || signatureschemes.IsEmpty())
-    {
-      return false;
-    }
-
-  static const XWORD ecdsaciphersuites[2] = { DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                                               DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 };
-  static const XWORD ecdsaschemes[3]      = { DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
-                                               DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384,
-                                               DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 };
-
-  for(XDWORD e=0; e<2; e++)
-    {
-      bool alreadypresent = false;
-
-      for(XDWORD c=0; c<ciphersuites.GetSize(); c++)
-        {
-          if(ciphersuites.Get(c) == ecdsaciphersuites[e]) { alreadypresent = true; break; }
-        }
-
-      if(!alreadypresent && !ciphersuites.Add(ecdsaciphersuites[e])) return false;
-    }
-
-  for(XDWORD e=0; e<3; e++)
-    {
-      bool alreadypresent = false;
-
-      for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
-        {
-          if(signatureschemes.Get(c) == ecdsaschemes[e]) { alreadypresent = true; break; }
-        }
-
-      if(!alreadypresent && !signatureschemes.Add(ecdsaschemes[e])) return false;
-    }
-
-  return true;
+  // Kept for source compatibility. Capabilities_Set() already installs the complete configured policy;
+  // a retry must never enable algorithms that the caller did not authorize.
+  return isini && config && (state == DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE) &&
+         !ciphersuites.IsEmpty() && !signatureschemes.IsEmpty();
 }
 
 
@@ -712,13 +739,6 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::RecordInput_Add(XBYTE* data, XDWORD size)
       return false;
     }
 
-  // Before ServerHello the session is not initialized yet (the cipher suite is not known), but incoming
-  // bytes still need somewhere to live; a plain byte accumulator local to this class covers that gap.
-  if(!session.IsIni())
-    {
-      return session.GetRecordInput()->Add(data, size);
-    }
-
   return session.RecordInput_Add(data, size);
 }
 
@@ -767,6 +787,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
                 {
                   return SetError();
                 }
+              if(header.GetLength() > DIOSTREAMTLS12RECORD_MAXCIPHERSIZE) return SetError();
               if((XDWORD)recordinput->GetSize() < ((XDWORD)DIOSTREAMTLS_MSG_RECORDHEADER_SIZE + header.GetLength())) return true;
 
               XBUFFER onerecord;
@@ -798,15 +819,15 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
               XBUFFER plain;
               plain.Add(&onerecord.Get()[DIOSTREAMTLS_MSG_RECORDHEADER_SIZE], header.GetLength());
 
-              if(!session.GetHandshakeInput()->Add(plain)) return SetError();
+              if(!session.HandshakeInput_Add(plain)) return SetError();
 
               while(true)
                 {
                   XBUFFER handshake;
 
-                  if(session.GetHandshakeInput()->GetSize() < DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE) break;
-
-                  if(!DIOSTREAMTLS_MSG_HANDSHAKE::Message_Extract(*session.GetHandshakeInput(), handshake)) break;
+                  DIOSTREAMTLS12SESSION_RESULT handshakeresult = session.Handshake_Extract(handshake);
+                  if(handshakeresult == DIOSTREAMTLS12SESSION_RESULT_INCOMPLETE) break;
+                  if(handshakeresult == DIOSTREAMTLS12SESSION_RESULT_ERROR) return SetError();
 
                   if(!Handshake_Process(handshake)) return false;
 
@@ -858,9 +879,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
                                                                   if(!alert.GetFromBuffer(plain, false) || !plain.IsEmpty()) return SetError();
 
 
-                                                                  // The two descriptions a real TLS 1.2 server sends when nothing in the ClientHello
-                                                                  // (cipher suite or signature_algorithms) is usable -- most commonly an ECDSA-only
-                                                                  // certificate against an ECDHE-RSA-only offer. See IsAlgorithmRejected()'s declaration.
+                                                                  // The two descriptions a real TLS 1.2 server sends when nothing allowed by the
+                                                                  // configured common cryptographic policy is mutually usable.
                                                                   if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
                                                                      ((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE) ||
                                                                       (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY)))
@@ -1058,7 +1078,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUF
   XVECTOR<XBUFFER*> fetchedcerts;
   bool              validated = false;
 
-  for(int attempt=0; attempt<DIOSTREAMTLSAIAFETCHER_MAXCHAINFETCHES; attempt++)
+  XDWORD maximumfetches = config?config->GetMemoryPolicy()->GetMaximumAIAFetches():DIOSTREAMTLSAIAFETCHER_MAXCHAINFETCHES;
+  for(XDWORD attempt=0; attempt<maximumfetches; attempt++)
     {
       XVECTOR<CIPHERCERTIFICATEX509*>* decodedchain = certificatevalidator.GetCertificateChain();
       CIPHERCERTIFICATEX509*           chainend     = decodedchain?decodedchain->GetLast():NULL;
@@ -1069,15 +1090,17 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUF
       if(!fetched) break;
 
       DIOSTREAMTLSAIAFETCHER fetcher;
-      if(!fetcher.Fetch((*chainend->GetCAIssuersURL()), (*fetched), aiafetchtimeout) ||
+      if(!fetcher.Fetch((*chainend->GetCAIssuersURL()), (*fetched), aiafetchtimeout,
+                        config?config->GetMemoryPolicy()->GetMaximumAIAHeaderSize():DIOSTREAMTLSAIAFETCHER_MAXHEADERSIZE,
+                        config?config->GetMemoryPolicy()->GetMaximumAIABodySize():DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE) ||
          !fetchedcerts.Add(fetched) || !certificatechain.Add(fetched))
         {
           GEN_DELETE fetched;
           break;
         }
 
-      if(certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                       hasvalidationdatetime?&validationdatetime:NULL))
+      if(certificatevalidator.ValidateAllPaths(&certificatechain, &trustedroots, expectedservername.Get(),
+                                               hasvalidationdatetime?&validationdatetime:NULL))
         {
           validated = true;
           break;
@@ -1143,21 +1166,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
             }
         }
 
-      XVECTOR<XBUFFER*> intermediates;
-      XVECTOR<XBUFFER*> builtpath;
-      CIPHERCERTIFICATEX509PATHBUILDER pathbuilder;
-      for(XDWORD c=1; c<certificatechain.GetSize(); c++) intermediates.Add(certificatechain.Get(c));
-
-      bool validated = false;
-      if(certificatechain.Get(0) && pathbuilder.Build((*certificatechain.Get(0)), &intermediates, &trustedroots,
-                                                      builtpath, certificatevalidator.GetPolicy()->GetMaximumChainDepth()))
-        validated = certificatevalidator.Validate(&builtpath, &trustedroots, expectedservername.Get(),
-                                                   hasvalidationdatetime?&validationdatetime:NULL);
-
-      CIPHERCERTIFICATEX509PATHBUILDER::Path_Delete(builtpath);
-
-      if(!validated && !certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                                       hasvalidationdatetime?&validationdatetime:NULL) &&
+      if(!certificatevalidator.ValidateAllPaths(&certificatechain, &trustedroots, expectedservername.Get(),
+                                                 hasvalidationdatetime?&validationdatetime:NULL) &&
          !CertificateChain_CompleteViaAIA(certificatechain))
         {
           certificatevalidationerror = certificatevalidator.GetError();
@@ -1176,7 +1186,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
           if(!chain || chain->GetSize()<2) return SetError();
           for(XDWORD c=0;c<revocationlists->GetSize();c++)
             {
-              XBUFFER* CRL=revocationlists->Get(c); if(!CRL) continue;
+              XBUFFER* CRL=revocationlists->Get(c);
+              if(!CRL || (config && CRL->GetSize() > config->GetMemoryPolicy()->GetMaximumCRLSize())) continue;
               CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*chain->Get(0)),(*chain->Get(1)));
               if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)
                 { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
@@ -1192,7 +1203,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
           XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain(); XBUFFER response;
           CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
           if(chain && chain->GetSize()>=2 && chain->Get(0)->HasOCSPURL() &&
-             ocspdirectfetcher((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,ocspdirectcontext))
+             ocspdirectfetcher((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,ocspdirectcontext) &&
+             (!config || response.GetSize() <= config->GetMemoryPolicy()->GetMaximumOCSPResponseSize()))
             result=CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(0)),(*chain->Get(1)));
           if(result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
             { certificatevalidationerror=(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)?
@@ -1629,6 +1641,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::SignatureScheme_IsOffered(XWORD signaturesch
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS12HANDSHAKECLIENT::Clean()
 {
+  config                           = NULL;
   state                       = DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE;
   isini                       = false;
   allowunauthenticatedserver  = false;

@@ -35,6 +35,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "DIOStreamTLS13Session.h"
+#include "DIOStreamTLSConfig.h"
 
 
 
@@ -117,6 +118,17 @@ bool DIOSTREAMTLS13SESSION::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE 
   isini      = true;
 
   return true;
+}
+
+
+bool DIOSTREAMTLS13SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
+{
+  if(!recordinput.IsEmpty() || !handshakeinput.IsEmpty() || !transcript.IsEmpty() || !applicationinput.IsEmpty()) return false;
+  maximumrecordinputsize      = policy.GetMaximumRecordInputSize();
+  maximumhandshakeinputsize   = policy.GetMaximumHandshakeInputSize();
+  maximumtranscriptsize       = policy.GetMaximumTranscriptSize();
+  maximumapplicationinputsize = policy.GetMaximumApplicationInputSize();
+  return maximumrecordinputsize && maximumhandshakeinputsize && maximumtranscriptsize && maximumapplicationinputsize;
 }
 
 
@@ -559,8 +571,8 @@ XBUFFER* DIOSTREAMTLS13SESSION::GetRecordInput()
 bool DIOSTREAMTLS13SESSION::RecordInput_Add(XBYTE* data, XDWORD size)
 {
   if(!isini || (!data && size) ||
-     (size > DIOSTREAMTLS13SESSION_MAXRECORDINPUTSIZE) ||
-     (recordinput.GetSize() > (DIOSTREAMTLS13SESSION_MAXRECORDINPUTSIZE - size)))
+     (size > maximumrecordinputsize) ||
+     (recordinput.GetSize() > (maximumrecordinputsize - size)))
     {
       return false;
     }
@@ -695,8 +707,8 @@ XBUFFER* DIOSTREAMTLS13SESSION::GetHandshakeInput()
 bool DIOSTREAMTLS13SESSION::HandshakeInput_Add(XBYTE* data, XDWORD size)
 {
   if(!isini || (!data && size) ||
-     (size > DIOSTREAMTLS13SESSION_MAXHANDSHAKESIZE) ||
-     (handshakeinput.GetSize() > (DIOSTREAMTLS13SESSION_MAXHANDSHAKESIZE - size)))
+     (size > maximumhandshakeinputsize) ||
+     (handshakeinput.GetSize() > (maximumhandshakeinputsize - size)))
     {
       return false;
     }
@@ -756,7 +768,7 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::Handshake_Extract(XBUFFER& m
   XDWORD length        = ((XDWORD)data[1] << 16) | ((XDWORD)data[2] << 8) | (XDWORD)data[3];
   XDWORD messagelength = DIOSTREAMTLS_MSG_HANDSHAKEHEADER_SIZE + length;
 
-  if(messagelength > DIOSTREAMTLS13SESSION_MAXHANDSHAKESIZE)
+  if(messagelength > maximumhandshakeinputsize)
     {
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
@@ -818,6 +830,8 @@ bool DIOSTREAMTLS13SESSION::Transcript_Add(XBUFFER& message)
       return false;
     }
 
+  if(message.GetSize() > maximumtranscriptsize ||
+     transcript.GetSize() > (maximumtranscriptsize-message.GetSize())) return false;
   return transcript.Add(message);
 }
 
@@ -1109,7 +1123,10 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
 
       switch(contenttype)
         {
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA    : if(closenotifyreceived || (plain.GetSize() && !applicationinput.Add(plain)))
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA    : if(closenotifyreceived ||
+                                                                     (plain.GetSize() > maximumapplicationinputsize) ||
+                                                                     (applicationinput.GetSize() > (maximumapplicationinputsize-plain.GetSize())) ||
+                                                                     (plain.GetSize() && !applicationinput.Add(plain)))
                                                                     {
                                                                       iserror = true;
                                                                       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
@@ -1148,6 +1165,8 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
                                                                         switch(handshake.GetMsgType())
                                                                           {
                                                                             case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT ||
+                                                                                                                                             (message.GetSize() > maximumhandshakeinputsize) ||
+                                                                                                                                             (newsessionticketinput.GetSize() > (maximumhandshakeinputsize-message.GetSize())) ||
                                                                                                                                              !newsessionticketinput.Add(message))
                                                                                                                                           {
                                                                                                                                             iserror = true;
@@ -1548,6 +1567,10 @@ void DIOSTREAMTLS13SESSION::Clean()
   role                         = DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT;
   isini                        = false;
   applicationsecretscalculated = false;
+  maximumrecordinputsize       = DIOSTREAMTLS_MEMORY_DEFAULT_RECORD_INPUT;
+  maximumhandshakeinputsize    = DIOSTREAMTLS_MEMORY_DEFAULT_HANDSHAKE_INPUT;
+  maximumtranscriptsize        = DIOSTREAMTLS_MEMORY_DEFAULT_TRANSCRIPT;
+  maximumapplicationinputsize  = DIOSTREAMTLS_MEMORY_DEFAULT_APPLICATION_INPUT;
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {

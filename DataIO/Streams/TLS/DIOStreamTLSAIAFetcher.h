@@ -75,7 +75,10 @@ class DIOSTREAMTLSAIAFETCHER
                                             DIOSTREAMTLSAIAFETCHER          ();
     virtual                                ~DIOSTREAMTLSAIAFETCHER          ();
 
-    bool                                    Fetch                           (XSTRING& url, XBUFFER& tobuffer, int timeout = DIOSTREAMTLSAIAFETCHER_TIMEOUT);
+    bool                                    Fetch                           (XSTRING& url, XBUFFER& tobuffer,
+                                                                            int timeout = DIOSTREAMTLSAIAFETCHER_TIMEOUT,
+                                                                            XDWORD maximumheadersize = DIOSTREAMTLSAIAFETCHER_MAXHEADERSIZE,
+                                                                            XDWORD maximumbodysize = DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE);
 
   private:
 
@@ -85,9 +88,11 @@ class DIOSTREAMTLSAIAFETCHER
     DIOSTREAMTLSAIAFETCHER_CHUNKRESULT      ChunkSize_Get                   (XBUFFER& input, XQWORD& chunksize);
 
     void                                    Clean                           ();
+
+    XDWORD                                  maximumheadersize;
+    XDWORD                                  maximumbodysize;
 };
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-

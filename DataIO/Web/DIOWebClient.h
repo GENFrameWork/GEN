@@ -35,6 +35,7 @@
 #include "XSubject.h"
 
 #include "DIOURL.h"
+#include "DIOStream.h"
 #include "DIOWebHeader.h"
 
 
@@ -95,6 +96,41 @@ enum DIOWEBCLIENT_CHUNKEDRESULT
 };
 
 
+enum DIOWEBCLIENT_ERRORSTAGE
+{
+  DIOWEBCLIENT_ERRORSTAGE_NONE                    = 0 ,
+  DIOWEBCLIENT_ERRORSTAGE_CONFIGURATION               ,
+  DIOWEBCLIENT_ERRORSTAGE_DNS                         ,
+  DIOWEBCLIENT_ERRORSTAGE_TCP                         ,
+  DIOWEBCLIENT_ERRORSTAGE_PROXY                       ,
+  DIOWEBCLIENT_ERRORSTAGE_TLSPROTOCOL                 ,
+  DIOWEBCLIENT_ERRORSTAGE_TLSAUTHENTICATION           ,
+  DIOWEBCLIENT_ERRORSTAGE_HTTP                        ,
+};
+
+
+enum DIOWEBCLIENT_ERROR
+{
+  DIOWEBCLIENT_ERROR_NONE                         = 0 ,
+  DIOWEBCLIENT_ERROR_INVALIDARGUMENT                  ,
+  DIOWEBCLIENT_ERROR_INVALIDURL                       ,
+  DIOWEBCLIENT_ERROR_TRANSPORTUNAVAILABLE             ,
+  DIOWEBCLIENT_ERROR_DNSRESOLUTION                    ,
+  DIOWEBCLIENT_ERROR_TCPCONNECTION                    ,
+  DIOWEBCLIENT_ERROR_TCPTIMEOUT                       ,
+  DIOWEBCLIENT_ERROR_PROXY                            ,
+  DIOWEBCLIENT_ERROR_TLSCONFIGURATION                 ,
+  DIOWEBCLIENT_ERROR_TLSPROTOCOL                      ,
+  DIOWEBCLIENT_ERROR_TLSAUTHENTICATION                ,
+  DIOWEBCLIENT_ERROR_HTTPWRITE                        ,
+  DIOWEBCLIENT_ERROR_HTTPRESPONSE                     ,
+  DIOWEBCLIENT_ERROR_HTTPSTATUS                       ,
+  DIOWEBCLIENT_ERROR_HTTPREDIRECT                     ,
+  DIOWEBCLIENT_ERROR_HTTPBODY                         ,
+  DIOWEBCLIENT_ERROR_HTTPCONTENTENCODING              ,
+};
+
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -108,6 +144,35 @@ class DIOSTREAMTCPIP;
 class DIOSTREAMTLSCONFIG;
 class DIOWEBCLIENT_XEVENT;
 class COMPRESSMANAGER;
+
+
+class DIOWEBCLIENT_OPERATIONERROR
+{
+  public:
+                                              DIOWEBCLIENT_OPERATIONERROR       ();
+
+    DIOWEBCLIENT_ERRORSTAGE                   GetStage                          ();
+    DIOWEBCLIENT_ERROR                        GetError                          ();
+    DIOSTREAMERROR                            GetStreamError                    ();
+    int                                       GetHTTPStatus                     ();
+    const XCHAR*                              GetDescription                    ();
+    bool                                      IsSet                             ();
+
+  private:
+
+    friend class DIOWEBCLIENT;
+
+    void                                      Set                               (DIOWEBCLIENT_ERRORSTAGE stage,
+                                                                                 DIOWEBCLIENT_ERROR error,
+                                                                                 DIOSTREAMERROR streamerror,
+                                                                                 int HTTPstatus = 0);
+    void                                      Clean                             ();
+
+    DIOWEBCLIENT_ERRORSTAGE                   stage;
+    DIOWEBCLIENT_ERROR                        error;
+    DIOSTREAMERROR                            streamerror;
+    int                                       HTTPstatus;
+};
 
 
 class DIOWEBCLIENT_HEADER : public DIOWEBHEADER
@@ -171,6 +236,10 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      IsInsecureRedirectAllowed         ();
     void                                      AllowInsecureRedirect             (bool allow);
 
+    DIOWEBCLIENT_OPERATIONERROR*              GetLastOperationError             ();
+    DIOWEBCLIENT_OPERATIONERROR*              GetLastHTTPSAttemptError          ();
+    bool                                      WasHTTPFallbackUsed               ();
+
 
 
 
@@ -199,7 +268,7 @@ class DIOWEBCLIENT : public XSUBJECT
   private:
 
  
-    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool* allowhttpfallback = NULL);
+    bool                                      MakeOperation                     (DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount = 0, bool internaloperation = false);
     bool                                      Header_Read                       (int timeout);
     bool                                      Body_Read                         (DIOWEBCLIENT_BODYMODE bodymode, bool isTLS, XQWORD contentlength, int timeout, bool istobuffer, void* to, DIOWEBCLIENT_XEVENT& xevent);
     bool                                      Body_Decompress                   (bool istobuffer, void* to);
@@ -209,6 +278,10 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      IsSecureURL                       (DIOURL& url);
     bool                                      RedirectOrigin_IsSame              (DIOURL& first, DIOURL& second);
     bool                                      Headers_FilterSensitive            (XCHAR* source, XSTRING& filtered);
+    void                                      OperationError_Reset               ();
+    void                                      OperationError_Set                 (DIOWEBCLIENT_ERROR error, DIOSTREAMERROR streamerror = DIOSTREAMERROR_NONE, int HTTPstatus = 0);
+    void                                      OperationError_FromStream          (DIOWEBCLIENT_ERROR defaulterror);
+    bool                                      OperationError_AllowsHTTPFallback  ();
 
     bool                                      GetSubStringWWWWAuthenticate      (XSTRING& www_authenticate, XCHAR* field, XSTRING& value, bool betweenquotation = true);
 
@@ -234,6 +307,9 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      dostophttperror;
     DIOWEBCLIENT_TRANSPORTPOLICY              transportpolicy;
     bool                                      allowinsecureredirect;
+    DIOWEBCLIENT_OPERATIONERROR               lastoperationerror;
+    DIOWEBCLIENT_OPERATIONERROR               lastHTTPSattempterror;
+    bool                                      HTTPfallbackused;
 
     bool                                      contentencodingactive;
     bool                                      compressrequestbody;
@@ -249,4 +325,3 @@ class DIOWEBCLIENT : public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-

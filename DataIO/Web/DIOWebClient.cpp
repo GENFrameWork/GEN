@@ -76,6 +76,86 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+DIOWEBCLIENT_OPERATIONERROR::DIOWEBCLIENT_OPERATIONERROR()
+{
+  Clean();
+}
+
+
+DIOWEBCLIENT_ERRORSTAGE DIOWEBCLIENT_OPERATIONERROR::GetStage()
+{
+  return stage;
+}
+
+
+DIOWEBCLIENT_ERROR DIOWEBCLIENT_OPERATIONERROR::GetError()
+{
+  return error;
+}
+
+
+DIOSTREAMERROR DIOWEBCLIENT_OPERATIONERROR::GetStreamError()
+{
+  return streamerror;
+}
+
+
+int DIOWEBCLIENT_OPERATIONERROR::GetHTTPStatus()
+{
+  return HTTPstatus;
+}
+
+
+const XCHAR* DIOWEBCLIENT_OPERATIONERROR::GetDescription()
+{
+  switch(error)
+    {
+      case DIOWEBCLIENT_ERROR_INVALIDARGUMENT       : return __L("invalid operation argument");
+      case DIOWEBCLIENT_ERROR_INVALIDURL            : return __L("invalid or unsupported URL");
+      case DIOWEBCLIENT_ERROR_TRANSPORTUNAVAILABLE  : return __L("requested transport is not available");
+      case DIOWEBCLIENT_ERROR_DNSRESOLUTION         : return __L("DNS resolution failed");
+      case DIOWEBCLIENT_ERROR_TCPCONNECTION         : return __L("TCP connection failed");
+      case DIOWEBCLIENT_ERROR_TCPTIMEOUT            : return __L("TCP connection timed out");
+      case DIOWEBCLIENT_ERROR_PROXY                 : return __L("proxy connection or negotiation failed");
+      case DIOWEBCLIENT_ERROR_TLSCONFIGURATION      : return __L("TLS configuration is invalid or unavailable");
+      case DIOWEBCLIENT_ERROR_TLSPROTOCOL           : return __L("TLS protocol negotiation or record processing failed");
+      case DIOWEBCLIENT_ERROR_TLSAUTHENTICATION     : return __L("TLS peer authentication failed");
+      case DIOWEBCLIENT_ERROR_HTTPWRITE             : return __L("HTTP request could not be sent");
+      case DIOWEBCLIENT_ERROR_HTTPRESPONSE          : return __L("HTTP response is missing or malformed");
+      case DIOWEBCLIENT_ERROR_HTTPSTATUS            : return __L("HTTP server returned an error status");
+      case DIOWEBCLIENT_ERROR_HTTPREDIRECT          : return __L("HTTP redirect was rejected");
+      case DIOWEBCLIENT_ERROR_HTTPBODY              : return __L("HTTP response body could not be read");
+      case DIOWEBCLIENT_ERROR_HTTPCONTENTENCODING   : return __L("HTTP response content encoding could not be decoded");
+                                             default : return __L("no error");
+    }
+}
+
+
+bool DIOWEBCLIENT_OPERATIONERROR::IsSet()
+{
+  return error != DIOWEBCLIENT_ERROR_NONE;
+}
+
+
+void DIOWEBCLIENT_OPERATIONERROR::Set(DIOWEBCLIENT_ERRORSTAGE stage, DIOWEBCLIENT_ERROR error,
+                                      DIOSTREAMERROR streamerror, int HTTPstatus)
+{
+  this->stage       = stage;
+  this->error       = error;
+  this->streamerror = streamerror;
+  this->HTTPstatus  = HTTPstatus;
+}
+
+
+void DIOWEBCLIENT_OPERATIONERROR::Clean()
+{
+  stage       = DIOWEBCLIENT_ERRORSTAGE_NONE;
+  error       = DIOWEBCLIENT_ERROR_NONE;
+  streamerror = DIOSTREAMERROR_NONE;
+  HTTPstatus  = 0;
+}
+
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -943,6 +1023,24 @@ void DIOWEBCLIENT::AllowInsecureRedirect(bool allow)
 }
 
 
+DIOWEBCLIENT_OPERATIONERROR* DIOWEBCLIENT::GetLastOperationError()
+{
+  return &lastoperationerror;
+}
+
+
+DIOWEBCLIENT_OPERATIONERROR* DIOWEBCLIENT::GetLastHTTPSAttemptError()
+{
+  return &lastHTTPSattempterror;
+}
+
+
+bool DIOWEBCLIENT::WasHTTPFallbackUsed()
+{
+  return HTTPfallbackused;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOWEBCLIENT::IsActiveContentEncoding()
@@ -1065,8 +1163,13 @@ bool DIOWEBCLIENT::Get(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int time
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Get(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
+  OperationError_Reset();
   XFILE* file=GEN_XFACTORY.Create_File();
-  if(!file) return false;
+  if(!file)
+    {
+      OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
+      return false;
+    }
   
   bool status  = false;
 
@@ -1089,6 +1192,8 @@ bool DIOWEBCLIENT::Get(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeo
     }
 
   GEN_XFACTORY.Delete_File(file);
+
+  if(!status && !lastoperationerror.IsSet()) OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
 
   return status;
 }
@@ -1180,8 +1285,13 @@ bool DIOWEBCLIENT::Put(XCHAR* url, XBUFFER& tobuffer, XCHAR* addheader, int time
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Put(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
+  OperationError_Reset();
   XFILE* file=GEN_XFACTORY.Create_File();
-  if(!file) return false;
+  if(!file)
+    {
+      OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
+      return false;
+    }
 
   XBUFFER buffer;
   bool    status  = false;
@@ -1206,6 +1316,8 @@ bool DIOWEBCLIENT::Put(DIOURL& url, XPATH& pathfile, XCHAR* addheader, int timeo
     }
 
   GEN_XFACTORY.Delete_File(file);
+
+  if(!status && !lastoperationerror.IsSet()) OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
 
   return status;
 }
@@ -1300,8 +1412,13 @@ bool DIOWEBCLIENT::Post(XCHAR* url, XBUFFER& tobuffer, XBUFFER* postdata, XCHAR*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::Post(DIOURL& url, XPATH& pathfile, XBUFFER* postdata, XCHAR* addheader, int timeout, XSTRING* localIP)
 {
+  OperationError_Reset();
   XFILE* file=GEN_XFACTORY.Create_File();
-  if(!file) return false;
+  if(!file)
+    {
+      OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
+      return false;
+    }
 
   XBUFFER buffer;
   bool    status  = false;
@@ -1318,6 +1435,8 @@ bool DIOWEBCLIENT::Post(DIOURL& url, XPATH& pathfile, XBUFFER* postdata, XCHAR* 
     }
 
   GEN_XFACTORY.Delete_File(file);
+
+  if(!status && !lastoperationerror.IsSet()) OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
 
   return status;
 }
@@ -1880,13 +1999,15 @@ bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool* allowhttpfallback)
+bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFER* postdata, XCHAR* addhead, int timeout, XSTRING* localIP, bool istobuffer, void* to, int redirectcount, bool internaloperation)
 {
-  if(allowhttpfallback) (*allowhttpfallback) = false;
+  if(!internaloperation) OperationError_Reset();
 
-  if(!diostreamcfg)     return false;
-  if(!timerout)         return false;
-  if(!to)               return false;
+  if(!diostreamcfg || !timerout || !to)
+    {
+      OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
+      return false;
+    }
 
   bool explicitHTTP  = (url.Find(DIOURL_WEBURLID       , true) == 0);
   bool explicitHTTPS = (url.Find(DIOURL_WEBURLID_SECURE, true) == 0);
@@ -1897,13 +2018,17 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
     {
       DIOURL targeturl;
 
-      if(url.Find(__L("://"), true) != XSTRING_NOTFOUND) return false;
+      if(url.Find(__L("://"), true) != XSTRING_NOTFOUND)
+        {
+          OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDURL);
+          return false;
+        }
 
       if(transportpolicy == DIOWEBCLIENT_TRANSPORTPOLICY_HTTP_ONLY)
         {
           targeturl  = DIOURL_WEBURLID;
           targeturl += url.Get();
-          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true);
         }
 
       targeturl  = DIOURL_WEBURLID_SECURE;
@@ -1911,20 +2036,21 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       if(transportpolicy == DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_ONLY)
         {
-          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+          return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true);
         }
 
-      // HTTPS_PREFER is only an availability fallback. The recursive operation enables it solely while creating or
-      // connecting the HTTPS transport (including TLS negotiation), and never after an HTTP request has been sent or
-      // when TLS authentication fails. Explicit http:// / https:// URLs never enter this branch.
-      bool canfallbacktohttp = false;
+      // Preserve the exact HTTPS failure before considering a weaker transport. Authentication, DNS, local
+      // configuration and every failure after an HTTP request was sent are authoritative and never permit fallback.
+      if(MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true)) return true;
 
-      if(MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, &canfallbacktohttp)) return true;
-      if(!canfallbacktohttp) return false;
+      lastHTTPSattempterror = lastoperationerror;
+      if(!OperationError_AllowsHTTPFallback()) return false;
 
       targeturl  = DIOURL_WEBURLID;
       targeturl += url.Get();
-      return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, NULL);
+      lastoperationerror.Clean();
+      HTTPfallbackused = true;
+      return MakeOperation(method, targeturl, postdata, addhead, timeout, localIP, istobuffer, to, 0, true);
     }
 
   if(istobuffer) ((XBUFFER*)to)->Delete();
@@ -1943,7 +2069,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   xevent.SetMethod(method);
 
   diostreamcfg->SetRemotePort(0);
-  if(!diostreamcfg->SetFromString(url.Get())) return false;
+  if(!diostreamcfg->SetFromString(url.Get()))
+    {
+      OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDURL);
+      return false;
+    }
 
   url  = diostreamcfg->GetRemoteURL()->Get();
   if(diostreamcfg->GetRemotePort()) operationport = diostreamcfg->GetRemotePort();
@@ -1984,7 +2114,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       XBUFFER             applicationprotocol;
       static const XBYTE  HTTP11ALPN[] = { 'h','t','t','p','/','1','.','1' };
 
-      if(!tlsconfig) return false;
+      if(!tlsconfig)
+        {
+          OperationError_Set(DIOWEBCLIENT_ERROR_TLSCONFIGURATION, DIOSTREAMERROR_TLSCONFIGURATION);
+          return false;
+        }
 
       // The TLS stream derives SNI and the certificate name from RemoteURL.  Keeping
       // ServerName empty is intentional: it makes the host connection-specific and
@@ -1994,6 +2128,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
          (applicationprotocol.GetSize() != sizeof(HTTP11ALPN)) ||
          memcmp(applicationprotocol.Get(), HTTP11ALPN, sizeof(HTTP11ALPN)))
         {
+          OperationError_Set(DIOWEBCLIENT_ERROR_TLSCONFIGURATION, DIOSTREAMERROR_TLSCONFIGURATION);
           return false;
         }
     }
@@ -2002,13 +2137,14 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   if(!Stream_Create(isTLS))
     {
-      // A build without the TLS module cannot service an implicit HTTPS attempt. This is an availability failure,
-      // so HTTPS_PREFER may still use HTTP. With TLS compiled in, creation failures are local configuration/resource
-      // errors and must not silently weaken the requested transport.
       #ifndef DIO_STREAMTLS_ACTIVE
 
-      if(isTLS && allowhttpfallback) (*allowhttpfallback) = true;
+      OperationError_Set(isTLS?DIOWEBCLIENT_ERROR_TRANSPORTUNAVAILABLE:DIOWEBCLIENT_ERROR_TCPCONNECTION);
 
+      #else
+
+      OperationError_Set(isTLS?DIOWEBCLIENT_ERROR_TLSCONFIGURATION:DIOWEBCLIENT_ERROR_TCPCONNECTION,
+                         isTLS?DIOSTREAMERROR_TLSCONFIGURATION:DIOSTREAMERROR_TCPCONNECTION);
       #endif
 
       return false;
@@ -2018,26 +2154,19 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   if(!diostream->Open())
     {
-      DIOSTREAMERROR streamerror = diostream->GetLastDIOError();
-
+      OperationError_FromStream(isTLS?DIOWEBCLIENT_ERROR_TLSPROTOCOL:DIOWEBCLIENT_ERROR_TCPCONNECTION);
       diostream->Close();
-
-      // The caller only supplies allowhttpfallback for the first HTTPS attempt of a scheme-less URL. A certificate,
-      // hostname, trust-chain or other TLS authentication failure is authoritative and must never become HTTP.
-      if(isTLS && allowhttpfallback)
-        {
-          (*allowhttpfallback) = (streamerror != DIOSTREAMERROR_TLSAUTHENTICATION);
-        }
-
       return false;
     }
 
   if(!diostream->WaitToConnected(timeout))
     {
+      if(diostream->PeekLastDIOError() == DIOSTREAMERROR_NONE)
+        {
+          diostream->SetLastDIOError(DIOSTREAMERROR_TCPTIMEOUT);
+        }
+      OperationError_FromStream(DIOWEBCLIENT_ERROR_TCPTIMEOUT);
       diostream->Close();
-      if(isTLS && allowhttpfallback) (*allowhttpfallback) = true;
-
-
       return false;
     }
 
@@ -2059,6 +2188,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
                             default : { xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
                                         PostEvent(&xevent);
 
+                                        OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDARGUMENT);
                                         diostream->Close();
                                       }
                                       return false;
@@ -2200,7 +2330,12 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
   sendheader += __L("Connection: close\r\n");
   sendheader += __L("\r\n");
 
-  diostream->WriteStr(sendheader);
+  if(!diostream->WriteStr(sendheader))
+    {
+      OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPWRITE);
+      diostream->Close();
+      return false;
+    }
 
   //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("%s"), sendheader.Get());
 
@@ -2211,18 +2346,29 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   if(effectivepostdata)
     {
-      diostream->Write(effectivepostdata->Get(), effectivepostdata->GetSize());
+      if(diostream->Write(effectivepostdata->Get(), effectivepostdata->GetSize()) != effectivepostdata->GetSize())
+        {
+          OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPWRITE);
+          diostream->Close();
+          return false;
+        }
 
       xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_SENDPOSTDATA);
       PostEvent(&xevent);
     }
 
-  diostream->WaitToFlushOutXBuffer(timeout);
+  if(!diostream->WaitToFlushOutXBuffer(timeout))
+    {
+      OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPWRITE);
+      diostream->Close();
+      return false;
+    }
 
   //--- Read Header ----------------------------
 
   if(!Header_Read(timeout))
     {
+      OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPRESPONSE);
       diostream->Close();
       return false;
     }
@@ -2285,7 +2431,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
           // the cost of one extra allocation per redirect hop (redirect chains are already bounded by
           // DIOWEBCLIENT_MAXREDIRECTS).
           bool redirectisTLS = IsSecureURL(redirecturl);
-          if(isTLS && !redirectisTLS && !allowinsecureredirect) return false;
+          if(isTLS && !redirectisTLS && !allowinsecureredirect)
+            {
+              OperationError_Set(DIOWEBCLIENT_ERROR_HTTPREDIRECT, DIOSTREAMERROR_NONE, resultserver);
+              return false;
+            }
 
           bool    sameorigin      = RedirectOrigin_IsSame(url, redirecturl);
           XSTRING filteredheaders;
@@ -2293,7 +2443,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
           if(addhead && !sameorigin)
             {
-              if(!Headers_FilterSensitive(addhead, filteredheaders)) return false;
+              if(!Headers_FilterSensitive(addhead, filteredheaders))
+                {
+                  OperationError_Set(DIOWEBCLIENT_ERROR_HTTPREDIRECT, DIOSTREAMERROR_NONE, resultserver);
+                  return false;
+                }
               redirectheaders = filteredheaders.IsEmpty()?NULL:filteredheaders.Get();
             }
 
@@ -2314,7 +2468,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
           GEN_DIOFACTORY.DeleteStreamIO(diostream);
           diostream = NULL;
 
-          bool redirectstatus = MakeOperation(method, redirecturl, postdata, redirectheaders, timeout, localIP, istobuffer, to, redirectcount+1);
+          bool redirectstatus = MakeOperation(method, redirecturl, postdata, redirectheaders, timeout, localIP, istobuffer, to, redirectcount+1, true);
 
           if(!sameorigin)
             {
@@ -2352,12 +2506,18 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       if(!diostream->Open())
         {
+          OperationError_FromStream(isTLS?DIOWEBCLIENT_ERROR_TLSPROTOCOL:DIOWEBCLIENT_ERROR_TCPCONNECTION);
           diostream->Close();
           return false;
         }
 
       if(!diostream->WaitToConnected(timeout))
         {
+          if(diostream->PeekLastDIOError() == DIOSTREAMERROR_NONE)
+            {
+              diostream->SetLastDIOError(DIOSTREAMERROR_TCPTIMEOUT);
+            }
+          OperationError_FromStream(DIOWEBCLIENT_ERROR_TCPTIMEOUT);
           diostream->Close();
           return false;
         }
@@ -2443,7 +2603,12 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
       
       //XTRACE_PRINTCOLOR(XTRACE_COLOR_PURPLE, __L("%s"), sendheader.Get());
 
-      diostream->WriteStr(sendheader);
+      if(!diostream->WriteStr(sendheader))
+        {
+          OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPWRITE);
+          diostream->Close();
+          return false;
+        }
 
       xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_WRITEHEADER);
       PostEvent(&xevent);
@@ -2452,18 +2617,29 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       if(effectivepostdata)
         {
-          diostream->Write(effectivepostdata->Get(), effectivepostdata->GetSize());
+          if(diostream->Write(effectivepostdata->Get(), effectivepostdata->GetSize()) != effectivepostdata->GetSize())
+            {
+              OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPWRITE);
+              diostream->Close();
+              return false;
+            }
 
           xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_SENDPOSTDATA);
           PostEvent(&xevent);
         }
 
-      diostream->WaitToFlushOutXBuffer(timeout);
+      if(!diostream->WaitToFlushOutXBuffer(timeout))
+        {
+          OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPWRITE);
+          diostream->Close();
+          return false;
+        }
 
       //--- Read Header ----------------------------
 
       if(!Header_Read(timeout))
         {
+          OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPRESPONSE);
           diostream->Close();
           return false;
         }
@@ -2477,6 +2653,11 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
       if(IsActiveDoStopHTTPError())
         {
+          if(proxycfg && proxycfg->IsActive() && (header.GetResultServer() == 407))
+            {
+              OperationError_Set(DIOWEBCLIENT_ERROR_PROXY, DIOSTREAMERROR_TCPIPPROXY, header.GetResultServer());
+            }
+           else OperationError_Set(DIOWEBCLIENT_ERROR_HTTPSTATUS, DIOSTREAMERROR_NONE, header.GetResultServer());
           diostream->Close();
           return false;
         }
@@ -2511,6 +2692,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
           xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
           PostEvent(&xevent);
 
+          OperationError_Set(DIOWEBCLIENT_ERROR_HTTPRESPONSE, DIOSTREAMERROR_NONE, resultserver);
           diostream->Close();
           return false;
         }
@@ -2525,6 +2707,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
           xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
           PostEvent(&xevent);
 
+          OperationError_Set(DIOWEBCLIENT_ERROR_HTTPRESPONSE, DIOSTREAMERROR_NONE, resultserver);
           diostream->Close();
           return false;
         }
@@ -2540,6 +2723,7 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
           xevent.SetEventType(DIOWEBCLIENT_XEVENT_TYPE_HEADERERROR);
           PostEvent(&xevent);
 
+          OperationError_Set(DIOWEBCLIENT_ERROR_HTTPRESPONSE, DIOSTREAMERROR_NONE, resultserver);
           diostream->Close();
           return false;
         }
@@ -2558,7 +2742,15 @@ bool DIOWEBCLIENT::MakeOperation(DIOWEBHEADER_METHOD method, DIOURL& url, XBUFFE
 
   status = Body_Read(bodymode, isTLS, contentlength, timeout, istobuffer, to, xevent);
 
-  if(status) status = Body_Decompress(istobuffer, to);
+  if(!status)
+    {
+      OperationError_FromStream(DIOWEBCLIENT_ERROR_HTTPBODY);
+    }
+   else if(!Body_Decompress(istobuffer, to))
+    {
+      OperationError_Set(DIOWEBCLIENT_ERROR_HTTPCONTENTENCODING, DIOSTREAMERROR_NONE, resultserver);
+      status = false;
+    }
 
   //--- Close ----------------------------------
 
@@ -2773,6 +2965,76 @@ bool DIOWEBCLIENT::Headers_FilterSensitive(XCHAR* source, XSTRING& filtered)
 }
 
 
+void DIOWEBCLIENT::OperationError_Reset()
+{
+  lastoperationerror.Clean();
+  lastHTTPSattempterror.Clean();
+  HTTPfallbackused = false;
+}
+
+
+void DIOWEBCLIENT::OperationError_Set(DIOWEBCLIENT_ERROR error, DIOSTREAMERROR streamerror, int HTTPstatus)
+{
+  DIOWEBCLIENT_ERRORSTAGE stage = DIOWEBCLIENT_ERRORSTAGE_CONFIGURATION;
+
+  switch(error)
+    {
+      case DIOWEBCLIENT_ERROR_NONE                : stage = DIOWEBCLIENT_ERRORSTAGE_NONE;                   break;
+      case DIOWEBCLIENT_ERROR_DNSRESOLUTION       : stage = DIOWEBCLIENT_ERRORSTAGE_DNS;                    break;
+      case DIOWEBCLIENT_ERROR_TCPCONNECTION       :
+      case DIOWEBCLIENT_ERROR_TCPTIMEOUT          : stage = DIOWEBCLIENT_ERRORSTAGE_TCP;                    break;
+      case DIOWEBCLIENT_ERROR_PROXY               : stage = DIOWEBCLIENT_ERRORSTAGE_PROXY;                  break;
+      case DIOWEBCLIENT_ERROR_TLSPROTOCOL         : stage = DIOWEBCLIENT_ERRORSTAGE_TLSPROTOCOL;            break;
+      case DIOWEBCLIENT_ERROR_TLSAUTHENTICATION   : stage = DIOWEBCLIENT_ERRORSTAGE_TLSAUTHENTICATION;      break;
+      case DIOWEBCLIENT_ERROR_HTTPWRITE           :
+      case DIOWEBCLIENT_ERROR_HTTPRESPONSE        :
+      case DIOWEBCLIENT_ERROR_HTTPSTATUS          :
+      case DIOWEBCLIENT_ERROR_HTTPREDIRECT        :
+      case DIOWEBCLIENT_ERROR_HTTPBODY            :
+      case DIOWEBCLIENT_ERROR_HTTPCONTENTENCODING : stage = DIOWEBCLIENT_ERRORSTAGE_HTTP;                   break;
+                                             default : stage = DIOWEBCLIENT_ERRORSTAGE_CONFIGURATION;        break;
+    }
+
+  lastoperationerror.Set(stage, error, streamerror, HTTPstatus);
+}
+
+
+void DIOWEBCLIENT::OperationError_FromStream(DIOWEBCLIENT_ERROR defaulterror)
+{
+  DIOSTREAMERROR streamerror = diostream?diostream->PeekLastDIOError():DIOSTREAMERROR_NONE;
+
+  switch(streamerror)
+    {
+      case DIOSTREAMERROR_DNS               : OperationError_Set(DIOWEBCLIENT_ERROR_DNSRESOLUTION, streamerror);       return;
+      case DIOSTREAMERROR_TCPCONNECTION     :
+      case DIOSTREAMERROR_ADDRINUSE         : OperationError_Set(DIOWEBCLIENT_ERROR_TCPCONNECTION, streamerror);       return;
+      case DIOSTREAMERROR_TCPTIMEOUT        : OperationError_Set(DIOWEBCLIENT_ERROR_TCPTIMEOUT, streamerror);          return;
+      case DIOSTREAMERROR_TCPIPPROXY        : OperationError_Set(DIOWEBCLIENT_ERROR_PROXY, streamerror);               return;
+      case DIOSTREAMERROR_TLSCONFIGURATION  : OperationError_Set(DIOWEBCLIENT_ERROR_TLSCONFIGURATION, streamerror);    return;
+      case DIOSTREAMERROR_TLSPROTOCOL       : OperationError_Set(DIOWEBCLIENT_ERROR_TLSPROTOCOL, streamerror);         return;
+      case DIOSTREAMERROR_TLSAUTHENTICATION : OperationError_Set(DIOWEBCLIENT_ERROR_TLSAUTHENTICATION, streamerror);   return;
+      case DIOSTREAMERROR_URLNOTVALID       : OperationError_Set(DIOWEBCLIENT_ERROR_INVALIDURL, streamerror);          return;
+                                      default : break;
+    }
+
+  OperationError_Set(defaulterror, streamerror);
+}
+
+
+bool DIOWEBCLIENT::OperationError_AllowsHTTPFallback()
+{
+  switch(lastoperationerror.GetError())
+    {
+      case DIOWEBCLIENT_ERROR_TRANSPORTUNAVAILABLE :
+      case DIOWEBCLIENT_ERROR_TCPCONNECTION        :
+      case DIOWEBCLIENT_ERROR_TCPTIMEOUT           :
+      case DIOWEBCLIENT_ERROR_PROXY                :
+      case DIOWEBCLIENT_ERROR_TLSPROTOCOL          : return true;
+                                                default : return false;
+    }
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOWEBCLIENT::Clean()
@@ -2801,6 +3063,7 @@ void DIOWEBCLIENT::Clean()
   // Explicit http:// and https:// schemes are mandatory and are never replaced by this policy.
   transportpolicy         = DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_PREFER;
   allowinsecureredirect   = false;
+  OperationError_Reset();
 
   contentencodingactive   = true;
   compressrequestbody     = false;

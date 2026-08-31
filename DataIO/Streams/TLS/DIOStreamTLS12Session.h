@@ -60,6 +60,8 @@ enum DIOSTREAMTLS12SESSION_RESULT
   DIOSTREAMTLS12SESSION_RESULT_COMPLETE         ,
 };
 
+class DIOSTREAMTLSMEMORYPOLICY;
+
 
 
 
@@ -73,6 +75,7 @@ class DIOSTREAMTLS12SESSION
     virtual                                ~DIOSTREAMTLS12SESSION                             ();
 
     bool                                    Ini                                               (XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+    bool                                    MemoryPolicy_Set                                  (DIOSTREAMTLSMEMORYPOLICY& policy);
     void                                    End                                               ();
     bool                                    IsIni                                             ();
 
@@ -146,6 +149,11 @@ class DIOSTREAMTLS12SESSION
     XBUFFER                                 handshakeinput;
     XBUFFER                                 transcript;
     XBUFFER                                 applicationinput;
+
+    XDWORD                                  maximumrecordinputsize;
+    XDWORD                                  maximumhandshakeinputsize;
+    XDWORD                                  maximumtranscriptsize;
+    XDWORD                                  maximumapplicationinputsize;
 
     bool                                    iserror;
     bool                                    closenotifysent;

@@ -110,11 +110,14 @@ DIOSTREAMTLSAIAFETCHER::~DIOSTREAMTLSAIAFETCHER()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSAIAFETCHER::Fetch(XSTRING& url, XBUFFER& tobuffer, int timeout)
+bool DIOSTREAMTLSAIAFETCHER::Fetch(XSTRING& url, XBUFFER& tobuffer, int timeout,
+                                    XDWORD maximumheadersize, XDWORD maximumbodysize)
 {
   tobuffer.Delete();
 
-  if(url.IsEmpty()) return false;
+  if(url.IsEmpty() || !maximumheadersize || !maximumbodysize) return false;
+  this->maximumheadersize = maximumheadersize;
+  this->maximumbodysize   = maximumbodysize;
 
   DIOURL requesturl;
   requesturl = url.Get();
@@ -312,7 +315,7 @@ bool DIOSTREAMTLSAIAFETCHER::Exchange(DIOSTREAMTCPIP* diostream, XSTRING& server
         {
           timeridle->Reset();
 
-          if(((XQWORD)raw.GetSize() + sizeread) > DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE)
+          if(((XQWORD)raw.GetSize() + sizeread) > ((XQWORD)maximumheadersize + maximumbodysize + 4))
             {
               status = false;
               break;
@@ -381,7 +384,7 @@ bool DIOSTREAMTLSAIAFETCHER::ResponseBody_Extract(XBUFFER& raw, XBUFFER& tobuffe
         }
     }
 
-  if((headerend == XBUFFER_INVALIDPOSITION) || (headerend > DIOSTREAMTLSAIAFETCHER_MAXHEADERSIZE)) return false;
+  if((headerend == XBUFFER_INVALIDPOSITION) || (headerend > maximumheadersize)) return false;
 
   XSTRING headertext;
   for(int c=0; c<headerend; c++)
@@ -450,7 +453,7 @@ bool DIOSTREAMTLSAIAFETCHER::ResponseBody_Extract(XBUFFER& raw, XBUFFER& tobuffe
 
           if(!chunksize) break;                          // final (zero-size) chunk: the body is complete
 
-          if(((XQWORD)decoded.GetSize() + chunksize) > DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE) return false;
+          if(((XQWORD)decoded.GetSize() + chunksize) > maximumbodysize) return false;
           if((pending.GetSize() < chunksize) || ((pending.GetSize() - chunksize) < 2)) return false;
 
           if(!decoded.Add(pending.Get(), (XDWORD)chunksize)) return false;
@@ -462,13 +465,14 @@ bool DIOSTREAMTLSAIAFETCHER::ResponseBody_Extract(XBUFFER& raw, XBUFFER& tobuffe
     }
    else if(hascontentlength)
     {
-      if(contentlength > DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE)   return false;
+      if(contentlength > maximumbodysize)   return false;
       if((XQWORD)body.GetSize() < contentlength)               return false;
 
       if(!tobuffer.Add(body.Get(), (XDWORD)contentlength)) return false;
     }
    else
     {
+      if(body.GetSize() > maximumbodysize) return false;
       if(!tobuffer.Add(body)) return false;
     }
 
@@ -506,7 +510,7 @@ DIOSTREAMTLSAIAFETCHER_CHUNKRESULT DIOSTREAMTLSAIAFETCHER::ChunkSize_Get(XBUFFER
 
   if(lineend == XBUFFER_INVALIDPOSITION)
     {
-      if(input.GetSize() > DIOSTREAMTLSAIAFETCHER_MAXHEADERSIZE) return DIOSTREAMTLSAIAFETCHER_CHUNKRESULT_ERROR;
+      if(input.GetSize() > maximumheadersize) return DIOSTREAMTLSAIAFETCHER_CHUNKRESULT_ERROR;
 
       return DIOSTREAMTLSAIAFETCHER_CHUNKRESULT_INCOMPLETE;
     }
@@ -560,4 +564,6 @@ DIOSTREAMTLSAIAFETCHER_CHUNKRESULT DIOSTREAMTLSAIAFETCHER::ChunkSize_Get(XBUFFER
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSAIAFETCHER::Clean()
 {
+  maximumheadersize = DIOSTREAMTLSAIAFETCHER_MAXHEADERSIZE;
+  maximumbodysize   = DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE;
 }

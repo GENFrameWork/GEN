@@ -66,6 +66,23 @@ enum DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY
 #define DIOSTREAMTLS_DEFAULT_CONNECTION_TIMEOUT                3
 #define DIOSTREAMTLS_DEFAULT_HANDSHAKE_TIMEOUT                 10
 
+#define DIOSTREAMTLS_MEMORY_DEFAULT_RECORD_INPUT              (4*1024*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_HANDSHAKE_INPUT           (4*1024*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_TRANSCRIPT                (8*1024*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_APPLICATION_INPUT         (4*1024*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_AIA_BODY                    (16*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_AIA_HEADER                   (8*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_AIA_FETCHES                         3
+#define DIOSTREAMTLS_MEMORY_DEFAULT_OCSP_RESPONSE              (256*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_CRL                       (4*1024*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_CRLS                               64
+#define DIOSTREAMTLS_MEMORY_DEFAULT_SESSION_TICKETS                     8
+#define DIOSTREAMTLS_MEMORY_DEFAULT_TRUST_ROOTS                       2048
+#define DIOSTREAMTLS_MEMORY_DEFAULT_TRUST_CERTIFICATE          (1024*1024)
+#define DIOSTREAMTLS_MEMORY_DEFAULT_TRUST_TOTAL              (32*1024*1024)
+#define DIOSTREAMTLS_MEMORY_MINIMUM_RECORD_INPUT                    (18*1024)
+#define DIOSTREAMTLS_MEMORY_MAXIMUM_BUFFER                         (64*1024*1024)
+
 
 enum DIOSTREAMTLS_LOCALCREDENTIALSERROR
 {
@@ -92,6 +109,52 @@ typedef bool (*DIOSTREAMTLS_OCSPDIRECTFETCHER)(XSTRING& URL, CIPHERCERTIFICATEX5
                                                CIPHERCERTIFICATEX509& issuer, XBUFFER& response, void* context);
 typedef bool (*DIOSTREAMTLS_SESSIONTICKETKEYRING_LOAD)(XBUFFER& encryptedkeyring, void* context);
 typedef bool (*DIOSTREAMTLS_SESSIONTICKETKEYRING_SAVE)(XBUFFER& encryptedkeyring, void* context);
+
+
+class DIOSTREAMTLSMEMORYPOLICY
+{
+  public:
+                            DIOSTREAMTLSMEMORYPOLICY           ();
+
+    bool                    SetConnectionBufferLimits         (XDWORD recordinput, XDWORD handshakeinput,
+                                                               XDWORD transcript, XDWORD applicationinput);
+    bool                    SetAIALimits                      (XDWORD headersize, XDWORD bodysize, XDWORD maximumfetches);
+    bool                    SetRevocationLimits               (XDWORD OCSPsize, XDWORD CRLsize, XDWORD maximumCRLs);
+    bool                    SetTrustStoreLimits               (XDWORD maximumroots, XDWORD maximumcertificatesize,
+                                                               XDWORD maximumtotalsize);
+    bool                    SetMaximumSessionTickets          (XDWORD maximumtickets);
+
+    XDWORD                  GetMaximumRecordInputSize         ();
+    XDWORD                  GetMaximumHandshakeInputSize      ();
+    XDWORD                  GetMaximumTranscriptSize          ();
+    XDWORD                  GetMaximumApplicationInputSize    ();
+    XDWORD                  GetMaximumAIAHeaderSize           ();
+    XDWORD                  GetMaximumAIABodySize             ();
+    XDWORD                  GetMaximumAIAFetches              ();
+    XDWORD                  GetMaximumOCSPResponseSize        ();
+    XDWORD                  GetMaximumCRLSize                 ();
+    XDWORD                  GetMaximumCRLs                    ();
+    XDWORD                  GetMaximumSessionTickets          ();
+    XDWORD                  GetMaximumTrustRoots              ();
+    XDWORD                  GetMaximumTrustCertificateSize    ();
+    XDWORD                  GetMaximumTrustStoreSize          ();
+
+  private:
+    XDWORD                  maximumrecordinputsize;
+    XDWORD                  maximumhandshakeinputsize;
+    XDWORD                  maximumtranscriptsize;
+    XDWORD                  maximumapplicationinputsize;
+    XDWORD                  maximumAIAheadersize;
+    XDWORD                  maximumAIAbodysize;
+    XDWORD                  maximumAIAfetches;
+    XDWORD                  maximumOCSPresponsesize;
+    XDWORD                  maximumCRLsize;
+    XDWORD                  maximumCRLs;
+    XDWORD                  maximumsessiontickets;
+    XDWORD                  maximumtrustroots;
+    XDWORD                  maximumtrustcertificatesize;
+    XDWORD                  maximumtruststoresize;
+};
 
 
 class DIOSTREAMTLS13SESSIONTICKET
@@ -183,6 +246,10 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     bool                    CipherSuite_Add                   (XWORD ciphersuite);
     bool                    CipherSuites_Delete               ();
 
+    XVECTOR<XWORD>*         GetTLS12CipherSuites              ();
+    bool                    TLS12CipherSuite_Add              (XWORD ciphersuite);
+    bool                    TLS12CipherSuites_Delete          ();
+
     XVECTOR<XWORD>*         GetSupportedGroups                ();
     bool                    SupportedGroup_Add                (XWORD supportedgroup);
     bool                    SupportedGroups_Delete            ();
@@ -256,6 +323,8 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
 
     CIPHERCERTIFICATEX509VALIDATIONPOLICY* GetCertificateValidationPolicy ();
     void                    SetCertificateValidationPolicy    (CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy);
+    DIOSTREAMTLSMEMORYPOLICY* GetMemoryPolicy                 ();
+    bool                    SetMemoryPolicy                   (DIOSTREAMTLSMEMORYPOLICY& policy);
     XVECTOR<XBUFFER*>*      GetCertificateRevocationLists     ();
     bool                    CertificateRevocationList_Add     (XBUFFER& CRL);
     bool                    CertificateRevocationLists_Delete ();
@@ -297,12 +366,15 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
   private:
 
     bool                    Credentials_Validate              (XVECTOR<XBUFFER*>* certificatechain, CIPHERKEY* privatekey);
+    bool                    CryptographicPolicy_Validate      ();
+    bool                    MemoryPolicy_Validate             ();
     void                    Clean                             ();
 
     XWORD                   minversion;
     XWORD                   maxversion;
 
     XVECTOR<XWORD>          ciphersuites;
+    XVECTOR<XWORD>          TLS12ciphersuites;
     XVECTOR<XWORD>          supportedgroups;
     XVECTOR<XWORD>          signatureschemes;
     XVECTOR<XWORD>          certificatesignatureschemes;
@@ -325,6 +397,7 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     int                     connectiontimeout;
     int                     handshaketimeout;
     CIPHERCERTIFICATEX509VALIDATIONPOLICY certificatevalidationpolicy;
+    DIOSTREAMTLSMEMORYPOLICY memorypolicy;
     XVECTOR<XBUFFER*>       certificaterevocationlists;
     DIOSTREAMTLS_OCSPDIRECTFETCHER ocspdirectfetcher;
     void*                   ocspdirectcontext;

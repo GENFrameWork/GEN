@@ -58,6 +58,11 @@ enum DIOSTREAMERROR
   DIOSTREAMERROR_ADDRINUSE                  ,
   DIOSTREAMERROR_TLSAUTHENTICATION          ,
   DIOSTREAMERROR_TCPIPPROXY                 ,
+  DIOSTREAMERROR_DNS                        ,
+  DIOSTREAMERROR_TCPCONNECTION              ,
+  DIOSTREAMERROR_TCPTIMEOUT                 ,
+  DIOSTREAMERROR_TLSCONFIGURATION           ,
+  DIOSTREAMERROR_TLSPROTOCOL                ,
 };
 
 
@@ -157,6 +162,7 @@ class DIOSTREAM : public XSUBJECT
     bool                        ResetConnectionStatistics       ();
 
     DIOSTREAMERROR              GetLastDIOError                 ();
+    DIOSTREAMERROR              PeekLastDIOError                ();
     void                        SetLastDIOError                 (DIOSTREAMERROR error);
 
     void                        Wait                            (int milliseconds);
@@ -193,7 +199,6 @@ class DIOSTREAM : public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

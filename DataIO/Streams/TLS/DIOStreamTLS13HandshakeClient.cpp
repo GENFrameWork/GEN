@@ -48,7 +48,6 @@
 #include "XTrace.h"
 
 #include "CipherCertificateX509.h"
-#include "CipherCertificateX509PathBuilder.h"
 #include "CipherCertificateX509Revocation.h"
 #include "DIOStreamTLSAIAFetcher.h"
 
@@ -122,25 +121,6 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Ini(DIOSTREAMTLS13SESSION* session, bool all
   this->allowunauthenticatedserver = allowunauthenticatedserver;
   state                            = DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE;
   isini                            = true;
-
-  ciphersuites.Add(session->GetKeySchedule()->GetCipherSuite());
-
-  #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
-  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
-  #endif
-
-  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
-  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
-  supportedgroups.Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
-  signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
-  #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
-  signatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
-  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519);
-  #endif
-  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
-  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
-  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
-  certificatesignatureschemes.Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512);
 
   return true;
 }
@@ -465,6 +445,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
         }
     }
 
+  AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
+
   return true;
 }
 
@@ -480,25 +462,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::SignatureSchemes_WidenECDSA()
 {
-  if(!isini || (state != DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) || signatureschemes.IsEmpty()) return false;
-
-  static const XWORD ecdsaschemes[3] = { DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256,
-                                          DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384,
-                                          DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 };
-
-  for(XDWORD e=0; e<3; e++)
-    {
-      bool alreadypresent = false;
-
-      for(XDWORD c=0; c<signatureschemes.GetSize(); c++)
-        {
-          if(signatureschemes.Get(c) == ecdsaschemes[e]) { alreadypresent = true; break; }
-        }
-
-      if(!alreadypresent && !signatureschemes.Add(ecdsaschemes[e])) return false;
-    }
-
-  return true;
+  // Kept for source compatibility. Capabilities_Set() already installs the complete configured policy;
+  // a retry must never enable algorithms that the caller did not authorize.
+  return isini && config && (state == DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE) && !signatureschemes.IsEmpty();
 }
 
 
@@ -2208,7 +2174,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUF
   XVECTOR<XBUFFER*> fetchedcerts;
   bool              validated = false;
 
-  for(int attempt=0; attempt<DIOSTREAMTLSAIAFETCHER_MAXCHAINFETCHES; attempt++)
+  XDWORD maximumfetches = config?config->GetMemoryPolicy()->GetMaximumAIAFetches():DIOSTREAMTLSAIAFETCHER_MAXCHAINFETCHES;
+  for(XDWORD attempt=0; attempt<maximumfetches; attempt++)
     {
       XVECTOR<CIPHERCERTIFICATEX509*>* decodedchain = certificatevalidator.GetCertificateChain();
       CIPHERCERTIFICATEX509*           chainend     = decodedchain?decodedchain->GetLast():NULL;
@@ -2219,15 +2186,17 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateChain_CompleteViaAIA(XVECTOR<XBUF
       if(!fetched) break;
 
       DIOSTREAMTLSAIAFETCHER fetcher;
-      if(!fetcher.Fetch((*chainend->GetCAIssuersURL()), (*fetched), aiafetchtimeout) ||
+      if(!fetcher.Fetch((*chainend->GetCAIssuersURL()), (*fetched), aiafetchtimeout,
+                        config?config->GetMemoryPolicy()->GetMaximumAIAHeaderSize():DIOSTREAMTLSAIAFETCHER_MAXHEADERSIZE,
+                        config?config->GetMemoryPolicy()->GetMaximumAIABodySize():DIOSTREAMTLSAIAFETCHER_MAXBODYSIZE) ||
          !fetchedcerts.Add(fetched) || !certificatechain.Add(fetched))
         {
           GEN_DELETE fetched;
           break;
         }
 
-      if(certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                       hasvalidationdatetime?&validationdatetime:NULL))
+      if(certificatevalidator.ValidateAllPaths(&certificatechain, &trustedroots, expectedservername.Get(),
+                                               hasvalidationdatetime?&validationdatetime:NULL))
         {
           validated = true;
           break;
@@ -2296,21 +2265,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
             }
         }
 
-      XVECTOR<XBUFFER*> intermediates;
-      XVECTOR<XBUFFER*> builtpath;
-      CIPHERCERTIFICATEX509PATHBUILDER pathbuilder;
-      for(XDWORD c=1; c<certificatechain.GetSize(); c++) intermediates.Add(certificatechain.Get(c));
-
-      bool validated = false;
-      if(certificatechain.Get(0) && pathbuilder.Build((*certificatechain.Get(0)), &intermediates, &trustedroots,
-                                                      builtpath, certificatevalidator.GetPolicy()->GetMaximumChainDepth()))
-        validated = certificatevalidator.Validate(&builtpath, &trustedroots, expectedservername.Get(),
-                                                   hasvalidationdatetime?&validationdatetime:NULL);
-
-      CIPHERCERTIFICATEX509PATHBUILDER::Path_Delete(builtpath);
-
-      if(!validated && !certificatevalidator.Validate(&certificatechain, &trustedroots, expectedservername.Get(),
-                                                       hasvalidationdatetime?&validationdatetime:NULL) &&
+      if(!certificatevalidator.ValidateAllPaths(&certificatechain, &trustedroots, expectedservername.Get(),
+                                                 hasvalidationdatetime?&validationdatetime:NULL) &&
          !CertificateChain_CompleteViaAIA(certificatechain))
         {
           certificatevalidationerror = certificatevalidator.GetError();
@@ -2348,7 +2304,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
           XVECTOR<CIPHERCERTIFICATEX509*>* validatedchain = certificatevalidator.GetCertificateChain();
           if(!data || data->GetSize()<5 || data->Get()[0]!=1 ||
              (((XDWORD)data->Get()[1]<<16)|((XDWORD)data->Get()[2]<<8)|data->Get()[3]) != data->GetSize()-4 ||
-             ((data->GetSize()-4) > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE) ||
+             ((data->GetSize()-4) > (config?config->GetMemoryPolicy()->GetMaximumOCSPResponseSize():CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE)) ||
              !validatedchain || validatedchain->GetSize()<2)
             {
               certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
@@ -2374,7 +2330,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
           XBUFFER response;
           CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
           if(chain && chain->GetSize()>=2 && chain->Get(0)->HasOCSPURL() &&
-             config->GetOCSPDirectFetcher()((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,config->GetOCSPDirectContext()))
+             config->GetOCSPDirectFetcher()((*chain->Get(0)->GetOCSPURL()),(*chain->Get(0)),(*chain->Get(1)),response,config->GetOCSPDirectContext()) &&
+             response.GetSize() <= config->GetMemoryPolicy()->GetMaximumOCSPResponseSize())
             result=CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(0)),(*chain->Get(1)));
           if(result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
             {
@@ -2392,7 +2349,8 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
           if(!chain || chain->GetSize()<2) return SetError();
           for(XDWORD c=0;c<config->GetCertificateRevocationLists()->GetSize();c++)
             {
-              XBUFFER* CRL=config->GetCertificateRevocationLists()->Get(c); if(!CRL) continue;
+              XBUFFER* CRL=config->GetCertificateRevocationLists()->Get(c);
+              if(!CRL || CRL->GetSize() > config->GetMemoryPolicy()->GetMaximumCRLSize()) continue;
               CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*chain->Get(0)),(*chain->Get(1)));
               if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)
                 { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED; SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }

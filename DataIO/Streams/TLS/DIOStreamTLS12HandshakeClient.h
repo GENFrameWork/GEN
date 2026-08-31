@@ -28,8 +28,8 @@
 
 // PARALLEL to DIOStreamTLS13HandshakeClient.h (TLS 1.3). It owns its DIOSTREAMTLS12SESSION directly (TLS 1.2 does
 // not need any key material before ServerHello, unlike TLS 1.3, so there is no reason to construct the session
-// any earlier). Scope: ECDHE key exchange only (RFC 4492 / RFC 8422), AEAD-GCM suites only, RSA-PSS
-// ServerKeyExchange signatures only (the schemes DIOSTREAMTLSSIGNATURE currently verifies) — no client
+// any earlier). Scope: ECDHE key exchange only (RFC 4492 / RFC 8422), AEAD-GCM suites and the RSA-PSS/ECDSA
+// ServerKeyExchange schemes enabled by DIOSTREAMTLSCONFIG — no client
 // certificates, no session resumption, no renegotiation.
 
 #pragma once
@@ -95,6 +95,7 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     
     
     bool                                    Ini                                              (bool allowunauthenticatedserver, bool checkdowngradesentinel = false);
+    bool                                    Capabilities_Set                                 (DIOSTREAMTLSCONFIG* config);
     void                                    End                                              ();
     bool                                    IsIni                                            ();
 
@@ -160,6 +161,7 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     void                                    Clean                                            ();
 
     DIOSTREAMTLS12SESSION                   session;
+    DIOSTREAMTLSCONFIG*                     config;
     DIOSTREAMTLS12HANDSHAKECLIENT_STATE     state;
     bool                                    isini;
     bool                                    allowunauthenticatedserver;

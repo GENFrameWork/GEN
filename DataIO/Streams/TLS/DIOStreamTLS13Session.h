@@ -67,6 +67,8 @@ enum DIOSTREAMTLS13SESSION_EPOCH
   DIOSTREAMTLS13SESSION_EPOCH_APPLICATION      ,
 };
 
+class DIOSTREAMTLSMEMORYPOLICY;
+
 
 
 
@@ -80,6 +82,7 @@ class DIOSTREAMTLS13SESSION
     virtual                                ~DIOSTREAMTLS13SESSION                              ();
 
     bool                                    Ini                                              (XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE role);
+    bool                                    MemoryPolicy_Set                                 (DIOSTREAMTLSMEMORYPOLICY& policy);
     void                                    End                                              ();
     bool                                    IsIni                                            ();
 
@@ -171,6 +174,11 @@ class DIOSTREAMTLS13SESSION
     XBUFFER                                 applicationinput;
     XBUFFER                                 posthandshakeoutput;
     XBUFFER                                 newsessionticketinput;
+
+    XDWORD                                  maximumrecordinputsize;
+    XDWORD                                  maximumhandshakeinputsize;
+    XDWORD                                  maximumtranscriptsize;
+    XDWORD                                  maximumapplicationinputsize;
 
     XQWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     bool                                    keyupdaterequestpending;

@@ -129,13 +129,13 @@ class DIOSTREAMTLS : public T
                                               config = dynamic_cast<DIOSTREAMTLSCONFIG*>(T::GetConfig());
                                                if(!config)
                                                  {
-                                                   tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                   TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                    return false;
                                                  }
 
                                                if(!config->Freeze())
                                                  {
-                                                   tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                   TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                    return false;
                                                  }
 
@@ -150,7 +150,7 @@ class DIOSTREAMTLS : public T
                                                  ((maxversion != DIOSTREAMTLS_MSG_VERSION_TLS_1_2) && (maxversion != DIOSTREAMTLS_MSG_VERSION_TLS_1_3)) ||
                                                  (minversion > maxversion))
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                   return false;
                                                 }
 
@@ -162,7 +162,7 @@ class DIOSTREAMTLS : public T
                                                   if((minversion != DIOSTREAMTLS_MSG_VERSION_TLS_1_3) ||
                                                      (maxversion != DIOSTREAMTLS_MSG_VERSION_TLS_1_3))
                                                     {
-                                                      tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                      TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                       return false;
                                                     }
 
@@ -178,13 +178,13 @@ class DIOSTREAMTLS : public T
                                               servername = config->GetServerName()->GetSize()?config->GetServerName()->Get():config->GetRemoteURL()->Get();
                                               if(!servername || !servername[0])
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                   return false;
                                                 }
 
                                               if(!DIOURL::Host_Canonicalize(servername, canonicalservername, servernametype))
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                   return false;
                                                 }
 
@@ -200,32 +200,13 @@ class DIOSTREAMTLS : public T
                                                   return true;
                                                 }
 
-                                              bool tls12algorithmrejected = starttls12 &&
-                                                                            (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
-                                                                            (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM);
-
-                                              // A TLS 1.3 handshake_failure/insufficient_security is an algorithm/parameter retry,
-                                              // not a version rejection.  Exhaust the wider TLS 1.3 offer first and only change
-                                              // protocol version after an explicit protocol_version alert.
-                                              if(!starttls12 &&
-                                                 (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
-                                                 (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM))
-                                                {
-                                                  tlserror = DIOSTREAMTLS_ERROR_NONE;
-
-                                                  if(Handshake_Attempt(config, servername, sniservername, false, true))
-                                                    {
-                                                      T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
-                                                      return true;
-                                                    }
-                                                }
-
                                               if(dualversionmode &&
                                                  !usingtls12 &&
                                                  (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
                                                  (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_VERSION))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_NONE;
+                                                  T::SetLastDIOError(DIOSTREAMERROR_NONE);
 
                                                   if(Handshake_Attempt(config, servername, sniservername, true))
                                                     {
@@ -233,19 +214,6 @@ class DIOSTREAMTLS : public T
                                                       return true;
                                                     }
 
-                                                  tls12algorithmrejected = (tlserror == DIOSTREAMTLS_ERROR_HANDSHAKE) &&
-                                                                           (retrycause == DIOSTREAMTLS_HANDSHAKERETRYCAUSE_ALGORITHM);
-                                                }
-
-                                              if(tls12algorithmrejected && (minversion == DIOSTREAMTLS_MSG_VERSION_TLS_1_2))
-                                                {
-                                                  tlserror = DIOSTREAMTLS_ERROR_NONE;
-
-                                                  if(Handshake_Attempt(config, servername, sniservername, true, true))
-                                                    {
-                                                      T::SetStatus(DIOSTREAMSTATUS_CONNECTED);
-                                                      return true;
-                                                    }
                                                 }
 
                                               return false;
@@ -254,7 +222,7 @@ class DIOSTREAMTLS : public T
 
     
     
-    bool                                    Handshake_Attempt                       (DIOSTREAMTLSCONFIG* config, XCHAR* servername, XCHAR* sniservername, bool astls12, bool widenschemes = false)
+    bool                                    Handshake_Attempt                       (DIOSTREAMTLSCONFIG* config, XCHAR* servername, XCHAR* sniservername, bool astls12)
                                             {
                                               handshakeclient.End();
                                               session.End();
@@ -266,33 +234,26 @@ class DIOSTREAMTLS : public T
                                               if(usingtls12)
                                                 {                               
                                                   if(!handshakeclient12.Ini(config->IsAllowUnauthenticatedServer(), dualversionmode) ||
-                                                     (widenschemes && !handshakeclient12.CipherSuitesAndSchemes_WidenECDSA()) ||
+                                                     !handshakeclient12.Capabilities_Set(config) ||
                                                      (!config->IsAllowUnauthenticatedServer() &&
                                                       !handshakeclient12.Authentication_Set(servername, config->GetTrustedRoots())))
                                                     {
-                                                      tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                      TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                       return false;
                                                     }
-
-                                                  handshakeclient12.AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
-                                                  handshakeclient12.ValidationPolicy_Set((*config->GetCertificateValidationPolicy()));
-                                                  handshakeclient12.RevocationLists_Set(config->GetCertificateRevocationLists());
-                                                  handshakeclient12.OCSPDirect_Set(config->GetOCSPDirectFetcher(), config->GetOCSPDirectContext());
                                                 }
                                                else
                                                 {
                                                   if(!session.Ini(config->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
+                                                     !session.MemoryPolicy_Set((*config->GetMemoryPolicy())) ||
                                                      !handshakeclient.Ini(&session, config->IsAllowUnauthenticatedServer()) ||
                                                      !handshakeclient.Capabilities_Set(config) ||
-                                                     (widenschemes && !handshakeclient.SignatureSchemes_WidenECDSA()) ||
                                                      (!config->IsAllowUnauthenticatedServer() &&
                                                       !handshakeclient.Authentication_Set(servername, config->GetTrustedRoots())))
                                                     {
-                                                      tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                      TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                       return false;
                                                     }
-
-                                                  handshakeclient.AIAFetch_Set(config->IsActiveAIAFetch(), config->GetAIAFetchTimeout());
                                                 }
 
                                               T::ResetOutXBuffer();
@@ -301,6 +262,10 @@ class DIOSTREAMTLS : public T
                                               if(!T::Open())
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  if(T::PeekLastDIOError() == DIOSTREAMERROR_NONE)
+                                                    {
+                                                      T::SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+                                                    }
                                                   return false;
                                                 }
 
@@ -309,6 +274,10 @@ class DIOSTREAMTLS : public T
                                               if(!T::WaitToConnected(connectiontimeout))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  if(T::PeekLastDIOError() == DIOSTREAMERROR_NONE)
+                                                    {
+                                                      T::SetLastDIOError(DIOSTREAMERROR_TCPTIMEOUT);
+                                                    }
                                                   Close_OnError();
                                                   return false;
                                                 }
@@ -324,12 +293,13 @@ class DIOSTREAMTLS : public T
 
                                               if(!Handshake_Client(sniservername))
                                                 {
-                                                  if(tlserror == DIOSTREAMTLS_ERROR_NONE) tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+                                                  if(tlserror == DIOSTREAMTLS_ERROR_NONE) TLSError_Set(DIOSTREAMTLS_ERROR_HANDSHAKE);
 
                                                   if(IsAuthenticationSecurityFailure())
                                                     {
                                                       T::SetLastDIOError(DIOSTREAMERROR_TLSAUTHENTICATION);
                                                     }
+                                                   else T::SetLastDIOError(DIOSTREAMERROR_TLSPROTOCOL);
 
                                                   if(usingtls12 && handshakeclient12.IsAlgorithmRejected())
                                                     {
@@ -361,9 +331,10 @@ class DIOSTREAMTLS : public T
                                               isserverrole = true;
 
                                               if(!session.Ini(config->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER) ||
+                                                 !session.MemoryPolicy_Set((*config->GetMemoryPolicy())) ||
                                                  !handshakeserver.Ini(&session, config))
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_CONFIGURATION;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                   return false;
                                                 }
 
@@ -373,6 +344,10 @@ class DIOSTREAMTLS : public T
                                               if(!T::Open())
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  if(T::PeekLastDIOError() == DIOSTREAMERROR_NONE)
+                                                    {
+                                                      T::SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+                                                    }
                                                   return false;
                                                 }
 
@@ -381,6 +356,10 @@ class DIOSTREAMTLS : public T
                                               if(!T::WaitToConnected(connectiontimeout))
                                                 {
                                                   tlserror = DIOSTREAMTLS_ERROR_TRANSPORT;
+                                                  if(T::PeekLastDIOError() == DIOSTREAMERROR_NONE)
+                                                    {
+                                                      T::SetLastDIOError(DIOSTREAMERROR_TCPTIMEOUT);
+                                                    }
                                                   Close_OnError();
                                                   return false;
                                                 }
@@ -389,7 +368,7 @@ class DIOSTREAMTLS : public T
 
                                               if(!Handshake_Server())
                                                 {
-                                                  if(tlserror == DIOSTREAMTLS_ERROR_NONE) tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+                                                  if(tlserror == DIOSTREAMTLS_ERROR_NONE) TLSError_Set(DIOSTREAMTLS_ERROR_HANDSHAKE);
 
                                                   DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription = handshakeserver.GetErrorAlertDescription();
 
@@ -466,7 +445,7 @@ class DIOSTREAMTLS : public T
 
                                               if(usingtls12 && !handshakeclient12.GetSession()->ApplicationData_CanProtect(size))
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_KEY_USAGE_LIMIT;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_KEY_USAGE_LIMIT);
                                                   Close_OnError();
                                                   return 0;
                                                 }
@@ -476,7 +455,7 @@ class DIOSTREAMTLS : public T
 
                                               if(!protectstatus)
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_RECORD;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_RECORD);
                                                   Close_OnError();
                                                   return 0;
                                                 }
@@ -672,6 +651,29 @@ class DIOSTREAMTLS : public T
     DIOSTREAMTLS_ERROR                      GetLastTLSError                         ()
                                             {
                                               return tlserror;
+                                            }
+
+
+    void                                    TLSError_Set                            (DIOSTREAMTLS_ERROR error)
+                                            {
+                                              tlserror = error;
+
+                                              switch(error)
+                                                {
+                                                  case DIOSTREAMTLS_ERROR_CONFIGURATION   : T::SetLastDIOError(DIOSTREAMERROR_TLSCONFIGURATION);
+                                                                                          break;
+
+                                                  case DIOSTREAMTLS_ERROR_HANDSHAKE       :
+                                                  case DIOSTREAMTLS_ERROR_RECORD          :
+                                                  case DIOSTREAMTLS_ERROR_TRUNCATED       :
+                                                  case DIOSTREAMTLS_ERROR_KEY_USAGE_LIMIT : T::SetLastDIOError(DIOSTREAMERROR_TLSPROTOCOL);
+                                                                                          break;
+
+                                                  case DIOSTREAMTLS_ERROR_NONE            : T::SetLastDIOError(DIOSTREAMERROR_NONE);
+                                                                                          break;
+
+                                                                                  default : break;
+                                                }
                                             }
 
 
@@ -1045,7 +1047,7 @@ class DIOSTREAMTLS : public T
 
                                                   if(Transport_Read(input) && !handshakeclient12.GetSession()->RecordInput_Add(input))
                                                     {
-                                                      tlserror = DIOSTREAMTLS_ERROR_RECORD;
+                                                      TLSError_Set(DIOSTREAMTLS_ERROR_RECORD);
                                                       return false;
                                                     }
 
@@ -1053,7 +1055,7 @@ class DIOSTREAMTLS : public T
 
                                                   if(result == DIOSTREAMTLS12SESSION_RESULT_ERROR)
                                                     {
-                                                      tlserror = DIOSTREAMTLS_ERROR_RECORD;
+                                                      TLSError_Set(DIOSTREAMTLS_ERROR_RECORD);
                                                       Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, handshakeclient12.GetSession()->GetLastRecordAlertDescription());
                                                       T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                       return false;
@@ -1073,7 +1075,7 @@ class DIOSTREAMTLS : public T
                                                         {
                                                           if(!handshakeclient12.GetSession()->TransportClosed())
                                                             {
-                                                              tlserror = DIOSTREAMTLS_ERROR_TRUNCATED;
+                                                              TLSError_Set(DIOSTREAMTLS_ERROR_TRUNCATED);
                                                               return !handshakeclient12.GetSession()->GetApplicationInput()->IsEmpty();
                                                             }
                                                         }
@@ -1087,7 +1089,7 @@ class DIOSTREAMTLS : public T
 
                                               if(Transport_Read(input) && !session.RecordInput_Add(input))
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_RECORD;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_RECORD);
                                                   return false;
                                                 }
 
@@ -1095,7 +1097,7 @@ class DIOSTREAMTLS : public T
 
                                               if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)
                                                 {
-                                                  tlserror = DIOSTREAMTLS_ERROR_RECORD;
+                                                  TLSError_Set(DIOSTREAMTLS_ERROR_RECORD);
                                                   Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, session.GetLastRecordAlertDescription());
                                                   T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                   return false;
@@ -1108,7 +1110,7 @@ class DIOSTREAMTLS : public T
                                                       XBUFFER newsessionticket;
                                                       if(!session.NewSessionTicket_Extract(newsessionticket))
                                                         {
-                                                          tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+                                                          TLSError_Set(DIOSTREAMTLS_ERROR_HANDSHAKE);
                                                           T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                           return false;
                                                         }
@@ -1116,7 +1118,7 @@ class DIOSTREAMTLS : public T
                                                       if(newsessionticket.IsEmpty()) break;
                                                       if(!handshakeclient.NewSessionTicket_Process(newsessionticket))
                                                         {
-                                                          tlserror = DIOSTREAMTLS_ERROR_HANDSHAKE;
+                                                          TLSError_Set(DIOSTREAMTLS_ERROR_HANDSHAKE);
                                                           T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                           return false;
                                                         }
@@ -1145,7 +1147,7 @@ class DIOSTREAMTLS : public T
                                                     {
                                                       if(!session.TransportClosed())
                                                         {
-                                                          tlserror = DIOSTREAMTLS_ERROR_TRUNCATED;
+                                                          TLSError_Set(DIOSTREAMTLS_ERROR_TRUNCATED);
                                                           return !session.GetApplicationInput()->IsEmpty();
                                                         }
                                                     }

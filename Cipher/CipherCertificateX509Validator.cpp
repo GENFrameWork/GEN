@@ -35,6 +35,7 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "CipherCertificateX509Validator.h"
+#include "CipherCertificateX509PathBuilder.h"
 
 #include "CipherKeyPublicRSA.h"
 #include "CipherKeyECDSA.h"
@@ -169,6 +170,92 @@ bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechai
 bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClient(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
 {
   return ValidateInternal(certificatechain, trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_CLIENT_AUTH, NULL, datetime);
+}
+
+
+bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPaths(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots,
+                                                       XCHAR* servername, XDATETIME* datetime)
+{
+  return ValidateAllPathsInternal(certificatechain, trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_SERVER_AUTH,
+                                  servername, datetime);
+}
+
+
+bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClientAllPaths(XVECTOR<XBUFFER*>* certificatechain,
+                                                             XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
+{
+  return ValidateAllPathsInternal(certificatechain, trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE_CLIENT_AUTH,
+                                  NULL, datetime);
+}
+
+
+bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPathsInternal(XVECTOR<XBUFFER*>* certificatechain,
+                                                               XVECTOR<XBUFFER*>* trustedroots,
+                                                               CIPHERCERTIFICATEX509VALIDATOR_PURPOSE purpose,
+                                                               XCHAR* servername, XDATETIME* datetime)
+{
+  End();
+
+  if(!certificatechain || certificatechain->IsEmpty() || !certificatechain->Get(0) ||
+     !trustedroots || trustedroots->IsEmpty() ||
+     (certificatechain->GetSize() > CIPHERCERTIFICATEX509VALIDATOR_MAXCHAINSIZE))
+    {
+      return ValidateInternal(certificatechain, trustedroots, purpose, servername, datetime);
+    }
+
+  XVECTOR<XBUFFER*> intermediates;
+  for(XDWORD c=1; c<certificatechain->GetSize(); c++)
+    {
+      if(!intermediates.Add(certificatechain->Get(c)))
+        {
+          return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCERTIFICATE);
+        }
+    }
+
+  CIPHERCERTIFICATEX509PATHBUILDER pathbuilder;
+  XVECTOR<XVECTOR<XBUFFER*>*>      paths;
+
+  if(!pathbuilder.BuildAll((*certificatechain->Get(0)), &intermediates, trustedroots, paths,
+                           policy.GetMaximumChainDepth(), CIPHERCERTIFICATEX509PATHBUILDER_MAX_PATHS))
+    {
+      return ValidateInternal(certificatechain, trustedroots, purpose, servername, datetime);
+    }
+
+  XDWORD firstfailedpath = 0;
+  bool   havefailedpath = false;
+
+  for(XDWORD c=0; c<paths.GetSize(); c++)
+    {
+      XVECTOR<XBUFFER*>* path = paths.Get(c);
+      if(!path) continue;
+
+      if(ValidateInternal(path, trustedroots, purpose, servername, datetime))
+        {
+          CIPHERCERTIFICATEX509PATHBUILDER::Paths_Delete(paths);
+          return true;
+        }
+
+      if(!havefailedpath)
+        {
+          firstfailedpath = c;
+          havefailedpath  = true;
+        }
+    }
+
+  // Preserve a deterministic validation error and decoded chain for diagnostics/AIA consumers.
+  // ValidateInternal owns its decoded copy, so deleting the builder paths afterwards is safe.
+  bool status = false;
+  if(havefailedpath && paths.Get(firstfailedpath))
+    {
+      status = ValidateInternal(paths.Get(firstfailedpath), trustedroots, purpose, servername, datetime);
+    }
+   else
+    {
+      status = ValidateInternal(certificatechain, trustedroots, purpose, servername, datetime);
+    }
+
+  CIPHERCERTIFICATEX509PATHBUILDER::Paths_Delete(paths);
+  return status;
 }
 
 CIPHERCERTIFICATEX509VALIDATIONPOLICY* CIPHERCERTIFICATEX509VALIDATOR::GetPolicy()
@@ -378,6 +465,9 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
       return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCERTIFICATE);
     }
 
+  CIPHERCERTIFICATEX509VALIDATOR_ERROR rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT;
+  bool                                 rooterrorfound = false;
+
   for(XDWORD c=0; c<roots.GetSize(); c++)
     {
       CIPHERCERTIFICATEX509* root = roots.Get(c);
@@ -389,7 +479,11 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
       if(chainend->GetCertificateData()->Compare((*root->GetCertificateData())))
         {
           if(!CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(root,certificates,true))
-            return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
+            {
+              if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT;
+              rooterrorfound = true;
+              continue;
+            }
           error = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
           return true;
         }
@@ -400,7 +494,11 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
          IsSamePublicKey(chainend->GetPublicCipherKey(), root->GetPublicCipherKey()))
         {
           if(!CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(root,certificates,true))
-            return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
+            {
+              if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT;
+              rooterrorfound = true;
+              continue;
+            }
           error = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
           return true;
         }
@@ -413,30 +511,43 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
       if(!root->IsCertificateAuthority() ||
          (root->HasKeyUsage() && !root->IsKeyUsageCertificateSign()))
         {
+          if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCA;
+          rooterrorfound = true;
           continue;
         }
 
       if((root->GetBasicConstraintsPathLength() >= 0) &&
          ((int)certificates.GetSize() - 1 > root->GetBasicConstraintsPathLength()))
         {
-          return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH);
+          if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH;
+          rooterrorfound = true;
+          continue;
         }
 
       if(!IsSignatureAlgorithmSupported(chainend))
         {
-          return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNSUPPORTEDALGORITHM);
+          if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNSUPPORTEDALGORITHM;
+          rooterrorfound = true;
+          continue;
         }
 
       if(chainend->VerifySignature(root->GetPublicCipherKey()))
         {
           if(!CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(root,certificates,false))
-            return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
+            {
+              if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT;
+              rooterrorfound = true;
+              continue;
+            }
           error = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
           return true;
         }
+
+      if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDSIGNATURE;
+      rooterrorfound = true;
     }
 
-  return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT);
+  return SetError(rooterrorfound?rooterror:CIPHERCERTIFICATEX509VALIDATOR_ERROR_UNTRUSTEDROOT);
 }
 
 

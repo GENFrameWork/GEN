@@ -1801,7 +1801,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificate_Process(XBUFFER& message)
       return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
     }
 
-  if(!clientcertificatevalidator.ValidateClient(&certificatechain, config->GetClientTrustedRoots()))
+  if(!clientcertificatevalidator.ValidateClientAllPaths(&certificatechain, config->GetClientTrustedRoots()))
     {
       return SetError(DIOSTREAMTLS13_HANDSHAKESERVER_CertificateAlert(clientcertificatevalidator.GetError()));
     }
@@ -1826,7 +1826,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificate_Process(XBUFFER& message)
       hasstapledOCSP = true;
       if(!data || (data->GetSize() < 5) || (data->GetByte(0) != 1) ||
          ((((XDWORD)data->GetByte(1) << 16) | ((XDWORD)data->GetByte(2) << 8) | data->GetByte(3)) != (data->GetSize()-4)) ||
-         ((data->GetSize()-4) > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE) ||
+         ((data->GetSize()-4) > config->GetMemoryPolicy()->GetMaximumOCSPResponseSize()) ||
          !validatedchain || (validatedchain->GetSize() < 2))
         {
           return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE);

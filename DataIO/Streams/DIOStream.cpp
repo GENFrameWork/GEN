@@ -1094,6 +1094,21 @@ DIOSTREAMERROR DIOSTREAM::GetLastDIOError()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         DIOSTREAMERROR DIOSTREAM::PeekLastDIOError()
+* @brief      Read the last DIO error without consuming it
+* @ingroup    DATAIO
+*
+* @return     DIOSTREAMERROR : Last error retained by the stream.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+DIOSTREAMERROR DIOSTREAM::PeekLastDIOError()
+{
+  return error;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void DIOSTREAM::SetLastDIOError(DIOSTREAMERROR error)
 * @brief      Set last DIO error
@@ -1174,5 +1189,4 @@ void DIOSTREAM::Clean()
   nbytesread          = 0;
   nbyteswrite         = 0;
 }
-
 

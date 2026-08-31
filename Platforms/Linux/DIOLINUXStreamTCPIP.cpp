@@ -361,7 +361,11 @@ int DIOLINUXSTREAMTCPIP::Accept(int socket, void* addr, void* addrlen, XDWORD us
 * --------------------------------------------------------------------------------------------------------------------*/
 int DIOLINUXSTREAMTCPIP::IsReadyConnect(int socket)
 {
-  if(socket==-1) return -1;
+  if(socket==-1)
+    {
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+      return -1;
+    }
 
   struct timeval  tv;
   int             rc;
@@ -381,7 +385,11 @@ int DIOLINUXSTREAMTCPIP::IsReadyConnect(int socket)
   tv.tv_usec = 100;
 
   rc = select((int)(socket)+1, &fdr, &fdw, &fds, &tv);
-  if(rc == -1) return -1;
+  if(rc == -1)
+    {
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+      return -1;
+    }
 
   int status1 = FD_ISSET(socket, &fdr) ? 1 : 0;
   int status2 = FD_ISSET(socket, &fdw) ? 1 : 0;
@@ -398,14 +406,26 @@ int DIOLINUXSTREAMTCPIP::IsReadyConnect(int socket)
           int       optval;
           socklen_t optlen = sizeof(optval);
 
-          if(getsockopt(socket,SOL_SOCKET, SO_ERROR, &optval, &optlen) < 0 ) return -1;
-          if(optval) return -1;
+          if(getsockopt(socket,SOL_SOCKET, SO_ERROR, &optval, &optlen) < 0 )
+            {
+              SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+              return -1;
+            }
+          if(optval)
+            {
+              SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+              return -1;
+            }
 
           return  1;
         }
     }
 
-  if(status3) return -1;
+  if(status3)
+    {
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
+      return -1;
+    }
 
   return 0;
 }
@@ -572,6 +592,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
   if(config->GetConnectionURL()->IsEmpty())
     {
       SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
+      SetLastDIOError(DIOSTREAMERROR_URLNOTVALID);
       return false;
     }
 
@@ -579,7 +600,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
   if(handlesocket == -1)
     {
       SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
-      SetLastDIOError(DIOSTREAMERROR_UNKNOWN);
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
       return false;
     }
 
@@ -603,7 +624,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
       if(bind(handlesocket, (struct sockaddr *)&loc_addr, sizeof(loc_addr)) < 0 )
         {
           SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
-          SetLastDIOError(DIOSTREAMERROR_UNKNOWN);
+          SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
           return false;
         }
     }
@@ -617,7 +638,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
   if(!config->GetConnectionURL()->ResolveURL(remoteIP))
     {
       SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
-      SetLastDIOError(DIOSTREAMERROR_URLNOTVALID);
+      SetLastDIOError(DIOSTREAMERROR_DNS);
       return false;
     }
 
@@ -636,7 +657,7 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
   if(setsockopt(handlesocket, SOL_SOCKET, SO_KEEPALIVE , &opt, sizeof(opt)) < 0)
     {
       SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
-      SetLastDIOError(DIOSTREAMERROR_UNKNOWN);
+      SetLastDIOError(DIOSTREAMERROR_TCPCONNECTION);
       return false;
     }
 
@@ -645,10 +666,10 @@ bool DIOLINUXSTREAMTCPIP::GetHandleClient()
 
   if(connect(handlesocket, (struct sockaddr *)&rem_addr, sizeof(rem_addr)) < 0)
     {
-      if(errno == EADDRINUSE)
+      if((errno != EINPROGRESS) && (errno != EWOULDBLOCK) && (errno != EALREADY))
         {
           SetEvent(DIOLINUXTCPIPFSMEVENT_DISCONNECTING);
-          SetLastDIOError(DIOSTREAMERROR_ADDRINUSE);
+          SetLastDIOError((errno == EADDRINUSE)?DIOSTREAMERROR_ADDRINUSE:DIOSTREAMERROR_TCPCONNECTION);
           return false;
         }
     }
@@ -857,7 +878,6 @@ void DIOLINUXSTREAMTCPIP::Clean()
   threadconnection   = NULL;
   handlesocket      = -1;
 }
-
 
 
 
