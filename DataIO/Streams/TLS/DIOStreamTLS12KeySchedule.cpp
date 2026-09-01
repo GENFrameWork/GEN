@@ -136,19 +136,31 @@ bool DIOSTREAMTLS12KEYSCHEDULE::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_R
 {
   End();
 
-  // Only ECDHE + AEAD GCM suites are supported. The CBC ones are deliberately absent: they need
+  // Only ECDHE + AEAD suites are supported. The CBC ones are deliberately absent: they need
   // MAC-then-encrypt with all its padding handling, and no modern server requires them.
   switch(ciphersuite)
     {
       case DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 :
-      case DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256   : hash    = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
-                                                                       keysize = 16;
+      case DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256   : hash        = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
+                                                                       keysize     = 16;
+                                                                       fixedIVsize = DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE;
                                                                        break;
 
       case DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 :
-      case DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384   : hash    = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);
-                                                                       keysize = 32;
+      case DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384   : hash        = GEN_NEW HASHSHA2(HASHSHA2TYPE_384);
+                                                                       keysize     = 32;
+                                                                       fixedIVsize = DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE;
                                                                        break;
+
+      #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256   :
+      case DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 : hash        = GEN_NEW HASHSHA2(HASHSHA2TYPE_256);
+                                                                               keysize     = 32;
+                                                                               fixedIVsize = DIOSTREAMTLS12KEYSCHEDULE_CHACHA20_FIXEDIVSIZE;
+                                                                               break;
+
+      #endif
 
                                                             default  : return false;
     }
@@ -201,6 +213,7 @@ void DIOSTREAMTLS12KEYSCHEDULE::End()
   ciphersuite = 0;
   hashsize    = 0;
   keysize     = 0;
+  fixedIVsize = 0;
 }
 
 
@@ -290,7 +303,7 @@ XDWORD DIOSTREAMTLS12KEYSCHEDULE::GetKeySize()
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS12KEYSCHEDULE::GetFixedIVSize()
 {
-  return DIOSTREAMTLS12KEYSCHEDULE_FIXEDIVSIZE;
+  return fixedIVsize;
 }
 
 
@@ -485,7 +498,7 @@ bool DIOSTREAMTLS12KEYSCHEDULE::KeyBlock_Create(XBUFFER& clientrandom, XBUFFER& 
   if(!seed.Add(serverrandom) || !seed.Add(clientrandom)) return false;
 
   // An AEAD suite has no MAC key, so the block is only the two write keys and the two salts.
-  XDWORD keyblocksize = (keysize * 2) + (DIOSTREAMTLS12KEYSCHEDULE_FIXEDIVSIZE * 2);
+  XDWORD keyblocksize = (keysize * 2) + (fixedIVsize * 2);
 
   if(!PRF(mastersecret, DIOSTREAMTLS12KEYSCHEDULE_LABEL_KEYEXPANSION, seed, keyblocksize, keyblock)) return false;
   if(keyblock.GetSize() != keyblocksize)                                                            return false;
@@ -504,10 +517,10 @@ bool DIOSTREAMTLS12KEYSCHEDULE::KeyBlock_Create(XBUFFER& clientrandom, XBUFFER& 
   if(!serverkey.Add(keyblock.Get() + position, keysize)) return false;
   position += keysize;
 
-  if(!clientIV.Add(keyblock.Get() + position, DIOSTREAMTLS12KEYSCHEDULE_FIXEDIVSIZE)) return false;
-  position += DIOSTREAMTLS12KEYSCHEDULE_FIXEDIVSIZE;
+  if(!clientIV.Add(keyblock.Get() + position, fixedIVsize)) return false;
+  position += fixedIVsize;
 
-  if(!serverIV.Add(keyblock.Get() + position, DIOSTREAMTLS12KEYSCHEDULE_FIXEDIVSIZE)) return false;
+  if(!serverIV.Add(keyblock.Get() + position, fixedIVsize)) return false;
 
   // Stored by direction, never by role, so that a future server end reuses this class untouched.
   bool isclient = (role == DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT);
@@ -606,4 +619,5 @@ void DIOSTREAMTLS12KEYSCHEDULE::Clean()
   hash        = NULL;
   hashsize    = 0;
   keysize     = 0;
+  fixedIVsize = 0;
 }

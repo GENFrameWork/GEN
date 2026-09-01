@@ -158,6 +158,7 @@
 
 #define APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                                         __L("path_privatekey")
 #define APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                                        __L("path_certificate")
+#define APPFLOW_CFG_WEBSERVER_PRIVATEKEY_PASSWORD                                      __L("privatekey_password")
 #endif
 
 #endif
@@ -360,6 +361,7 @@ class APPFLOWCFG
     bool                 WebServer_IsTLS                                          ();
     XPATH*               WebServer_PathPrivateKey                                 ();
     XPATH*               WebServer_PathCertificate                                ();
+    XSTRING*             WebServer_GetPrivateKeyPassword                          ();
     #endif
     #endif
 
@@ -455,6 +457,7 @@ class APPFLOWCFG
     #ifdef DIO_STREAMTLS_ACTIVE
     XPATH                webserver_path_privatekey;
     XPATH                webserver_path_certificate;
+    XSTRING              webserver_privatekey_password;
     #endif
     #endif
 

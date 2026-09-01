@@ -361,6 +361,14 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
                        (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
                        (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
 
+      #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+      supported = supported || (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768);
+      #endif
+
+      #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+      supported = supported || (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024);
+      #endif
+
       #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
       supported = supported || (supportedgroup == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
       #endif
@@ -388,7 +396,10 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256    :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384    :
-          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    : break;
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256     :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384     :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512     : break;
                                                              default   : continue;
         }
 
@@ -412,6 +423,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512 :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256  :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384  :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512  :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256     :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384     :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512     : break;
@@ -1553,6 +1567,14 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ServerHello_Process(XBUFFER& serverhello, XB
 
                                                                     if(key && (key->GetKeyType() == currentkeysharegroup) &&
                                                                        (
+                                                                        #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERSECP256R1MLKEM768_SERVERSHARESIZE)) ||
+                                                                        #endif
+                                                                        #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+                                                                        ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024) &&
+                                                                         (key->GetKeyData()->GetSize() == CIPHERSECP384R1MLKEM1024_SERVERSHARESIZE)) ||
+                                                                        #endif
                                                                         #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
                                                                         ((currentkeysharegroup == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) &&
                                                                          (key->GetKeyData()->GetSize() == CIPHERX25519MLKEM768_SERVERSHARESIZE)) ||
@@ -1659,7 +1681,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
               for(XDWORD c=0; c<requestedclientsignatureschemes.GetSize(); c++)
                 {
                   XWORD candidate = requestedclientsignatureschemes.Get(c);
-                  if(DIOSTREAMTLSSIGNATURE::IsSupported(candidate, clientleafcertificate.GetPublicCipherKey()))
+                  if(DIOSTREAMTLSSIGNATURE::IsSupported(candidate, &clientleafcertificate))
                     {
                       clientsignaturescheme = candidate;
                       break;
@@ -2447,7 +2469,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::CertificateVerify_Process(XBUFFER& message)
 
       CIPHERCERTIFICATEX509* leaf = certificatevalidator.GetLeafCertificate();
       if(!authenticationconfigured || !leaf || !leaf->GetPublicCipherKey() ||
-         !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey()) ||
+         !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf) ||
          !session->TranscriptHash(transcripthash))
         {
           SetAuthenticationError(DIOSTREAMTLS13HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATEVERIFY);

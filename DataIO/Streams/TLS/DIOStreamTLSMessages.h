@@ -87,6 +87,7 @@
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256       0xCCA8    // TLSv1.2
 #define DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256     0xCCA9    // TLSv1.2
 #define DIOSTREAMTLS_MSG_CIPHER_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256         0xCCAA    // TLSv1.2 
+#define DIOSTREAMTLS_MSG_CIPHER_FALLBACK_SCSV                                 0x5600    // RFC 7507: only on a real protocol fallback retry
 
 // TLS 1.2 (RFC 5246 + RFC 5289) suites supported by DIOSTREAMTLS12: ECDHE key exchange with AEAD GCM only.
 // The CBC ones are deliberately left out; they need MAC-then-encrypt, and no modern server requires them.
@@ -97,7 +98,9 @@
                                         
 #define DIOSTREAMTLS_MSG_COMPRESS_METHOD_NULL                                 0x00
 
+#define DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768                               0x11EB    // RFC 10024
 #define DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768                                  0x11EC    // RFC 10024
+#define DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024                              0x11ED    // RFC 10024
 #define DIOSTREAMTLS_MSG_CURVEID_X25519	                                      0x001D    // Optimizated              // Curvas modernas (TLS 1.3 recomendadas)
 #define DIOSTREAMTLS_MSG_CURVEID_X448	                                        0x001E	
 #define DIOSTREAMTLS_MSG_CURVEID_SECP256R1                                    0x0017	  // 256 bits
@@ -193,6 +196,8 @@ enum DIOSTREAMTLS_ALERT_DESCRIPTION
   DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION                             =     70  ,
   DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY                        =     71  ,
   DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR                               =     80  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_INAPPROPRIATE_FALLBACK                       =     86  ,
+  DIOSTREAMTLS_ALERT_DESCRIPTION_USER_CANCELED                                =     90  ,
   DIOSTREAMTLS_ALERT_DESCRIPTION_MISSING_EXTENSION                            =    109  ,
   DIOSTREAMTLS_ALERT_DESCRIPTION_UNSUPPORTED_EXTENSION                        =    110  ,
   DIOSTREAMTLS_ALERT_DESCRIPTION_UNRECOGNIZED_NAME                            =    112  ,

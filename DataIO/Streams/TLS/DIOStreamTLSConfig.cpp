@@ -195,6 +195,14 @@ static bool DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(XWORD ciphersuite)
       case DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384   :
       case DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 :
       case DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 : return true;
+
+      #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256   :
+      case DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 : return true;
+
+      #endif
+
                                                                     default : return false;
     }
 }
@@ -205,6 +213,14 @@ static bool DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(XWORD group)
   bool supported = (group == DIOSTREAMTLS_MSG_CURVEID_X25519)   ||
                    (group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
                    (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
+
+  #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+  supported = supported || (group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768);
+  #endif
+
+  #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+  supported = supported || (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024);
+  #endif
 
   #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
   supported = supported || (group == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
@@ -226,7 +242,10 @@ static bool DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(XWORD scheme, bool cer
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256    :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384    :
-      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    : return true;
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256     :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384     :
+      case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512     : return true;
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256       :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384       :
       case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512       : return certificate;
@@ -503,6 +522,23 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::SetPrivateKey(CIPHERKEY* privatekey)
           copy = ecdsacopy;
         }
         break;
+
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+      case CIPHERKEYTYPE_ED25519_PRIVATE :
+        {
+          CIPHERKEYSYMMETRICAL* ed25519copy = GEN_NEW CIPHERKEYSYMMETRICAL();
+          if(!ed25519copy) return false;
+
+          if(!ed25519copy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
+            {
+              GEN_DELETE ed25519copy;
+              return false;
+            }
+
+          copy = ed25519copy;
+        }
+        break;
+      #endif
 
                                         default : return false;
     }
@@ -1529,9 +1565,10 @@ bool DIOSTREAMTLSCONFIG::DeleteLocalOCSPStapledResponse()
 *
 * @fn         bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
 * @brief      Copy the private key of the local end
-* @note       Accepts either an RSA private key or an ECDSA private key for one of the curves CIPHERECDSA
-*             implements (P-256/P-384/P-521 -- see CIPHERECDSA::Parameters_Set()); any other key type is
-*             rejected. The matching CertificateSignatureScheme_Add()/SignatureScheme_Add() calls (see
+* @note       Accepts an RSA private key, an ECDSA private key for one of the curves CIPHERECDSA implements
+*             (P-256/P-384/P-521 -- see CIPHERECDSA::Parameters_Set()), or an Ed25519 private key when Ed25519
+*             support is active. Any other key type is rejected. The matching CertificateSignatureScheme_Add()/
+*             SignatureScheme_Add() calls (see
 *             DoDefault() below) still need to be picked to match whichever key ends up here -- callers building
 *             a server profile from a loaded key, such as APPFLOWWEBSERVER::Ini_BuildTLSConfig(), should offer
 *             only the scheme(s) that pair with this key's type.
@@ -1588,6 +1625,27 @@ bool DIOSTREAMTLSCONFIG::SetLocalPrivateKey(CIPHERKEY* privatekey)
           localprivatekey = copy;
         }
         return true;
+
+      #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
+      case CIPHERKEYTYPE_ED25519_PRIVATE :
+        {
+          CIPHERKEYSYMMETRICAL* copy;
+
+          copy = GEN_NEW CIPHERKEYSYMMETRICAL();
+          if(!copy) return false;
+
+          if(!copy->CopyFrom((CIPHERKEYSYMMETRICAL*)privatekey))
+            {
+              GEN_DELETE copy;
+              return false;
+            }
+
+          if(localprivatekey) GEN_DELETE localprivatekey;
+
+          localprivatekey = copy;
+        }
+        return true;
+      #endif
 
                                         default : break;
     }
@@ -3088,7 +3146,10 @@ bool DIOSTREAMTLSCONFIG::CryptographicPolicy_Validate()
       if(!DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(scheme, false)) return false;
       if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) ||
          (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) ||
-         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512)) RSAsignature = true;
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512)) RSAsignature = true;
       if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256) ||
          (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384) ||
          (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512)) ECDSAsignature = true;
@@ -3104,9 +3165,11 @@ bool DIOSTREAMTLSCONFIG::CryptographicPolicy_Validate()
         {
           XWORD suite = TLS12ciphersuites.Get(c);
           if(((suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256) ||
-              (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384)) && RSAsignature) compatible = true;
+              (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384) ||
+              (suite == DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256)) && RSAsignature) compatible = true;
           if(((suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256) ||
-              (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384)) && ECDSAsignature) compatible = true;
+              (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384) ||
+              (suite == DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256)) && ECDSAsignature) compatible = true;
         }
 
       if(!TLS12group || !compatible) return false;
@@ -3209,11 +3272,21 @@ void DIOSTREAMTLSCONFIG::Clean()
   TLS12CipherSuites_Delete();
   TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
   TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
+
+  #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+  TLS12CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
+  TLS12CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256);
+
+  #endif
+
   TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384);
   TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384);
 
   SupportedGroups_Delete();
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768);
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
@@ -3226,6 +3299,9 @@ void DIOSTREAMTLSCONFIG::Clean()
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384);
+  SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384);
   SignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512);
@@ -3235,6 +3311,9 @@ void DIOSTREAMTLSCONFIG::Clean()
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384);
+  CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384);
   CertificateSignatureScheme_Add(DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512);

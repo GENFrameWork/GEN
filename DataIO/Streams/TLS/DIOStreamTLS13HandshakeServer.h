@@ -108,7 +108,7 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     bool                                    Group_Select                                     (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XWORD& selectedgroup,
                                                                                               XBUFFER& peerpublickey, bool& helloretryrequestrequired,
                                                                                               bool& invalidkeyshare);
-    bool                                    SignatureScheme_Select                           (XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected);
+    bool                                    SignatureScheme_Select                           (XVECTOR<XWORD>& offered, CIPHERCERTIFICATEX509* leafcertificate, XWORD& selected);
     void                                    ApplicationProtocol_Select                       (DIOSTREAMTLS_MSG_EXTENSION_ALPN* offered);
 
     bool                                    SetError                                         (DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR, bool sendalert = true);

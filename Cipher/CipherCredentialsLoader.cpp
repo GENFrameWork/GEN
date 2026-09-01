@@ -11,6 +11,7 @@
 #include "CipherPEMCodec.h"
 #include "CipherCertificateX509.h"
 #ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
+#include "CipherKeyPublicRSA.h"
 #include "CipherKeyPrivateRSA.h"
 #endif
 #include "CipherKeyECDSA.h"
@@ -323,6 +324,37 @@ static bool CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(CIPHERKEY* privateke
 {
   if(!privatekey || !publickey) return false;
 
+  #ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
+
+  if(publickey->GetType()==CIPHERKEYTYPE_RSA_PUBLIC)
+    {
+      if(privatekey->GetType()!=CIPHERKEYTYPE_RSA_PRIVATE) return false;
+
+      return ((CIPHERKEYPRIVATERSA*)privatekey)->Check((*((CIPHERKEYPUBLICRSA*)publickey)));
+    }
+
+  #endif
+
+  CIPHERTYPE ecdsatype=CIPHERTYPE_ECDSA_SECP256R1;
+  CIPHERKEYTYPE expectedprivatetype=CIPHERKEYTYPE_UNKNOWN;
+  bool isecdsa=false;
+
+  switch(publickey->GetType())
+    {
+      case CIPHERKEYTYPE_ECDSA_SECP256R1_PUBLIC: ecdsatype=CIPHERTYPE_ECDSA_SECP256R1; expectedprivatetype=CIPHERKEYTYPE_ECDSA_SECP256R1_PRIVATE; isecdsa=true; break;
+      case CIPHERKEYTYPE_ECDSA_SECP384R1_PUBLIC: ecdsatype=CIPHERTYPE_ECDSA_SECP384R1; expectedprivatetype=CIPHERKEYTYPE_ECDSA_SECP384R1_PRIVATE; isecdsa=true; break;
+      case CIPHERKEYTYPE_ECDSA_SECP521R1_PUBLIC: ecdsatype=CIPHERTYPE_ECDSA_SECP521R1; expectedprivatetype=CIPHERKEYTYPE_ECDSA_SECP521R1_PRIVATE; isecdsa=true; break;
+                                                default: break;
+    }
+
+  if(isecdsa)
+    {
+      if(privatekey->GetType()!=expectedprivatetype) return false;
+
+      CIPHERECDSA ecdsa(ecdsatype);
+      return ecdsa.SetKey(publickey,true) && ecdsa.SetKey(privatekey,true);
+    }
+
   #ifdef CIPHER_ASYMMETRIC_ED25519_ACTIVE
 
   if(publickey->GetType()==CIPHERKEYTYPE_ED25519_PUBLIC)
@@ -345,7 +377,7 @@ static bool CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(CIPHERKEY* privateke
 
   #endif
 
-  return true;
+  return false;
 }
 
 bool CIPHERCREDENTIALSLOADER::PrivateKey_Load(XBUFFER& filedata, XCHAR* password,
@@ -400,10 +432,29 @@ bool CIPHERCREDENTIALSLOADER::Credentials_Load(XBUFFER& certificatedata, XBUFFER
   if(CIPHERPEMCODEC::PKCS12_Decode(privatekeydata,secret,certificatechain,pfxprivatekey) ||
      ((&certificatedata!=&privatekeydata) && CIPHERPEMCODEC::PKCS12_Decode(certificatedata,secret,certificatechain,pfxprivatekey)))
     {
-      CIPHERCERTIFICATEX509 leaf;
-      bool loaded=certificatechain.Get(0) && leaf.Decode((*certificatechain.Get(0))) && leaf.GetPublicCipherKey() &&
-                  PrivateKeyDER_Decode(pfxprivatekey,leaf.GetPublicCipherKey()->GetType(),privatekey) &&
-                  CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(privatekey,leaf.GetPublicCipherKey());
+      bool loaded=false;
+      XDWORD leafindex=0;
+
+      for(XDWORD c=0; c<certificatechain.GetSize() && !loaded; c++)
+        {
+          XBUFFER* certificateder=certificatechain.Get(c);
+          CIPHERCERTIFICATEX509 certificate;
+          CIPHERKEY* publickey=NULL;
+
+          if(!certificateder || !certificate.Decode((*certificateder))) continue;
+          publickey=certificate.GetPublicCipherKey();
+          if(!publickey) continue;
+
+          if(PrivateKeyDER_Decode(pfxprivatekey,publickey->GetType(),privatekey) &&
+             CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(privatekey,publickey))
+            {
+              loaded=true;
+              leafindex=c;
+            }
+        }
+
+      if(loaded && leafindex) loaded=certificatechain.Swap(0,leafindex);
+
       pfxprivatekey.SecureDelete();
       if(secret.Get()){volatile XCHAR* wipe=secret.Get();for(XDWORD c=0;c<secret.GetSize();c++)wipe[c]=0;} secret.Empty();
       if(loaded) return true;

@@ -28,8 +28,8 @@
 
 // PARALLEL to DIOStreamTLS13HandshakeClient.h (TLS 1.3). It owns its DIOSTREAMTLS12SESSION directly (TLS 1.2 does
 // not need any key material before ServerHello, unlike TLS 1.3, so there is no reason to construct the session
-// any earlier). Scope: ECDHE key exchange only (RFC 4492 / RFC 8422), AEAD-GCM suites and the RSA-PSS/ECDSA
-// ServerKeyExchange schemes enabled by DIOSTREAMTLSCONFIG — no client
+// any earlier). Scope: ECDHE key exchange only (RFC 4492 / RFC 8422), AEAD-GCM suites and the RSA-PSS,
+// RSA-PKCS#1-v1.5/SHA-2 and ECDSA ServerKeyExchange schemes enabled by DIOSTREAMTLSCONFIG — no client
 // certificates, no session resumption, no renegotiation.
 
 #pragma once

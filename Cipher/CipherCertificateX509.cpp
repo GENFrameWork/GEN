@@ -1371,6 +1371,18 @@ XDWORD CIPHERCERTIFICATEX509::GetRSASSAPSSSaltSize()
 }
 
 
+CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE CIPHERCERTIFICATEX509::GetPublicKeyRSASSAPSSHashType()
+{
+  return publickeyRSASSAPSShashtype;
+}
+
+
+XDWORD CIPHERCERTIFICATEX509::GetPublicKeyRSASSAPSSSaltSize()
+{
+  return publickeyRSASSAPSSsaltsize;
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         CIPHERCERTIFICATEX509_ID* CIPHERCERTIFICATEX509::GetIssuerID()
@@ -1897,14 +1909,28 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
     }
 
   #ifdef CIPHER_ASYMMETRIC_RSA_ACTIVE
-  if(!publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1"), false))
+  if(!publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1"), false) ||
+     !publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.10"), false))
     {
+      bool RSAE = !publickeyalgorithmOID.Compare(__L("1.2.840.113549.1.1.1"), false);
+
+      if(RSAE)
+        {
+          if(publickeyalgorithmparameters.tag &&
+             ((publickeyalgorithmparameters.tag != 0x05) || publickeyalgorithmparameters.size)) return false;
+        }
+       else
+        {
+          if(!publickeyalgorithmparameters.tag ||
+             !CIPHERCERTIFICATEX509_DER_RSASSAPSSParameters(publickeyalgorithmparameters,
+                                                            publickeyRSASSAPSShashtype,
+                                                            publickeyRSASSAPSSsaltsize)) return false;
+        }
+
       CIPHERCERTIFICATEX509_DERREADER publickeyreader(&publickeybits.data[1], publickeybits.size - 1);
       CIPHERCERTIFICATEX509_DERITEM   publickeysequence;
 
-      if((publickeyalgorithmparameters.tag &&
-          ((publickeyalgorithmparameters.tag != 0x05) || publickeyalgorithmparameters.size)) ||
-         !publickeyreader.Read(publickeysequence) || !publickeyreader.IsEnd() || (publickeysequence.tag != 0x30))
+      if(!publickeyreader.Read(publickeysequence) || !publickeyreader.IsEnd() || (publickeysequence.tag != 0x30))
         {
           return false;
         }
@@ -3223,6 +3249,8 @@ void CIPHERCERTIFICATEX509::Clean()
   algorithmtypestr.Empty();
   RSASSAPSShashtype               = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN;
   RSASSAPSSsaltsize               = 0;
+  publickeyRSASSAPSShashtype      = CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_UNKNOWN;
+  publickeyRSASSAPSSsaltsize      = 0;
 
   publiccipherkeyusaged           = false;
   publiccipherkeybasicconstraints = false;

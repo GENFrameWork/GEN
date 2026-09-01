@@ -462,6 +462,18 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
                                ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||
                                ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P384_PUBLICKEY_SIZE));
 
+              #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+              validsize = validsize ||
+                          ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768) &&
+                           (key->GetKeyData()->GetSize() == CIPHERSECP256R1MLKEM768_CLIENTSHARESIZE));
+              #endif
+
+              #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+              validsize = validsize ||
+                          ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024) &&
+                           (key->GetKeyData()->GetSize() == CIPHERSECP384R1MLKEM1024_CLIENTSHARESIZE));
+              #endif
+
               #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
               validsize = validsize ||
                           ((candidate == DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768) &&
@@ -503,7 +515,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected)
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERCERTIFICATEX509* leafcertificate, XWORD& selected)
 * @brief      Select the first configured signature scheme (server preference order) offered by the client and
 *             usable with the local leaf certificate's public key
 * @note       INTERNAL
@@ -516,13 +528,13 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected)
+bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERCERTIFICATEX509* leafcertificate, XWORD& selected)
 {
   for(XDWORD c=0; c<config->GetSignatureSchemes()->GetSize(); c++)
     {
       XWORD candidate = config->GetSignatureSchemes()->Get(c);
 
-      if(!DIOSTREAMTLSSIGNATURE::IsSupported(candidate, leafpublickey)) continue;
+      if(!DIOSTREAMTLSSIGNATURE::IsSupported(candidate, leafcertificate)) continue;
 
       for(XDWORD d=0; d<offered.GetSize(); d++)
         {
@@ -1330,7 +1342,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
           !localcertificatechain || localcertificatechain->IsEmpty() || !localprivatekey ||
          !leafcertificate.Decode((*localcertificatechain->Get(0))) ||
          !CipherSuite_Select(offeredciphersuites, ciphersuite) ||
-         !SignatureScheme_Select(offeredsignatureschemes, leafcertificate.GetPublicCipherKey(), signaturescheme))
+         !SignatureScheme_Select(offeredsignatureschemes, &leafcertificate, signaturescheme))
         {
           return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE);
         }
@@ -1900,7 +1912,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificateVerify_Process(XBUFFER& mes
 
   leaf = clientcertificatevalidator.GetLeafCertificate();
   if(!schemeoffered || !leaf || !leaf->GetPublicCipherKey() ||
-     !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey()) ||
+     !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf) ||
      !session->TranscriptHash(transcripthash))
     {
       return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECRYPT_ERROR);

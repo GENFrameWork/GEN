@@ -3,7 +3,7 @@
 * @file       DIOStreamTLS12Record.cpp
 *
 * @class      DIOSTREAMTLS12RECORD
-* @brief      Data Input/Output Stream TLS 1.2 record protection class (RFC 5246 + RFC 5288)
+* @brief      Data Input/Output Stream TLS 1.2 record protection class (RFC 5246 + RFC 5288 + RFC 7905)
 * @ingroup    DATAIO
 *
 * @copyright  EndoraSoft. All rights reserved.
@@ -35,11 +35,17 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "DIOStreamTLS12Record.h"
+#include "DIOStreamTLS12KeySchedule.h"
 
 #include <string.h>
 
+#include "Cipher.h"
 #include "CipherKeySymmetrical.h"
 #include "CipherAESGCM.h"
+
+#ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+#include "CipherChaCha20Poly1305.h"
+#endif
 
 #include "DIOStreamTLSRecord.h"
 
@@ -201,7 +207,29 @@ bool DIOSTREAMTLS12RECORD::SetKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, 
       return false;
     }
 
-  cipher[direction] = GEN_NEW CIPHERAESGCM();
+  if(fixedIV.GetSize() == DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE)
+    {
+      if((key.GetSize() != 16) && (key.GetSize() != 32))
+        {
+          GEN_DELETE this->key[direction];
+          this->key[direction] = NULL;
+          return false;
+        }
+
+      cipher[direction] = GEN_NEW CIPHERAESGCM();
+    }
+  else
+    {
+      #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+      if((fixedIV.GetSize() == DIOSTREAMTLS12KEYSCHEDULE_CHACHA20_FIXEDIVSIZE) && (key.GetSize() == 32))
+        {
+          cipher[direction] = GEN_NEW CIPHERCHACHA20POLY1305();
+        }
+
+      #endif
+    }
+
   if(!cipher[direction])
     {
       GEN_DELETE this->key[direction];
@@ -290,13 +318,13 @@ bool DIOSTREAMTLS12RECORD::ResetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direc
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool DIOSTREAMTLS12RECORD::Nonce_Build(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBYTE* explicitnonce, XBUFFER& nonce)
-* @brief      Build the AEAD nonce as salt + explicit nonce
+* @brief      Build the AEAD nonce for AES-GCM (RFC 5288) or ChaCha20-Poly1305 (RFC 7905)
 * @note       INTERNAL
 * @ingroup    DATAIO
 *
 * @param[in]  direction : Direction value.
-* @param[in]  explicitnonce : The 8 bytes that travel in the clear at the front of the fragment.
-* @param[out] nonce : Buffer that receives the 12 byte nonce.
+* @param[in]  explicitnonce : AES-GCM nonce_explicit, or NULL for ChaCha20-Poly1305.
+* @param[out] nonce : Buffer that receives the 12 byte AEAD nonce.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -304,14 +332,40 @@ bool DIOSTREAMTLS12RECORD::ResetSequence(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direc
 bool DIOSTREAMTLS12RECORD::Nonce_Build(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction, XBYTE* explicitnonce, XBUFFER& nonce)
 {
   if(direction >= DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS) return false;
-  if(!explicitnonce)                                     return false;
 
   nonce.Delete();
 
-  if(!nonce.Add(fixedIV[direction]))                                        return false;
-  if(!nonce.Add(explicitnonce, DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE))     return false;
+  if(fixedIV[direction].GetSize() == DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE)
+    {
+      if(!explicitnonce) return false;
 
-  return true;
+      if(!nonce.Add(fixedIV[direction])) return false;
+      if(!nonce.Add(explicitnonce, DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE)) return false;
+
+      return (nonce.GetSize() == 12);
+    }
+
+  #ifdef CIPHER_SYMMETRIC_CHACHA20POLY1305_ACTIVE
+
+  if(fixedIV[direction].GetSize() == DIOSTREAMTLS12KEYSCHEDULE_CHACHA20_FIXEDIVSIZE)
+    {
+      if(!nonce.Add(fixedIV[direction])) return false;
+
+      XBYTE paddedsequence[12] = { 0 };
+
+      for(int c=7; c>=0; c--)
+        {
+          paddedsequence[11-c] = (XBYTE)((sequence[direction] >> (c*8)) & 0xFF);
+        }
+
+      for(XDWORD c=0; c<12; c++) nonce.Get()[c] ^= paddedsequence[c];
+
+      return true;
+    }
+
+  #endif
+
+  return false;
 }
 
 
@@ -388,28 +442,33 @@ bool DIOSTREAMTLS12RECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttyp
 
   if(!cipher[direction]) return false;
 
-  if(sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS) return false; // Never encrypt beyond the AES-GCM key-usage limit
+  bool isAESGCM = (fixedIV[direction].GetSize() == DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE);
+
+  if(isAESGCM && sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS) return false;
   if(sequence[direction] == 0xFFFFFFFFFFFFFFFFULL) return false;                  // The sequence number must never wrap
 
-  // The explicit nonce only has to be unique for the key. Using the sequence number is what every
-  // implementation does, and it makes a capture reproducible.
-  XBYTE explicitnonce[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE];
+  XBYTE explicitnonce[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE] = { 0 };
+  XDWORD explicitnoncesize = isAESGCM?DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE:DIOSTREAMTLS12RECORD_CHACHA20_EXPLICITNONCESIZE;
 
-  for(int c=7; c>=0; c--)
+  if(isAESGCM)
     {
-      explicitnonce[7-c] = (XBYTE)((sequence[direction] >> (c*8)) & 0xFF);
+      // RFC 5288: AES-GCM carries the sequence-derived nonce_explicit in each record.
+      for(int c=7; c>=0; c--)
+        {
+          explicitnonce[7-c] = (XBYTE)((sequence[direction] >> (c*8)) & 0xFF);
+        }
     }
 
   XBUFFER nonce;
   XBUFFER additionaldata;
   XBUFFER tag;
 
-  if(!Nonce_Build(direction, explicitnonce, nonce))                                                      return false;
+  if(!Nonce_Build(direction, explicitnoncesize?explicitnonce:NULL, nonce))                                                      return false;
   if(!AAD_Build(sequence[direction], contenttype, DIOSTREAMTLS_MSG_VERSION_TLS_1_2, size, additionaldata)) return false;
 
   if(!cipher[direction]->CipherAEAD(plain, size, nonce, additionaldata, tag)) return false;
 
-  XDWORD fragmentsize = DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE + size + tag.GetSize();
+  XDWORD fragmentsize = explicitnoncesize + size + tag.GetSize();
 
   if(fragmentsize > DIOSTREAMTLS12RECORD_MAXCIPHERSIZE) return false;
 
@@ -419,7 +478,7 @@ bool DIOSTREAMTLS12RECORD::Protect_OneRecord(DIOSTREAMTLS_CONTENTTYPE contenttyp
   XBUFFER encodedrecord;
 
   if(!header.SetToBuffer(encodedrecord, false))                                      return false;
-  if(!encodedrecord.Add(explicitnonce, DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE))      return false;
+  if(explicitnoncesize && !encodedrecord.Add(explicitnonce, explicitnoncesize))                   return false;
   if(!encodedrecord.Add(cipher[direction]->GetResult()))                              return false;
   if(!encodedrecord.Add(tag))                                                         return false;
   if(!records.Add(encodedrecord))                                                     return false;
@@ -550,14 +609,16 @@ bool DIOSTREAMTLS12RECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& 
     }
 
   XDWORD tagsize = cipher[direction]->GetAEADTagSize();
+  bool   isAESGCM = (fixedIV[direction].GetSize() == DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE);
+  XDWORD explicitnoncesize = isAESGCM?DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE:DIOSTREAMTLS12RECORD_CHACHA20_EXPLICITNONCESIZE;
 
-  if((XDWORD)length < (DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE + tagsize))
+  if((XDWORD)length < (explicitnoncesize + tagsize))
     {
       lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_RECORD_MAC;
       return false;
     }
 
-  XWORD  plainlength = (XWORD)(length - DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE - tagsize);
+  XWORD  plainlength = (XWORD)(length - explicitnoncesize - tagsize);
   XBYTE* fragment    = &record.Get()[DIOSTREAMTLS_MSG_RECORDHEADER_SIZE];
 
   if(plainlength > DIOSTREAMTLS12RECORD_MAXPLAINSIZE)
@@ -571,15 +632,15 @@ bool DIOSTREAMTLS12RECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& 
   XBUFFER ciphertext;
   XBUFFER tag;
 
-  if(!Nonce_Build(direction, fragment, nonce) ||
+  if(!Nonce_Build(direction, explicitnoncesize?fragment:NULL, nonce) ||
      !AAD_Build(sequence[direction], contenttype, header.GetProtocolVersion(), plainlength, additionaldata))
     {
       lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
       return false;
     }
 
-  if((plainlength && !ciphertext.Add(&fragment[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE], plainlength)) ||
-     !tag.Add(&fragment[DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE + plainlength], tagsize))
+  if((plainlength && !ciphertext.Add(&fragment[explicitnoncesize], plainlength)) ||
+     !tag.Add(&fragment[explicitnoncesize + plainlength], tagsize))
     {
       lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
       return false;

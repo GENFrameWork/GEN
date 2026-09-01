@@ -130,6 +130,8 @@ class CIPHERCERTIFICATEX509
     XSTRING*                                GetAlgorithmTypeStr                     ();
     CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE GetRSASSAPSSHashType                 ();
     XDWORD                                  GetRSASSAPSSSaltSize                    ();
+    CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE GetPublicKeyRSASSAPSSHashType        ();
+    XDWORD                                  GetPublicKeyRSASSAPSSSaltSize           ();
 
     CIPHERCERTIFICATEX509_ID*               GetIssuerID                             ();  
 
@@ -219,6 +221,8 @@ class CIPHERCERTIFICATEX509
     XSTRING                                 algorithmtypestr;
     CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE RSASSAPSShashtype;
     XDWORD                                  RSASSAPSSsaltsize;
+    CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE publickeyRSASSAPSShashtype;
+    XDWORD                                  publickeyRSASSAPSSsaltsize;
 
     CIPHERCERTIFICATEX509_ID                issuerID;
     

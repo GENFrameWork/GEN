@@ -1154,7 +1154,15 @@ class DIOSTREAMTLS : public T
                                               if(result == DIOSTREAMTLS13SESSION_RESULT_ERROR)
                                                 {
                                                   TLSError_Set(DIOSTREAMTLS_ERROR_RECORD);
-                                                  Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, session.GetLastRecordAlertDescription());
+
+                                                  // A fatal alert received from the peer already terminates the TLS
+                                                  // connection.  RFC 8446 does not require, and interoperability is
+                                                  // improved by avoiding, a second fatal alert in response.
+                                                  if(session.GetReceivedAlertLevel() != DIOSTREAMTLS_ALERT_LEVEL_FATAL)
+                                                    {
+                                                      Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, session.GetLastRecordAlertDescription());
+                                                    }
+
                                                   T::SetStatus(DIOSTREAMSTATUS_DISCONNECTED);
                                                   return false;
                                                 }

@@ -451,7 +451,9 @@ bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFI
   CIPHERCREDENTIALSLOADER loader;
   XVECTOR<XBUFFER*> certificatechain;
   CIPHERKEY* privatekey = NULL;
-  bool status = loader.Credentials_Load(certificatefile, keyfile, NULL, certificatechain, privatekey);
+  XSTRING* configuredpassword = cfg->WebServer_GetPrivateKeyPassword();
+  XCHAR* password = (configuredpassword && !configuredpassword->IsEmpty())?configuredpassword->Get():NULL;
+  bool status = loader.Credentials_Load(certificatefile, keyfile, password, certificatechain, privatekey);
 
   keyfile.SecureDelete();
 

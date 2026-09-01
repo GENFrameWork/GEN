@@ -35,6 +35,14 @@
 #include "CipherECDSA.h"
 #include "CipherECDSAX25519.h"
 
+#ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+#include "CipherSecP256r1MLKEM768.h"
+#endif
+
+#ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+#include "CipherSecP384r1MLKEM1024.h"
+#endif
+
 #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
 #include "CipherX25519MLKEM768.h"
 #endif
@@ -155,6 +163,14 @@ class DIOSTREAMTLS13SESSION
     DIOSTREAMTLS13KEYSCHEDULE                 keyschedule;
     DIOSTREAMTLSRECORD                      record;
     CIPHERECDSAX25519                       keyexchange;
+
+    #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+    CIPHERSECP256R1MLKEM768                 keyexchangesecp256r1mlkem768;
+    #endif
+
+    #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+    CIPHERSECP384R1MLKEM1024                keyexchangesecp384r1mlkem1024;
+    #endif
 
     #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
     CIPHERX25519MLKEM768                    keyexchangex25519mlkem768;

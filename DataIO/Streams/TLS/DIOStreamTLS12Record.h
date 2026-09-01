@@ -3,7 +3,7 @@
 * @file       DIOStreamTLS12Record.h
 *
 * @class      DIOSTREAMTLS12RECORD
-* @brief      Data Input/Output Stream TLS 1.2 record protection class (RFC 5246 + RFC 5288)
+* @brief      Data Input/Output Stream TLS 1.2 record protection class (RFC 5246 + RFC 5288 + RFC 7905)
 * @ingroup    DATAIO
 *
 * @copyright  EndoraSoft. All rights reserved.
@@ -41,7 +41,8 @@
 
 #define DIOSTREAMTLS12RECORD_MAXPLAINSIZE                     16384             // 2^14, RFC 5246 section 6.2.1
 #define DIOSTREAMTLS12RECORD_MAXCIPHERSIZE                    (16384 + 2048)    // Plain text plus the AEAD expansion
-#define DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE                8                 // GenericAEADCipher.nonce_explicit, RFC 5288
+#define DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE                8                 // AES-GCM GenericAEADCipher.nonce_explicit, RFC 5288
+#define DIOSTREAMTLS12RECORD_CHACHA20_EXPLICITNONCESIZE       0                 // RFC 7905
 #define DIOSTREAMTLS12RECORD_TAGSIZE                          16
 #define DIOSTREAMTLS12RECORD_AADSIZE                          13                // seq(8) + type(1) + version(2) + length(2)
 
@@ -51,7 +52,7 @@
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
-class CIPHERAESGCM;
+class CIPHER;
 class CIPHERKEYSYMMETRICAL;
 
 
@@ -98,7 +99,7 @@ class DIOSTREAMTLS12RECORD
 
     bool                                    isini;
 
-    CIPHERAESGCM*                           cipher[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
+    CIPHER*                                 cipher[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     CIPHERKEYSYMMETRICAL*                   key[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     XBUFFER                                 fixedIV[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
 
