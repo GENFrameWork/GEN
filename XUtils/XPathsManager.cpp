@@ -451,8 +451,16 @@ bool XPATHSMANAGER::AdjustRootPathDefault(XCHAR* assetsdirname)
 
   if(!GetPathOfSection(XPATHSMANAGERSECTIONTYPE_ROOT, xpathroot))
     {
-      GEN_XFACTORY.Delete_Dir(xdir);
-      return false;
+      // No ROOT section has been registered yet (typical on the very first call, before any AddPathSection):
+      // fall back to the application executable path as the search base instead of operating on an empty
+      // XPATH, which Slash_Add() below would otherwise turn into the real filesystem root ("/").
+      if(!appexecpath || appexecpath->IsEmpty())
+        {
+          GEN_XFACTORY.Delete_Dir(xdir);
+          return false;
+        }
+
+      xpathroot = appexecpath->Get();
     }
 
   xpathroot.Slash_Add();
