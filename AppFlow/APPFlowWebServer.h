@@ -56,6 +56,10 @@ class DIOWEBSERVER_XEVENT;
 class DIOWEBSERVER;
 class APPFLOWCFG;
 class DIOSTREAMTLSCONFIG;
+#ifdef DIO_STREAMTLS_ACTIVE
+class CIPHERCREDENTIALSPROVIDER;
+class CIPHERSECRETPROVIDER;
+#endif
 
 
 class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
@@ -73,6 +77,13 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
     bool                        Ini                               (DIOSTREAMTLSCONFIG* tlsconfig, XDWORD port, int timeoutserverpage, XSTRING* addrlocal);
 
     DIOWEBSERVER*               GetWebServer                      ();
+
+    #ifdef DIO_STREAMTLS_ACTIVE
+    bool                        SetTLSCredentialsProvider          (CIPHERCREDENTIALSPROVIDER* provider, bool owner = false);
+    CIPHERCREDENTIALSPROVIDER*  GetTLSCredentialsProvider          ();
+    bool                        SetTLSSecretProvider               (CIPHERSECRETPROVIDER* provider, bool owner = false);
+    CIPHERSECRETPROVIDER*       GetTLSSecretProvider               ();
+    #endif
 
     bool                        GetIsAuthenticatedAccess          ();
     bool                        GetIsApiRestOnly                  ();
@@ -119,6 +130,13 @@ class APPFLOWWEBSERVER : public XOBSERVER, public XSUBJECT
 
     XSTRING                     page_login;
     XSTRING                     page_password;
+
+    #ifdef DIO_STREAMTLS_ACTIVE
+    CIPHERCREDENTIALSPROVIDER*  tlscredentialsprovider;
+    bool                        tlscredentialsproviderowner;
+    CIPHERSECRETPROVIDER*       tlssecretprovider;
+    bool                        tlssecretproviderowner;
+    #endif
 
     DIOWEBSERVER_PLUGIN_PHP*    pluginPHP;
 };

@@ -212,7 +212,8 @@ static bool DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(XWORD group)
 {
   bool supported = (group == DIOSTREAMTLS_MSG_CURVEID_X25519)   ||
                    (group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
-                   (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
+                   (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) ||
+                   (group == DIOSTREAMTLS_MSG_CURVEID_SECP521R1);
 
   #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
   supported = supported || (group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768);
@@ -2024,12 +2025,9 @@ DIOSTREAMTLSSERVERCREDENTIALS* DIOSTREAMTLSCONFIG::ServerCredentials_Add(XCHAR* 
          (pattern.FindCharacter(__C('*'), 1) >= 0)) return NULL;
     }
 
-  for(XDWORD c=0; c<servercredentials.GetSize(); c++)
-    {
-      DIOSTREAMTLSSERVERCREDENTIALS* existing = servercredentials.Get(c);
-
-      if(existing && !existing->GetServerName()->Compare(pattern, true)) return NULL;
-    }
+  // More than one credential set may intentionally use the same SNI pattern.  TLS 1.3 can then choose
+  // the best certificate/key pair according to the client's signature_algorithms and
+  // signature_algorithms_cert extensions (for example Ed25519, ECDSA and RSA alternatives).
 
   credentials = GEN_NEW DIOSTREAMTLSSERVERCREDENTIALS();
   if(!credentials) return NULL;
@@ -3025,6 +3023,12 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XW
                                                 XBUFFER& applicationprotocol, XSTRING& servername,
                                                 XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
 {
+  // Enforce the ticket-key cryptoperiod on the resumption path too.  Previously rotation was guaranteed when a new
+  // ticket was sealed, but a server receiving only resumptions could keep opening tickets with the current key after
+  // its configured rotation interval.  ServerInitialize rotates current -> previous while retaining the previous key
+  // long enough for already-issued, individually unexpired tickets to remain usable.
+  if(!sessionresumptionactive || !SessionResumption_ServerInitialize()) return false;
+
   if(ticket.GetSize() <= (sizeof(XQWORD) + CIPHERAESGCM_NONCESIZE + CIPHERAESGCM_TAGSIZE)) return false;
 
   XBUFFER nonce;
@@ -3135,7 +3139,8 @@ bool DIOSTREAMTLSCONFIG::CryptographicPolicy_Validate()
       if(!DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(group)) return false;
       if((group == DIOSTREAMTLS_MSG_CURVEID_X25519) ||
          (group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) ||
-         (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) TLS12group = true;
+         (group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) ||
+         (group == DIOSTREAMTLS_MSG_CURVEID_SECP521R1)) TLS12group = true;
     }
 
   bool RSAsignature = false;
@@ -3290,6 +3295,7 @@ void DIOSTREAMTLSCONFIG::Clean()
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP256R1);
   SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP384R1);
+  SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_SECP521R1);
 
   // Default handshake-signing profile. Keep the existing RSA-PSS defaults for backwards compatibility. The trust
   // anchor source is configured independently through CIPHERTRUSTPROVIDERX509, so applications can extend these

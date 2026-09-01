@@ -182,6 +182,8 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     XVECTOR<XWORD>                          offeredkeysharegroups;
     XVECTOR<XWORD>                          offeredsignatureschemes;
     XVECTOR<XWORD>                          requestedclientsignatureschemes;
+    XVECTOR<XWORD>                          requestedclientcertificatesignatureschemes;
+    XVECTOR<XBUFFER*>                       requestedclientcertificateauthorities;
     XVECTOR<DIOSTREAMTLS_ALPN_TYPE>          offeredapplicationprotocols;
     XVECTOR<XBUFFER*>                        offeredapplicationprotocolsraw;
 

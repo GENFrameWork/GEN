@@ -143,6 +143,9 @@ class DIOSTREAMTLS12SESSION
     CIPHERECDSA                             keyexchangep384;
     XSECUREBUFFER                           keyexchangep384private;
     XBUFFER                                 keyexchangep384public;
+    CIPHERECDSA                             keyexchangep521;
+    XSECUREBUFFER                           keyexchangep521private;
+    XBUFFER                                 keyexchangep521public;
 
     XBUFFER                                 recordinput;
     DIOSTREAMTLS_ALERT_DESCRIPTION          lastrecordalertdescription;

@@ -173,6 +173,8 @@ class CIPHERCERTIFICATEX509
     XBUFFER*                                GetSubjectPublicKeyData                 ();
     bool                                    HasSubjectKeyIdentifier                 ();
     XBUFFER*                                GetSubjectKeyIdentifier                 ();
+    bool                                    HasAuthorityKeyIdentifier               ();
+    XBUFFER*                                GetAuthorityKeyIdentifier               ();
 
     bool                                    HasBasicConstraints                     ();
     bool                                    IsCertificateAuthority                  ();
@@ -248,6 +250,8 @@ class CIPHERCERTIFICATEX509
     XBUFFER                                 subjectpublickeydata;
     bool                                    hassubjectkeyidentifier;
     XBUFFER                                 subjectkeyidentifier;
+    bool                                    hasauthoritykeyidentifier;
+    XBUFFER                                 authoritykeyidentifier;
 
     bool                                    hasbasicconstraints;
     bool                                    iscertificateauthority;

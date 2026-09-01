@@ -62,7 +62,7 @@
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS12SESSION::DIOSTREAMTLS12SESSION() : keyexchangep384(CIPHERTYPE_ECDSA_SECP384R1)
+DIOSTREAMTLS12SESSION::DIOSTREAMTLS12SESSION() : keyexchangep384(CIPHERTYPE_ECDSA_SECP384R1), keyexchangep521(CIPHERTYPE_ECDSA_SECP521R1)
 {
   Clean();
 }
@@ -217,7 +217,7 @@ DIOSTREAMTLS12RECORD* DIOSTREAMTLS12SESSION::GetRecord()
 * @brief      Generate a fresh ephemeral ECDHE key pair
 * @ingroup    DATAIO
 *
-* @param[in]  group : TLS supported group value (X25519, secp256r1 or secp384r1).
+* @param[in]  group : TLS supported group value (X25519, secp256r1, secp384r1 or secp521r1).
 * @param[out] publickey : Encoded public key (uncompressed EC point / raw X25519 key).
 *
 * @return     bool : true if the operation is successful; otherwise false.
@@ -269,6 +269,21 @@ bool DIOSTREAMTLS12SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                     keyexchangep384private.FillBuffer(0);
                                                     keyexchangep384private.SecureDelete();
                                                     keyexchangep384public.Delete();
+                                                    return false;
+                                                  }
+                                                break;
+
+      case DIOSTREAMTLS_MSG_CURVEID_SECP521R1 : keyexchangep521private.FillBuffer(0);
+                                                keyexchangep521private.SecureDelete();
+                                                keyexchangep521public.Delete();
+
+                                                if(!keyexchangep521.KeyPair_Create(keyexchangep521private,
+                                                                                  keyexchangep521public) ||
+                                                   !publickey.Add(keyexchangep521public))
+                                                  {
+                                                    keyexchangep521private.FillBuffer(0);
+                                                    keyexchangep521private.SecureDelete();
+                                                    keyexchangep521public.Delete();
                                                     return false;
                                                   }
                                                 break;
@@ -327,6 +342,14 @@ bool DIOSTREAMTLS12SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
                                                   }
                                                 break;
 
+      case DIOSTREAMTLS_MSG_CURVEID_SECP521R1 : if(keyexchangep521private.IsEmpty() ||
+                                                   !keyexchangep521.SharedSecret_Create(keyexchangep521private,
+                                                                                       publickey, sharedsecret))
+                                                  {
+                                                    return false;
+                                                  }
+                                                break;
+
                                       default : return false;
     }
 
@@ -352,6 +375,10 @@ void DIOSTREAMTLS12SESSION::KeyExchange_Delete()
   keyexchangep384private.FillBuffer(0);
   keyexchangep384private.SecureDelete();
   keyexchangep384public.Delete();
+
+  keyexchangep521private.FillBuffer(0);
+  keyexchangep521private.SecureDelete();
+  keyexchangep521public.Delete();
 }
 
 

@@ -186,7 +186,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       XWORD group = config->GetSupportedGroups()->Get(c);
       if((group != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
          (group != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
-         (group != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) continue;
+         (group != DIOSTREAMTLS_MSG_CURVEID_SECP384R1) &&
+         (group != DIOSTREAMTLS_MSG_CURVEID_SECP521R1)) continue;
       if(!supportedgroups.Add(group)) return false;
     }
 

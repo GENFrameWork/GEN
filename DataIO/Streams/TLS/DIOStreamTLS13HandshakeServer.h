@@ -109,6 +109,10 @@ class DIOSTREAMTLS13HANDSHAKESERVER
                                                                                               XBUFFER& peerpublickey, bool& helloretryrequestrequired,
                                                                                               bool& invalidkeyshare);
     bool                                    SignatureScheme_Select                           (XVECTOR<XWORD>& offered, CIPHERCERTIFICATEX509* leafcertificate, XWORD& selected);
+    bool                                    ServerCredentials_Select                         (XCHAR* servername, XVECTOR<XWORD>& offeredsignatures, XVECTOR<XWORD>& offeredcertificatesignatures,
+                                                                                              XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey,
+                                                                                              XBUFFER*& OCSPstapledresponse, CIPHERCERTIFICATEX509& leafcertificate,
+                                                                                              XWORD& signaturescheme);
     void                                    ApplicationProtocol_Select                       (DIOSTREAMTLS_MSG_EXTENSION_ALPN* offered);
 
     bool                                    SetError                                         (DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR, bool sendalert = true);

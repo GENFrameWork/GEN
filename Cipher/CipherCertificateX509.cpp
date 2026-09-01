@@ -1722,7 +1722,8 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
   static const XBYTE OIDextendedkeyusage[] = { 0x55, 0x1D, 0x25 };
   static const XBYTE OIDsubjectaltname[]   = { 0x55, 0x1D, 0x11 };
   static const XBYTE OIDnameconstraints[]  = { 0x55, 0x1D, 0x1E };
-  static const XBYTE OIDsubjectkeyidentifier[] = { 0x55, 0x1D, 0x0E };
+  static const XBYTE OIDsubjectkeyidentifier[]   = { 0x55, 0x1D, 0x0E };
+  static const XBYTE OIDauthoritykeyidentifier[] = { 0x55, 0x1D, 0x23 };
   static const XBYTE OIDserverauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x01 };
   static const XBYTE OIDclientauth[]       = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x02 };
   static const XBYTE OIDOCSPsigning[]      = { 0x2B, 0x06, 0x01, 0x05, 0x05, 0x07, 0x03, 0x09 };
@@ -2230,6 +2231,61 @@ bool CIPHERCERTIFICATEX509::Decode(XBUFFER& certificate)
 
               hassubjectkeyidentifier = true;
             }
+          else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDauthoritykeyidentifier, sizeof(OIDauthoritykeyidentifier)))
+            {
+              CIPHERCERTIFICATEX509_DERREADER authorityouter(extensionvalue.data, extensionvalue.size);
+              CIPHERCERTIFICATEX509_DERITEM   authoritysequence;
+
+              if(hasauthoritykeyidentifier || !authorityouter.Read(authoritysequence) || !authorityouter.IsEnd() ||
+                 (authoritysequence.tag != 0x30))
+                {
+                  return false;
+                }
+
+              CIPHERCERTIFICATEX509_DERREADER authorityreader(authoritysequence.data, authoritysequence.size);
+              bool seenkeyidentifier = false;
+              bool seenissuer        = false;
+              bool seenserial        = false;
+
+              while(!authorityreader.IsEnd())
+                {
+                  CIPHERCERTIFICATEX509_DERITEM authorityitem;
+                  if(!authorityreader.Read(authorityitem)) return false;
+
+                  if(authorityitem.tag == 0x80)
+                    {
+                      if(seenkeyidentifier || seenissuer || seenserial || !authorityitem.size ||
+                         !authoritykeyidentifier.Add((XBYTE*)authorityitem.data, authorityitem.size)) return false;
+                      seenkeyidentifier = true;
+                    }
+                   else if(authorityitem.tag == 0xA1)
+                    {
+                      if(seenissuer || seenserial || !authorityitem.size) return false;
+                      // authorityCertIssuer is useful as an additional hint, but path validation in GEN
+                      // is based on the normalized issuer/subject DN plus the signature.  Keep accepting
+                      // this optional field while using keyIdentifier, when present, to disambiguate keys.
+                      seenissuer = true;
+                    }
+                   else if(authorityitem.tag == 0x82)
+                    {
+                      if(seenserial || !authorityitem.size) return false;
+                      seenserial = true;
+                    }
+                   else
+                    {
+                      return false;
+                    }
+                }
+
+              // RFC 5280 requires authorityCertIssuer and authorityCertSerialNumber to appear together.
+              if(seenissuer != seenserial) return false;
+
+              hasauthoritykeyidentifier = true;
+
+              // A critical AKI that cannot be reduced to the keyIdentifier form is not fully processed by
+              // this implementation and therefore must fail closed instead of being silently ignored.
+              if(critical && !seenkeyidentifier) return false;
+            }
           else if(CIPHERCERTIFICATEX509_DER_OIDCompare(extensionOID, OIDkeyusage, sizeof(OIDkeyusage)))
             {
               CIPHERCERTIFICATEX509_DERREADER keyusagereader(extensionvalue.data, extensionvalue.size);
@@ -2595,6 +2651,18 @@ bool CIPHERCERTIFICATEX509::HasSubjectKeyIdentifier()
 XBUFFER* CIPHERCERTIFICATEX509::GetSubjectKeyIdentifier()
 {
   return &subjectkeyidentifier;
+}
+
+
+bool CIPHERCERTIFICATEX509::HasAuthorityKeyIdentifier()
+{
+  return hasauthoritykeyidentifier && !authoritykeyidentifier.IsEmpty();
+}
+
+
+XBUFFER* CIPHERCERTIFICATEX509::GetAuthorityKeyIdentifier()
+{
+  return &authoritykeyidentifier;
 }
 
 
@@ -3261,6 +3329,9 @@ void CIPHERCERTIFICATEX509::Clean()
 
   hasbasicconstraints             = false;
   hassubjectkeyidentifier         = false;
+  hasauthoritykeyidentifier       = false;
+  subjectkeyidentifier.Empty();
+  authoritykeyidentifier.Empty();
   iscertificateauthority          = false;
   basicconstraintspathlength      = -1;
 

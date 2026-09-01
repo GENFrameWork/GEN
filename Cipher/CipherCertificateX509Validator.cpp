@@ -56,13 +56,57 @@
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
+
+static bool CIPHERCERTIFICATEX509VALIDATOR_IsSelfIssued(CIPHERCERTIFICATEX509* certificate)
+{
+  return certificate && certificate->GetIssuerData() && certificate->GetSubjectData() &&
+         certificate->GetIssuerData()->Compare((*certificate->GetSubjectData()));
+}
+
+static XDWORD CIPHERCERTIFICATEX509VALIDATOR_NonSelfIssuedCABelow(XVECTOR<CIPHERCERTIFICATEX509*>& certificates,
+                                                                   XDWORD issuerindex)
+{
+  XDWORD count = 0;
+  XDWORD limit = issuerindex;
+  if(limit > certificates.GetSize()) limit = certificates.GetSize();
+
+  // Index 0 is the end-entity certificate. pathLenConstraint counts only non-self-issued
+  // intermediate CA certificates below the CA carrying the constraint.
+  for(XDWORD c=1; c<limit; c++)
+    {
+      CIPHERCERTIFICATEX509* certificate = certificates.Get(c);
+      if(certificate && certificate->IsCertificateAuthority() &&
+         !CIPHERCERTIFICATEX509VALIDATOR_IsSelfIssued(certificate)) count++;
+    }
+
+  return count;
+}
+
+static bool CIPHERCERTIFICATEX509VALIDATOR_IssuerIdentifierMatches(CIPHERCERTIFICATEX509* certificate,
+                                                                    CIPHERCERTIFICATEX509* issuer)
+{
+  if(!certificate || !issuer) return false;
+  if(certificate->HasAuthorityKeyIdentifier() && issuer->HasSubjectKeyIdentifier())
+    {
+      XBUFFER* authority = certificate->GetAuthorityKeyIdentifier();
+      XBUFFER* subject   = issuer->GetSubjectKeyIdentifier();
+      if(!authority || !subject || !authority->Compare((*subject))) return false;
+    }
+  return true;
+}
+
 static bool CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(CIPHERCERTIFICATEX509* root,
                                                                   XVECTOR<CIPHERCERTIFICATEX509*>& certificates,
                                                                   bool rootisinchain)
 {
   if(!root || !root->HasNameConstraints()) return true;
   XDWORD limit=certificates.GetSize(); if(rootisinchain&&limit) limit--;
-  for(XDWORD c=0;c<limit;c++) if(!root->AreNamesPermitted(certificates.Get(c))) return false;
+  for(XDWORD c=0;c<limit;c++)
+    {
+      CIPHERCERTIFICATEX509* certificate=certificates.Get(c);
+      if((c>0) && CIPHERCERTIFICATEX509VALIDATOR_IsSelfIssued(certificate)) continue;
+      if(!root->AreNamesPermitted(certificate)) return false;
+    }
   return true;
 }
 
@@ -399,7 +443,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
         }
 
       if((c > 0) && (certificate->GetBasicConstraintsPathLength() >= 0) &&
-         ((int)c - 1 > certificate->GetBasicConstraintsPathLength()))
+         (CIPHERCERTIFICATEX509VALIDATOR_NonSelfIssuedCABelow(certificates, c) >
+          (XDWORD)certificate->GetBasicConstraintsPathLength()))
         {
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH);
         }
@@ -434,8 +479,12 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
       CIPHERCERTIFICATEX509* issuer = certificates.Get(issuerindex);
       if(!issuer || !issuer->HasNameConstraints()) continue;
       for(XDWORD subjectindex=0; subjectindex<issuerindex; subjectindex++)
-        if(!issuer->AreNamesPermitted(certificates.Get(subjectindex)))
-          return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
+        {
+          CIPHERCERTIFICATEX509* subject=certificates.Get(subjectindex);
+          if((subjectindex>0) && CIPHERCERTIFICATEX509VALIDATOR_IsSelfIssued(subject)) continue;
+          if(!issuer->AreNamesPermitted(subject))
+            return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_NAMECONSTRAINT);
+        }
     }
 
   for(XDWORD c=0; c+1<certificates.GetSize(); c++)
@@ -443,7 +492,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
       CIPHERCERTIFICATEX509* certificate = certificates.Get(c);
       CIPHERCERTIFICATEX509* issuer      = certificates.Get(c+1);
 
-      if(!certificate->GetIssuerData()->Compare((*issuer->GetSubjectData())))
+      if(!certificate->GetIssuerData()->Compare((*issuer->GetSubjectData())) ||
+         !CIPHERCERTIFICATEX509VALIDATOR_IssuerIdentifierMatches(certificate, issuer))
         {
           return SetError(CIPHERCERTIFICATEX509VALIDATOR_ERROR_INVALIDCA);
         }
@@ -503,7 +553,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
           return true;
         }
 
-      if(!chainend->GetIssuerData()->Compare((*root->GetSubjectData())))
+      if(!chainend->GetIssuerData()->Compare((*root->GetSubjectData())) ||
+         !CIPHERCERTIFICATEX509VALIDATOR_IssuerIdentifierMatches(chainend, root))
         {
           continue;
         }
@@ -517,7 +568,8 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certifi
         }
 
       if((root->GetBasicConstraintsPathLength() >= 0) &&
-         ((int)certificates.GetSize() - 1 > root->GetBasicConstraintsPathLength()))
+         (CIPHERCERTIFICATEX509VALIDATOR_NonSelfIssuedCABelow(certificates, certificates.GetSize()) >
+          (XDWORD)root->GetBasicConstraintsPathLength()))
         {
           if(!rooterrorfound) rooterror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_PATHLENGTH;
           rooterrorfound = true;
