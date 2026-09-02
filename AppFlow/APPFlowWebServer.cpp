@@ -54,6 +54,7 @@
 
 #ifdef DIO_STREAMTLS_ACTIVE
 #include "CipherCredentialsLoader.h"
+#include "CipherCredentialsProvider.h"
 #endif
 
 
@@ -98,6 +99,24 @@ APPFLOWWEBSERVER::APPFLOWWEBSERVER()
 APPFLOWWEBSERVER::~APPFLOWWEBSERVER()
 {
   End();
+
+  #ifdef DIO_STREAMTLS_ACTIVE
+  if(tlscredentialsprovider && tlscredentialsproviderowner)
+    {
+      GEN_DELETE tlscredentialsprovider;
+    }
+
+  tlscredentialsprovider      = NULL;
+  tlscredentialsproviderowner = false;
+
+  if(tlssecretprovider && tlssecretproviderowner)
+    {
+      GEN_DELETE tlssecretprovider;
+    }
+
+  tlssecretprovider      = NULL;
+  tlssecretproviderowner = false;
+  #endif
 
   Clean();
 }
@@ -157,19 +176,18 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
     }
 
   //-------------------------------------------------------------------------------------------------------------------------------
-  // TLS (HTTPS): there is no separate "istls" setting -- the WEB server runs TLS by default and only falls back
-  // to plain HTTP when path_privatekey and/or path_certificate are left empty (see APPFLOWCFG::WebServer_IsTLS(),
-  // which is derived from those two paths, not stored). The port, local address and timeout are shared with the
-  // plain-HTTP path below -- this is the same single listener, just wrapped in TLS instead of speaking plain
-  // HTTP, not a second independent one.
+  // TLS (HTTPS): there is no separate "istls" setting. TLS is enabled when a credentials provider has been
+  // injected or, for the default file-backed provider, when path_privatekey/path_certificate are configured.
+  // The port, local address and timeout are shared with the plain-HTTP path below -- this is the same single
+  // listener, just wrapped in TLS instead of speaking plain HTTP, not a second independent one.
 
   #ifdef DIO_STREAMTLS_ACTIVE
-  if(cfg->WebServer_IsTLS())
+  if(tlscredentialsprovider || cfg->WebServer_IsTLS())
     {
       DIOSTREAMTLSCONFIG* tlsconfig = Ini_BuildTLSConfig(cfg);
       if(!tlsconfig)
         {
-          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server: path_privatekey/path_certificate are configured but the credentials could not be loaded from those paths."));
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server: TLS credentials could not be loaded from the configured provider or credential paths."));
 
           return false;
         }
@@ -187,11 +205,11 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, bool doinitialconnectitivitytest,  b
 *
 * @fn         bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, XDWORD port, int timeoutserverpage, XSTRING* addrlocal)
 * @brief      Initialize a secondary listener (e.g. WebSocket) on its own port, following the same
-*             cfg->WebServer_IsTLS() decision and credentials as the main Ini(APPFLOWCFG*, ...) listener.
+*             TLS provider / cfg->WebServer_IsTLS() decision and credentials as the main Ini(APPFLOWCFG*, ...) listener.
 * @ingroup    APPFLOW
 *
-* @param[in]  cfg : Configuration object to use (only WebServer_IsTLS() / WebServer_PathPrivateKey() /
-*             WebServer_PathCertificate() / WebServer_GetLocalAddress() are consulted here -- port and
+* @param[in]  cfg : Configuration object to use (WebServer_IsTLS() / credential paths are consulted when no
+*             TLS credentials provider is injected; WebServer_GetLocalAddress() is also used -- port and
 *             timeoutserverpage are taken from the parameters below, not from cfg, since this listener runs on
 *             a different port than the one configured in cfg->WebServer_GetPort()).
 * @param[in]  port : Port number to use.
@@ -210,12 +228,12 @@ bool APPFLOWWEBSERVER::Ini(APPFLOWCFG* cfg, XDWORD port, int timeoutserverpage, 
   if(!webserver)  return false;
 
   #ifdef DIO_STREAMTLS_ACTIVE
-  if(cfg->WebServer_IsTLS())
+  if(tlscredentialsprovider || cfg->WebServer_IsTLS())
     {
       DIOSTREAMTLSCONFIG* tlsconfig = Ini_BuildTLSConfig(cfg);
       if(!tlsconfig)
         {
-          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server (port %d): path_privatekey/path_certificate are configured but the credentials could not be loaded from those paths."), (int)port);
+          APPFLOW_LOG_ENTRY(XLOGLEVEL_ERROR, DIOWEBSERVER_LOGSECTIONID, false, __L("WEB server (port %d): TLS credentials could not be loaded from the configured provider or credential paths."), (int)port);
 
           return false;
         }
@@ -428,34 +446,63 @@ bool APPFLOWWEBSERVER::Ini_ReadFile(XPATH& path, XBUFFER& filedata)
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFIG* tlsconfig)
-* @brief      Read the configured files and delegate every PKI/format decision to Cipher
+* @brief      Load TLS credentials through the configured provider or the default file-backed provider.
 * @ingroup    APPFLOW
+*
+* @param[in]  cfg : Configuration object to use.
+* @param[in]  tlsconfig : TLS configuration that receives the local credentials.
+*
+* @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFIG* tlsconfig)
 {
   if(!cfg || !tlsconfig) return false;
 
+  CIPHERCREDENTIALSPROVIDER* provider = tlscredentialsprovider;
+
   XPATH pathkey;
   XPATH pathcert;
   XBUFFER keyfile;
   XBUFFER certificatefile;
+  CIPHERCREDENTIALSPROVIDERBUFFER bufferprovider;
+  CIPHERSECRETPROVIDERSTRING secretprovider;
 
-  if(!Ini_ResolveCertificatePath(cfg->WebServer_PathPrivateKey(), pathkey) ||
-     !Ini_ResolveCertificatePath(cfg->WebServer_PathCertificate(), pathcert) ||
-     !Ini_ReadFile(pathkey, keyfile) || !Ini_ReadFile(pathcert, certificatefile))
+  if(!provider)
     {
-      return false;
+      if(!Ini_ResolveCertificatePath(cfg->WebServer_PathPrivateKey(), pathkey) ||
+         !Ini_ResolveCertificatePath(cfg->WebServer_PathCertificate(), pathcert) ||
+         !Ini_ReadFile(pathkey, keyfile) || !Ini_ReadFile(pathcert, certificatefile))
+        {
+          keyfile.SecureDelete();
+          certificatefile.Delete();
+          return false;
+        }
+
+      CIPHERSECRETPROVIDER* selectedsecretprovider = tlssecretprovider;
+
+      if(!selectedsecretprovider)
+        {
+          secretprovider.SetSource(cfg->WebServer_GetPrivateKeyPassword());
+          selectedsecretprovider = &secretprovider;
+        }
+
+      bufferprovider.SetCertificateData(&certificatefile);
+      bufferprovider.SetPrivateKeyData(&keyfile);
+      bufferprovider.SetSecretProvider(selectedsecretprovider);
+
+      provider = &bufferprovider;
     }
 
-  CIPHERCREDENTIALSLOADER loader;
   XVECTOR<XBUFFER*> certificatechain;
   CIPHERKEY* privatekey = NULL;
-  bool status = loader.Credentials_Load(certificatefile, keyfile, NULL, certificatechain, privatekey);
+  bool status = provider->Credentials_Load(certificatechain, privatekey);
 
   keyfile.SecureDelete();
+  certificatefile.Delete();
 
   if(status) status = tlsconfig->SetLocalPrivateKey(privatekey);
+
   for(XDWORD c=0; status && c<certificatechain.GetSize(); c++)
     {
       XBUFFER* certificate = certificatechain.Get(c);
@@ -464,8 +511,6 @@ bool APPFLOWWEBSERVER::Ini_LoadTLSCredentials(APPFLOWCFG* cfg, DIOSTREAMTLSCONFI
 
   CIPHERCREDENTIALSLOADER::Certificates_Delete(certificatechain);
   CIPHERCREDENTIALSLOADER::PrivateKey_Delete(privatekey);
-
-  if(!status) tlsconfig->LocalCredentials_Delete();
 
   return status;
 }
@@ -570,6 +615,62 @@ DIOWEBSERVER* APPFLOWWEBSERVER::GetWebServer()
 {
   return webserver;
 }
+
+
+#ifdef DIO_STREAMTLS_ACTIVE
+
+bool APPFLOWWEBSERVER::SetTLSCredentialsProvider(CIPHERCREDENTIALSPROVIDER* provider, bool owner)
+{
+  if(provider == tlscredentialsprovider)
+    {
+      tlscredentialsproviderowner = owner;
+      return true;
+    }
+
+  if(tlscredentialsprovider && tlscredentialsproviderowner)
+    {
+      GEN_DELETE tlscredentialsprovider;
+    }
+
+  tlscredentialsprovider      = provider;
+  tlscredentialsproviderowner = owner;
+
+  return true;
+}
+
+
+CIPHERCREDENTIALSPROVIDER* APPFLOWWEBSERVER::GetTLSCredentialsProvider()
+{
+  return tlscredentialsprovider;
+}
+
+
+bool APPFLOWWEBSERVER::SetTLSSecretProvider(CIPHERSECRETPROVIDER* provider, bool owner)
+{
+  if(provider == tlssecretprovider)
+    {
+      tlssecretproviderowner = owner;
+      return true;
+    }
+
+  if(tlssecretprovider && tlssecretproviderowner)
+    {
+      GEN_DELETE tlssecretprovider;
+    }
+
+  tlssecretprovider      = provider;
+  tlssecretproviderowner = owner;
+
+  return true;
+}
+
+
+CIPHERSECRETPROVIDER* APPFLOWWEBSERVER::GetTLSSecretProvider()
+{
+  return tlssecretprovider;
+}
+
+#endif
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1302,6 +1403,13 @@ void APPFLOWWEBSERVER::Clean()
 
   isauthenticatedaccess      = false;
   isapirestonly              = false;
+
+  #ifdef DIO_STREAMTLS_ACTIVE
+  tlscredentialsprovider      = NULL;
+  tlscredentialsproviderowner = false;
+  tlssecretprovider           = NULL;
+  tlssecretproviderowner      = false;
+  #endif
 
 //useragentID                = NULL;
 

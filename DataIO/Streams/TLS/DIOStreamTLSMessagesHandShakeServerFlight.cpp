@@ -1386,6 +1386,16 @@ XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicket()
   return &ticket;
 }
 
+XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetMaximumEarlyDataSize()
+{
+  return maximumearlydatasize;
+}
+
+void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetMaximumEarlyDataSize(XDWORD size)
+{
+  maximumearlydatasize = size;
+}
+
 
 bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
@@ -1396,12 +1406,19 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetToBuffer(XBUFFER& buffer, b
       return false;
     }
 
+  XWORD extensionslength = maximumearlydatasize ? 8 : 0;
   if(!buffer.Add(ticketlifetime) || !buffer.Add(ticketageadd) ||
      !buffer.Add((XBYTE)ticketnonce.GetSize()) || !buffer.Add(ticketnonce) ||
      !buffer.Add((XWORD)ticket.GetSize()) || !buffer.Add(ticket) ||
-     !buffer.Add((XWORD)0))
+     !buffer.Add(extensionslength))
     {
       return false;
+    }
+
+  if(maximumearlydatasize)
+    {
+      if(!buffer.Add((XWORD)DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA) ||
+         !buffer.Add((XWORD)4) || !buffer.Add(maximumearlydatasize)) return false;
     }
 
   return true;
@@ -1418,6 +1435,7 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetFromBuffer(XBUFFER& buffer,
 
   ticketnonce.Delete();
   ticket.Delete();
+  maximumearlydatasize = 0;
 
   if(!buffer.Extract(ticketlifetime) || !buffer.Extract(ticketageadd) ||
      (ticketlifetime > 604800) || !buffer.Extract(nonce_length) ||
@@ -1440,8 +1458,25 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetFromBuffer(XBUFFER& buffer,
   if(!ticket.Resize(ticket_length) || buffer.Extract(ticket.Get(), 0, ticket_length) != ticket_length) return false;
   if(!buffer.Extract(extensions_length) || buffer.GetSize() != extensions_length) return false;
 
-  // GEN currently does not advertise early_data in NewSessionTicket. Unknown future extensions are ignored.
-  return (buffer.Extract(NULL, 0, extensions_length) == extensions_length);
+  maximumearlydatasize = 0;
+  while(buffer.GetSize())
+    {
+      XWORD extensiontype = 0;
+      XWORD extensionlength = 0;
+      if(buffer.GetSize() < 4 || !buffer.Extract(extensiontype) || !buffer.Extract(extensionlength) ||
+         buffer.GetSize() < extensionlength) return false;
+
+      if(extensiontype == DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA)
+        {
+          if(maximumearlydatasize || extensionlength != 4 || !buffer.Extract(maximumearlydatasize)) return false;
+        }
+       else
+        {
+          if(buffer.Extract(NULL, 0, extensionlength) != extensionlength) return false;
+        }
+    }
+
+  return true;
 }
 
 
@@ -1451,4 +1486,5 @@ void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::Clean()
   ticketageadd    = 0;
   ticketnonce.Delete();
   ticket.Delete();
+  maximumearlydatasize = 0;
 }

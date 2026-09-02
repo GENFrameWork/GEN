@@ -130,6 +130,8 @@ class CIPHERCERTIFICATEX509
     XSTRING*                                GetAlgorithmTypeStr                     ();
     CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE GetRSASSAPSSHashType                 ();
     XDWORD                                  GetRSASSAPSSSaltSize                    ();
+    CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE GetPublicKeyRSASSAPSSHashType        ();
+    XDWORD                                  GetPublicKeyRSASSAPSSSaltSize           ();
 
     CIPHERCERTIFICATEX509_ID*               GetIssuerID                             ();  
 
@@ -171,6 +173,8 @@ class CIPHERCERTIFICATEX509
     XBUFFER*                                GetSubjectPublicKeyData                 ();
     bool                                    HasSubjectKeyIdentifier                 ();
     XBUFFER*                                GetSubjectKeyIdentifier                 ();
+    bool                                    HasAuthorityKeyIdentifier               ();
+    XBUFFER*                                GetAuthorityKeyIdentifier               ();
 
     bool                                    HasBasicConstraints                     ();
     bool                                    IsCertificateAuthority                  ();
@@ -219,6 +223,8 @@ class CIPHERCERTIFICATEX509
     XSTRING                                 algorithmtypestr;
     CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE RSASSAPSShashtype;
     XDWORD                                  RSASSAPSSsaltsize;
+    CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE publickeyRSASSAPSShashtype;
+    XDWORD                                  publickeyRSASSAPSSsaltsize;
 
     CIPHERCERTIFICATEX509_ID                issuerID;
     
@@ -244,6 +250,8 @@ class CIPHERCERTIFICATEX509
     XBUFFER                                 subjectpublickeydata;
     bool                                    hassubjectkeyidentifier;
     XBUFFER                                 subjectkeyidentifier;
+    bool                                    hasauthoritykeyidentifier;
+    XBUFFER                                 authoritykeyidentifier;
 
     bool                                    hasbasicconstraints;
     bool                                    iscertificateauthority;

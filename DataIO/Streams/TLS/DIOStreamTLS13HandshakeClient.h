@@ -101,6 +101,12 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    SignatureSchemes_WidenECDSA                      ();
     bool                                    IsApplicationProtocolNegotiated                  ();
     bool                                    IsSessionResumed                                 ();
+    bool                                    EarlyData_Prepare                                 (XDWORD size);
+    bool                                    IsEarlyDataOffered                                ();
+    bool                                    IsEarlyDataAccepted                               ();
+    XDWORD                                  GetMaximumEarlyDataSize                           ();
+    bool                                    EarlyData_Protect                                 (XBYTE* data, XDWORD size, XBUFFER& records);
+    bool                                    EarlyData_Protect                                 (XBUFFER& data, XBUFFER& records);
     DIOSTREAMTLS_ALPN_TYPE                  GetApplicationProtocol                           ();
     XBUFFER*                                GetApplicationProtocolRaw                        ();
 
@@ -182,6 +188,8 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     XVECTOR<XWORD>                          offeredkeysharegroups;
     XVECTOR<XWORD>                          offeredsignatureschemes;
     XVECTOR<XWORD>                          requestedclientsignatureschemes;
+    XVECTOR<XWORD>                          requestedclientcertificatesignatureschemes;
+    XVECTOR<XBUFFER*>                       requestedclientcertificateauthorities;
     XVECTOR<DIOSTREAMTLS_ALPN_TYPE>          offeredapplicationprotocols;
     XVECTOR<XBUFFER*>                        offeredapplicationprotocolsraw;
 
@@ -193,6 +201,10 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    resumptionaccepted;
     XBUFFER                                 resumptionpsk;
     XWORD                                   resumptionciphersuite;
+    bool                                    earlydataoffered;
+    bool                                    earlydataaccepted;
+    XDWORD                                  maximumearlydatasize;
+    XDWORD                                  preparedearlydatasize;
 
     XBUFFER                                 firstclienthello;
     XWORD                                   currentkeysharegroup;

@@ -71,6 +71,7 @@ class DIOSTREAMTLSRECORD
     bool                                    IsIni                                             ();
 
     bool                                    SetKeys                                           (DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    bool                                    ClearKeys                                         (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
     bool                                    IsProtected                                       (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
 
     XQWORD                                  GetSequence                                       (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);

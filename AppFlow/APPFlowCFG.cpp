@@ -242,6 +242,7 @@ bool APPFLOWCFG::DoVariableMapping()
   // XPATHSMANAGERSECTIONTYPE_CERTIFICATES.
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                           , &webserver_path_privatekey                                          , __L("Path to the private key file for the WEB server (empty = no TLS)")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                          , &webserver_path_certificate                                         , __L("Path to the certificate file for the WEB server (empty = no TLS)")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+  AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PRIVATEKEY_PASSWORD                       , &webserver_privatekey_password                                      , __L("Password for encrypted TLS private key / PKCS#12 container")        , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   #endif
   #endif
 
@@ -1734,6 +1735,21 @@ XPATH* APPFLOWCFG::WebServer_PathCertificate()
   return &webserver_path_certificate;
 }
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* APPFLOWCFG::WebServer_GetPrivateKeyPassword()
+* @brief      Web server encrypted private key / PKCS#12 password (TLS)
+* @ingroup    APPFLOW
+*
+* @return     XSTRING* : Pointer to the configured password; empty when no password is required.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* APPFLOWCFG::WebServer_GetPrivateKeyPassword()
+{
+  return &webserver_privatekey_password;
+}
+
 #endif
 
 #endif
@@ -1987,6 +2003,12 @@ void APPFLOWCFG::Clean()
   #ifdef DIO_STREAMTLS_ACTIVE
   webserver_path_privatekey.Empty();
   webserver_path_certificate.Empty();
+  if(webserver_privatekey_password.Get())
+    {
+      volatile XCHAR* data = webserver_privatekey_password.Get();
+      for(XDWORD c=0; c<webserver_privatekey_password.GetSize(); c++) data[c]=0;
+    }
+  webserver_privatekey_password.Empty();
   #endif
   #endif
 

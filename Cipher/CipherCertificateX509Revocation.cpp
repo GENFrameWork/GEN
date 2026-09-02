@@ -405,36 +405,62 @@ CIPHERCERTIFICATEX509REVOCATION_RESULT CIPHERCERTIFICATEX509REVOCATION::Validate
      issuername.encodedsize!=issuer.GetSubjectData()->GetSize() || memcmp(issuername.encoded,issuer.GetSubjectData()->Get(),issuername.encodedsize))
     return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
   CIPHERREV_DER thisupdate,nextupdate; XQWORD now;
-  if(!fields.Read(thisupdate) || !fields.Read(nextupdate) || !CIPHERREV_Now(now) || !CIPHERREV_TimeWindow(thisupdate,&nextupdate,now,false))
+  memset(&nextupdate,0,sizeof(nextupdate));
+  if(!fields.Read(thisupdate) || !CIPHERREV_Now(now))
     return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
-  bool revoked=false;
+
+  bool haveitem=false;
   if(!fields.End())
     {
       if(!fields.Read(item)) return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
-      if(item.tag==0x30)
+      haveitem=true;
+      if((item.tag==0x17) || (item.tag==0x18))
         {
-          CIPHERREV_READER entries(item.data,item.size);
-          while(!entries.End())
-            {
-              CIPHERREV_DER entry,serial,date;
-              if(!entries.Read(entry) || entry.tag!=0x30) return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
-              CIPHERREV_READER entryfields(entry.data,entry.size); XDATETIME ignored;
-              if(!entryfields.Read(serial) || !CIPHERREV_Serial(serial) || !entryfields.Read(date) || !CIPHERREV_Time(date,ignored))
-                return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
-              if(!entryfields.End())
-                {
-                  CIPHERREV_DER extensions;
-                  if(!version2 || !entryfields.Read(extensions) || !entryfields.End() || !CIPHERREV_CRLEntryExtensions(extensions))
-                    return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
-                }
-              if(CIPHERREV_SerialEqual(serial,certificate.GetSerial())) revoked=true;
-            }
-          if(!fields.End()) { if(!fields.Read(item)) return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID; }
-          else memset(&item,0,sizeof(item));
+          nextupdate=item;
+          haveitem=false;
         }
-      if(item.tag && (!version2 || item.tag!=0xA0 || !fields.End() || !CIPHERREV_CRLExtensions(item,issuer)))
-        return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
     }
+
+  if(!CIPHERREV_TimeWindow(thisupdate,nextupdate.tag?&nextupdate:NULL,now,false))
+    return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+
+  if(!haveitem && !fields.End())
+    {
+      if(!fields.Read(item)) return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+      haveitem=true;
+    }
+
+  bool revoked=false;
+  if(haveitem && (item.tag==0x30))
+    {
+      CIPHERREV_READER entries(item.data,item.size);
+      while(!entries.End())
+        {
+          CIPHERREV_DER entry,serial,date;
+          if(!entries.Read(entry) || entry.tag!=0x30) return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+          CIPHERREV_READER entryfields(entry.data,entry.size); XDATETIME ignored;
+          if(!entryfields.Read(serial) || !CIPHERREV_Serial(serial) || !entryfields.Read(date) || !CIPHERREV_Time(date,ignored))
+            return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+          if(!entryfields.End())
+            {
+              CIPHERREV_DER extensions;
+              if(!version2 || !entryfields.Read(extensions) || !entryfields.End() || !CIPHERREV_CRLEntryExtensions(extensions))
+                return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+            }
+          if(CIPHERREV_SerialEqual(serial,certificate.GetSerial())) revoked=true;
+        }
+
+      haveitem=false;
+      if(!fields.End())
+        {
+          if(!fields.Read(item)) return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+          haveitem=true;
+        }
+    }
+
+  if(haveitem && (!version2 || item.tag!=0xA0 || !fields.End() || !CIPHERREV_CRLExtensions(item,issuer)))
+    return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+  if(!haveitem && !fields.End()) return CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
   return revoked?CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED:CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD;
 }
 

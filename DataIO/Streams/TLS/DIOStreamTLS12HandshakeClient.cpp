@@ -141,6 +141,9 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256    :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384    :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512    :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256     :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384     :
+          case DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512     :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384 :
           case DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512 : break;
@@ -150,12 +153,41 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       if(!signatureschemes.Add(scheme)) return false;
     }
 
+  // TLS 1.2 still permits RSA PKCS#1 v1.5 with SHA-2 for ServerKeyExchange. TLS 1.3 deliberately
+  // excludes these schemes, so DIOSTREAMTLSCONFIG keeps them in the certificate-signature policy instead of the
+  // TLS 1.3 handshake-signature list. In TLS 1.2 there is only one signature_algorithms extension for this purpose;
+  // therefore add the SHA-2 PKCS#1 schemes only when the caller's certificate policy explicitly authorizes them.
+  if(config->GetCertificateSignatureSchemes())
+    {
+      for(XDWORD c=0; c<config->GetCertificateSignatureSchemes()->GetSize(); c++)
+        {
+          XWORD scheme = config->GetCertificateSignatureSchemes()->Get(c);
+
+          if((scheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256) &&
+             (scheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384) &&
+             (scheme != DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512)) continue;
+
+          bool alreadypresent = false;
+          for(XDWORD d=0; d<signatureschemes.GetSize(); d++)
+            {
+              if(signatureschemes.Get(d) == scheme)
+                {
+                  alreadypresent = true;
+                  break;
+                }
+            }
+
+          if(!alreadypresent && !signatureschemes.Add(scheme)) return false;
+        }
+    }
+
   for(XDWORD c=0; c<config->GetSupportedGroups()->GetSize(); c++)
     {
       XWORD group = config->GetSupportedGroups()->Get(c);
       if((group != DIOSTREAMTLS_MSG_CURVEID_X25519) &&
          (group != DIOSTREAMTLS_MSG_CURVEID_SECP256R1) &&
-         (group != DIOSTREAMTLS_MSG_CURVEID_SECP384R1)) continue;
+         (group != DIOSTREAMTLS_MSG_CURVEID_SECP384R1) &&
+         (group != DIOSTREAMTLS_MSG_CURVEID_SECP521R1)) continue;
       if(!supportedgroups.Add(group)) return false;
     }
 
@@ -166,7 +198,13 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
       XWORD scheme = signatureschemes.Get(c);
       if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256) ||
          (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384) ||
-         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512)) allowRSA = true;
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512) ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256)  ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384)  ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512)  ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256)     ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384)     ||
+         (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512)) allowRSA = true;
       if((scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256) ||
          (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384) ||
          (scheme == DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512)) allowECDSA = true;
@@ -176,9 +214,11 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
     {
       XWORD suite = config->GetTLS12CipherSuites()->Get(c);
       bool  RSA   = (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256) ||
-                    (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384);
+                    (suite == DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_256_GCM_SHA384) ||
+                    (suite == DIOSTREAMTLS_MSG_CIPHER_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
       bool  ECDSA = (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256) ||
-                    (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384);
+                    (suite == DIOSTREAMTLS12_CIPHER_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384) ||
+                    (suite == DIOSTREAMTLS_MSG_CIPHER_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256);
 
       if((RSA && allowRSA) || (ECDSA && allowECDSA))
         if(!ciphersuites.Add(suite)) return false;
@@ -596,6 +636,14 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
       if(!body->GetCipherSuites()->Add(ciphersuites.Get(c))) return SetError();
     }
 
+  // RFC 7507: this value is not a negotiable cipher suite. It is sent only when this TLS 1.2 ClientHello is a
+  // retry after a failed TLS 1.3 attempt. A caller explicitly configured as TLS-1.2-only must not send it.
+  if(checkdowngradesentinel &&
+     !body->GetCipherSuites()->Add(DIOSTREAMTLS_MSG_CIPHER_FALLBACK_SCSV))
+    {
+      return SetError();
+    }
+
   if(servername && servername[0])
     {
       DIOSTREAMTLS_MSG_EXTENSION_SNI*            extension;
@@ -805,8 +853,20 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
 
                       alertbody.Add(&onerecord.Get()[DIOSTREAMTLS_MSG_RECORDHEADER_SIZE], header.GetLength());
 
-                      if(alert.GetFromBuffer(alertbody, false))
+                      if(alert.GetFromBuffer(alertbody, false) && alertbody.IsEmpty())
                         {
+                          if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
+                             (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_INAPPROPRIATE_FALLBACK))
+                            {
+                              SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_DOWNGRADEDETECTED);
+                            }
+
+                          if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
+                             ((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE) ||
+                              (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY)))
+                            {
+                              algorithmrejected = true;
+                            }
                         }
                     }
                    else
@@ -871,7 +931,15 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
           case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE          : if(!session.HandshakeInput_Add(plain)) return SetError();
                                                                 break;
 
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC : if((plain.GetSize() != 1) || (plain.GetByte(0) != 1)) return SetError();
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC : if((state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_WAIT_CHANGECIPHERSPEC) ||
+                                                                      (plain.GetSize() != 1) || (plain.GetByte(0) != 1))
+                                                                    {
+                                                                      return SetError();
+                                                                    }
+
+                                                                  // RFC 5246 section 7.4.9: a peer Finished is valid only after its
+                                                                  // ChangeCipherSpec. A duplicate CCS is rejected because the state moves on.
+                                                                  state = DIOSTREAMTLS12HANDSHAKECLIENT_STATE_WAIT_FINISHED;
                                                                 break;
 
           case DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT              : { DIOSTREAMTLS_MSG_ALERT alert;
@@ -881,11 +949,18 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Process()
 
                                                                   // The two descriptions a real TLS 1.2 server sends when nothing allowed by the
                                                                   // configured common cryptographic policy is mutually usable.
-                                                                  if((alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL) &&
-                                                                     ((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE) ||
-                                                                      (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY)))
+                                                                  if(alert.GetLevel() == DIOSTREAMTLS_ALERT_LEVEL_FATAL)
                                                                     {
-                                                                      algorithmrejected = true;
+                                                                      if((alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE) ||
+                                                                         (alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY))
+                                                                        {
+                                                                          algorithmrejected = true;
+                                                                        }
+
+                                                                      if(alert.GetDescription() == DIOSTREAMTLS_ALERT_DESCRIPTION_INAPPROPRIATE_FALLBACK)
+                                                                        {
+                                                                          SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_DOWNGRADEDETECTED);
+                                                                        }
                                                                     }
 
                                                                   return SetError();
@@ -1300,7 +1375,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerKeyExchange_Process(XBUFFER& message)
       CIPHERCERTIFICATEX509* leaf = certificatevalidator.GetLeafCertificate();
 
       if(!authenticationconfigured || !leaf || !leaf->GetPublicCipherKey() ||
-         !DIOSTREAMTLSSIGNATURE::IsSupported(ske.GetBody()->GetSignatureAlgorithm(), leaf->GetPublicCipherKey()))
+         !DIOSTREAMTLSSIGNATURE::IsSupported(ske.GetBody()->GetSignatureAlgorithm(), leaf))
         {
           SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
           return SetError();
@@ -1507,8 +1582,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Finished_Process(XBUFFER& message)
   XBUFFER                                                       transcripthash;
   XBUFFER                                                       expectedverifydata;
 
-  if((state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_WAIT_CHANGECIPHERSPEC) &&
-     (state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_WAIT_FINISHED))
+  if(state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_WAIT_FINISHED)
     {
       return SetError();
     }

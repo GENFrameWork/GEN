@@ -182,6 +182,29 @@ bool DIOSTREAMTLSRECORD::IsIni()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLSRECORD::ClearKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @brief      Remove the traffic keys for one direction and return it to clear records
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSRECORD::ClearKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  if(!isini || direction >= DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS) return false;
+
+  if(key[direction] && key[direction]->Get()) DIOStreamTLS_BufferErase((*key[direction]->Get()));
+  DIOStreamTLS_BufferErase(IV[direction]);
+
+  if(cipher[direction]) { GEN_DELETE cipher[direction]; cipher[direction] = NULL; }
+  if(key[direction])    { GEN_DELETE key[direction];    key[direction] = NULL; }
+
+  sequence[direction] = 0;
+  isprotected[direction] = false;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Install the traffic keys of a level in one direction, and restart its sequence number
 * @note       RFC 8446 section 5.3: every time the keys change, the sequence number goes back to zero.
@@ -205,7 +228,7 @@ bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREA
       return false;
     }
 
-  XBUFFER trafficzkey;
+  XSECUREBUFFER trafficzkey;
 
   if(!keyschedule->GetTrafficKeys(level, direction, trafficzkey, IV[direction]))
     {
@@ -538,8 +561,14 @@ bool DIOSTREAMTLSRECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& co
       return true;
     }
 
-  // RFC 8446 section 5.2: once protection is active, every TLSCiphertext record uses
-  // application_data as its outer content type. ChangeCipherSpec was handled above.
+  // RFC 8446 sections 5.1 and 5.2: protected TLS 1.3 records use the TLS 1.2
+  // legacy_record_version (0x0303) and application_data as the outer content type.
+  if(header.GetProtocolVersion() != DIOSTREAMTLSRECORD_LEGACYVERSION)
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION;
+      return false;
+    }
+
   if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA)
     {
       lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
@@ -549,6 +578,16 @@ bool DIOSTREAMTLSRECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& co
   if(!cipher[direction])
     {
       lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+      return false;
+    }
+
+  if((keyschedule->GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256 ||
+      keyschedule->GetCipherSuite() == DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384) &&
+     sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS)
+    {
+      // The peer has exhausted the traffic key without updating it.  Do not process
+      // any more ciphertext with a key that has reached the RFC 8446 usage bound.
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
       return false;
     }
 

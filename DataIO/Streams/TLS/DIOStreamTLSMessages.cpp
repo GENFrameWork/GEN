@@ -530,6 +530,8 @@ XCHAR* DIOSTREAMTLS_MSG_ALERT::GetDescriptionString(DIOSTREAMTLS_ALERT_DESCRIPTI
       case DIOSTREAMTLS_ALERT_DESCRIPTION_PROTOCOL_VERSION                : return __L("protocol_version (the server does NOT support TLS 1.3)");
       case DIOSTREAMTLS_ALERT_DESCRIPTION_INSUFFICIENT_SECURITY           : return __L("insufficient_security");
       case DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR                  : return __L("internal_error");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_INAPPROPRIATE_FALLBACK          : return __L("inappropriate_fallback");
+      case DIOSTREAMTLS_ALERT_DESCRIPTION_USER_CANCELED                   : return __L("user_canceled");
       case DIOSTREAMTLS_ALERT_DESCRIPTION_MISSING_EXTENSION               : return __L("missing_extension");
       case DIOSTREAMTLS_ALERT_DESCRIPTION_UNSUPPORTED_EXTENSION           : return __L("unsupported_extension");
       case DIOSTREAMTLS_ALERT_DESCRIPTION_UNRECOGNIZED_NAME               : return __L("unrecognized_name (SNI not served here)");

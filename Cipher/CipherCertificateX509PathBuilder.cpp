@@ -9,6 +9,22 @@
 #include "CipherCertificateX509PathBuilder.h"
 #include "GEN_Control.h"
 
+
+static bool CIPHERCERTIFICATEX509PATHBUILDER_IssuerIdentifierMatches(CIPHERCERTIFICATEX509* certificate,
+                                                                       CIPHERCERTIFICATEX509* issuer)
+{
+  if(!certificate || !issuer) return false;
+
+  if(certificate->HasAuthorityKeyIdentifier() && issuer->HasSubjectKeyIdentifier())
+    {
+      XBUFFER* authority = certificate->GetAuthorityKeyIdentifier();
+      XBUFFER* subject   = issuer->GetSubjectKeyIdentifier();
+      if(!authority || !subject || !authority->Compare((*subject))) return false;
+    }
+
+  return true;
+}
+
 CIPHERCERTIFICATEX509PATHBUILDER::CIPHERCERTIFICATEX509PATHBUILDER() {}
 CIPHERCERTIFICATEX509PATHBUILDER::~CIPHERCERTIFICATEX509PATHBUILDER() {}
 
@@ -41,6 +57,7 @@ bool CIPHERCERTIFICATEX509PATHBUILDER::IsTrusted(CIPHERCERTIFICATEX509* certific
       if(!root) continue;
       if(certificate->GetCertificateData()->Compare((*root->GetCertificateData()))) return true;
       if(certificate->GetIssuerData()->Compare((*root->GetSubjectData())) &&
+         CIPHERCERTIFICATEX509PATHBUILDER_IssuerIdentifierMatches(certificate, root) &&
          certificate->VerifySignature(root->GetPublicCipherKey())) return true;
     }
   return false;
@@ -91,7 +108,8 @@ bool CIPHERCERTIFICATEX509PATHBUILDER::SearchAll(CIPHERCERTIFICATEX509* current,
     {
       CIPHERCERTIFICATEX509* issuer = candidates.Get(c);
       if(!issuer || !issuer->IsCertificateAuthority() ||
-         !current->GetIssuerData()->Compare((*issuer->GetSubjectData()))) continue;
+         !current->GetIssuerData()->Compare((*issuer->GetSubjectData())) ||
+         !CIPHERCERTIFICATEX509PATHBUILDER_IssuerIdentifierMatches(current, issuer)) continue;
 
       bool used = false;
       if(current->GetCertificateData()->Compare((*issuer->GetCertificateData()))) used = true;

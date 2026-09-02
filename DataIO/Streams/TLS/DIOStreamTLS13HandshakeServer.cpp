@@ -73,6 +73,111 @@ static const XWORD DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_PADDING    = 0x0015;
 static const XWORD DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_EARLYDATA  = 0x002A;
 
 
+static bool DIOSTREAMTLS13_HANDSHAKESERVER_ServerNameMatch(XSTRING& pattern, XCHAR* servername)
+{
+  XSTRING hostname;
+  int     dot;
+
+  if(!servername || !servername[0] || pattern.IsEmpty()) return false;
+
+  hostname = servername;
+  if(hostname.Character_GetLast() == __C('.')) hostname.DeleteLastCharacter();
+  if(pattern.Character_GetLast()  == __C('.')) pattern.DeleteLastCharacter();
+
+  if(!pattern.Compare(hostname, true)) return true;
+
+  if((pattern.GetSize() < 3) || (pattern[0] != __C('*')) || (pattern[1] != __C('.')) ||
+     (pattern.FindCharacter(__C('*'), 1) >= 0)) return false;
+
+  dot = hostname.FindCharacter(__C('.'));
+  if(dot <= 0) return false;
+
+  XSTRING hostnamesuffix(&hostname.Get()[dot]);
+  XSTRING patternsuffix(&pattern.Get()[1]);
+
+  return !hostnamesuffix.Compare(patternsuffix, true);
+}
+
+
+static bool DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(XVECTOR<XWORD>& offered, XWORD scheme)
+{
+  for(XDWORD c=0; c<offered.GetSize(); c++)
+    {
+      if(offered.Get(c) == scheme) return true;
+    }
+
+  return false;
+}
+
+
+static XWORD DIOSTREAMTLS13_HANDSHAKESERVER_CertificateSignatureScheme(CIPHERCERTIFICATEX509& certificate)
+{
+  switch(certificate.GetAlgorithmType())
+    {
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA256WITHRSAENCRYPTION : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA256;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA384WITHRSAENCRYPTION : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA384;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA512WITHRSAENCRYPTION : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PKCS1_SHA512;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA256         : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP256R1_SHA256;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA384         : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP384R1_SHA384;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ECDSAWITHSHA512         : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_ECDSA_SECP521R1_SHA512;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_ED25519                 : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_ED25519;
+      case CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS               :
+        {
+          switch(certificate.GetRSASSAPSSHashType())
+            {
+              case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256 : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256;
+              case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384 : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384;
+              case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : return DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512;
+              default                                                : break;
+            }
+        }
+        break;
+
+      default : break;
+    }
+
+  return 0;
+}
+
+
+static bool DIOSTREAMTLS13_HANDSHAKESERVER_CertificateChainCompatible(XVECTOR<XBUFFER*>* chain, XVECTOR<XWORD>& offered)
+{
+  if(!chain || chain->IsEmpty() || offered.IsEmpty()) return false;
+
+  for(XDWORD c=0; c<chain->GetSize(); c++)
+    {
+      XBUFFER* certificateDER = chain->Get(c);
+      if(!certificateDER || certificateDER->IsEmpty()) return false;
+
+      CIPHERCERTIFICATEX509 certificate;
+      if(!certificate.Decode((*certificateDER))) return false;
+
+      if(certificate.GetAlgorithmType() == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_RSASSAPSS)
+        {
+          XWORD RSAEscheme = 0;
+          XWORD PSSscheme  = 0;
+
+          switch(certificate.GetRSASSAPSSHashType())
+            {
+              case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA256 : RSAEscheme = DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA256; PSSscheme = DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA256; break;
+              case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA384 : RSAEscheme = DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA384; PSSscheme = DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA384; break;
+              case CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE_SHA512 : RSAEscheme = DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_RSAE_SHA512; PSSscheme = DIOSTREAMTLS_MSG_SIGNATURESCHEME_RSA_PSS_PSS_SHA512; break;
+              default                                                : return false;
+            }
+
+          if(!DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(offered, RSAEscheme) &&
+             !DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(offered, PSSscheme)) return false;
+          continue;
+        }
+
+      XWORD scheme = DIOSTREAMTLS13_HANDSHAKESERVER_CertificateSignatureScheme(certificate);
+      if(!scheme || !DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(offered, scheme)) return false;
+    }
+
+  return true;
+}
+
+
 static bool DIOSTREAMTLS13_HANDSHAKESERVER_OCSPRequest_Parse(XBUFFER* data, bool& requested)
 {
   requested = false;
@@ -291,6 +396,11 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::IsSessionResumed()
   return resumptionaccepted;
 }
 
+bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataOffered() { return earlydataoffered; }
+bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataAccepted() { return earlydataaccepted; }
+XDWORD DIOSTREAMTLS13HANDSHAKESERVER::GetEarlyDataSize() { return session?session->GetEarlyDataSize():0; }
+XDWORD DIOSTREAMTLS13HANDSHAKESERVER::EarlyData_Read(XBYTE* data, XDWORD size) { return session?session->EarlyData_Read(data,size):0; }
+
 
 CIPHERCERTIFICATEX509* DIOSTREAMTLS13HANDSHAKESERVER::GetClientCertificate()
 {
@@ -460,7 +570,20 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
             {
               bool validsize = ((candidate == DIOSTREAMTLS_MSG_CURVEID_X25519)    && (key->GetKeyData()->GetSize() == CIPHERECDSAX25519_MAXKEY))          ||
                                ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP256R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P256_PUBLICKEY_SIZE)) ||
-                               ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P384_PUBLICKEY_SIZE));
+                               ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP384R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P384_PUBLICKEY_SIZE)) ||
+                               ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP521R1) && (key->GetKeyData()->GetSize() == CIPHERECDSA_P521_PUBLICKEY_SIZE));
+
+              #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+              validsize = validsize ||
+                          ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768) &&
+                           (key->GetKeyData()->GetSize() == CIPHERSECP256R1MLKEM768_CLIENTSHARESIZE));
+              #endif
+
+              #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+              validsize = validsize ||
+                          ((candidate == DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024) &&
+                           (key->GetKeyData()->GetSize() == CIPHERSECP384R1MLKEM1024_CLIENTSHARESIZE));
+              #endif
 
               #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
               validsize = validsize ||
@@ -503,7 +626,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected)
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERCERTIFICATEX509* leafcertificate, XWORD& selected)
 * @brief      Select the first configured signature scheme (server preference order) offered by the client and
 *             usable with the local leaf certificate's public key
 * @note       INTERNAL
@@ -516,19 +639,97 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERKEY* leafpublickey, XWORD& selected)
+bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offered, CIPHERCERTIFICATEX509* leafcertificate, XWORD& selected)
 {
   for(XDWORD c=0; c<config->GetSignatureSchemes()->GetSize(); c++)
     {
       XWORD candidate = config->GetSignatureSchemes()->Get(c);
 
-      if(!DIOSTREAMTLSSIGNATURE::IsSupported(candidate, leafpublickey)) continue;
+      if(!DIOSTREAMTLSSIGNATURE::IsSupported(candidate, leafcertificate)) continue;
 
       for(XDWORD d=0; d<offered.GetSize(); d++)
         {
           if(offered.Get(d) == candidate)
             {
               selected = candidate;
+              return true;
+            }
+        }
+    }
+
+  return false;
+}
+
+
+bool DIOSTREAMTLS13HANDSHAKESERVER::ServerCredentials_Select(XCHAR* servername, XVECTOR<XWORD>& offeredsignatures,
+                                                              XVECTOR<XWORD>& offeredcertificatesignatures,
+                                                              XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey,
+                                                              XBUFFER*& OCSPstapledresponse, CIPHERCERTIFICATEX509& leafcertificate,
+                                                              XWORD& signaturescheme)
+{
+  certificatechain     = NULL;
+  privatekey            = NULL;
+  OCSPstapledresponse   = NULL;
+  signaturescheme       = 0;
+
+  if(!config || offeredsignatures.IsEmpty() || offeredcertificatesignatures.IsEmpty()) return false;
+
+  // SNI specificity has priority over certificate algorithm preference. Within one SNI level, the configured
+  // signature-scheme order selects the preferred usable credential.
+  XDWORD firstpass = (servername && servername[0])?0:2;
+
+  for(XDWORD pass=firstpass; pass<3; pass++)
+    {
+      for(XDWORD s=0; s<config->GetSignatureSchemes()->GetSize(); s++)
+        {
+          XWORD candidate = config->GetSignatureSchemes()->Get(s);
+          if(!DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(offeredsignatures, candidate)) continue;
+
+          if(pass < 2)
+            {
+              for(XDWORD c=0; c<config->GetServerCredentials()->GetSize(); c++)
+                {
+                  DIOSTREAMTLSSERVERCREDENTIALS* credentials = config->GetServerCredentials()->Get(c);
+                  if(!credentials || !credentials->HasCredentials()) continue;
+
+                  XSTRING pattern((*credentials->GetServerName()));
+                  bool wildcard = (pattern.FindCharacter(__C('*')) >= 0);
+                  if((pass == 0 && wildcard) || (pass == 1 && !wildcard)) continue;
+                  if(!DIOSTREAMTLS13_HANDSHAKESERVER_ServerNameMatch(pattern, servername)) continue;
+
+                  XVECTOR<XBUFFER*>* chain = credentials->GetCertificateChain();
+                  if(!chain || chain->IsEmpty() || !credentials->GetPrivateKey()) continue;
+
+                  CIPHERCERTIFICATEX509 leaf;
+                  if(!leaf.Decode((*chain->Get(0))) ||
+                     !DIOSTREAMTLSSIGNATURE::IsSupported(candidate, &leaf) ||
+                     !DIOSTREAMTLS13_HANDSHAKESERVER_CertificateChainCompatible(chain, offeredcertificatesignatures)) continue;
+
+                  certificatechain     = chain;
+                  privatekey            = credentials->GetPrivateKey();
+                  OCSPstapledresponse   = credentials->GetOCSPStapledResponse();
+                  if(!leafcertificate.Decode((*chain->Get(0)))) return false;
+                  signaturescheme       = candidate;
+                  return true;
+                }
+            }
+           else
+            {
+              if(!config->HasLocalCredentials()) continue;
+
+              XVECTOR<XBUFFER*>* chain = config->GetLocalCertificateChain();
+              if(!chain || chain->IsEmpty() || !config->GetLocalPrivateKey()) continue;
+
+              CIPHERCERTIFICATEX509 leaf;
+              if(!leaf.Decode((*chain->Get(0))) ||
+                 !DIOSTREAMTLSSIGNATURE::IsSupported(candidate, &leaf) ||
+                 !DIOSTREAMTLS13_HANDSHAKESERVER_CertificateChainCompatible(chain, offeredcertificatesignatures)) continue;
+
+              certificatechain     = chain;
+              privatekey            = config->GetLocalPrivateKey();
+              OCSPstapledresponse   = config->GetLocalOCSPStapledResponse();
+              if(!leafcertificate.Decode((*chain->Get(0)))) return false;
+              signaturescheme       = candidate;
               return true;
             }
         }
@@ -834,7 +1035,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::HelloRetryRequest_Create(DIOSTREAMTLS_MSG_HA
 *
 * @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XCHAR* servername, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XWORD& ciphersuite, XBUFFER& PSK)
 * @brief      Validate one stateless resumption ticket and its PSK binder
-* @note       INTERNAL. GEN accepts only psk_dhe_ke, preserving forward secrecy. 0-RTT is not advertised.
+* @note       INTERNAL. GEN accepts only psk_dhe_ke, preserving forward secrecy. Early data, when offered, is bound to identity 0.
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -848,6 +1049,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
 
   DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES* modes = NULL;
   DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY*         offeredpsk = NULL;
+  DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*              earlyextension = NULL;
 
   for(XDWORD c=0; c<clienthello->Extensions_GetAll()->GetSize(); c++)
     {
@@ -858,6 +1060,13 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
         {
           if(modes) return false;
           modes = (DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES*)extension;
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA)
+        {
+          if(earlyextension || state==DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY) return false;
+          earlyextension=(DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
+          if(!earlyextension->GetData()->IsEmpty()) return false;
         }
 
       if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY)
@@ -879,6 +1088,8 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
 
   for(XDWORD c=0; c<offeredpsk->Identities_GetAll()->GetSize(); c++)
     {
+      // TLS 1.3 binds early_data to identity 0, but ordinary 1-RTT resumption may select any offered identity.
+      // If early_data is present, identities after 0 remain eligible only for 1-RTT and must not authorize early data.
       DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity = offeredpsk->Identities_GetAll()->Get(c);
       XBUFFER* receivedbinder = offeredpsk->Binders_GetAll()->Get(c);
       if(!identity || !receivedbinder) continue;
@@ -890,28 +1101,41 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
       XQWORD issueepoch = 0;
       XDWORD lifetime = 0;
       XDWORD ageadd = 0;
+      XDWORD ticketmaximumearlydata = 0;
 
       if(!config->SessionTicket_OpenRaw((*identity->GetIdentity()), ticketpsk, ticketcipher, ticketprotocol,
-                                     ticketservername, issueepoch, lifetime, ageadd)) continue;
+                                     ticketservername, issueepoch, lifetime, ageadd, ticketmaximumearlydata)) continue;
 
-      bool servernamematch = servername && servername[0] ? !ticketservername.Compare(servername, true) : ticketservername.IsEmpty();
-      bool protocolmatch   = applicationprotocol?ticketprotocol.Compare((*applicationprotocol)):ticketprotocol.IsEmpty();
-      bool cipherfound     = false;
+      bool servernamematch    = servername && servername[0] ? !ticketservername.Compare(servername, true) : ticketservername.IsEmpty();
+      bool protocolmatch      = applicationprotocol?ticketprotocol.Compare((*applicationprotocol)):ticketprotocol.IsEmpty();
+      bool clientcipherfound  = false;
+      bool servercipherallowed = false;
 
       for(XDWORD d=0; d<clienthello->GetCipherSuites()->GetSize(); d++)
         {
-          if(clienthello->GetCipherSuites()->Get(d) == ticketcipher) { cipherfound = true; break; }
+          if(clienthello->GetCipherSuites()->Get(d) == ticketcipher) { clientcipherfound = true; break; }
         }
 
-      if(!servernamematch || !protocolmatch || !cipherfound)
+      // A ticket authenticates the cipher suite used to derive its PSK, but it must not bypass a later server policy
+      // change.  Resumption is therefore allowed only when that exact TLS 1.3 suite is still enabled locally as well
+      // as being offered by the client.  Exact-suite matching also preserves the PSK hash binding required by TLS 1.3.
+      if(config->GetCipherSuites())
+        {
+          for(XDWORD d=0; d<config->GetCipherSuites()->GetSize(); d++)
+            {
+              if(config->GetCipherSuites()->Get(d) == ticketcipher) { servercipherallowed = true; break; }
+            }
+        }
+
+      if(!servernamematch || !protocolmatch || !clientcipherfound || !servercipherallowed)
         {
           if(!ticketpsk.IsEmpty()) ticketpsk.FillBuffer(0);
           continue;
         }
 
       // Ticket freshness itself is authenticated and enforced by SessionTicket_Open(). The obfuscated ticket age is
-      // primarily used by TLS 1.3 to decide whether 0-RTT is fresh enough for anti-replay processing. GEN does not
-      // advertise or accept early_data, so an age skew must not reject an otherwise valid 1-RTT resumption PSK.
+      // used only to decide whether 0-RTT is fresh enough for anti-replay processing; an age skew must not reject an
+      // otherwise valid 1-RTT resumption PSK.
       (void)issueepoch;
       (void)lifetime;
       (void)ageadd;
@@ -979,6 +1203,24 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
           return false;
         }
 
+      earlydataoffered = (earlyextension != NULL) && (c == 0);
+      earlydataaccepted = false;
+      // Keep the authenticated ticket limit even when local policy rejects 0-RTT: the peer may already have sent
+      // early records before learning the rejection and GEN must authenticate/discard them within the ticket bound.
+      maximumearlydatasize = earlydataoffered ? ticketmaximumearlydata : 0;
+      earlydataticketidentity.Delete();
+      if(earlydataoffered && ticketmaximumearlydata && config->IsEarlyDataAcceptable())
+        {
+          XDWORD allowed=config->GetMaximumEarlyDataSize();
+          if(allowed>ticketmaximumearlydata) allowed=ticketmaximumearlydata;
+          if(allowed && config->EarlyDataTicketAge_IsAcceptable(issueepoch, identity->GetObfuscatedTicketAge(), ageadd) &&
+             earlydataticketidentity.Add((*identity->GetIdentity())) && config->EarlyDataReplayCheck(earlydataticketidentity))
+            {
+              earlydataaccepted=true;
+              maximumearlydatasize=allowed;
+            }
+        }
+
       ticketpsk.FillBuffer(0);
       ciphersuite = ticketcipher;
       return true;
@@ -992,7 +1234,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
 *
 * @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::NewSessionTicket_Create()
 * @brief      Issue one post-handshake ticket for TLS 1.3 PSK-DHE resumption
-* @note       INTERNAL. No early_data extension is emitted, so the ticket cannot authorize 0-RTT.
+* @note       INTERNAL. early_data is advertised only when explicitly enabled and an anti-replay callback is installed.
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -1026,7 +1268,8 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::NewSessionTicket_Create()
      !config->SessionTicket_SealRaw(PSK, session->GetKeySchedule()->GetCipherSuite(),
                                  applicationprotocolnegotiated?&applicationprotocolraw:NULL,
                                  negotiatedservername.IsEmpty()?NULL:negotiatedservername.Get(),
-                                 config->GetSessionTicketLifetime(), ageadd, ticket))
+                                 config->GetSessionTicketLifetime(), ageadd, ticket,
+                                 config->IsEarlyDataAcceptable()?config->GetMaximumEarlyDataSize():0))
     {
       if(!PSK.IsEmpty()) PSK.FillBuffer(0);
       return false;
@@ -1039,6 +1282,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::NewSessionTicket_Create()
   message.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET);
   message.GetBody()->SetTicketLifetime(config->GetSessionTicketLifetime());
   message.GetBody()->SetTicketAgeAdd(ageadd);
+  message.GetBody()->SetMaximumEarlyDataSize(config->IsEarlyDataAcceptable()?config->GetMaximumEarlyDataSize():0);
 
   status = message.GetBody()->GetTicketNonce()->Add(nonce) &&
            message.GetBody()->GetTicket()->Add(ticket) &&
@@ -1072,7 +1316,10 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
   XBUFFER                                                          workbuffer;
   XVECTOR<XWORD>                                                   offeredciphersuites;
   XVECTOR<XWORD>                                                   offeredsignatureschemes;
+  XVECTOR<XWORD>                                                   offeredcertificatesignatureschemes;
   DIOSTREAMTLS_MSG_EXTENSION_ALPN*                                 offeredapplicationprotocols = NULL;
+  bool                                                              signaturealgorithmsfound = false;
+  bool                                                              certificatesignaturealgorithmsfound = false;
   bool                                                              supportedversionsfound = false;
   bool                                                              alpnfound              = false;
   bool                                                              servernamefound        = false;
@@ -1112,6 +1359,13 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
     }
 
   records.Delete();
+
+  // ClientHello2 after HRR is sent in cleartext. 0-RTT is rejected by HRR, so remove the first
+  // ClientHello's early receive keys before processing the retried ClientHello.
+  if(isretry && session->GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
+    {
+      session->EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
+    }
 
   workbuffer.Add(clienthello);
 
@@ -1159,11 +1413,27 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
 
       if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMS)
         {
+          if(signaturealgorithmsfound) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
+          signaturealgorithmsfound = true;
+
           DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS* algorithms = (DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMS*)extension;
 
           for(XDWORD d=0; d<algorithms->List_Get()->GetSize(); d++)
             {
               if(!offeredsignatureschemes.Add(algorithms->List_Get()->Get(d))) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+            }
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT)
+        {
+          if(certificatesignaturealgorithmsfound) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER);
+          certificatesignaturealgorithmsfound = true;
+
+          DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT* algorithms = (DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT*)extension;
+
+          for(XDWORD d=0; d<algorithms->List_Get()->GetSize(); d++)
+            {
+              if(!offeredcertificatesignatureschemes.Add(algorithms->List_Get()->Get(d))) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
             }
         }
 
@@ -1223,6 +1493,15 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
     }
 
   if(!statusrequestfound) serverOCSPstaplingrequested = false;
+
+  // RFC 8446: when signature_algorithms_cert is absent, signature_algorithms also constrains certificate signatures.
+  if(!certificatesignaturealgorithmsfound)
+    {
+      for(XDWORD c=0; c<offeredsignatureschemes.GetSize(); c++)
+        {
+          if(!offeredcertificatesignatureschemes.Add(offeredsignatureschemes.Get(c))) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+        }
+    }
 
   // This server is TLS 1.3-only.  Version negotiation must be resolved before applying TLS 1.3-specific
   // mandatory-extension rules; otherwise an older ClientHello could incorrectly receive missing_extension.
@@ -1325,12 +1604,11 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
           return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_MISSING_EXTENSION);
         }
 
-      if(!config->ServerCredentials_Select(servernamefound?requestedservername.Get():NULL, localcertificatechain, localprivatekey,
-                                           localOCSPresponse) ||
-          !localcertificatechain || localcertificatechain->IsEmpty() || !localprivatekey ||
-         !leafcertificate.Decode((*localcertificatechain->Get(0))) ||
-         !CipherSuite_Select(offeredciphersuites, ciphersuite) ||
-         !SignatureScheme_Select(offeredsignatureschemes, leafcertificate.GetPublicCipherKey(), signaturescheme))
+      if(!CipherSuite_Select(offeredciphersuites, ciphersuite) ||
+         !ServerCredentials_Select(servernamefound?requestedservername.Get():NULL, offeredsignatureschemes,
+                                   offeredcertificatesignatureschemes, localcertificatechain, localprivatekey,
+                                   localOCSPresponse, leafcertificate, signaturescheme) ||
+         !localcertificatechain || localcertificatechain->IsEmpty() || !localprivatekey)
         {
           return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_HANDSHAKE_FAILURE);
         }
@@ -1365,6 +1643,17 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
 
   if(!isretry && helloretryrequestrequired)
     {
+      // RFC 8446 forbids accepting 0-RTT after HelloRetryRequest, but early records already sent after ClientHello1
+      // may still be queued on TCP.  If the PSK was valid, derive the CH1 early read keys only to authenticate and
+      // discard those records while waiting for ClientHello2.  No application bytes are delivered.
+      if(resumptionaccepted && earlydataoffered)
+        {
+          if(!session->CipherSuite_Select(ciphersuite) ||
+             !session->EarlyKeys_Activate(resumptionpsk, clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE))
+            return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+          session->EarlyData_Accepted(false);
+          earlydataaccepted=false;
+        }
       return HelloRetryRequest_Create(body, clienthello, ciphersuite, group, records);
     }
 
@@ -1380,6 +1669,23 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
     {
       sharedsecret.FillBuffer(0);
       return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+    }
+
+  if(resumptionaccepted && earlydataoffered)
+    {
+      XDWORD earlylimit=maximumearlydatasize;
+      if(!earlylimit)
+        {
+          earlylimit=config->GetMaximumEarlyDataSize();
+          if(!earlylimit) earlylimit=DIOSTREAMTLS13_EARLYDATA_MAXSIZE;
+        }
+      if(!session->EarlyKeys_Activate(resumptionpsk, clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) ||
+         !session->EarlyData_Limit(earlylimit))
+        {
+          sharedsecret.FillBuffer(0);
+          return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+        }
+      session->EarlyData_Accepted(earlydataaccepted);
     }
 
   if(!session->Transcript_Add(clienthello))
@@ -1527,6 +1833,14 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
         }
     }
 
+  if(earlydataaccepted)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* earlyack=GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+      if(!earlyack) return SetError();
+      earlyack->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA);
+      if(!encryptedextensionsmessage.GetBody()->Extensions_Add(earlyack)) { GEN_DELETE earlyack; return SetError(); }
+    }
+
   if(!encryptedextensionsmessage.SetToBuffer(encryptedextensions, false) ||
      !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE, encryptedextensions, flightrecords) ||
      !session->Transcript_Add(encryptedextensions) || !records.Add(flightrecords))
@@ -1563,17 +1877,55 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
           return SetError();
         }
 
-      statusrequest = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
-      if(!statusrequest) return SetError();
+      DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT* certificationalgorithms = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_SIGNATUREALGORITHMSCERT();
+      if(!certificationalgorithms) return SetError();
+      for(XDWORD c=0; c<config->GetCertificateSignatureSchemes()->GetSize(); c++)
+        if(!certificationalgorithms->List_Add(config->GetCertificateSignatureSchemes()->Get(c)))
+          { GEN_DELETE certificationalgorithms; return SetError(); }
+      if(!certificaterequest.GetBody()->Extensions_Add(certificationalgorithms))
+        { GEN_DELETE certificationalgorithms; return SetError(); }
 
-      statusrequest->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_STATUSREQUEST);
-      if(!certificaterequest.GetBody()->Extensions_Add(statusrequest))
+      if(config->GetClientTrustedRoots() && !config->GetClientTrustedRoots()->IsEmpty())
         {
-          GEN_DELETE statusrequest;
-          return SetError();
+          DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* authorities=GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+          XBUFFER authoritylist;
+          if(!authorities) return SetError();
+          for(XDWORD c=0;c<config->GetClientTrustedRoots()->GetSize();c++)
+            {
+              XBUFFER* rootDER=config->GetClientTrustedRoots()->Get(c);
+              CIPHERCERTIFICATEX509 rootcertificate;
+              if(!rootDER || !rootcertificate.Decode((*rootDER)) || !rootcertificate.GetSubjectData() || rootcertificate.GetSubjectData()->IsEmpty())
+                { GEN_DELETE authorities; return SetError(); }
+              XDWORD size=rootcertificate.GetSubjectData()->GetSize();
+              if(size>0xFFFF || authoritylist.GetSize()+2+size>0xFFFF) { GEN_DELETE authorities; return SetError(); }
+              if(!authoritylist.Add((XBYTE)((size>>8)&0xFF)) || !authoritylist.Add((XBYTE)(size&0xFF)) ||
+                 !authoritylist.Add((*rootcertificate.GetSubjectData()))) { GEN_DELETE authorities; return SetError(); }
+            }
+          authorities->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_CERTIFICATEAUTHORITIES);
+          XDWORD totalsize=authoritylist.GetSize();
+          if(!authorities->GetData()->Add((XBYTE)((totalsize>>8)&0xFF)) || !authorities->GetData()->Add((XBYTE)(totalsize&0xFF)) ||
+             !authorities->GetData()->Add(authoritylist) || !certificaterequest.GetBody()->Extensions_Add(authorities))
+            { GEN_DELETE authorities; return SetError(); }
         }
 
-      clientOCSPstaplingrequested = true;
+      if(config->GetRevocationPolicy() != DIOSTREAMTLS_REVOCATIONPOLICY_OFF)
+        {
+          statusrequest = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+          if(!statusrequest) return SetError();
+
+          statusrequest->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_STATUSREQUEST);
+          if(!certificaterequest.GetBody()->Extensions_Add(statusrequest))
+            {
+              GEN_DELETE statusrequest;
+              return SetError();
+            }
+
+          clientOCSPstaplingrequested = true;
+        }
+       else
+        {
+          clientOCSPstaplingrequested = false;
+        }
 
       flightrecords.Delete();
       if(!certificaterequest.SetToBuffer(certificaterequestbuffer, false) ||
@@ -1738,9 +2090,10 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
   retryselectedgroup = 0;
   retryciphersuite   = 0;
   clientcertificateprovided = false;
-  state = (resumptionaccepted || (config->GetClientAuthenticationMode() == DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE))?
-          DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED:
-          DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATE;
+  state = earlydataaccepted?DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_END_OF_EARLY_DATA:
+          ((resumptionaccepted || (config->GetClientAuthenticationMode() == DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE))?
+           DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED:
+           DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATE);
 
   return true;
 }
@@ -1846,11 +2199,53 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificate_Process(XBUFFER& message)
           return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_REVOKED);
         }
 
-      if(OCSPresult != CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
+      if((OCSPresult != CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) &&
+         (config->GetRevocationPolicy() != DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL))
         {
           return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE);
         }
     }
+
+  const bool revocationenabled=(config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_OFF);
+  XVECTOR<CIPHERCERTIFICATEX509*>* validatedchain=clientcertificatevalidator.GetCertificateChain();
+
+  if(revocationenabled && !hasstapledOCSP && config->GetOCSPDirectFetcher() && validatedchain && validatedchain->GetSize()>=2)
+    {
+      CIPHERCERTIFICATEX509* leaf=validatedchain->Get(0);
+      CIPHERCERTIFICATEX509* issuer=validatedchain->Get(1);
+      XBUFFER response;
+      CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+      if(leaf && issuer && leaf->HasOCSPURL() &&
+         config->GetOCSPDirectFetcher()((*leaf->GetOCSPURL()),(*leaf),(*issuer),response,config->GetOCSPDirectContext()) &&
+         response.GetSize()<=config->GetMemoryPolicy()->GetMaximumOCSPResponseSize())
+        result=CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*leaf),(*issuer));
+      if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_REVOKED);
+      if((result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) &&
+         (config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL))
+        return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE);
+    }
+
+  if(revocationenabled && config->GetCertificateRevocationLists() && !config->GetCertificateRevocationLists()->IsEmpty())
+    {
+      if(!validatedchain || validatedchain->GetSize()<2) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE);
+      for(XDWORD certindex=0;certindex+1<validatedchain->GetSize();certindex++)
+        {
+          bool valid=false;
+          for(XDWORD c=0;c<config->GetCertificateRevocationLists()->GetSize();c++)
+            {
+              XBUFFER* CRL=config->GetCertificateRevocationLists()->Get(c);
+              if(!CRL || CRL->GetSize()>config->GetMemoryPolicy()->GetMaximumCRLSize()) continue;
+              CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*validatedchain->Get(certindex)),(*validatedchain->Get(certindex+1)));
+              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_CERTIFICATE_REVOKED);
+              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) valid=true;
+            }
+          if(!valid && config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL)
+            return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE);
+        }
+    }
+
+  if((config->GetRevocationPolicy()==DIOSTREAMTLS_REVOCATIONPOLICY_MUST_STAPLE) && !hasstapledOCSP)
+    return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE);
 
   if(!session->Transcript_Add(message)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
 
@@ -1900,7 +2295,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificateVerify_Process(XBUFFER& mes
 
   leaf = clientcertificatevalidator.GetLeafCertificate();
   if(!schemeoffered || !leaf || !leaf->GetPublicCipherKey() ||
-     !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf->GetPublicCipherKey()) ||
+     !DIOSTREAMTLSSIGNATURE::IsSupported(certificateverify.GetBody()->GetAlgorithm(), leaf) ||
      !session->TranscriptHash(transcripthash))
     {
       return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECRYPT_ERROR);
@@ -1922,6 +2317,46 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificateVerify_Process(XBUFFER& mes
 
   if(!session->Transcript_Add(message)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
 
+  state = DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::EndOfEarlyData_Process(XBUFFER& message)
+* @brief      Process the TLS 1.3 EndOfEarlyData marker and switch receive processing to handshake keys
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  message : Complete EndOfEarlyData handshake message.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKESERVER::EndOfEarlyData_Process(XBUFFER& message)
+{
+  if(state != DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_END_OF_EARLY_DATA || !earlydataaccepted)
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
+    }
+
+  DIOSTREAMTLS_MSG_HANDSHAKE handshake;
+  XBUFFER                    work;
+
+  if(!work.Add(message) || !handshake.GetFromBuffer(work, false) || !work.IsEmpty() ||
+     (handshake.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_END_OF_EARLY_DATA) ||
+     handshake.GetLength())
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+    }
+
+  if(!session->Transcript_Add(message) || !session->EarlyData_Commit())
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+    }
+
+  session->EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
   state = DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED;
   return true;
 }
@@ -2077,6 +2512,17 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Process()
           case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC : if((plain.GetSize() != 1) || (plain.GetByte(0) != 1)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
                                                                 break;
 
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA   : if(!earlydataoffered ||
+                                                                   (session->GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) != DIOSTREAMTLS13SESSION_EPOCH_EARLY))
+                                                                  {
+                                                                    return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
+                                                                  }
+                                                                if(earlydataaccepted && session->GetEarlyDataSize()>maximumearlydatasize)
+                                                                  {
+                                                                    return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
+                                                                  }
+                                                                break;
+
           case DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT              : { DIOSTREAMTLS_MSG_ALERT alert;
 
                                                                   if(!alert.GetFromBuffer(plain, false))
@@ -2159,6 +2605,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Handshake_Process(XBUFFER& message)
     {
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE        : return ClientCertificate_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY : return ClientCertificateVerify_Process(message);
+      case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_END_OF_EARLY_DATA  : return EndOfEarlyData_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED           : return Finished_Process(message);
                                                                default : return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
     }
@@ -2211,6 +2658,11 @@ void DIOSTREAMTLS13HANDSHAKESERVER::Clean()
   retryselectedgroup               = 0;
   retryciphersuite                 = 0;
   clientcertificateprovided       = false;
+  resumptionaccepted              = false;
+  earlydataoffered                = false;
+  earlydataaccepted               = false;
+  maximumearlydatasize            = 0;
+  earlydataticketidentity.Delete();
   serverOCSPstaplingrequested      = false;
   clientOCSPstaplingrequested      = false;
   clientcertificatevalidator.End();

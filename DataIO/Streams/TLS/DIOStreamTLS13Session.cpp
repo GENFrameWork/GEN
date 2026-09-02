@@ -60,7 +60,7 @@
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOSTREAMTLS13SESSION::DIOSTREAMTLS13SESSION() : keyexchangep256(CIPHERTYPE_ECDSA_SECP256R1), keyexchangep384(CIPHERTYPE_ECDSA_SECP384R1)
+DIOSTREAMTLS13SESSION::DIOSTREAMTLS13SESSION() : keyexchangep256(CIPHERTYPE_ECDSA_SECP256R1), keyexchangep384(CIPHERTYPE_ECDSA_SECP384R1), keyexchangep521(CIPHERTYPE_ECDSA_SECP521R1)
 {
   Clean();
 }
@@ -108,7 +108,7 @@ bool DIOSTREAMTLS13SESSION::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE 
       return false;
     }
 
-  if(!record.Ini(&keyschedule))
+  if(!record.Ini(&keyschedule) || !earlyrecord.Ini(&keyschedule))
     {
       keyschedule.End();
       return false;
@@ -128,6 +128,7 @@ bool DIOSTREAMTLS13SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
   maximumhandshakeinputsize   = policy.GetMaximumHandshakeInputSize();
   maximumtranscriptsize       = policy.GetMaximumTranscriptSize();
   maximumapplicationinputsize = policy.GetMaximumApplicationInputSize();
+  maximumearlydatasize = maximumapplicationinputsize>DIOSTREAMTLS13_EARLYDATA_MAXSIZE?DIOSTREAMTLS13_EARLYDATA_MAXSIZE:maximumapplicationinputsize;
   return maximumrecordinputsize && maximumhandshakeinputsize && maximumtranscriptsize && maximumapplicationinputsize;
 }
 
@@ -141,6 +142,7 @@ bool DIOSTREAMTLS13SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSION::End()
 {
+  earlyrecord.End();
   record.End();
   keyschedule.End();
   KeyExchange_Delete();
@@ -149,6 +151,7 @@ void DIOSTREAMTLS13SESSION::End()
   handshakeinput.Delete();
   transcript.Delete();
   applicationinput.Delete();
+  earlydatainput.Delete();
   posthandshakeoutput.Delete();
   newsessionticketinput.Delete();
 
@@ -288,6 +291,34 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
 
   switch(group)
     {
+      #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024 : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) return false;
+
+                                                           keyexchangesecp384r1mlkem1024.Delete();
+                                                           if(!keyexchangesecp384r1mlkem1024.ClientKeyShare_Create(publickey))
+                                                             {
+                                                               keyexchangesecp384r1mlkem1024.Delete();
+                                                               return false;
+                                                             }
+                                                           break;
+
+      #endif
+
+      #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768 : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) return false;
+
+                                                          keyexchangesecp256r1mlkem768.Delete();
+                                                          if(!keyexchangesecp256r1mlkem768.ClientKeyShare_Create(publickey))
+                                                            {
+                                                              keyexchangesecp256r1mlkem768.Delete();
+                                                              return false;
+                                                            }
+                                                          break;
+
+      #endif
+
       #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
 
       case DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768 : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) return false;
@@ -344,6 +375,21 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_Generate(XWORD group, XBUFFER& publickey
                                                   }
                                                 break;
 
+      case DIOSTREAMTLS_MSG_CURVEID_SECP521R1 : keyexchangep521private.FillBuffer(0);
+                                                keyexchangep521private.SecureDelete();
+                                                keyexchangep521public.Delete();
+
+                                                if(!keyexchangep521.KeyPair_Create(keyexchangep521private,
+                                                                                  keyexchangep521public) ||
+                                                   !publickey.Add(keyexchangep521public))
+                                                  {
+                                                    keyexchangep521private.FillBuffer(0);
+                                                    keyexchangep521private.SecureDelete();
+                                                    keyexchangep521public.Delete();
+                                                    return false;
+                                                  }
+                                                break;
+
                                       default : return false;
     }
 
@@ -372,6 +418,36 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
 
   switch(group)
     {
+      #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024 : { bool invalidpeershare = false;
+
+                                                           if((role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
+                                                              !keyexchangesecp384r1mlkem1024.ClientSharedSecret_Create(publickey, sharedsecret,
+                                                                                                                          &invalidpeershare))
+                                                             {
+                                                               return false;
+                                                             }
+                                                         }
+                                                         break;
+
+      #endif
+
+      #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+
+      case DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768 : { bool invalidpeershare = false;
+
+                                                          if((role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
+                                                             !keyexchangesecp256r1mlkem768.ClientSharedSecret_Create(publickey, sharedsecret,
+                                                                                                                         &invalidpeershare))
+                                                            {
+                                                              return false;
+                                                            }
+                                                        }
+                                                        break;
+
+      #endif
+
       #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
 
       case DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768 : { bool invalidpeershare = false;
@@ -413,6 +489,14 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_SharedSecret(XWORD group, XBUFFER& publi
                                                   }
                                                 break;
 
+      case DIOSTREAMTLS_MSG_CURVEID_SECP521R1 : if(keyexchangep521private.IsEmpty() ||
+                                                   !keyexchangep521.SharedSecret_Create(keyexchangep521private,
+                                                                                       publickey, sharedsecret))
+                                                  {
+                                                    return false;
+                                                  }
+                                                break;
+
                                       default : return false;
     }
 
@@ -448,6 +532,26 @@ bool DIOSTREAMTLS13SESSION::KeyExchange_ServerGenerate(XWORD group, XBUFFER& pee
   if(!isini || (role != DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER)) return false;
 
   KeyExchange_Delete();
+
+  #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+
+  if(group == DIOSTREAMTLS_MSG_CURVEID_SECP384R1MLKEM1024)
+    {
+      return keyexchangesecp384r1mlkem1024.ServerKeyShare_Create(peerpublickey, publickey, sharedsecret,
+                                                                  &invalidpeershare);
+    }
+
+  #endif
+
+  #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+
+  if(group == DIOSTREAMTLS_MSG_CURVEID_SECP256R1MLKEM768)
+    {
+      return keyexchangesecp256r1mlkem768.ServerKeyShare_Create(peerpublickey, publickey, sharedsecret,
+                                                                 &invalidpeershare);
+    }
+
+  #endif
 
   #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
 
@@ -492,6 +596,14 @@ void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
 {
   keyexchange.CleanAllKeys();
 
+  #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+  keyexchangesecp256r1mlkem768.Delete();
+  #endif
+
+  #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+  keyexchangesecp384r1mlkem1024.Delete();
+  #endif
+
   #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
   keyexchangex25519mlkem768.Delete();
   #endif
@@ -503,6 +615,10 @@ void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
   keyexchangep384private.FillBuffer(0);
   keyexchangep384private.SecureDelete();
   keyexchangep384public.Delete();
+
+  keyexchangep521private.FillBuffer(0);
+  keyexchangep521private.SecureDelete();
+  keyexchangep521public.Delete();
 }
 
 
@@ -519,18 +635,20 @@ void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::CipherSuite_Select(XWORD ciphersuite)
 {
-  if(!isini ||
-     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  != DIOSTREAMTLS13SESSION_EPOCH_CLEAR) ||
-     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_CLEAR))
-    {
-      return false;
-    }
+  if(!isini) return false;
+  bool localearly=(epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]==DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+  bool remoteearly=(epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]==DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+  if((epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]!=DIOSTREAMTLS13SESSION_EPOCH_CLEAR && !localearly) ||
+     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]!=DIOSTREAMTLS13SESSION_EPOCH_CLEAR && !remoteearly)) return false;
 
   if(keyschedule.GetCipherSuite() == ciphersuite) return true;
 
+  if(localearly) epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]=DIOSTREAMTLS13SESSION_EPOCH_CLEAR;
+  if(remoteearly) epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]=DIOSTREAMTLS13SESSION_EPOCH_CLEAR;
+  earlyrecord.End();
   record.End();
 
-  if(!keyschedule.Ini(ciphersuite, role) || !record.Ini(&keyschedule))
+  if(!keyschedule.Ini(ciphersuite, role) || !record.Ini(&keyschedule) || !earlyrecord.Ini(&keyschedule))
     {
       keyschedule.End();
       isini = false;
@@ -570,8 +688,12 @@ XBUFFER* DIOSTREAMTLS13SESSION::GetRecordInput()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::RecordInput_Add(XBYTE* data, XDWORD size)
 {
-  if(!isini || (!data && size) ||
-     (size > maximumrecordinputsize) ||
+  if(!isini || (!data && size)) return false;
+
+  // RFC 8446 section 6.1: data received after close_notify MUST be ignored.
+  if(closenotifyreceived) return true;
+
+  if((size > maximumrecordinputsize) ||
      (recordinput.GetSize() > (maximumrecordinputsize - size)))
     {
       return false;
@@ -652,11 +774,33 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::Record_Extract(DIOSTREAMTLS_
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
 
+  bool useearly = (role==DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER &&
+                   epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]==DIOSTREAMTLS13SESSION_EPOCH_EARLY &&
+                   header.GetContenType()==DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA);
+  if(useearly)
+    {
+      if(earlyrecord.Unprotect(onerecord, contenttype, plain))
+        {
+          if(contenttype!=DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA || earlydatareceived>maximumearlydatasize ||
+             plain.GetSize()>(maximumearlydatasize-earlydatareceived) ||
+             (earlydataaccepted && plain.GetSize() && !earlydatainput.Add(plain)))
+            {
+              lastrecordalertdescription=DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+              return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+            }
+          earlydatareceived += plain.GetSize();
+          return DIOSTREAMTLS13SESSION_RESULT_COMPLETE;
+        }
+      // The first handshake-key record (EndOfEarlyData when accepted, Finished when rejected) has the same
+      // outer application_data type. Retry the exact ciphertext with handshake keys before declaring failure.
+      plain.Delete();
+    }
   if(!record.Unprotect(onerecord, contenttype, plain))
     {
       lastrecordalertdescription = record.GetLastAlertDescription();
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
+  if(useearly && !earlydataaccepted) EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
 
   return DIOSTREAMTLS13SESSION_RESULT_COMPLETE;
 }
@@ -859,15 +1003,83 @@ bool DIOSTREAMTLS13SESSION::TranscriptHash(XBUFFER& transcripthash)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* @fn         bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate
+* @brief      Install TLS 1.3 client early traffic keys in the requested direction
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate(XBUFFER& PSK, XBUFFER& clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  XBUFFER hash;
+  if(!isini || PSK.IsEmpty() || clienthello.IsEmpty() || direction>=DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS) return false;
+  if(direction==DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL && role!=DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) return false;
+  if(direction==DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE && role!=DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER) return false;
+  if(epoch[direction]!=DIOSTREAMTLS13SESSION_EPOCH_CLEAR) return false;
+  if(!keyschedule.EarlySecret_Calculate(&PSK) || !keyschedule.TranscriptHash(clienthello, hash) ||
+     !keyschedule.EarlyTrafficSecret_Calculate(hash) || !earlyrecord.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_EARLY, direction)) return false;
+  epoch[direction]=DIOSTREAMTLS13SESSION_EPOCH_EARLY;
+  return true;
+}
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
+{
+  if(!isini || role!=DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT || epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]!=DIOSTREAMTLS13SESSION_EPOCH_EARLY ||
+     (!data && size) || !size || earlydatasent>maximumearlydatasize || size>(maximumearlydatasize-earlydatasent)) return false;
+  if(!earlyrecord.Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA, data, size, records)) return false;
+  earlydatasent += size;
+  return true;
+}
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBUFFER& data, XBUFFER& records) { return EarlyData_Protect(data.Get(), data.GetSize(), records); }
+
+XDWORD DIOSTREAMTLS13SESSION::EarlyData_Read(XBYTE* data, XDWORD size)
+{
+  if(!data || !size) return 0;
+  if(size>earlydatainput.GetSize()) size=earlydatainput.GetSize();
+  return earlydatainput.Extract(data,0,size);
+}
+
+XDWORD DIOSTREAMTLS13SESSION::GetEarlyDataSize() { return earlydatainput.GetSize(); }
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Commit()
+{
+  if(!isini || role != DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER || !earlydataaccepted) return false;
+  if(earlydatainput.IsEmpty()) return true;
+  if(earlydatainput.GetSize() > maximumapplicationinputsize ||
+     applicationinput.GetSize() > (maximumapplicationinputsize-earlydatainput.GetSize())) return false;
+  if(!applicationinput.Add(earlydatainput)) return false;
+  earlydatainput.Delete();
+  return true;
+}
+
+void DIOSTREAMTLS13SESSION::EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  if(direction<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS && epoch[direction]==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
+    {
+      earlyrecord.ClearKeys(direction);
+      epoch[direction]=DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
+    }
+}
+
+void DIOSTREAMTLS13SESSION::EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  if(direction<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS && epoch[direction]==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
+    {
+      earlyrecord.ClearKeys(direction);
+      epoch[direction]=DIOSTREAMTLS13SESSION_EPOCH_CLEAR;
+    }
+}
+
+void DIOSTREAMTLS13SESSION::EarlyData_Accepted(bool accepted) { earlydataaccepted=accepted; }
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Limit(XDWORD maximumsize)
+{
+  if(!maximumsize || maximumsize>DIOSTREAMTLS13_EARLYDATA_MAXSIZE || maximumsize>maximumapplicationinputsize || earlydatareceived) return false;
+  maximumearlydatasize=maximumsize;
+  return true;
+}
+
+/**-------------------------------------------------------------------------------------------------------------------
 * @fn         bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 * @brief      Derive and install both handshake traffic directions
-* @ingroup    DATAIO
-*
-* @param[in]  sharedsecret : Shared secret produced by the negotiated key exchange.
-*
-* @return     bool : true if the operation is successful; otherwise false.
-*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 {
@@ -878,7 +1090,18 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFE
   // hand back here, not assume the X25519 constant fits them all.
   bool sharedsecretsizevalid = (sharedsecret.GetSize() == CIPHERECDSAX25519_MAXKEY) ||
                                (sharedsecret.GetSize() == CIPHERECDSA_P256_COORDINATE_SIZE) ||
-                               (sharedsecret.GetSize() == CIPHERECDSA_P384_COORDINATE_SIZE);
+                               (sharedsecret.GetSize() == CIPHERECDSA_P384_COORDINATE_SIZE) ||
+                               (sharedsecret.GetSize() == CIPHERECDSA_P521_COORDINATE_SIZE);
+
+  #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+  sharedsecretsizevalid = sharedsecretsizevalid ||
+                          (sharedsecret.GetSize() == CIPHERSECP256R1MLKEM768_SHAREDSECRETSIZE);
+  #endif
+
+  #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+  sharedsecretsizevalid = sharedsecretsizevalid ||
+                          (sharedsecret.GetSize() == CIPHERSECP384R1MLKEM1024_SHAREDSECRETSIZE);
+  #endif
 
   #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
   sharedsecretsizevalid = sharedsecretsizevalid ||
@@ -890,8 +1113,8 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFE
       return false;
     }
 
-  if((epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  != DIOSTREAMTLS13SESSION_EPOCH_CLEAR) ||
-     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_CLEAR))
+  if((epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  != DIOSTREAMTLS13SESSION_EPOCH_CLEAR && epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] != DIOSTREAMTLS13SESSION_EPOCH_EARLY) ||
+     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_CLEAR && epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_EARLY))
     {
       return false;
     }
@@ -902,11 +1125,14 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFE
   if(!keyschedule.HandshakeTrafficSecrets_Calculate(transcripthash)) return false;
   if(!keyschedule.MasterSecret_Calculate())                        return false;
 
+  bool localearly  = (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  == DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+  bool remoteearly = (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] == DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+
   if(!record.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL))  return false;
   if(!record.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)) return false;
 
-  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  = DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
-  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] = DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
+  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  = localearly ?DIOSTREAMTLS13SESSION_EPOCH_EARLY:DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
+  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] = remoteearly?DIOSTREAMTLS13SESSION_EPOCH_EARLY:DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
 
   return true;
 }
@@ -1102,6 +1328,14 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
 
   while(true)
     {
+      // RFC 8446 section 6.1: once close_notify is received, any bytes that
+      // follow it on the peer write side are ignored rather than processed.
+      if(closenotifyreceived)
+        {
+          recordinput.Delete();
+          return processed?DIOSTREAMTLS13SESSION_RESULT_COMPLETE:DIOSTREAMTLS13SESSION_RESULT_INCOMPLETE;
+        }
+
       DIOSTREAMTLS_CONTENTTYPE   contenttype = (DIOSTREAMTLS_CONTENTTYPE)0;
       DIOSTREAMTLS13SESSION_RESULT result;
       XBUFFER                    plain;
@@ -1123,12 +1357,18 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
 
       switch(contenttype)
         {
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA    : if(closenotifyreceived ||
-                                                                     (plain.GetSize() > maximumapplicationinputsize) ||
-                                                                     (applicationinput.GetSize() > (maximumapplicationinputsize-plain.GetSize())) ||
-                                                                     (plain.GetSize() && !applicationinput.Add(plain)))
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA    : if((plain.GetSize() > maximumapplicationinputsize) ||
+                                                                     (applicationinput.GetSize() > (maximumapplicationinputsize-plain.GetSize())))
                                                                     {
-                                                                      iserror = true;
+                                                                      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+                                                                      iserror                    = true;
+                                                                      return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+                                                                    }
+
+                                                                  if(plain.GetSize() && !applicationinput.Add(plain))
+                                                                    {
+                                                                      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+                                                                      iserror                    = true;
                                                                       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                     }
                                                                   break;
@@ -1151,25 +1391,40 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
 
                                                                         if(handshakeresult == DIOSTREAMTLS13SESSION_RESULT_ERROR)
                                                                           {
-                                                                            iserror = true;
+                                                                            lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+                                                                            iserror                    = true;
                                                                             return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                           }
 
                                                                         workbuffer.Add(message);
                                                                         if(!handshake.GetFromBuffer(workbuffer, false) || !workbuffer.IsEmpty())
                                                                           {
-                                                                            iserror = true;
+                                                                            lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+                                                                            iserror                    = true;
                                                                             return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                           }
 
                                                                         switch(handshake.GetMsgType())
                                                                           {
-                                                                            case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT ||
-                                                                                                                                             (message.GetSize() > maximumhandshakeinputsize) ||
-                                                                                                                                             (newsessionticketinput.GetSize() > (maximumhandshakeinputsize-message.GetSize())) ||
-                                                                                                                                             !newsessionticketinput.Add(message))
+                                                                            case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET : if(role != DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT)
                                                                                                                                           {
-                                                                                                                                            iserror = true;
+                                                                                                                                            lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+                                                                                                                                            iserror                    = true;
+                                                                                                                                            return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+                                                                                                                                          }
+
+                                                                                                                                        if((message.GetSize() > maximumhandshakeinputsize) ||
+                                                                                                                                           (newsessionticketinput.GetSize() > (maximumhandshakeinputsize-message.GetSize())))
+                                                                                                                                          {
+                                                                                                                                            lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+                                                                                                                                            iserror                    = true;
+                                                                                                                                            return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+                                                                                                                                          }
+
+                                                                                                                                        if(!newsessionticketinput.Add(message))
+                                                                                                                                          {
+                                                                                                                                            lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+                                                                                                                                            iserror                    = true;
                                                                                                                                             return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                                                                                           }
                                                                                                                                         break;
@@ -1182,12 +1437,14 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
 
                                                                                                                                             if(!handshakeinput.IsEmpty())
                                                                                                                                               {
-                                                                                                                                                iserror = true;
+                                                                                                                                                lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+                                                                                                                                                iserror                    = true;
                                                                                                                                                 return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                                                                                               }
                                                                                                                                             break;
 
-                                                                                                                                  default : iserror = true;
+                                                                                                                                  default : lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+                                                                                                                                            iserror                    = true;
                                                                                                                                             return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                           }
                                                                       }
@@ -1198,35 +1455,61 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::ApplicationData_Process()
 
                                                                     if(!alert.GetFromBuffer(plain, false) || !plain.IsEmpty())
                                                                       {
-                                                                        iserror = true;
+                                                                        lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+                                                                        iserror                    = true;
                                                                         return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                       }
 
-                                                                    receivedalertlevel       = alert.GetLevel();
-                                                                    receivedalertdescription = alert.GetDescription();
+                                                                    DIOSTREAMTLS_ALERT_LEVEL       alertlevel       = alert.GetLevel();
+                                                                    DIOSTREAMTLS_ALERT_DESCRIPTION alertdescription = alert.GetDescription();
 
-                                                                    if(receivedalertdescription == DIOSTREAMTLS_ALERT_DESCRIPTION_CLOSE_NOTIFY)
+                                                                    // RFC 8446 section 6: close_notify and user_canceled use
+                                                                    // warning.  Every error alert is fatal.
+                                                                    bool warningallowed = (alertdescription == DIOSTREAMTLS_ALERT_DESCRIPTION_CLOSE_NOTIFY) ||
+                                                                                          (alertdescription == DIOSTREAMTLS_ALERT_DESCRIPTION_USER_CANCELED);
+
+                                                                    if((warningallowed && (alertlevel != DIOSTREAMTLS_ALERT_LEVEL_WARNING)) ||
+                                                                       (!warningallowed && (alertlevel != DIOSTREAMTLS_ALERT_LEVEL_FATAL)))
                                                                       {
-                                                                        if(closenotifyreceived)
+                                                                        lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER;
+                                                                        iserror                    = true;
+                                                                        return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+                                                                      }
+
+                                                                    receivedalertlevel       = alertlevel;
+                                                                    receivedalertdescription = alertdescription;
+
+                                                                    if(alertdescription == DIOSTREAMTLS_ALERT_DESCRIPTION_CLOSE_NOTIFY)
+                                                                      {
+                                                                        if(!handshakeinput.IsEmpty())
                                                                           {
-                                                                            iserror = true;
+                                                                            lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
+                                                                            iserror                    = true;
                                                                             return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                           }
 
                                                                         closenotifyreceived = true;
                                                                       }
+                                                                     else if(alertdescription == DIOSTREAMTLS_ALERT_DESCRIPTION_USER_CANCELED)
+                                                                      {
+                                                                        // Advisory warning. RFC 8446 recommends following it with close_notify.
+                                                                      }
                                                                      else
                                                                       {
+                                                                        // A valid fatal alert from the peer terminates the connection.
+                                                                        // The transport wrapper must not answer it with another fatal alert.
                                                                         iserror = true;
                                                                         return DIOSTREAMTLS13SESSION_RESULT_ERROR;
                                                                       }
                                                                   }
                                                                   break;
 
-          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC  : iserror = true;
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC  : lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+                                                                  iserror                    = true;
                                                                   return DIOSTREAMTLS13SESSION_RESULT_ERROR;
 
-                                                        default : iserror = true;
+                                                        default : lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+                                                                  iserror                    = true;
                                                                   return DIOSTREAMTLS13SESSION_RESULT_ERROR;
         }
     }
@@ -1317,9 +1600,18 @@ bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Extract(XBUFFER& records)
     {
       XBUFFER keyupdaterecords;
 
-      if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] < DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES)
+      if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES)
         {
-          if(!KeyUpdate_Create(false, keyupdaterecords) || !posthandshakeoutput.Add(keyupdaterecords)) return false;
+          lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+          iserror                    = true;
+          return false;
+        }
+
+      if(!KeyUpdate_Create(false, keyupdaterecords) || !posthandshakeoutput.Add(keyupdaterecords))
+        {
+          lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+          iserror                    = true;
+          return false;
         }
 
       keyupdateresponsepending = false;
@@ -1351,25 +1643,39 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Process(DIOSTREAMTLS_MSG_HANDSHAKE& handsh
 {
   XBYTE requestupdate;
 
-  if((handshake.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE) ||
-     (handshake.GetBody()->GetSize() != 1))
+  if(handshake.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_KEY_UPDATE)
     {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+      return false;
+    }
+
+  if(handshake.GetBody()->GetSize() != 1)
+    {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR;
       return false;
     }
 
   requestupdate = handshake.GetBody()->GetByte(0);
-  if(requestupdate > 1) return false;
+  if(requestupdate > 1)
+    {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_ILLEGAL_PARAMETER;
+      return false;
+    }
+
+  if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] >= DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES)
+    {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+      return false;
+    }
 
   if(!keyschedule.UpdateTrafficSecret(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) ||
      !record.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE))
     {
+      lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
       return false;
     }
 
-  if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != (XQWORD)-1)
-    {
-      keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]++;
-    }
+  keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]++;
 
   keyupdaterequestpending = false;
 
@@ -1398,6 +1704,15 @@ bool DIOSTREAMTLS13SESSION::Alert_Create(DIOSTREAMTLS_ALERT_LEVEL level, DIOSTRE
   XBUFFER                plain;
 
   if(!isini || closenotifysent) return false;
+
+  bool warningallowed = (description == DIOSTREAMTLS_ALERT_DESCRIPTION_CLOSE_NOTIFY) ||
+                        (description == DIOSTREAMTLS_ALERT_DESCRIPTION_USER_CANCELED);
+
+  if((warningallowed && (level != DIOSTREAMTLS_ALERT_LEVEL_WARNING)) ||
+     (!warningallowed && (level != DIOSTREAMTLS_ALERT_LEVEL_FATAL)))
+    {
+      return false;
+    }
 
   alert.SetLevel(level);
   alert.SetDescription(description);
@@ -1571,6 +1886,10 @@ void DIOSTREAMTLS13SESSION::Clean()
   maximumhandshakeinputsize    = DIOSTREAMTLS_MEMORY_DEFAULT_HANDSHAKE_INPUT;
   maximumtranscriptsize        = DIOSTREAMTLS_MEMORY_DEFAULT_TRANSCRIPT;
   maximumapplicationinputsize  = DIOSTREAMTLS_MEMORY_DEFAULT_APPLICATION_INPUT;
+  maximumearlydatasize        = DIOSTREAMTLS13_EARLYDATA_MAXSIZE;
+  earlydatareceived           = 0;
+  earlydatasent               = 0;
+  earlydataaccepted           = false;
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {

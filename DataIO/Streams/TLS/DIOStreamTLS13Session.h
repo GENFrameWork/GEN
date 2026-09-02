@@ -35,6 +35,14 @@
 #include "CipherECDSA.h"
 #include "CipherECDSAX25519.h"
 
+#ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+#include "CipherSecP256r1MLKEM768.h"
+#endif
+
+#ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+#include "CipherSecP384r1MLKEM1024.h"
+#endif
+
 #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
 #include "CipherX25519MLKEM768.h"
 #endif
@@ -63,6 +71,7 @@ enum DIOSTREAMTLS13SESSION_RESULT
 enum DIOSTREAMTLS13SESSION_EPOCH
 {
   DIOSTREAMTLS13SESSION_EPOCH_CLEAR        = 0 ,
+  DIOSTREAMTLS13SESSION_EPOCH_EARLY            ,
   DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE        ,
   DIOSTREAMTLS13SESSION_EPOCH_APPLICATION      ,
 };
@@ -115,6 +124,16 @@ class DIOSTREAMTLS13SESSION
     bool                                    Transcript_Add                                   (XBUFFER& message);
     bool                                    TranscriptHash                                   (XBUFFER& transcripthash);
 
+    bool                                    EarlyKeys_Activate                               (XBUFFER& PSK, XBUFFER& clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    bool                                    EarlyData_Protect                                (XBYTE* data, XDWORD size, XBUFFER& records);
+    bool                                    EarlyData_Protect                                (XBUFFER& data, XBUFFER& records);
+    XDWORD                                  EarlyData_Read                                   (XBYTE* data, XDWORD size);
+    XDWORD                                  GetEarlyDataSize                                 ();
+    bool                                    EarlyData_Commit                                  ();
+    void                                    EarlyData_End                                    (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    void                                    EarlyKeys_Deactivate                             (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    void                                    EarlyData_Accepted                               (bool accepted);
+    bool                                    EarlyData_Limit                                  (XDWORD maximumsize);
     bool                                    HandshakeKeys_Activate                           (XBUFFER& sharedsecret, XBUFFER* PSK = NULL);
     bool                                    ApplicationTrafficSecrets_Calculate              ();
     bool                                    ApplicationKeys_Activate                         (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
@@ -154,7 +173,16 @@ class DIOSTREAMTLS13SESSION
 
     DIOSTREAMTLS13KEYSCHEDULE                 keyschedule;
     DIOSTREAMTLSRECORD                      record;
+    DIOSTREAMTLSRECORD                      earlyrecord;
     CIPHERECDSAX25519                       keyexchange;
+
+    #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
+    CIPHERSECP256R1MLKEM768                 keyexchangesecp256r1mlkem768;
+    #endif
+
+    #ifdef CIPHER_ASYMMETRIC_MLKEM1024_ACTIVE
+    CIPHERSECP384R1MLKEM1024                keyexchangesecp384r1mlkem1024;
+    #endif
 
     #if defined(CIPHER_ASYMMETRIC_X25519_ACTIVE) && defined(CIPHER_ASYMMETRIC_MLKEM768_ACTIVE)
     CIPHERX25519MLKEM768                    keyexchangex25519mlkem768;
@@ -166,12 +194,16 @@ class DIOSTREAMTLS13SESSION
     CIPHERECDSA                             keyexchangep384;
     XSECUREBUFFER                           keyexchangep384private;
     XBUFFER                                 keyexchangep384public;
+    CIPHERECDSA                             keyexchangep521;
+    XSECUREBUFFER                           keyexchangep521private;
+    XBUFFER                                 keyexchangep521public;
 
     XBUFFER                                 recordinput;
     DIOSTREAMTLS_ALERT_DESCRIPTION          lastrecordalertdescription;
     XBUFFER                                 handshakeinput;
     XBUFFER                                 transcript;
     XBUFFER                                 applicationinput;
+    XBUFFER                                 earlydatainput;
     XBUFFER                                 posthandshakeoutput;
     XBUFFER                                 newsessionticketinput;
 
@@ -180,6 +212,10 @@ class DIOSTREAMTLS13SESSION
     XDWORD                                  maximumtranscriptsize;
     XDWORD                                  maximumapplicationinputsize;
 
+    XDWORD                                  maximumearlydatasize;
+    XDWORD                                  earlydatareceived;
+    XDWORD                                  earlydatasent;
+    bool                                    earlydataaccepted;
     XQWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     bool                                    keyupdaterequestpending;
     bool                                    keyupdateresponsepending;

@@ -1,0 +1,162 @@
+/**-------------------------------------------------------------------------------------------------------------------
+* @file       CipherSecP256r1MLKEM768.cpp
+* @class      CIPHERSECP256R1MLKEM768
+* @brief      SecP256r1MLKEM768 hybrid key agreement (RFC 10024)
+* @ingroup    CIPHER
+* --------------------------------------------------------------------------------------------------------------------*/
+#include "GEN_Defines.h"
+
+#include "CipherSecP256r1MLKEM768.h"
+
+#include "GEN_Control.h"
+
+CIPHERSECP256R1MLKEM768::CIPHERSECP256R1MLKEM768()
+  : secp256r1(CIPHERTYPE_ECDSA_SECP256R1)
+{
+  Clean();
+}
+
+CIPHERSECP256R1MLKEM768::~CIPHERSECP256R1MLKEM768()
+{
+  Delete();
+  Clean();
+}
+
+bool CIPHERSECP256R1MLKEM768::ClientKeyShare_Create(XBUFFER& clientshare)
+{
+  XBUFFER mlkempublic;
+
+  Delete();
+  clientshare.Delete();
+
+  bool status = secp256r1.KeyPair_Create(secp256r1private, secp256r1public) &&
+                mlkem.KeyPair_Create(mlkempublic, mlkemprivate) &&
+                clientshare.Add(secp256r1public) && clientshare.Add(mlkempublic) &&
+                (clientshare.GetSize() == CIPHERSECP256R1MLKEM768_CLIENTSHARESIZE);
+
+  if(!status)
+    {
+      clientshare.Delete();
+      Delete();
+    }
+
+  return status;
+}
+
+bool CIPHERSECP256R1MLKEM768::ClientSharedSecret_Create(XBUFFER& servershare, XBUFFER& sharedsecret,
+                                                         bool* invalidpeershare)
+{
+  XBUFFER         peerpublic;
+  XBUFFER         ciphertext;
+  XSECUREBUFFER   ecdhsecret;
+  XSECUREBUFFER   mlkemsecret;
+  bool            status = false;
+
+  if(invalidpeershare) (*invalidpeershare) = false;
+  sharedsecret.SecureDelete();
+
+  do
+    {
+      if(servershare.GetSize() != CIPHERSECP256R1MLKEM768_SERVERSHARESIZE)
+        {
+          if(invalidpeershare) (*invalidpeershare) = true;
+          break;
+        }
+
+      if((secp256r1private.GetSize() != CIPHERECDSA_P256_COORDINATE_SIZE) ||
+         (mlkemprivate.GetSize() != CIPHERMLKEM768_PRIVATEKEYSIZE)) break;
+
+      if(!peerpublic.Add(servershare.Get(), CIPHERECDSA_P256_PUBLICKEY_SIZE) ||
+         !secp256r1.PublicKey_Check(peerpublic))
+        {
+          if(invalidpeershare) (*invalidpeershare) = true;
+          break;
+        }
+
+      if(!ciphertext.Add(servershare.Get() + CIPHERECDSA_P256_PUBLICKEY_SIZE,
+                         CIPHERMLKEM768_CIPHERTEXTSIZE) ||
+         !secp256r1.SharedSecret_Create(secp256r1private, peerpublic, ecdhsecret) ||
+         !mlkem.Decapsulate(mlkemprivate, ciphertext, mlkemsecret)) break;
+
+      status = sharedsecret.Add(ecdhsecret) && sharedsecret.Add(mlkemsecret) &&
+               (sharedsecret.GetSize() == CIPHERSECP256R1MLKEM768_SHAREDSECRETSIZE);
+    }
+  while(false);
+
+  if(!status) sharedsecret.SecureDelete();
+  Delete();
+  return status;
+}
+
+bool CIPHERSECP256R1MLKEM768::ServerKeyShare_Create(XBUFFER& clientshare, XBUFFER& servershare,
+                                                     XBUFFER& sharedsecret, bool* invalidpeershare)
+{
+  XBUFFER         peerpublic;
+  XBUFFER         mlkempublic;
+  XBUFFER         serverpublic;
+  XSECUREBUFFER   serverprivate;
+  XBUFFER         ciphertext;
+  XSECUREBUFFER   ecdhsecret;
+  XSECUREBUFFER   mlkemsecret;
+  bool            status = false;
+
+  if(invalidpeershare) (*invalidpeershare) = false;
+  Delete();
+  servershare.Delete();
+  sharedsecret.SecureDelete();
+
+  do
+    {
+      if(clientshare.GetSize() != CIPHERSECP256R1MLKEM768_CLIENTSHARESIZE)
+        {
+          if(invalidpeershare) (*invalidpeershare) = true;
+          break;
+        }
+
+      if(!peerpublic.Add(clientshare.Get(), CIPHERECDSA_P256_PUBLICKEY_SIZE) ||
+         !secp256r1.PublicKey_Check(peerpublic))
+        {
+          if(invalidpeershare) (*invalidpeershare) = true;
+          break;
+        }
+
+      if(!mlkempublic.Add(clientshare.Get() + CIPHERECDSA_P256_PUBLICKEY_SIZE,
+                          CIPHERMLKEM768_PUBLICKEYSIZE) ||
+         !mlkem.PublicKey_Check(mlkempublic))
+        {
+          if(invalidpeershare) (*invalidpeershare) = true;
+          break;
+        }
+
+      if(!secp256r1.KeyPair_Create(serverprivate, serverpublic) ||
+         !secp256r1.SharedSecret_Create(serverprivate, peerpublic, ecdhsecret) ||
+         !mlkem.Encapsulate(mlkempublic, ciphertext, mlkemsecret)) break;
+
+      status = servershare.Add(serverpublic) && servershare.Add(ciphertext) &&
+               sharedsecret.Add(ecdhsecret) && sharedsecret.Add(mlkemsecret) &&
+               (servershare.GetSize() == CIPHERSECP256R1MLKEM768_SERVERSHARESIZE) &&
+               (sharedsecret.GetSize() == CIPHERSECP256R1MLKEM768_SHAREDSECRETSIZE);
+    }
+  while(false);
+
+  serverprivate.SecureDelete();
+
+  if(!status)
+    {
+      servershare.Delete();
+      sharedsecret.SecureDelete();
+    }
+
+  return status;
+}
+
+void CIPHERSECP256R1MLKEM768::Delete()
+{
+  secp256r1private.SecureDelete();
+  secp256r1public.Delete();
+  mlkemprivate.SecureDelete();
+}
+
+void CIPHERSECP256R1MLKEM768::Clean()
+{
+}

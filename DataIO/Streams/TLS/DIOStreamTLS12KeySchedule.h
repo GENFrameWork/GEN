@@ -42,8 +42,12 @@
 #define DIOSTREAMTLS12KEYSCHEDULE_MASTERSECRETSIZE            48                // Fixed by RFC 5246, section 8.1
 #define DIOSTREAMTLS12KEYSCHEDULE_RANDOMSIZE                  32
 #define DIOSTREAMTLS12KEYSCHEDULE_VERIFYDATASIZE              12                // RFC 5246, section 7.4.9
-#define DIOSTREAMTLS12KEYSCHEDULE_FIXEDIVSIZE                 4                 // AEAD salt, RFC 5288
-#define DIOSTREAMTLS12KEYSCHEDULE_RECORDIVSIZE                8                 // Explicit nonce sent with every record
+#define DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE          4                 // RFC 5288
+#define DIOSTREAMTLS12KEYSCHEDULE_CHACHA20_FIXEDIVSIZE        12                // RFC 7905
+#define DIOSTREAMTLS12KEYSCHEDULE_AESGCM_RECORDIVSIZE         8                 // Explicit nonce sent with every AES-GCM record
+#define DIOSTREAMTLS12KEYSCHEDULE_CHACHA20_RECORDIVSIZE       0                 // RFC 7905: no explicit nonce
+#define DIOSTREAMTLS12KEYSCHEDULE_FIXEDIVSIZE                 DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE
+#define DIOSTREAMTLS12KEYSCHEDULE_RECORDIVSIZE                DIOSTREAMTLS12KEYSCHEDULE_AESGCM_RECORDIVSIZE
 
 #define DIOSTREAMTLS12KEYSCHEDULE_LABEL_MASTERSECRET          "master secret"
 #define DIOSTREAMTLS12KEYSCHEDULE_LABEL_EXTENDEDMASTERSECRET  "extended master secret"
@@ -110,6 +114,7 @@ class DIOSTREAMTLS12KEYSCHEDULE
     HASH*                                   hash;
     XDWORD                                  hashsize;
     XDWORD                                  keysize;
+    XDWORD                                  fixedIVsize;
 
     XSECUREBUFFER                           mastersecret;
     XSECUREBUFFER                           key[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];

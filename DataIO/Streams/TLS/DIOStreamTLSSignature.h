@@ -43,6 +43,7 @@
 
 
 class CIPHERKEY;
+class CIPHERCERTIFICATEX509;
 
 
 class DIOSTREAMTLSSIGNATURE
@@ -50,6 +51,7 @@ class DIOSTREAMTLSSIGNATURE
   public:
 
     static bool                             IsSupported                                      (XWORD signaturescheme, CIPHERKEY* key);
+    static bool                             IsSupported                                      (XWORD signaturescheme, CIPHERCERTIFICATEX509* certificate);
     static bool                             Verify                                           (XWORD signaturescheme, CIPHERKEY* key, XBUFFER& content, XBUFFER& signature);
 
     static bool                             Sign                                             (XWORD signaturescheme, CIPHERKEY* privatekey, CIPHERKEY* publickey, XBUFFER& content, XBUFFER& signature);
