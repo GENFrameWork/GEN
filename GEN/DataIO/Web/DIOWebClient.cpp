@@ -1025,35 +1025,39 @@ void DIOWEBCLIENT::AllowInsecureRedirect(bool allow)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOWEBCLIENT::IsTLSProtocolErrorHTTPFallbackAllowed()
-* @brief      Check whether a scheme-less URL is allowed to retry over plain HTTP after a TLS protocol error
+* @fn         bool DIOWEBCLIENT::IsActiveAutoHTTPFallback()
+* @brief      Check whether the automatic HTTP fallback is active
 * @ingroup    DATAIO
-* @note       This only governs the DIOWEBCLIENT_ERROR_TLSPROTOCOL case of the scheme-less fallback (see
-*             OperationError_AllowsHTTPFallback). It never affects a URL with an explicit http:// or https://
-*             scheme, and it never applies to a TLS authentication failure (certificate/hostname rejected),
-*             which is never eligible for fallback regardless of this setting.
+* @note       This governs the automatic retry over plain HTTP that MakeOperation() performs when a scheme-less
+*             URL (no explicit http:// or https://) fails its HTTPS attempt with a cause that
+*             OperationError_AllowsHTTPFallback() considers eligible (transport/TCP/proxy/TLS-protocol errors).
+*             A URL with an explicit scheme is never affected by this setting, and a TLS authentication failure
+*             (certificate/hostname rejected) never falls back to HTTP regardless of this setting either.
 *
-* @return     bool : true if the TLS-protocol-error fallback to HTTP is allowed; otherwise false.
+* @return     bool : true if the automatic HTTP fallback is active; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOWEBCLIENT::IsTLSProtocolErrorHTTPFallbackAllowed()
+bool DIOWEBCLIENT::IsActiveAutoHTTPFallback()
 {
-  return allowtlsprotocolerrorhttpfallback;
+  return autohttpfallbackactive;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void DIOWEBCLIENT::AllowTLSProtocolErrorHTTPFallback(bool allow)
-* @brief      Allow or deny retrying a scheme-less URL over plain HTTP after a TLS protocol error
+* @fn         void DIOWEBCLIENT::AutoHTTPFallback_Activate(bool activate)
+* @brief      Activate or deactivate the automatic HTTP fallback for scheme-less URLs
 * @ingroup    DATAIO
+* @note       When deactivated, a scheme-less URL that fails its HTTPS attempt is never retried over plain HTTP:
+*             MakeOperation() returns the HTTPS failure as-is. This does not change how http:// or https:// are
+*             resolved when the URL carries an explicit scheme.
 *
-* @param[in]  allow : true to allow the downgrade explicitly; otherwise false.
+* @param[in]  activate : true to activate the automatic fallback; false to deactivate it.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void DIOWEBCLIENT::AllowTLSProtocolErrorHTTPFallback(bool allow)
+void DIOWEBCLIENT::AutoHTTPFallback_Activate(bool activate)
 {
-  allowtlsprotocolerrorhttpfallback = allow;
+  autohttpfallbackactive = activate;
 }
 
 
@@ -3065,19 +3069,18 @@ void DIOWEBCLIENT::OperationError_FromStream(DIOWEBCLIENT_ERROR defaulterror)
 
 bool DIOWEBCLIENT::OperationError_AllowsHTTPFallback()
 {
+  // Master switch: when the automatic HTTP fallback is deactivated, a scheme-less URL never retries over
+  // plain HTTP, whatever the cause of the HTTPS failure was. This is only reached from the scheme-less-URL
+  // retry in MakeOperation(): a URL with an explicit https:// scheme never falls back to HTTP either way.
+  if(!autohttpfallbackactive) return false;
+
   switch(lastoperationerror.GetError())
     {
       case DIOWEBCLIENT_ERROR_TRANSPORTUNAVAILABLE :
       case DIOWEBCLIENT_ERROR_TCPCONNECTION        :
       case DIOWEBCLIENT_ERROR_TCPTIMEOUT           :
-      case DIOWEBCLIENT_ERROR_PROXY                : return true;
-
-      // A TLS protocol error (e.g. an on-path attacker interfering with the handshake) is only allowed to
-      // fall back to plain HTTP when explicitly enabled via AllowTLSProtocolErrorHTTPFallback(). This is
-      // reached only from the scheme-less-URL retry in MakeOperation(): a URL with an explicit https://
-      // scheme never falls back to HTTP regardless of this setting.
-      case DIOWEBCLIENT_ERROR_TLSPROTOCOL          : return allowtlsprotocolerrorhttpfallback;
-
+      case DIOWEBCLIENT_ERROR_PROXY                :
+      case DIOWEBCLIENT_ERROR_TLSPROTOCOL          : return true;
                                                 default : return false;
     }
 }
@@ -3111,9 +3114,10 @@ void DIOWEBCLIENT::Clean()
   // Explicit http:// and https:// schemes are mandatory and are never replaced by this policy.
   transportpolicy         = DIOWEBCLIENT_TRANSPORTPOLICY_HTTPS_PREFER;
   allowinsecureredirect   = false;
-  // Preserves the pre-existing HTTPS_PREFER behavior by default: a TLS protocol error on a scheme-less URL may
-  // still retry over plain HTTP unless the application opts out via AllowTLSProtocolErrorHTTPFallback(false).
-  allowtlsprotocolerrorhttpfallback = true;
+  // Preserves the pre-existing HTTPS_PREFER behavior by default: a scheme-less URL whose HTTPS attempt fails
+  // may still retry automatically over plain HTTP, unless the application opts out via
+  // AutoHTTPFallback_Activate(false).
+  autohttpfallbackactive  = true;
   OperationError_Reset();
 
   contentencodingactive   = true;

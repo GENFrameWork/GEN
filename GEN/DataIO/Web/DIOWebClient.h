@@ -235,8 +235,8 @@ class DIOWEBCLIENT : public XSUBJECT
     void                                      SetTransportPolicy                (DIOWEBCLIENT_TRANSPORTPOLICY policy);
     bool                                      IsInsecureRedirectAllowed         ();
     void                                      AllowInsecureRedirect             (bool allow);
-    bool                                      IsTLSProtocolErrorHTTPFallbackAllowed ();
-    void                                      AllowTLSProtocolErrorHTTPFallback     (bool allow);
+    bool                                      IsActiveAutoHTTPFallback          ();
+    void                                      AutoHTTPFallback_Activate         (bool activate);
 
     DIOWEBCLIENT_OPERATIONERROR*              GetLastOperationError             ();
     DIOWEBCLIENT_OPERATIONERROR*              GetLastHTTPSAttemptError          ();
@@ -309,7 +309,7 @@ class DIOWEBCLIENT : public XSUBJECT
     bool                                      dostophttperror;
     DIOWEBCLIENT_TRANSPORTPOLICY              transportpolicy;
     bool                                      allowinsecureredirect;
-    bool                                      allowtlsprotocolerrorhttpfallback;
+    bool                                      autohttpfallbackactive;
     DIOWEBCLIENT_OPERATIONERROR               lastoperationerror;
     DIOWEBCLIENT_OPERATIONERROR               lastHTTPSattempterror;
     bool                                      HTTPfallbackused;
