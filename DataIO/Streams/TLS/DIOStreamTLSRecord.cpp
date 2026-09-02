@@ -182,6 +182,29 @@ bool DIOSTREAMTLSRECORD::IsIni()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLSRECORD::ClearKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @brief      Remove the traffic keys for one direction and return it to clear records
+* @ingroup    DATAIO
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSRECORD::ClearKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  if(!isini || direction >= DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS) return false;
+
+  if(key[direction] && key[direction]->Get()) DIOStreamTLS_BufferErase((*key[direction]->Get()));
+  DIOStreamTLS_BufferErase(IV[direction]);
+
+  if(cipher[direction]) { GEN_DELETE cipher[direction]; cipher[direction] = NULL; }
+  if(key[direction])    { GEN_DELETE key[direction];    key[direction] = NULL; }
+
+  sequence[direction] = 0;
+  isprotected[direction] = false;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLSRECORD::SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL level, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Install the traffic keys of a level in one direction, and restart its sequence number
 * @note       RFC 8446 section 5.3: every time the keys change, the sequence number goes back to zero.

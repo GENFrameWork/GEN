@@ -201,6 +201,7 @@ void DIOSTREAMTLS13KEYSCHEDULE::End()
   DIOStreamTLS_BufferErase(mastersecret);
   DIOStreamTLS_BufferErase(resumptionsecret);
 
+  DIOStreamTLS_BufferErase(clientearlytrafficsecret);
   DIOStreamTLS_BufferErase(clienthandshaketrafficsecret);
   DIOStreamTLS_BufferErase(serverhandshaketrafficsecret);
   DIOStreamTLS_BufferErase(clientapplicationtrafficsecret);
@@ -521,15 +522,24 @@ bool DIOSTREAMTLS13KEYSCHEDULE::MasterSecret_Calculate()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
-* @brief      Derive both handshake traffic secrets from the transcript up to the ServerHello
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::EarlyTrafficSecret_Calculate(XBUFFER& transcripthash)
+* @brief      Derive the client early traffic secret from ClientHello transcript
 * @ingroup    DATAIO
 *
-* @param[in]  transcripthash : Transcript hash of ClientHello..ServerHello.
+* @param[in]  transcripthash : Hash of the ClientHello that carries the PSK binder.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13KEYSCHEDULE::EarlyTrafficSecret_Calculate(XBUFFER& transcripthash)
+{
+  if(!isini || !HKDF || (earlysecret.GetSize() != hashsize) || (transcripthash.GetSize() != hashsize)) return false;
+
+  DIOStreamTLS_BufferErase(clientearlytrafficsecret);
+  return HKDF->ExpandLabel(earlysecret, DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTEARLY, transcripthash, hashsize, clientearlytrafficsecret);
+}
+
+
 bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
 {
   if(!isini || !HKDF)
@@ -752,6 +762,8 @@ XBUFFER* DIOSTREAMTLS13KEYSCHEDULE::GetTrafficSecret(DIOSTREAMTLS13KEYSCHEDULE_L
 
   switch(level)
     {
+      case DIOSTREAMTLS13KEYSCHEDULE_LEVEL_EARLY        : return isclient?&clientearlytrafficsecret:NULL;
+
       case DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE    : return isclient?&clienthandshaketrafficsecret:&serverhandshaketrafficsecret;
 
       case DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION  : return isclient?&clientapplicationtrafficsecret:&serverapplicationtrafficsecret;

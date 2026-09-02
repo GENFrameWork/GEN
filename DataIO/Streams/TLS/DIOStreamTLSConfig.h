@@ -71,6 +71,9 @@ enum DIOSTREAMTLS_REVOCATIONPOLICY
 #define DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME         604800
 #define DIOSTREAMTLS13_SESSIONTICKET_MAX_CACHED                8
 #define DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_KEYROTATION    86400
+#define DIOSTREAMTLS13_EARLYDATA_DEFAULT_MAXSIZE                0
+#define DIOSTREAMTLS13_EARLYDATA_MAXSIZE                    16384
+#define DIOSTREAMTLS13_EARLYDATA_AGE_TOLERANCE_MS            10000
 #define DIOSTREAMTLS_DEFAULT_CONNECTION_TIMEOUT                3
 #define DIOSTREAMTLS_DEFAULT_HANDSHAKE_TIMEOUT                 10
 
@@ -117,6 +120,7 @@ typedef bool (*DIOSTREAMTLS_OCSPDIRECTFETCHER)(XSTRING& URL, CIPHERCERTIFICATEX5
                                                CIPHERCERTIFICATEX509& issuer, XBUFFER& response, void* context);
 typedef bool (*DIOSTREAMTLS_SESSIONTICKETKEYRING_LOAD)(XBUFFER& encryptedkeyring, void* context);
 typedef bool (*DIOSTREAMTLS_SESSIONTICKETKEYRING_SAVE)(XBUFFER& encryptedkeyring, void* context);
+typedef bool (*DIOSTREAMTLS_EARLYDATA_REPLAYCHECK)(XBUFFER& ticketidentity, void* context);
 
 
 class DIOSTREAMTLSMEMORYPOLICY
@@ -185,6 +189,8 @@ class DIOSTREAMTLS13SESSIONTICKET
     DIOSTREAMTLS_ALPN_TYPE  GetApplicationProtocol             ();
     void                    SetApplicationProtocol             (DIOSTREAMTLS_ALPN_TYPE protocol);
     XBUFFER*                GetApplicationProtocolRaw          ();
+    XDWORD                  GetMaximumEarlyDataSize            ();
+    void                    SetMaximumEarlyDataSize            (XDWORD size);
     bool                    IsExpired                          ();
     XDWORD                  GetObfuscatedAge                   ();
     bool                    Delete                             ();
@@ -202,6 +208,7 @@ class DIOSTREAMTLS13SESSIONTICKET
     XWORD                   ciphersuite;
     DIOSTREAMTLS_ALPN_TYPE  applicationprotocol;
     XBUFFER                 applicationprotocolraw;
+    XDWORD                  maximumearlydatasize;
 };
 
 
@@ -353,6 +360,14 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     bool                    SetMaxVersion                     (XWORD version);
 
     bool                    IsSessionResumptionActive         ();
+    bool                    IsEarlyDataActive                 ();
+    void                    EarlyData_Activate                 (bool active);
+    XDWORD                  GetMaximumEarlyDataSize            ();
+    bool                    SetMaximumEarlyDataSize            (XDWORD size);
+    bool                    EarlyDataReplayCheck_Set           (DIOSTREAMTLS_EARLYDATA_REPLAYCHECK callback, void* context = NULL);
+    bool                    EarlyDataReplayCheck               (XBUFFER& ticketidentity);
+    bool                    IsEarlyDataAcceptable              ();
+    bool                    EarlyDataTicketAge_IsAcceptable     (XQWORD issueepoch, XDWORD obfuscatedage, XDWORD ageadd);
     void                    SessionResumption_Activate        (bool active);
     XDWORD                  GetSessionTicketLifetime          ();
     bool                    SetSessionTicketLifetime          (XDWORD lifetime);
@@ -367,13 +382,13 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
                                                                   XBUFFER& wrappingkey, void* context = NULL);
     bool                    SessionTicketKeyRing_Synchronize  (bool publish);
     bool                    SessionTicket_Store               (XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd, XDWORD lifetime, XWORD ciphersuite, DIOSTREAMTLS_ALPN_TYPE applicationprotocol);
-    bool                    SessionTicket_StoreRaw            (XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd, XDWORD lifetime, XWORD ciphersuite, XBUFFER* applicationprotocol);
+    bool                    SessionTicket_StoreRaw            (XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd, XDWORD lifetime, XWORD ciphersuite, XBUFFER* applicationprotocol, XDWORD maximumearlydatasize = 0);
     bool                    SessionTicket_Copy                (XCHAR* servername, DIOSTREAMTLS13SESSIONTICKET& destination);
     bool                    SessionTickets_Delete             ();
-    bool                    SessionTicket_Seal                (XBUFFER& PSK, XWORD ciphersuite, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername, XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket);
-    bool                    SessionTicket_SealRaw             (XBUFFER& PSK, XWORD ciphersuite, XBUFFER* applicationprotocol, XCHAR* servername, XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket);
+    bool                    SessionTicket_Seal                (XBUFFER& PSK, XWORD ciphersuite, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername, XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize = 0);
+    bool                    SessionTicket_SealRaw             (XBUFFER& PSK, XWORD ciphersuite, XBUFFER* applicationprotocol, XCHAR* servername, XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize = 0);
     bool                    SessionTicket_Open                (XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite, DIOSTREAMTLS_ALPN_TYPE& applicationprotocol, XSTRING& servername, XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd);
-    bool                    SessionTicket_OpenRaw             (XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite, XBUFFER& applicationprotocol, XSTRING& servername, XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd);
+    bool                    SessionTicket_OpenRaw             (XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite, XBUFFER& applicationprotocol, XSTRING& servername, XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd, XDWORD& maximumearlydatasize);
 
   protected:
 
@@ -418,6 +433,10 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     void*                   ocspdirectcontext;
 
     bool                    sessionresumptionactive;
+    bool                    earlydataactive;
+    XDWORD                  maximumearlydatasize;
+    DIOSTREAMTLS_EARLYDATA_REPLAYCHECK earlydatareplaycheck;
+    void*                   earlydatareplaycontext;
     XDWORD                  sessionticketlifetime;
     XDWORD                  sessionticketkeyrotationinterval;
     XSECUREBUFFER           sessionticketserverkeycurrent;

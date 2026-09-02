@@ -203,6 +203,8 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET : public DIOSTREAMTLS_MSG_INTE
     void                                    SetTicketAgeAdd                                     (XDWORD ageadd);
     XBUFFER*                                GetTicketNonce                                      ();
     XBUFFER*                                GetTicket                                           ();
+    XDWORD                                  GetMaximumEarlyDataSize                              ();
+    void                                    SetMaximumEarlyDataSize                              (XDWORD size);
 
     bool                                    SetToBuffer                                         (XBUFFER& buffer, bool showdebug);
     bool                                    GetFromBuffer                                       (XBUFFER& buffer, bool showdebug);
@@ -215,6 +217,7 @@ class DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET : public DIOSTREAMTLS_MSG_INTE
     XDWORD                                  ticketageadd;
     XBUFFER                                 ticketnonce;
     XBUFFER                                 ticket;
+    XDWORD                                  maximumearlydatasize;
 };
 
 

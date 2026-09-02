@@ -625,6 +625,8 @@ class DIOSTREAMTLS : public T
 
                                               GEN_XFACTORY.DeleteTimer(xtimer);
 
+                                              if(!usingtls12 && earlydataattempted) earlydataaccepted = handshakeclient.IsEarlyDataAccepted();
+                                              earlydata.Delete();
                                               return status;
                                             }
 
@@ -745,6 +747,25 @@ class DIOSTREAMTLS : public T
                                             }
 
 
+    bool                                    EarlyData_Set                            (XBUFFER& data)
+                                            {
+                                              earlydata.Delete();
+                                              earlydataattempted = false;
+                                              earlydataaccepted = false;
+                                              return data.IsEmpty()?true:earlydata.Add(data);
+                                            }
+
+    void                                    EarlyData_Delete                         ()
+                                            {
+                                              earlydata.Delete();
+                                              earlydataattempted = false;
+                                              earlydataaccepted = false;
+                                            }
+
+    bool                                    WasEarlyDataAttempted                    () { return earlydataattempted; }
+    bool                                    IsEarlyDataAccepted                      () { return earlydataaccepted; }
+
+
     
     
     
@@ -804,12 +825,26 @@ class DIOSTREAMTLS : public T
                                                 }
                                                else
                                                 {
+                                                  if(!earlydata.IsEmpty() && !handshakeclient.EarlyData_Prepare(earlydata.GetSize()))
+                                                    {
+                                                      return false;
+                                                    }
                                                   if(!handshakeclient.ClientHello_Create(servername, clienthello, records) ||
                                                      !Transport_Write(records))
                                                     {
                                                       return false;
                                                     }
 
+                                                  if(!earlydata.IsEmpty() && handshakeclient.IsEarlyDataOffered())
+                                                    {
+                                                      XBUFFER earlyrecords;
+                                                      if(earlydata.GetSize() > handshakeclient.GetMaximumEarlyDataSize() ||
+                                                         !handshakeclient.EarlyData_Protect(earlydata, earlyrecords) || !Transport_Write(earlyrecords))
+                                                        {
+                                                          return false;
+                                                        }
+                                                      earlydataattempted = true;
+                                                    }
                                                 }
 
                                               xtimer = GEN_XFACTORY.CreateTimer();
@@ -944,6 +979,12 @@ class DIOSTREAMTLS : public T
                                                       return false;
                                                     }
 
+                                                  if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA &&
+                                                     handshakeserver.IsWaitingClientHelloRetry() && handshakeserver.IsEarlyDataOffered())
+                                                    {
+                                                      continue;
+                                                    }
+
                                                   if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE ||
                                                      !session.HandshakeInput_Add(plain))
                                                     {
@@ -1058,6 +1099,12 @@ class DIOSTREAMTLS : public T
                                                           return false;
                                                         }
 
+                                                      continue;
+                                                    }
+
+                                                  if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA &&
+                                                     handshakeserver.IsWaitingClientHelloRetry() && handshakeserver.IsEarlyDataOffered())
+                                                    {
                                                       continue;
                                                     }
 
@@ -1359,6 +1406,9 @@ class DIOSTREAMTLS : public T
                                               isserverrole    = false;
                                               dualversionmode = false;
                                               retrycause      = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_NONE;
+                                              earlydata.Delete();
+                                              earlydataattempted = false;
+                                              earlydataaccepted = false;
                                             }
 
 
@@ -1379,6 +1429,9 @@ class DIOSTREAMTLS : public T
     DIOSTREAMTLS12HANDSHAKECLIENT           handshakeclient12;
     bool                                    usingtls12;
     bool                                    dualversionmode;
+    XBUFFER                                 earlydata;
+    bool                                    earlydataattempted;
+    bool                                    earlydataaccepted;
 };
 
 

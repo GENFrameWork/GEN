@@ -695,6 +695,8 @@ void DIOSTREAMTLS13SESSIONTICKET::SetCipherSuite(XWORD ciphersuite) { this->ciph
 DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocol() { return applicationprotocol; }
 void DIOSTREAMTLS13SESSIONTICKET::SetApplicationProtocol(DIOSTREAMTLS_ALPN_TYPE protocol) { applicationprotocol = protocol; }
 XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocolRaw() { return &applicationprotocolraw; }
+XDWORD DIOSTREAMTLS13SESSIONTICKET::GetMaximumEarlyDataSize() { return maximumearlydatasize; }
+void DIOSTREAMTLS13SESSIONTICKET::SetMaximumEarlyDataSize(XDWORD size) { maximumearlydatasize = size; }
 
 
 bool DIOSTREAMTLS13SESSIONTICKET::IsExpired()
@@ -735,6 +737,7 @@ void DIOSTREAMTLS13SESSIONTICKET::Clean()
   ciphersuite         = 0;
   applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
   applicationprotocolraw.Delete();
+  maximumearlydatasize = 0;
 }
 
 
@@ -2441,6 +2444,57 @@ bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
 
 
 
+bool DIOSTREAMTLSCONFIG::IsEarlyDataActive()
+{
+  return earlydataactive;
+}
+
+void DIOSTREAMTLSCONFIG::EarlyData_Activate(bool active)
+{
+  if(IsFrozen()) return;
+  earlydataactive = active;
+}
+
+XDWORD DIOSTREAMTLSCONFIG::GetMaximumEarlyDataSize()
+{
+  return maximumearlydatasize;
+}
+
+bool DIOSTREAMTLSCONFIG::SetMaximumEarlyDataSize(XDWORD size)
+{
+  if(IsFrozen() || size > DIOSTREAMTLS13_EARLYDATA_MAXSIZE) return false;
+  maximumearlydatasize = size;
+  return true;
+}
+
+bool DIOSTREAMTLSCONFIG::EarlyDataReplayCheck_Set(DIOSTREAMTLS_EARLYDATA_REPLAYCHECK callback, void* context)
+{
+  if(IsFrozen()) return false;
+  earlydatareplaycheck = callback;
+  earlydatareplaycontext = context;
+  return true;
+}
+
+bool DIOSTREAMTLSCONFIG::EarlyDataReplayCheck(XBUFFER& ticketidentity)
+{
+  return earlydataactive && earlydatareplaycheck && earlydatareplaycheck(ticketidentity, earlydatareplaycontext);
+}
+bool DIOSTREAMTLSCONFIG::IsEarlyDataAcceptable()
+{
+  return earlydataactive && maximumearlydatasize && earlydatareplaycheck;
+}
+bool DIOSTREAMTLSCONFIG::EarlyDataTicketAge_IsAcceptable(XQWORD issueepoch, XDWORD obfuscatedage, XDWORD ageadd)
+{
+  XQWORD now=DIOSTREAMTLSCONFIG_CurrentEpoch();
+  if(!now || !issueepoch || now<issueepoch) return false;
+  XQWORD serverage64=(now-issueepoch)*1000ULL;
+  if(serverage64>0xFFFFFFFFULL) return false;
+  XDWORD serverage=(XDWORD)serverage64;
+  XDWORD clientage=(XDWORD)(obfuscatedage-ageadd);
+  XDWORD diff=(clientage>serverage)?(clientage-serverage):(serverage-clientage);
+  return diff<=DIOSTREAMTLS13_EARLYDATA_AGE_TOLERANCE_MS;
+}
+
 bool DIOSTREAMTLSCONFIG::IsSessionResumptionActive()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -2835,11 +2889,11 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket,
   XBUFFER protocol;
   if(!DIOSTREAMTLSCONFIG_ALPNFromType(applicationprotocol, protocol)) return false;
   return SessionTicket_StoreRaw(servername, ticket, PSK, ageadd, lifetime, ciphersuite,
-                                protocol.IsEmpty()?NULL:&protocol);
+                                protocol.IsEmpty()?NULL:&protocol, 0);
 }
 
 bool DIOSTREAMTLSCONFIG::SessionTicket_StoreRaw(XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd,
-                                                 XDWORD lifetime, XWORD ciphersuite, XBUFFER* applicationprotocol)
+                                                 XDWORD lifetime, XWORD ciphersuite, XBUFFER* applicationprotocol, XDWORD maximumearlydatasize)
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
   if(!lock.IsLocked()) return false;
@@ -2872,6 +2926,7 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_StoreRaw(XCHAR* servername, XBUFFER& tick
   stored->SetReceivedEpoch(DIOSTREAMTLSCONFIG_CurrentEpoch());
   stored->SetCipherSuite(ciphersuite);
   stored->SetApplicationProtocol(DIOSTREAMTLS_ALPN_TYPE_UNKNOWN);
+  stored->SetMaximumEarlyDataSize(maximumearlydatasize);
   if(applicationprotocol && (!stored->GetApplicationProtocolRaw()->Add((*applicationprotocol)) || applicationprotocol->GetSize() > 255))
     { GEN_DELETE stored; return false; }
 
@@ -2910,6 +2965,7 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Copy(XCHAR* servername, DIOSTREAMTLS13SES
           destination.SetReceivedEpoch(ticket->GetReceivedEpoch());
           destination.SetCipherSuite(ticket->GetCipherSuite());
           destination.SetApplicationProtocol(ticket->GetApplicationProtocol());
+          destination.SetMaximumEarlyDataSize(ticket->GetMaximumEarlyDataSize());
           return destination.GetTicket()->Add((*ticket->GetTicket())) && destination.GetPSK()->Add((*ticket->GetPSK())) &&
                  (ticket->GetApplicationProtocolRaw()->IsEmpty() || destination.GetApplicationProtocolRaw()->Add((*ticket->GetApplicationProtocolRaw())));
         }
@@ -2930,19 +2986,19 @@ bool DIOSTREAMTLSCONFIG::SessionTickets_Delete()
 
 bool DIOSTREAMTLSCONFIG::SessionTicket_Seal(XBUFFER& PSK, XWORD ciphersuite,
                                              DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername,
-                                             XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket)
+                                             XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize)
 {
   XBUFFER protocol;
   if(!DIOSTREAMTLSCONFIG_ALPNFromType(applicationprotocol, protocol)) return false;
-  return SessionTicket_SealRaw(PSK, ciphersuite, protocol.IsEmpty()?NULL:&protocol, servername, lifetime, ageadd, ticket);
+  return SessionTicket_SealRaw(PSK, ciphersuite, protocol.IsEmpty()?NULL:&protocol, servername, lifetime, ageadd, ticket, maximumearlydatasize);
 }
 
 bool DIOSTREAMTLSCONFIG::SessionTicket_SealRaw(XBUFFER& PSK, XWORD ciphersuite,
                                                 XBUFFER* applicationprotocol, XCHAR* servername,
-                                                XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket)
+                                                XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize)
 {
   if(!sessionresumptionactive || PSK.IsEmpty() || !lifetime ||
-     (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME) ||
+     (lifetime > DIOSTREAMTLS13_SESSIONTICKET_MAX_LIFETIME) || maximumearlydatasize > DIOSTREAMTLS13_EARLYDATA_MAXSIZE ||
      !SessionResumption_ServerInitialize()) return false;
 
   XSECUREBUFFER plain;
@@ -2987,15 +3043,15 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_SealRaw(XBUFFER& PSK, XWORD ciphersuite,
   if(!status) return false;
 
   XBYTE protocolsize = applicationprotocol?(XBYTE)applicationprotocol->GetSize():0;
-  if(!plain.Add((XBYTE)3) || !DIOSTREAMTLSCONFIG_AddUInt64BE(plain, issueepoch) ||
+  if(!plain.Add((XBYTE)4) || !DIOSTREAMTLSCONFIG_AddUInt64BE(plain, issueepoch) ||
      !DIOSTREAMTLSCONFIG_AddUInt32BE(plain, lifetime) || !DIOSTREAMTLSCONFIG_AddUInt32BE(plain, ageadd) ||
-     !DIOSTREAMTLSCONFIG_AddUInt16BE(plain, ciphersuite) || !plain.Add(protocolsize) ||
+     !DIOSTREAMTLSCONFIG_AddUInt16BE(plain, ciphersuite) || !DIOSTREAMTLSCONFIG_AddUInt32BE(plain, maximumearlydatasize) || !plain.Add(protocolsize) ||
      (protocolsize && !plain.Add((*applicationprotocol))) || !plain.Add((XBYTE)PSK.GetSize()) ||
      !plain.Add(PSK) || !plain.Add(namelength)) return false;
 
   for(XDWORD c=0; c<namelength; c++) if(!plain.Add((XBYTE)servername[c])) return false;
 
-  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','3' };
+  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','4' };
   if(!aad.Add(aadbytes, sizeof(aadbytes)) || !DIOSTREAMTLSCONFIG_AddUInt64BE(aad, keyID) ||
      !key.Set(sealingkey) || !cipher.SetKey(&key) ||
      !cipher.CipherAEAD(plain.Get(), plain.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
@@ -3012,7 +3068,8 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD
                                              XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
 {
   XBUFFER protocol;
-  if(!SessionTicket_OpenRaw(ticket, PSK, ciphersuite, protocol, servername, issueepoch, lifetime, ageadd)) return false;
+  XDWORD maximumearlydatasize = 0;
+  if(!SessionTicket_OpenRaw(ticket, PSK, ciphersuite, protocol, servername, issueepoch, lifetime, ageadd, maximumearlydatasize)) return false;
   applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_UNKNOWN;
   if(protocol.GetSize() == 8 && !memcmp(protocol.Get(), "http/1.1", 8)) applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_HTTP_1_1;
   if(protocol.GetSize() == 2 && !memcmp(protocol.Get(), "h2", 2)) applicationprotocol = DIOSTREAMTLS_ALPN_TYPE_HTTP_2;
@@ -3021,7 +3078,7 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD
 
 bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite,
                                                 XBUFFER& applicationprotocol, XSTRING& servername,
-                                                XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
+                                                XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd, XDWORD& maximumearlydatasize)
 {
   // Enforce the ticket-key cryptoperiod on the resumption path too.  Previously rotation was guaranteed when a new
   // ticket was sealed, but a server receiving only resumptions could keep opening tickets with the current key after
@@ -3057,13 +3114,25 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XW
      !ciphertext.Add(ticket.Get() + sizeof(XQWORD) + CIPHERAESGCM_NONCESIZE, ciphertextsize) ||
      !tag.Add(ticket.Get() + sizeof(XQWORD) + CIPHERAESGCM_NONCESIZE + ciphertextsize, CIPHERAESGCM_TAGSIZE)) return false;
 
-  static XBYTE aadbytes[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','3' };
-  if(!aad.Add(aadbytes, sizeof(aadbytes)) || !DIOSTREAMTLSCONFIG_AddUInt64BE(aad, keyID) ||
-     !key.Set(openingkey) || !cipher.SetKey(&key) ||
-     !cipher.UncipherAEAD(ciphertext.Get(), ciphertext.GetSize(), nonce, aad, tag) || !cipher.GetResult()) return false;
+  static XBYTE aadbytes4[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','4' };
+  if(!aad.Add(aadbytes4, sizeof(aadbytes4)) || !DIOSTREAMTLSCONFIG_AddUInt64BE(aad, keyID) ||
+     !key.Set(openingkey) || !cipher.SetKey(&key)) return false;
 
   XSECUREBUFFER plain;
-  if(!plain.Add((*cipher.GetResult()))) return false;
+  bool opened = cipher.UncipherAEAD(ciphertext.Get(), ciphertext.GetSize(), nonce, aad, tag) && cipher.GetResult();
+  if(opened) opened=plain.Add((*cipher.GetResult()));
+
+  // Backward compatibility with the stateless v3 tickets emitted before 0-RTT support. They remain usable for
+  // ordinary 1-RTT resumption but can never authorize early data.
+  if(!opened)
+    {
+      XBUFFER aad3;
+      CIPHERAESGCM cipher3;
+      static XBYTE aadbytes3[] = { 'G','E','N','-','T','L','S','1','3','-','T','I','C','K','E','T','-','3' };
+      if(!aad3.Add(aadbytes3,sizeof(aadbytes3)) || !DIOSTREAMTLSCONFIG_AddUInt64BE(aad3,keyID) || !cipher3.SetKey(&key) ||
+         !cipher3.UncipherAEAD(ciphertext.Get(),ciphertext.GetSize(),nonce,aad3,tag) || !cipher3.GetResult() ||
+         !plain.Add((*cipher3.GetResult()))) return false;
+    }
 
   XBYTE version = 0;
   XBYTE protocolsize = 0;
@@ -3073,10 +3142,14 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XW
   XDWORD position = 0;
   if(position >= plain.GetSize()) return false;
   version = plain.Get()[position++];
-  if(version != 3 || !DIOSTREAMTLSCONFIG_GetUInt64BE(plain, position, issueepoch) ||
+  maximumearlydatasize = 0;
+  if((version != 3 && version != 4) || !DIOSTREAMTLSCONFIG_GetUInt64BE(plain, position, issueepoch) ||
      !DIOSTREAMTLSCONFIG_GetUInt32BE(plain, position, lifetime) ||
      !DIOSTREAMTLSCONFIG_GetUInt32BE(plain, position, ageadd) ||
-     !DIOSTREAMTLSCONFIG_GetUInt16BE(plain, position, ciphersuite) || position >= plain.GetSize()) return false;
+     !DIOSTREAMTLSCONFIG_GetUInt16BE(plain, position, ciphersuite)) return false;
+  if(version==4 && (!DIOSTREAMTLSCONFIG_GetUInt32BE(plain, position, maximumearlydatasize) ||
+                    maximumearlydatasize > DIOSTREAMTLS13_EARLYDATA_MAXSIZE)) return false;
+  if(position >= plain.GetSize()) return false;
   protocolsize = plain.Get()[position++];
   if(position > plain.GetSize() || (plain.GetSize()-position) < ((XDWORD)protocolsize+2)) return false;
 
@@ -3362,6 +3435,10 @@ void DIOSTREAMTLSCONFIG::Clean()
   sessionticketkeyringwrappingkey.SecureDelete();
   sessionticketkeyringdirty = false;
   sessionresumptionactive = true;
+  earlydataactive = false;
+  maximumearlydatasize = DIOSTREAMTLS13_EARLYDATA_DEFAULT_MAXSIZE;
+  earlydatareplaycheck = NULL;
+  earlydatareplaycontext = NULL;
   sessionticketlifetime   = DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_LIFETIME;
   sessionticketkeyrotationinterval = DIOSTREAMTLS13_SESSIONTICKET_DEFAULT_KEYROTATION;
 }

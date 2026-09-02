@@ -71,6 +71,7 @@ enum DIOSTREAMTLS13SESSION_RESULT
 enum DIOSTREAMTLS13SESSION_EPOCH
 {
   DIOSTREAMTLS13SESSION_EPOCH_CLEAR        = 0 ,
+  DIOSTREAMTLS13SESSION_EPOCH_EARLY            ,
   DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE        ,
   DIOSTREAMTLS13SESSION_EPOCH_APPLICATION      ,
 };
@@ -123,6 +124,16 @@ class DIOSTREAMTLS13SESSION
     bool                                    Transcript_Add                                   (XBUFFER& message);
     bool                                    TranscriptHash                                   (XBUFFER& transcripthash);
 
+    bool                                    EarlyKeys_Activate                               (XBUFFER& PSK, XBUFFER& clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    bool                                    EarlyData_Protect                                (XBYTE* data, XDWORD size, XBUFFER& records);
+    bool                                    EarlyData_Protect                                (XBUFFER& data, XBUFFER& records);
+    XDWORD                                  EarlyData_Read                                   (XBYTE* data, XDWORD size);
+    XDWORD                                  GetEarlyDataSize                                 ();
+    bool                                    EarlyData_Commit                                  ();
+    void                                    EarlyData_End                                    (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    void                                    EarlyKeys_Deactivate                             (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
+    void                                    EarlyData_Accepted                               (bool accepted);
+    bool                                    EarlyData_Limit                                  (XDWORD maximumsize);
     bool                                    HandshakeKeys_Activate                           (XBUFFER& sharedsecret, XBUFFER* PSK = NULL);
     bool                                    ApplicationTrafficSecrets_Calculate              ();
     bool                                    ApplicationKeys_Activate                         (DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction);
@@ -162,6 +173,7 @@ class DIOSTREAMTLS13SESSION
 
     DIOSTREAMTLS13KEYSCHEDULE                 keyschedule;
     DIOSTREAMTLSRECORD                      record;
+    DIOSTREAMTLSRECORD                      earlyrecord;
     CIPHERECDSAX25519                       keyexchange;
 
     #ifdef CIPHER_ASYMMETRIC_MLKEM768_ACTIVE
@@ -191,6 +203,7 @@ class DIOSTREAMTLS13SESSION
     XBUFFER                                 handshakeinput;
     XBUFFER                                 transcript;
     XBUFFER                                 applicationinput;
+    XBUFFER                                 earlydatainput;
     XBUFFER                                 posthandshakeoutput;
     XBUFFER                                 newsessionticketinput;
 
@@ -199,6 +212,10 @@ class DIOSTREAMTLS13SESSION
     XDWORD                                  maximumtranscriptsize;
     XDWORD                                  maximumapplicationinputsize;
 
+    XDWORD                                  maximumearlydatasize;
+    XDWORD                                  earlydatareceived;
+    XDWORD                                  earlydatasent;
+    bool                                    earlydataaccepted;
     XQWORD                                  keyupdates[DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS];
     bool                                    keyupdaterequestpending;
     bool                                    keyupdateresponsepending;

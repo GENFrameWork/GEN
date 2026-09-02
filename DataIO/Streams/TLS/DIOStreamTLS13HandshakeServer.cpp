@@ -396,6 +396,11 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::IsSessionResumed()
   return resumptionaccepted;
 }
 
+bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataOffered() { return earlydataoffered; }
+bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataAccepted() { return earlydataaccepted; }
+XDWORD DIOSTREAMTLS13HANDSHAKESERVER::GetEarlyDataSize() { return session?session->GetEarlyDataSize():0; }
+XDWORD DIOSTREAMTLS13HANDSHAKESERVER::EarlyData_Read(XBYTE* data, XDWORD size) { return session?session->EarlyData_Read(data,size):0; }
+
 
 CIPHERCERTIFICATEX509* DIOSTREAMTLS13HANDSHAKESERVER::GetClientCertificate()
 {
@@ -1030,7 +1035,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::HelloRetryRequest_Create(DIOSTREAMTLS_MSG_HA
 *
 * @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XCHAR* servername, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XWORD& ciphersuite, XBUFFER& PSK)
 * @brief      Validate one stateless resumption ticket and its PSK binder
-* @note       INTERNAL. GEN accepts only psk_dhe_ke, preserving forward secrecy. 0-RTT is not advertised.
+* @note       INTERNAL. GEN accepts only psk_dhe_ke, preserving forward secrecy. Early data, when offered, is bound to identity 0.
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -1044,6 +1049,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
 
   DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES* modes = NULL;
   DIOSTREAMTLS_MSG_EXTENSION_PRESHAREDKEY*         offeredpsk = NULL;
+  DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*              earlyextension = NULL;
 
   for(XDWORD c=0; c<clienthello->Extensions_GetAll()->GetSize(); c++)
     {
@@ -1054,6 +1060,13 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
         {
           if(modes) return false;
           modes = (DIOSTREAMTLS_MSG_EXTENSION_PSKKEYEXCHANGEMODES*)extension;
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA)
+        {
+          if(earlyextension || state==DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY) return false;
+          earlyextension=(DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
+          if(!earlyextension->GetData()->IsEmpty()) return false;
         }
 
       if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY)
@@ -1075,6 +1088,8 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
 
   for(XDWORD c=0; c<offeredpsk->Identities_GetAll()->GetSize(); c++)
     {
+      // TLS 1.3 binds early_data to identity 0, but ordinary 1-RTT resumption may select any offered identity.
+      // If early_data is present, identities after 0 remain eligible only for 1-RTT and must not authorize early data.
       DIOSTREAMTLS_MSG_EXTENSION_PSKIDENTITY* identity = offeredpsk->Identities_GetAll()->Get(c);
       XBUFFER* receivedbinder = offeredpsk->Binders_GetAll()->Get(c);
       if(!identity || !receivedbinder) continue;
@@ -1086,9 +1101,10 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
       XQWORD issueepoch = 0;
       XDWORD lifetime = 0;
       XDWORD ageadd = 0;
+      XDWORD ticketmaximumearlydata = 0;
 
       if(!config->SessionTicket_OpenRaw((*identity->GetIdentity()), ticketpsk, ticketcipher, ticketprotocol,
-                                     ticketservername, issueepoch, lifetime, ageadd)) continue;
+                                     ticketservername, issueepoch, lifetime, ageadd, ticketmaximumearlydata)) continue;
 
       bool servernamematch    = servername && servername[0] ? !ticketservername.Compare(servername, true) : ticketservername.IsEmpty();
       bool protocolmatch      = applicationprotocol?ticketprotocol.Compare((*applicationprotocol)):ticketprotocol.IsEmpty();
@@ -1118,8 +1134,8 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
         }
 
       // Ticket freshness itself is authenticated and enforced by SessionTicket_Open(). The obfuscated ticket age is
-      // primarily used by TLS 1.3 to decide whether 0-RTT is fresh enough for anti-replay processing. GEN does not
-      // advertise or accept early_data, so an age skew must not reject an otherwise valid 1-RTT resumption PSK.
+      // used only to decide whether 0-RTT is fresh enough for anti-replay processing; an age skew must not reject an
+      // otherwise valid 1-RTT resumption PSK.
       (void)issueepoch;
       (void)lifetime;
       (void)ageadd;
@@ -1187,6 +1203,24 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
           return false;
         }
 
+      earlydataoffered = (earlyextension != NULL) && (c == 0);
+      earlydataaccepted = false;
+      // Keep the authenticated ticket limit even when local policy rejects 0-RTT: the peer may already have sent
+      // early records before learning the rejection and GEN must authenticate/discard them within the ticket bound.
+      maximumearlydatasize = earlydataoffered ? ticketmaximumearlydata : 0;
+      earlydataticketidentity.Delete();
+      if(earlydataoffered && ticketmaximumearlydata && config->IsEarlyDataAcceptable())
+        {
+          XDWORD allowed=config->GetMaximumEarlyDataSize();
+          if(allowed>ticketmaximumearlydata) allowed=ticketmaximumearlydata;
+          if(allowed && config->EarlyDataTicketAge_IsAcceptable(issueepoch, identity->GetObfuscatedTicketAge(), ageadd) &&
+             earlydataticketidentity.Add((*identity->GetIdentity())) && config->EarlyDataReplayCheck(earlydataticketidentity))
+            {
+              earlydataaccepted=true;
+              maximumearlydatasize=allowed;
+            }
+        }
+
       ticketpsk.FillBuffer(0);
       ciphersuite = ticketcipher;
       return true;
@@ -1200,7 +1234,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
 *
 * @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::NewSessionTicket_Create()
 * @brief      Issue one post-handshake ticket for TLS 1.3 PSK-DHE resumption
-* @note       INTERNAL. No early_data extension is emitted, so the ticket cannot authorize 0-RTT.
+* @note       INTERNAL. early_data is advertised only when explicitly enabled and an anti-replay callback is installed.
 * @ingroup    DATAIO
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -1234,7 +1268,8 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::NewSessionTicket_Create()
      !config->SessionTicket_SealRaw(PSK, session->GetKeySchedule()->GetCipherSuite(),
                                  applicationprotocolnegotiated?&applicationprotocolraw:NULL,
                                  negotiatedservername.IsEmpty()?NULL:negotiatedservername.Get(),
-                                 config->GetSessionTicketLifetime(), ageadd, ticket))
+                                 config->GetSessionTicketLifetime(), ageadd, ticket,
+                                 config->IsEarlyDataAcceptable()?config->GetMaximumEarlyDataSize():0))
     {
       if(!PSK.IsEmpty()) PSK.FillBuffer(0);
       return false;
@@ -1247,6 +1282,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::NewSessionTicket_Create()
   message.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_NEW_SESSION_TICKET);
   message.GetBody()->SetTicketLifetime(config->GetSessionTicketLifetime());
   message.GetBody()->SetTicketAgeAdd(ageadd);
+  message.GetBody()->SetMaximumEarlyDataSize(config->IsEarlyDataAcceptable()?config->GetMaximumEarlyDataSize():0);
 
   status = message.GetBody()->GetTicketNonce()->Add(nonce) &&
            message.GetBody()->GetTicket()->Add(ticket) &&
@@ -1323,6 +1359,13 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
     }
 
   records.Delete();
+
+  // ClientHello2 after HRR is sent in cleartext. 0-RTT is rejected by HRR, so remove the first
+  // ClientHello's early receive keys before processing the retried ClientHello.
+  if(isretry && session->GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
+    {
+      session->EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
+    }
 
   workbuffer.Add(clienthello);
 
@@ -1600,6 +1643,17 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
 
   if(!isretry && helloretryrequestrequired)
     {
+      // RFC 8446 forbids accepting 0-RTT after HelloRetryRequest, but early records already sent after ClientHello1
+      // may still be queued on TCP.  If the PSK was valid, derive the CH1 early read keys only to authenticate and
+      // discard those records while waiting for ClientHello2.  No application bytes are delivered.
+      if(resumptionaccepted && earlydataoffered)
+        {
+          if(!session->CipherSuite_Select(ciphersuite) ||
+             !session->EarlyKeys_Activate(resumptionpsk, clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE))
+            return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+          session->EarlyData_Accepted(false);
+          earlydataaccepted=false;
+        }
       return HelloRetryRequest_Create(body, clienthello, ciphersuite, group, records);
     }
 
@@ -1615,6 +1669,23 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
     {
       sharedsecret.FillBuffer(0);
       return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+    }
+
+  if(resumptionaccepted && earlydataoffered)
+    {
+      XDWORD earlylimit=maximumearlydatasize;
+      if(!earlylimit)
+        {
+          earlylimit=config->GetMaximumEarlyDataSize();
+          if(!earlylimit) earlylimit=DIOSTREAMTLS13_EARLYDATA_MAXSIZE;
+        }
+      if(!session->EarlyKeys_Activate(resumptionpsk, clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) ||
+         !session->EarlyData_Limit(earlylimit))
+        {
+          sharedsecret.FillBuffer(0);
+          return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+        }
+      session->EarlyData_Accepted(earlydataaccepted);
     }
 
   if(!session->Transcript_Add(clienthello))
@@ -1760,6 +1831,14 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
           GEN_DELETE ALPN;
           return SetError();
         }
+    }
+
+  if(earlydataaccepted)
+    {
+      DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* earlyack=GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+      if(!earlyack) return SetError();
+      earlyack->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA);
+      if(!encryptedextensionsmessage.GetBody()->Extensions_Add(earlyack)) { GEN_DELETE earlyack; return SetError(); }
     }
 
   if(!encryptedextensionsmessage.SetToBuffer(encryptedextensions, false) ||
@@ -2011,9 +2090,10 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
   retryselectedgroup = 0;
   retryciphersuite   = 0;
   clientcertificateprovided = false;
-  state = (resumptionaccepted || (config->GetClientAuthenticationMode() == DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE))?
-          DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED:
-          DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATE;
+  state = earlydataaccepted?DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_END_OF_EARLY_DATA:
+          ((resumptionaccepted || (config->GetClientAuthenticationMode() == DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE_NONE))?
+           DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED:
+           DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATE);
 
   return true;
 }
@@ -2244,6 +2324,46 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificateVerify_Process(XBUFFER& mes
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::EndOfEarlyData_Process(XBUFFER& message)
+* @brief      Process the TLS 1.3 EndOfEarlyData marker and switch receive processing to handshake keys
+* @note       INTERNAL
+* @ingroup    DATAIO
+*
+* @param[in]  message : Complete EndOfEarlyData handshake message.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13HANDSHAKESERVER::EndOfEarlyData_Process(XBUFFER& message)
+{
+  if(state != DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_END_OF_EARLY_DATA || !earlydataaccepted)
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
+    }
+
+  DIOSTREAMTLS_MSG_HANDSHAKE handshake;
+  XBUFFER                    work;
+
+  if(!work.Add(message) || !handshake.GetFromBuffer(work, false) || !work.IsEmpty() ||
+     (handshake.GetMsgType() != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_END_OF_EARLY_DATA) ||
+     handshake.GetLength())
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_DECODE_ERROR);
+    }
+
+  if(!session->Transcript_Add(message) || !session->EarlyData_Commit())
+    {
+      return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR);
+    }
+
+  session->EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
+  state = DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::Finished_Process(XBUFFER& message)
 * @brief      Verify the client Finished and activate remote application keys
 * @note       INTERNAL
@@ -2392,6 +2512,17 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Process()
           case DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC : if((plain.GetSize() != 1) || (plain.GetByte(0) != 1)) return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
                                                                 break;
 
+          case DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA   : if(!earlydataoffered ||
+                                                                   (session->GetEpoch(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE) != DIOSTREAMTLS13SESSION_EPOCH_EARLY))
+                                                                  {
+                                                                    return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
+                                                                  }
+                                                                if(earlydataaccepted && session->GetEarlyDataSize()>maximumearlydatasize)
+                                                                  {
+                                                                    return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
+                                                                  }
+                                                                break;
+
           case DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT              : { DIOSTREAMTLS_MSG_ALERT alert;
 
                                                                   if(!alert.GetFromBuffer(plain, false))
@@ -2474,6 +2605,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Handshake_Process(XBUFFER& message)
     {
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE        : return ClientCertificate_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_CERTIFICATE_VERIFY : return ClientCertificateVerify_Process(message);
+      case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_END_OF_EARLY_DATA  : return EndOfEarlyData_Process(message);
       case DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_FINISHED           : return Finished_Process(message);
                                                                default : return SetError(DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE);
     }
@@ -2526,6 +2658,11 @@ void DIOSTREAMTLS13HANDSHAKESERVER::Clean()
   retryselectedgroup               = 0;
   retryciphersuite                 = 0;
   clientcertificateprovided       = false;
+  resumptionaccepted              = false;
+  earlydataoffered                = false;
+  earlydataaccepted               = false;
+  maximumearlydatasize            = 0;
+  earlydataticketidentity.Delete();
   serverOCSPstaplingrequested      = false;
   clientOCSPstaplingrequested      = false;
   clientcertificatevalidator.End();

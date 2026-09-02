@@ -47,11 +47,12 @@
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SESSIONTICKET	        0x0023 // 1.2	  Ticket
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SUPPORTEDVERSIONS	    0x002b // 1.3	  TLS Versions
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_COOKIE                 0x002c // 1.3   HelloRetryRequest cookie
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA              0x002a // 1.3   0-RTT early data
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PSKKEYEXCHANGEMODES	  0x002d // 1.3	  Mode PSK
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_CERTIFICATEAUTHORITIES   0x002f // 1.3   Acceptable CA distinguished names
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_SIGNATUREALGORITHMSCERT 0x0032 // 1.2+  X.509 certificate signatures
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_KEYSHARE	            0x0033 // 1.3	  Public Key
-#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY         0x0029 // 1.3	  Session resumption (PSK); parsed/replayed only, not offered by this client
+#define DIOSTREAMTLS_MSG_EXTENSION_TYPE_PRESHAREDKEY         0x0029 // 1.3	  Session resumption (PSK)
 #define DIOSTREAMTLS_MSG_EXTENSION_TYPE_RENEGOTIATIONINFO     0xFF01 // 1.2   Secure renegotiation indication
 
 

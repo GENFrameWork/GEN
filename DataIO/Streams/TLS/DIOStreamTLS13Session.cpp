@@ -108,7 +108,7 @@ bool DIOSTREAMTLS13SESSION::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE 
       return false;
     }
 
-  if(!record.Ini(&keyschedule))
+  if(!record.Ini(&keyschedule) || !earlyrecord.Ini(&keyschedule))
     {
       keyschedule.End();
       return false;
@@ -128,6 +128,7 @@ bool DIOSTREAMTLS13SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
   maximumhandshakeinputsize   = policy.GetMaximumHandshakeInputSize();
   maximumtranscriptsize       = policy.GetMaximumTranscriptSize();
   maximumapplicationinputsize = policy.GetMaximumApplicationInputSize();
+  maximumearlydatasize = maximumapplicationinputsize>DIOSTREAMTLS13_EARLYDATA_MAXSIZE?DIOSTREAMTLS13_EARLYDATA_MAXSIZE:maximumapplicationinputsize;
   return maximumrecordinputsize && maximumhandshakeinputsize && maximumtranscriptsize && maximumapplicationinputsize;
 }
 
@@ -141,6 +142,7 @@ bool DIOSTREAMTLS13SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
 * --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSION::End()
 {
+  earlyrecord.End();
   record.End();
   keyschedule.End();
   KeyExchange_Delete();
@@ -149,6 +151,7 @@ void DIOSTREAMTLS13SESSION::End()
   handshakeinput.Delete();
   transcript.Delete();
   applicationinput.Delete();
+  earlydatainput.Delete();
   posthandshakeoutput.Delete();
   newsessionticketinput.Delete();
 
@@ -632,18 +635,20 @@ void DIOSTREAMTLS13SESSION::KeyExchange_Delete()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::CipherSuite_Select(XWORD ciphersuite)
 {
-  if(!isini ||
-     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  != DIOSTREAMTLS13SESSION_EPOCH_CLEAR) ||
-     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_CLEAR))
-    {
-      return false;
-    }
+  if(!isini) return false;
+  bool localearly=(epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]==DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+  bool remoteearly=(epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]==DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+  if((epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]!=DIOSTREAMTLS13SESSION_EPOCH_CLEAR && !localearly) ||
+     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]!=DIOSTREAMTLS13SESSION_EPOCH_CLEAR && !remoteearly)) return false;
 
   if(keyschedule.GetCipherSuite() == ciphersuite) return true;
 
+  if(localearly) epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]=DIOSTREAMTLS13SESSION_EPOCH_CLEAR;
+  if(remoteearly) epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]=DIOSTREAMTLS13SESSION_EPOCH_CLEAR;
+  earlyrecord.End();
   record.End();
 
-  if(!keyschedule.Ini(ciphersuite, role) || !record.Ini(&keyschedule))
+  if(!keyschedule.Ini(ciphersuite, role) || !record.Ini(&keyschedule) || !earlyrecord.Ini(&keyschedule))
     {
       keyschedule.End();
       isini = false;
@@ -769,11 +774,33 @@ DIOSTREAMTLS13SESSION_RESULT DIOSTREAMTLS13SESSION::Record_Extract(DIOSTREAMTLS_
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
 
+  bool useearly = (role==DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER &&
+                   epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE]==DIOSTREAMTLS13SESSION_EPOCH_EARLY &&
+                   header.GetContenType()==DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA);
+  if(useearly)
+    {
+      if(earlyrecord.Unprotect(onerecord, contenttype, plain))
+        {
+          if(contenttype!=DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA || earlydatareceived>maximumearlydatasize ||
+             plain.GetSize()>(maximumearlydatasize-earlydatareceived) ||
+             (earlydataaccepted && plain.GetSize() && !earlydatainput.Add(plain)))
+            {
+              lastrecordalertdescription=DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
+              return DIOSTREAMTLS13SESSION_RESULT_ERROR;
+            }
+          earlydatareceived += plain.GetSize();
+          return DIOSTREAMTLS13SESSION_RESULT_COMPLETE;
+        }
+      // The first handshake-key record (EndOfEarlyData when accepted, Finished when rejected) has the same
+      // outer application_data type. Retry the exact ciphertext with handshake keys before declaring failure.
+      plain.Delete();
+    }
   if(!record.Unprotect(onerecord, contenttype, plain))
     {
       lastrecordalertdescription = record.GetLastAlertDescription();
       return DIOSTREAMTLS13SESSION_RESULT_ERROR;
     }
+  if(useearly && !earlydataaccepted) EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE);
 
   return DIOSTREAMTLS13SESSION_RESULT_COMPLETE;
 }
@@ -976,15 +1003,83 @@ bool DIOSTREAMTLS13SESSION::TranscriptHash(XBUFFER& transcripthash)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
+* @fn         bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate
+* @brief      Install TLS 1.3 client early traffic keys in the requested direction
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate(XBUFFER& PSK, XBUFFER& clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  XBUFFER hash;
+  if(!isini || PSK.IsEmpty() || clienthello.IsEmpty() || direction>=DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS) return false;
+  if(direction==DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL && role!=DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) return false;
+  if(direction==DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE && role!=DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER) return false;
+  if(epoch[direction]!=DIOSTREAMTLS13SESSION_EPOCH_CLEAR) return false;
+  if(!keyschedule.EarlySecret_Calculate(&PSK) || !keyschedule.TranscriptHash(clienthello, hash) ||
+     !keyschedule.EarlyTrafficSecret_Calculate(hash) || !earlyrecord.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_EARLY, direction)) return false;
+  epoch[direction]=DIOSTREAMTLS13SESSION_EPOCH_EARLY;
+  return true;
+}
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
+{
+  if(!isini || role!=DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT || epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]!=DIOSTREAMTLS13SESSION_EPOCH_EARLY ||
+     (!data && size) || !size || earlydatasent>maximumearlydatasize || size>(maximumearlydatasize-earlydatasent)) return false;
+  if(!earlyrecord.Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA, data, size, records)) return false;
+  earlydatasent += size;
+  return true;
+}
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBUFFER& data, XBUFFER& records) { return EarlyData_Protect(data.Get(), data.GetSize(), records); }
+
+XDWORD DIOSTREAMTLS13SESSION::EarlyData_Read(XBYTE* data, XDWORD size)
+{
+  if(!data || !size) return 0;
+  if(size>earlydatainput.GetSize()) size=earlydatainput.GetSize();
+  return earlydatainput.Extract(data,0,size);
+}
+
+XDWORD DIOSTREAMTLS13SESSION::GetEarlyDataSize() { return earlydatainput.GetSize(); }
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Commit()
+{
+  if(!isini || role != DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER || !earlydataaccepted) return false;
+  if(earlydatainput.IsEmpty()) return true;
+  if(earlydatainput.GetSize() > maximumapplicationinputsize ||
+     applicationinput.GetSize() > (maximumapplicationinputsize-earlydatainput.GetSize())) return false;
+  if(!applicationinput.Add(earlydatainput)) return false;
+  earlydatainput.Delete();
+  return true;
+}
+
+void DIOSTREAMTLS13SESSION::EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  if(direction<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS && epoch[direction]==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
+    {
+      earlyrecord.ClearKeys(direction);
+      epoch[direction]=DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
+    }
+}
+
+void DIOSTREAMTLS13SESSION::EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+{
+  if(direction<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS && epoch[direction]==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
+    {
+      earlyrecord.ClearKeys(direction);
+      epoch[direction]=DIOSTREAMTLS13SESSION_EPOCH_CLEAR;
+    }
+}
+
+void DIOSTREAMTLS13SESSION::EarlyData_Accepted(bool accepted) { earlydataaccepted=accepted; }
+
+bool DIOSTREAMTLS13SESSION::EarlyData_Limit(XDWORD maximumsize)
+{
+  if(!maximumsize || maximumsize>DIOSTREAMTLS13_EARLYDATA_MAXSIZE || maximumsize>maximumapplicationinputsize || earlydatareceived) return false;
+  maximumearlydatasize=maximumsize;
+  return true;
+}
+
+/**-------------------------------------------------------------------------------------------------------------------
 * @fn         bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 * @brief      Derive and install both handshake traffic directions
-* @ingroup    DATAIO
-*
-* @param[in]  sharedsecret : Shared secret produced by the negotiated key exchange.
-*
-* @return     bool : true if the operation is successful; otherwise false.
-*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 {
@@ -1018,8 +1113,8 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFE
       return false;
     }
 
-  if((epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  != DIOSTREAMTLS13SESSION_EPOCH_CLEAR) ||
-     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_CLEAR))
+  if((epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  != DIOSTREAMTLS13SESSION_EPOCH_CLEAR && epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] != DIOSTREAMTLS13SESSION_EPOCH_EARLY) ||
+     (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_CLEAR && epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] != DIOSTREAMTLS13SESSION_EPOCH_EARLY))
     {
       return false;
     }
@@ -1030,11 +1125,14 @@ bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFE
   if(!keyschedule.HandshakeTrafficSecrets_Calculate(transcripthash)) return false;
   if(!keyschedule.MasterSecret_Calculate())                        return false;
 
+  bool localearly  = (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  == DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+  bool remoteearly = (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] == DIOSTREAMTLS13SESSION_EPOCH_EARLY);
+
   if(!record.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL))  return false;
   if(!record.SetKeys(DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE)) return false;
 
-  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  = DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
-  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] = DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
+  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]  = localearly ?DIOSTREAMTLS13SESSION_EPOCH_EARLY:DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
+  epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] = remoteearly?DIOSTREAMTLS13SESSION_EPOCH_EARLY:DIOSTREAMTLS13SESSION_EPOCH_HANDSHAKE;
 
   return true;
 }
@@ -1788,6 +1886,10 @@ void DIOSTREAMTLS13SESSION::Clean()
   maximumhandshakeinputsize    = DIOSTREAMTLS_MEMORY_DEFAULT_HANDSHAKE_INPUT;
   maximumtranscriptsize        = DIOSTREAMTLS_MEMORY_DEFAULT_TRANSCRIPT;
   maximumapplicationinputsize  = DIOSTREAMTLS_MEMORY_DEFAULT_APPLICATION_INPUT;
+  maximumearlydatasize        = DIOSTREAMTLS13_EARLYDATA_MAXSIZE;
+  earlydatareceived           = 0;
+  earlydatasent               = 0;
+  earlydataaccepted           = false;
 
   for(int c=0; c<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS; c++)
     {

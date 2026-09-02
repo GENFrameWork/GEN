@@ -49,6 +49,7 @@
 //#define DIOSTREAMTLS13KEYSCHEDULE_TRACE_SECRETS
 
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_DERIVED                 __L("derived")
+#define DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTEARLY             __L("c e traffic")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTHANDSHAKE         __L("c hs traffic")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_SERVERHANDSHAKE         __L("s hs traffic")
 #define DIOSTREAMTLS13KEYSCHEDULE_LABEL_CLIENTAPPLICATION       __L("c ap traffic")
@@ -70,6 +71,7 @@
 enum DIOSTREAMTLS13KEYSCHEDULE_LEVEL
 {
   DIOSTREAMTLS13KEYSCHEDULE_LEVEL_NONE                = 0 ,
+  DIOSTREAMTLS13KEYSCHEDULE_LEVEL_EARLY                  ,
   DIOSTREAMTLS13KEYSCHEDULE_LEVEL_HANDSHAKE               ,
   DIOSTREAMTLS13KEYSCHEDULE_LEVEL_APPLICATION             ,
 };
@@ -107,6 +109,7 @@ class DIOSTREAMTLS13KEYSCHEDULE
     bool                                    HandshakeSecret_Calculate                         (XBUFFER& sharedsecret);
     bool                                    MasterSecret_Calculate                            ();
 
+    bool                                    EarlyTrafficSecret_Calculate                     (XBUFFER& transcripthash);
     bool                                    HandshakeTrafficSecrets_Calculate                 (XBUFFER& transcripthash);
     bool                                    ApplicationTrafficSecrets_Calculate               (XBUFFER& transcripthash);
     bool                                    ResumptionSecret_Calculate                        (XBUFFER& transcripthash);
@@ -151,6 +154,7 @@ class DIOSTREAMTLS13KEYSCHEDULE
     XSECUREBUFFER                           mastersecret;
     XSECUREBUFFER                           resumptionsecret;
 
+    XSECUREBUFFER                           clientearlytrafficsecret;
     XSECUREBUFFER                           clienthandshaketrafficsecret;
     XSECUREBUFFER                           serverhandshaketrafficsecret;
     XSECUREBUFFER                           clientapplicationtrafficsecret;

@@ -47,6 +47,7 @@ enum DIOSTREAMTLS13HANDSHAKESERVER_STATE
 {
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_NONE                       = 0 ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENTHELLO_RETRY          ,
+  DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_END_OF_EARLY_DATA         ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATE        ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_CLIENT_CERTIFICATEVERIFY  ,
   DIOSTREAMTLS13HANDSHAKESERVER_STATE_WAIT_FINISHED                  ,
@@ -78,7 +79,12 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     bool                                    IsWaitingClientHelloRetry                        ();
 
     bool                                    IsClientAuthenticated                            ();
-    bool                                    IsSessionResumed                                 ();
+    bool                                    IsSessionResumed                                ();
+    bool                                    IsEarlyDataOffered                               ();
+    bool                                    IsEarlyDataAccepted                              ();
+    XDWORD                                  GetEarlyDataSize                                 ();
+    XDWORD                                  EarlyData_Read                                   (XBYTE* data, XDWORD size);
+
     CIPHERCERTIFICATEX509*                  GetClientCertificate                             ();
 
     bool                                    IsApplicationProtocolNegotiated                  ();
@@ -98,6 +104,7 @@ class DIOSTREAMTLS13HANDSHAKESERVER
 
     bool                                    ClientCertificate_Process                        (XBUFFER& message);
     bool                                    ClientCertificateVerify_Process                  (XBUFFER& message);
+    bool                                    EndOfEarlyData_Process                          (XBUFFER& message);
     bool                                    Finished_Process                                 (XBUFFER& message);
     bool                                    HelloRetryRequest_Create                         (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello, XBUFFER& clienthellobuffer, XWORD ciphersuite, XWORD group, XBUFFER& records);
     bool                                    ClientHelloRetry_Validate                        (DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello);
@@ -136,6 +143,10 @@ class DIOSTREAMTLS13HANDSHAKESERVER
     bool                                    clientOCSPstaplingrequested;
     bool                                    clientcertificateprovided;
     bool                                    resumptionaccepted;
+    bool                                    earlydataoffered;
+    bool                                    earlydataaccepted;
+    XDWORD                                  maximumearlydatasize;
+    XBUFFER                                 earlydataticketidentity;
     XBUFFER                                 resumptionpsk;
     XSTRING                                 negotiatedservername;
     CIPHERCERTIFICATEX509VALIDATOR          clientcertificatevalidator;

@@ -286,6 +286,10 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::End()
   if(!resumptionpsk.IsEmpty()) resumptionpsk.FillBuffer(0);
   resumptionpsk.Delete();
   resumptionciphersuite         = 0;
+  earlydataoffered              = false;
+  earlydataaccepted             = false;
+  maximumearlydatasize          = 0;
+  preparedearlydatasize          = 0;
   currentkeysharegroup          = 0;
   helloretryrequestprocessed    = false;
   aiafetchactive                = true;
@@ -615,6 +619,26 @@ XBUFFER* DIOSTREAMTLS13HANDSHAKECLIENT::GetApplicationProtocolRaw()
 bool DIOSTREAMTLS13HANDSHAKECLIENT::IsSessionResumed()
 {
   return resumptionaccepted;
+}
+
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsEarlyDataOffered() { return earlydataoffered; }
+bool DIOSTREAMTLS13HANDSHAKECLIENT::IsEarlyDataAccepted() { return earlydataaccepted; }
+XDWORD DIOSTREAMTLS13HANDSHAKECLIENT::GetMaximumEarlyDataSize() { return maximumearlydatasize; }
+bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Prepare(XDWORD size)
+{
+  if(state!=DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE || !config || !config->IsEarlyDataActive() || !size || size>config->GetMaximumEarlyDataSize()) return false;
+  preparedearlydatasize=size;
+  return true;
+}
+
+bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
+{
+  if(!earlydataoffered || !maximumearlydatasize || size>maximumearlydatasize) return false;
+  return session && session->EarlyData_Protect(data,size,records);
+}
+bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Protect(XBUFFER& data, XBUFFER& records)
+{
+  return EarlyData_Protect(data.Get(),data.GetSize(),records);
 }
 
 
@@ -1018,6 +1042,9 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
   if(!resumptionpsk.IsEmpty()) resumptionpsk.FillBuffer(0);
   resumptionpsk.Delete();
   resumptionciphersuite = 0;
+  earlydataoffered = false;
+  earlydataaccepted = false;
+  maximumearlydatasize = 0;
 
   DIOSTREAMTLS13SESSIONTICKET cachedticketcopy;
   DIOSTREAMTLS13SESSIONTICKET* cachedticket = (config && config->IsSessionResumptionActive() && !expectedservername.IsEmpty() &&
@@ -1083,6 +1110,18 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
               return SetError();
             }
 
+          XDWORD ticketearly = cachedticket->GetMaximumEarlyDataSize();
+          XDWORD configearly = config->GetMaximumEarlyDataSize();
+          XDWORD allowedearly = ticketearly < configearly ? ticketearly : configearly;
+          bool offerearly = config->IsEarlyDataActive() && preparedearlydatasize && allowedearly && preparedearlydatasize <= allowedearly;
+          if(offerearly)
+            {
+              DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* early = GEN_NEW DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN();
+              if(!early) { GEN_DELETE presharedkey; return SetError(); }
+              early->SetType(DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA);
+              if(!body->Extensions_Add(early)) { GEN_DELETE early; GEN_DELETE presharedkey; return SetError(); }
+            }
+
           if(!presharedkey->Identities_Add(&identity) || !presharedkey->Binders_Add(&placeholder))
             {
               GEN_DELETE presharedkey;
@@ -1116,6 +1155,14 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
 
           resumptionoffered     = true;
           resumptionciphersuite = cachedticket->GetCipherSuite();
+          if(offerearly)
+            {
+              maximumearlydatasize = allowedearly;
+              if(maximumearlydatasize > config->GetMaximumEarlyDataSize()) maximumearlydatasize = config->GetMaximumEarlyDataSize();
+              if(!session->CipherSuite_Select(cachedticket->GetCipherSuite()) ||
+                 !session->EarlyKeys_Activate(resumptionpsk, clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL)) return SetError();
+              earlydataoffered = true;
+            }
         }
     }
 
@@ -1226,6 +1273,13 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::Start(XBUFFER& clienthello)
             }
 
           keysharefound = true;
+        }
+
+      if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN* early=(DIOSTREAMTLS_MSG_EXTENSION_UNKNOWN*)extension;
+          if(!resumptionaccepted || !earlydataoffered || !early->GetData()->IsEmpty() || earlydataaccepted) return SetError();
+          earlydataaccepted=true;
         }
 
       if(extension->GetType() == DIOSTREAMTLS_MSG_EXTENSION_TYPE_ALPN)
@@ -1415,6 +1469,21 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::HelloRetryRequest_Process(XBUFFER& helloretr
         }
 
       if(!keysharefound) return SetError();
+    }
+
+  if(earlydataoffered)
+    {
+      for(int c=(int)clienthellomessage.GetBody()->Extensions_GetAll()->GetSize()-1;c>=0;c--)
+        {
+          DIOSTREAMTLS_MSG_EXTENSION* extension=clienthellomessage.GetBody()->Extensions_GetAll()->Get(c);
+          if(extension && extension->GetType()==DIOSTREAMTLS_MSG_EXTENSION_TYPE_EARLYDATA)
+            {
+              clienthellomessage.GetBody()->Extensions_GetAll()->Delete(extension);
+              GEN_DELETE extension;
+            }
+        }
+      earlydataaccepted=false;
+      session->EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
     }
 
   if(cookiepresent)
@@ -1757,6 +1826,18 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ClientFinished_Create(XBUFFER& clientfinishe
   clientfinished.Delete();
   records.Delete();
 
+  if(earlydataaccepted)
+    {
+      DIOSTREAMTLS_MSG_HANDSHAKE endofearly;
+      XBUFFER endbuffer;
+      XBUFFER endrecords;
+      endofearly.SetMsgType(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE_END_OF_EARLY_DATA);
+      endofearly.SetLength(0);
+      if(!endofearly.SetToBuffer(endbuffer,false) || !session->GetRecord()->Protect(DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE,endbuffer,endrecords) ||
+         !session->Transcript_Add(endbuffer) || !records.Add(endrecords)) return SetError();
+      session->EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
+    }
+
   if(certificaterequested)
     {
       DIOSTREAMTLS_MSG_FRAGMENT<DIOSTREAMTLS_MSG_HANDSHAKE_CERTIFICATE> certificatemessage;
@@ -1966,7 +2047,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::NewSessionTicket_Process(XBUFFER& message)
   bool status = config->SessionTicket_StoreRaw(expectedservername.Get(), (*ticketmessage.GetBody()->GetTicket()), PSK,
                                              ticketmessage.GetBody()->GetTicketAgeAdd(),
                                              ticketmessage.GetBody()->GetTicketLifetime(),
-                                             session->GetKeySchedule()->GetCipherSuite(), protocol);
+                                             session->GetKeySchedule()->GetCipherSuite(), protocol, ticketmessage.GetBody()->GetMaximumEarlyDataSize());
 
   if(!PSK.IsEmpty()) PSK.FillBuffer(0);
   PSK.SecureDelete();
@@ -2193,6 +2274,7 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::EncryptedExtensions_Process(XBUFFER& message
     }
 
   if(!session->Transcript_Add(message)) return SetError();
+  if(earlydataoffered && !earlydataaccepted) session->EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL);
 
   state = resumptionaccepted?DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_FINISHED:
                              DIOSTREAMTLS13HANDSHAKECLIENT_STATE_WAIT_CERTIFICATE;
@@ -2928,6 +3010,10 @@ void DIOSTREAMTLS13HANDSHAKECLIENT::Clean()
   resumptionaccepted            = false;
   resumptionpsk.Delete();
   resumptionciphersuite         = 0;
+  earlydataoffered              = false;
+  earlydataaccepted             = false;
+  maximumearlydatasize          = 0;
+  preparedearlydatasize          = 0;
   currentkeysharegroup          = 0;
   helloretryrequestprocessed    = false;
   servercertificate          = NULL;
