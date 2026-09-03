@@ -799,7 +799,7 @@ bool CIPHERRSA::GenerateKeys(XDWORD nbits, int exponent, CIPHERKEYPUBLICRSA& pub
 
       if(!context.D.ModularInverse(&context.E, &H))           return false;
       if(!context.DP.Module(&context.DP, &context.D, &P1))    return false;
-      if(!context.DP.Module(&context.DQ, &context.D, &Q1))    return false;
+      if(!context.DQ.Module(&context.DQ, &context.D, &Q1))    return false;
       if(!context.QP.ModularInverse(&context.Q, &context.P))  return false;
 
       context.len = (context.N.GetMSB() + 7) >> 3;
@@ -953,7 +953,7 @@ bool CIPHERRSA::Cipher_PKCS1_V15(XBYTE* buffer, XDWORD size, XBUFFER& output, CI
   int keysize = GetKeySizeInBytes(keytypetouse);
   if(!keysize) return false;
 
-  //if(keysize < (size + 11)) return false;
+  if(keysize < (int)(size + 11)) return false;
 
   nb_pad = keysize - 3 - size;
 

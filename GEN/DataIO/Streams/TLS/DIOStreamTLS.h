@@ -912,10 +912,6 @@ class DIOSTREAMTLS : public T
 
                                               GEN_XFACTORY.DeleteTimer(xtimer);
 
-                                              if(!status)
-                                                {
-                                                }
-
                                               return status;
                                             }
 
@@ -975,12 +971,6 @@ class DIOSTREAMTLS : public T
                                                         }
 
                                                       return false;
-                                                    }
-
-                                                  if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA &&
-                                                     handshakeserver.IsWaitingClientHelloRetry() && handshakeserver.IsEarlyDataOffered())
-                                                    {
-                                                      continue;
                                                     }
 
                                                   if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE ||
