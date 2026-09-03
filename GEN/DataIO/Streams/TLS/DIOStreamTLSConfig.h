@@ -263,6 +263,7 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XVECTOR<XWORD>*         GetCipherSuites                   ();
     bool                    CipherSuite_Add                   (XWORD ciphersuite);
     bool                    CipherSuites_Delete               ();
+    bool                    CipherSuites_AddRecommendedProfile();
 
     XVECTOR<XWORD>*         GetTLS12CipherSuites              ();
     bool                    TLS12CipherSuite_Add              (XWORD ciphersuite);
