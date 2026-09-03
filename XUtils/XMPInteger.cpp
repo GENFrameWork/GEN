@@ -274,7 +274,7 @@ bool XMPINTEGER::Shrink(XDWORD nblimbs)
   if(c<nblimbs ) c = nblimbs;
 
   newlimbs = (XLIMB*)GEN_NEW XBYTE[ c * XMPINTEGER_CHARSINLIMB];
-  if(newlimbs) return false;
+  if(!newlimbs) return false;
 
   memset(newlimbs, 0, (c * XMPINTEGER_CHARSINLIMB));
 
@@ -492,15 +492,6 @@ int XMPINTEGER::GetMSB()
 }
 */
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         int XMPINTEGER::GetMSB()
-* @brief      Get msb
-* @ingroup    XUTILS
-* 
-* @return     int : Requested value.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
 int XMPINTEGER::GetMSB()
 {
   int i;
@@ -1161,17 +1152,21 @@ bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
+* @fn         bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, XDWORD integer)
 * @brief      Multiplication
+* @note       integer is a single limb-sized value (0..XDWORD_MAX) rather than a signed int: the digit values
+*             produced internally by Division() can carry the limb's high bit set (up to ~0, i.e. XLIMB_MAX),
+*             and reinterpreting that through a signed int parameter silently truncated it to a negative value,
+*             corrupting the multiply. Since a limb magnitude is never negative, there is no sign to infer here.
 * @ingroup    XUTILS
-* 
+*
 * @param[in]  xmpinteger : Xmpinteger pointer to use.
 * @param[in]  integer : Integer value.
-* 
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, int integer)
+bool XMPINTEGER::Multiplication(XMPINTEGER* xmpinteger, XDWORD integer)
 {
   XMPINTEGER _xmpinteger;
 

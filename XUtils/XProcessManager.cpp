@@ -372,9 +372,9 @@ bool XPROCESS::Compare(XPROCESS& xprocess, bool onlyfixed)
 
   if(!onlyfixed)
     {
-      if(!GetWindowRect()->IsEqual(xprocess.GetWindowRect()))
+      if(GetWindowRect()->IsEqual(xprocess.GetWindowRect()) != ISEQUAL)
         {
-          return false;    
+          return false;
         }
 
       if(windowtitleheight != xprocess.GetWindowTitleHeight())

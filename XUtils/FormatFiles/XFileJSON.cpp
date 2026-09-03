@@ -398,6 +398,7 @@ void* XFILEJSONVALUE::GetValuePointer()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XFILEJSONVALUE::Set(void)
 {
+  type = XFILEJSONVALUETYPE_NULL;
   value.Set(XVARIANT_TYPE_NULL);
 
   return true;

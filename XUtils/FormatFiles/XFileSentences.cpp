@@ -176,7 +176,7 @@ bool XFILESENTENCES::ConvertFileFromDBF(XPATH& xpath)
           GetPrimaryFile()->Write((XBYTE*)&size,sizeof(XDWORD));
           
           XBUFFER xbufferexchange;
-          (*fsentence).ConvertToBufferExchange(xbufferexchange);
+          (*fsentence).ConvertToExchangeXBuffer(xbufferexchange);
           GetPrimaryFile()->Write(xbufferexchange.Get(), xbufferexchange.GetSize());
 
           

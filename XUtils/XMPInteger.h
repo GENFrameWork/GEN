@@ -137,7 +137,7 @@ class XMPINTEGER
     bool                        SubtractionSigned             (XMPINTEGER* xmpinteger, int integer);
 
     bool                        Multiplication                (XMPINTEGER* xmpinteger1, XMPINTEGER* xmpinteger2);
-    bool                        Multiplication                (XMPINTEGER* xmpinteger, int integer);
+    bool                        Multiplication                (XMPINTEGER* xmpinteger, XDWORD integer);
 
     bool                        Division                      (XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, XMPINTEGER* xmpintegerB);
     bool                        Division                      (XMPINTEGER* xmpintegerQ, XMPINTEGER* xmpintegerR, XMPINTEGER* xmpintegerA, int integerB);

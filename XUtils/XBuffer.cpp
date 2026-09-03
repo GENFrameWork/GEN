@@ -2244,10 +2244,7 @@ bool XBUFFER::Delete(bool setblocked)
 * @fn         bool XBUFFER::SecureDelete(bool setblocked)
 * @brief      Overwrite the complete allocated storage through volatile writes before releasing it
 * @ingroup    XUTILS
-* 
-* @param[in]  setblocked : Setblocked value.
 *
-* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XBUFFER::SecureDelete(bool setblocked)
 {
@@ -2548,6 +2545,7 @@ int XBUFFER::Find(XSTRING& string, bool normalize, int startindex)
 * 
 * @param[in]  xbuffer : Buffer to use.
 * 
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 void XBUFFER::operator = (const XBUFFER& xbuffer)
 {
@@ -2702,6 +2700,7 @@ bool XBUFFER::Padding_Add(XBYTE bitsadjust, XBUFFER_PADDINGTYPE type)
       default: break;
     }
 
+  paddingtype     = type;
   paddinghas      = true;
 
   return true;

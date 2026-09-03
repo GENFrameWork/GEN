@@ -56,6 +56,7 @@ class XWINDOWSSLEEP : public XSLEEP
     void                        Seconds                           (int seconds);
     void                        MilliSeconds                      (int milliseconds);
     void                        MicroSeconds                      (int microseconds);
+    void                        NanoSeconds                       (int nanoseconds);
 
   private:
  

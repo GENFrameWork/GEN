@@ -863,7 +863,7 @@ bool XDATETIME::AddMonths(int months)
   if(this->month<1)
     {
       AddYears(-1);
-      this->month = 13 + rest;
+      this->month += 12;
     }
 
   int c=0;
@@ -1027,14 +1027,14 @@ bool XDATETIME::SubtractMonths(int months)
   this->month -=  rest;
   if(this->month>12)
     {
-      SubtractYears(1);
+      SubtractYears(-1);
       this->month -= 12;
     }
 
   if(this->month<1)
     {
-      SubtractYears(-1);
-      this->month = 13 + rest;
+      SubtractYears(1);
+      this->month += 12;
     }
 
   int c=0;

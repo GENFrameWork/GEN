@@ -227,6 +227,8 @@ bool XFILECSV_RECORD::Copy(XFILECSV_RECORD* header)
         {
           XCHAR* string2 =  header->GetElement(c);
           (*string) = string2;
+
+          elements.Add(string);
         }
        else
         {

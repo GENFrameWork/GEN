@@ -1128,7 +1128,7 @@ void XTRACE::Application_SetName(XCHAR* applicationname)
 void XTRACE::Application_SetName(XCHAR* applicationname, XDWORD size)
 {
   memset(this->applicationname, 0, _MAXSTR*sizeof(XCHAR));
-  if(applicationname) memcpy(this->applicationname, applicationname, (size+1)*sizeof(XCHAR));
+  if(applicationname) memcpy(this->applicationname, applicationname, size*sizeof(XCHAR));
 }
 
 

@@ -131,6 +131,8 @@ bool XLINUXFILE::Exist(XCHAR* xpath)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXFILE::Open(XCHAR* xpath, bool isreadonly)
 {
+  this->isreadonly = isreadonly;
+
   return ExtendedOpen(xpath, (isreadonly)? __L("rb") : __L("r+b"));
 }
 

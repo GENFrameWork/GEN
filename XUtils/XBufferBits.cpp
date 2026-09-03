@@ -143,7 +143,7 @@ bool XBUFFERBITS::IsOverrun()
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD XBUFFERBITS::GetBytePosition()
 {
-  return (XDWORD)(xbuffer->Get() - p);
+  return (XDWORD)(p - xbuffer->Get());
 }
 
 

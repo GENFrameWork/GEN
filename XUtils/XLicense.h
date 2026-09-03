@@ -109,8 +109,8 @@
                                                                                               }
 #else
 
-  #define CHECKLICENSEFULLLOCAL(xlicense, xpath, applicationID)                     //
-  #define CHECKLICENSEFULLLOCALEXPIRE(xlicense, xpath, applicationID)               //
+  #define CHECKLICENSEFULLLOCAL(xlicense, xpath, applicationID, status)             //
+  #define CHECKLICENSEFULLLOCALEXPIRE(xlicense, xpath, applicationID, status)       //
 
 #endif
 
