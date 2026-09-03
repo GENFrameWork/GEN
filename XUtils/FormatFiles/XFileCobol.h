@@ -34,10 +34,6 @@
 #include "XVector.h"
 #include "XMap.h"
 #include "XTree.h"
-#include "XString.h"
-#include "XBuffer.h"
-#include "XPath.h"
-#include "XVariant.h"
 
 
 
@@ -104,7 +100,6 @@ typedef XTREE_NODE_ITERATOR<XFILECOBOL_FIELD*>   XFILECOBOL_FD_TREENODEITERATOR;
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 class XPATH;
-class XFILE;
 class XFILETXT;
 class XFILECOBOL_HANDLE;
 class XVARIANT;

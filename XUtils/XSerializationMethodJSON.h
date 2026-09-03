@@ -66,8 +66,8 @@ class XSERIALIZATIONMETHODJSON : public XSERIALIZATIONMETHOD
     virtual bool                Add                            (XBUFFER* var, XCHAR* name = NULL);
     virtual bool                Add                            (XVARIANT* var, XCHAR* name = NULL);
 
-    virtual bool                AddStruct                      (XCHAR* name = NULL, bool open = false);
-    virtual bool                AddArray                       (XDWORD nelements, XCHAR* name = NULL, bool open = false);
+    virtual bool                AddStruct                      (XCHAR* name = NULL, bool open = true);
+    virtual bool                AddArray                       (XDWORD nelements, XCHAR* name = NULL, bool open = true);
 
 
     virtual bool                Extract                        (bool& var, XCHAR* name = NULL); 

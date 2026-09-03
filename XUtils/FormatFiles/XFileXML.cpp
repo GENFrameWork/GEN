@@ -1418,7 +1418,7 @@ bool XFILEXML::WriteAndEncodeAllLines(bool istabulatedline)
 * --------------------------------------------------------------------------------------------------------------------*/
 XFILEXMLELEMENT* XFILEXML::SearchChild(XCHAR* name, XFILEXMLELEMENT* father)
 {
-  XFILEXMLELEMENT* _father = father;
+  XFILEXMLELEMENT* _father = NULL;
   XFILEXMLELEMENT* element = NULL;
 
   if(!_father) _father = root;

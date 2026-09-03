@@ -176,7 +176,7 @@ class XBER : public XSUBJECT
 
   private:
 
-    bool                      SetFromDumpInternal             (XBUFFER& xbuffer, XOBSERVER* observer = NULL, XBER* root = NULL);
+    bool                      SetFromDumpInternal             (XBUFFER& xbuffer, XOBSERVER* observer = NULL);
 
     bool                      ConvertToBoolean                (XBUFFER& data, XVARIANT& variant);
     bool                      ConvertToInteger                (XBUFFER& data, XVARIANT& variant);
@@ -194,9 +194,9 @@ class XBER : public XSUBJECT
 
     void                      Clean                           ();
 
-    XDWORD                    totalposition;
-    XDWORD                    level;
-    XDWORD                    levels[XBER_MAXLEVELS];
+    static XDWORD             totalposition;
+    static XDWORD             level;
+    static XDWORD             levels[XBER_MAXLEVELS];
 
 };
 

@@ -522,17 +522,16 @@ bool XLINUXPROCESSMANAGER::Application_IsRunning(XCHAR* applicationname, XDWORD*
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool XLINUXPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow)
+* @fn         bool XLINUXPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist)
 * @brief      Application get running list
 * @ingroup    PLATFORM_LINUX
-*
+* 
 * @param[in]  applist : Applist pointer to use.
-* @param[in]  onlywithvalidwindow : Onlywithvalidwindow value.
-*
+* 
 * @return     bool : true if the operation is successful; otherwise false.
-*
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XLINUXPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow)
+bool XLINUXPROCESSMANAGER::Application_GetRunningList(XVECTOR<XPROCESS*>& applist)
 {
   DIR*            dir;
   struct dirent*  ent;

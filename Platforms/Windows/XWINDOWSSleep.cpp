@@ -147,36 +147,6 @@ void XWINDOWSSLEEP::MicroSeconds(int microseconds)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-*
-* @fn         void XWINDOWSSLEEP::NanoSeconds(int nanoseconds)
-* @brief      Nano seconds
-* @ingroup    PLATFORM_WINDOWS
-*
-* @param[in]  nanoseconds : nanoseconds to sleep
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-void XWINDOWSSLEEP::NanoSeconds(int nanoseconds)
-{
-  __int64 timeellapsed;
-  __int64 timestart;
-  __int64 timedelta;
-
-  QueryPerformanceFrequency((LARGE_INTEGER*)(&timedelta));
-
-  __int64 timetowait = (__int64)((XDWORD)timedelta * ((XDWORD)nanoseconds / 1000000000.0f));
-
-  QueryPerformanceCounter ((LARGE_INTEGER*)(&timestart));
-
-  timeellapsed = timestart;
-
-  while(( timeellapsed - timestart ) < timetowait)
-   {
-     QueryPerformanceCounter( (LARGE_INTEGER*)(&timeellapsed ) );
-   };
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void XWINDOWSSLEEP::Clean()
 * @brief      Clean the attributes of the class: Default initialize

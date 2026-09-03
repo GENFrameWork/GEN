@@ -59,7 +59,7 @@ enum
                                                   {                                               \
                                                     if(xfile->Open(xpathfile))                    \
                                                       {                                           \
-                                                        size = xfile->GetSize();                   \
+                                                        sizefile = xfile->GetSize();              \
                                                         xfile->Close();                           \
                                                       }                                           \
                                                     GEN_XFACTORY.Delete_File(xfile);              \

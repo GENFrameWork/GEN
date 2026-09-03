@@ -52,6 +52,10 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
+XDWORD XBER::totalposition = 0;
+XDWORD XBER::level         = 0;
+XDWORD XBER::levels[_MAXBUFFER];
+
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
@@ -862,9 +866,8 @@ bool XBER::Sequence_AddTo(XBER& xber)
 
   sequences.Add(newxber);
 
-  tagtype       = XBER_TAGTYPE_SEQUENCE | XBER_TAG_MASKISCONSTRUCTED;
-  isconstructed = true;
-  size          = 0;
+  tagtype = XBER_TAGTYPE_SEQUENCE;
+  size    = 0;
 
   for(XDWORD c=0;c<sequences.GetSize();c++)
     {
@@ -986,14 +989,13 @@ bool XBER::Sequence_DeleteAll()
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer, XBER* root)
+bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer)
 {
   static XASN1_OID_PROPERTY*  property       = NULL;
   XASN1_OID_PROPERTY*         propertyevent  = NULL;
   XSTRING                     line;
-  XBER*                       rootber        = root?root:this;
-
-  if(buffer.IsEmpty())
+  
+  if(buffer.IsEmpty()) 
     {
       return false;
     }
@@ -1003,7 +1005,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer, XBER* root)
       observer->SubscribeEvent(XBERXEVENT_TYPE_DECODE_DATA, this, observer);
     }
 
-  rootber->levels[rootber->level]++;
+  levels[level]++;   
 
   tagtype = (XBYTE)(buffer.Get()[0] & XBER_TAG_MASKTYPE); 
 
@@ -1070,7 +1072,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer, XBER* root)
                                             if(property)
                                               {
                                                 isconstructed = property->isconstructed;
-                                                if(isconstructed) rootber->totalposition++;
+                                                if(isconstructed) totalposition++;
                                               }
 
                                             property = NULL;                                               
@@ -1093,19 +1095,19 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer, XBER* root)
       XBER*   sub_ber  = NULL; 
       XDWORD  position = 0;  
 
-      rootber->level++;
-
-      rootber->totalposition += sizehead;
+      level++;              
+      
+      totalposition += sizehead;           
 
       subdata.Delete();
-      subdata.Add(data.Get(), data.GetSize());
+      subdata.Add(data.Get(), data.GetSize());     
 
+      
+      XBER_XEVENT event(this, XBERXEVENT_TYPE_DECODE_DATA); 
 
-      XBER_XEVENT event(this, XBERXEVENT_TYPE_DECODE_DATA);
-
-      event.SetLevel(rootber->GetLevel());
-      memcpy(event.GetLevels(), rootber->GetLevels(), sizeof(XDWORD)*XBER_MAXLEVELS);
-      rootber->GetLevels((*event.GetLevelsString()));
+      event.SetLevel(GetLevel());    
+      memcpy(event.GetLevels(), GetLevels(), sizeof(XDWORD)*XBER_MAXLEVELS);  
+      GetLevels((*event.GetLevelsString()));      
       event.GetLine()->Set(line);
       event.GetData()->CopyFrom(buffer);
       event.SetTagType(tagtype);
@@ -1122,7 +1124,7 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer, XBER* root)
           sub_ber = GEN_NEW XBER();
           if(sub_ber) 
             {                                        
-              if(!sub_ber->SetFromDumpInternal(subdata, observer, rootber))
+              if(!sub_ber->SetFromDumpInternal(subdata, observer))
                 {           
                   GEN_DELETE sub_ber;    
                   sub_ber = NULL;
@@ -1147,8 +1149,8 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer, XBER* root)
             }
         }
             
-      rootber->levels[rootber->level] = 0;
-      rootber->level--;
+      levels[level] = 0; 
+      level--;
       
     } 
    else
@@ -1225,15 +1227,15 @@ bool XBER::SetFromDumpInternal(XBUFFER& buffer, XOBSERVER* observer, XBER* root)
             }         
         }
    
-      rootber->totalposition += sizehead + size;
+      totalposition += sizehead + size;
 
+      
+      XBER_XEVENT event(this, XBERXEVENT_TYPE_DECODE_DATA); 
 
-      XBER_XEVENT event(this, XBERXEVENT_TYPE_DECODE_DATA);
-
-      event.SetLevel(rootber->GetLevel());
-      memcpy(event.GetLevels(), rootber->GetLevels(), sizeof(XDWORD)*XBER_MAXLEVELS);
-      rootber->GetLevels((*event.GetLevelsString()));
-      event.GetLine()->Set(line);
+      event.SetLevel(GetLevel());    
+      memcpy(event.GetLevels(), GetLevels(), sizeof(XDWORD)*XBER_MAXLEVELS);  
+      GetLevels((*event.GetLevelsString()));  
+      event.GetLine()->Set(line);       
       event.GetData()->CopyFrom(data);
       event.SetTagType(tagtype);
       event.GetTagTypeName()->Set(nametagtype);
@@ -1725,10 +1727,6 @@ void XBER::Clean()
 
   contextspecificvalue  = 0;
   unusedbits            = 0;
-
-  totalposition         = 0;
-  level                 = 0;
-  memset(levels, 0, sizeof(XDWORD)*XBER_MAXLEVELS);
 
   value.Destroy();
 

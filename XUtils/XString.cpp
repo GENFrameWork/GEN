@@ -5668,15 +5668,14 @@ bool XSTRING::FormatArg(const XCHAR* mask, va_list* arg, bool isspecialweb)
 bool XSTRING::Format(const XCHAR* mask, ...)
 {
   va_list arg;
-  bool    status;
 
   va_start(arg, mask);
 
-  status = FormatArg(mask, &arg);
+  FormatArg(mask, &arg);
 
   va_end(arg);
 
-  return status;
+  return 0;
 }
 
 
@@ -5695,17 +5694,16 @@ bool XSTRING::AddFormat(const XCHAR* mask, ...)
 {
   XSTRING concat;
   va_list arg;
-  bool    status;
 
   va_start(arg, mask);
 
-  status = concat.FormatArg(mask, &arg);
+  concat.FormatArg(mask, &arg);
 
   va_end(arg);
 
   Add(concat.Get());
 
-  return status;
+  return 0;
 }
 
 

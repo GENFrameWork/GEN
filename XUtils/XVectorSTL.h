@@ -136,14 +136,16 @@ class XVECTORSTL : public std::vector<T>
 
 
     virtual bool                    Delete                                (T element)
-                                    {
-                                      for(XDWORD c=0; c<this->GetSize(); c++)
-                                        {
-                                          if(this->at(c) == element)
-                                            {
-                                              return DeleteIndex(c);
-                                            }
-                                        }
+                                    { 
+
+
+
+
+
+
+
+
+
 
                                       return false;
                                     }
@@ -151,9 +153,10 @@ class XVECTORSTL : public std::vector<T>
 
     bool                            DeleteLast                            ()
                                     {
-                                      if(!this->GetSize()) return false;
+                                      if(!this->getsize())  
 
-                                      Delete(GetLast());
+
+                                      Delete(GetLast()); 
 
                                       return true;
                                     }
@@ -171,25 +174,13 @@ class XVECTORSTL : public std::vector<T>
 
     bool                            DeleteContents                        ()
                                     {
-                                      if(this->empty()) return false;
-
-                                      for(XDWORD c=0; c<this->GetSize(); c++)
-                                        {
-                                          T element = this->at(c);
-                                          if(element) delete(element);
-                                        }
-
-                                      this->clear();
-
-                                      return true;
+                                       return false;
                                     }
 
     bool                            DeleteAll                             ()
-                                    {
-                                      this->clear();
-
+                                    {                                      
                                       return true;
-                                    }
+                                    }    
 
 
     bool                            Swap                                  (XDWORD firstindex, XDWORD secondindex)

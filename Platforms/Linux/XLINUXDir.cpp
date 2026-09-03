@@ -169,9 +169,7 @@ bool XLINUXDIR::Make(XCHAR* path, bool recursive)
   xpath = path;
 
   if(recursive)
-    {
-      xpath.Slash_Add();
-
+    {     
       XPATH   xpathsequence;
       XSTRING pathpart;
       int     index = 0;

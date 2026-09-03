@@ -59,7 +59,7 @@ class XLINUXPROCESSMANAGER : public XPROCESSMANAGER
     bool                    Application_Execute             (XBUFFER* applicationpath, XBUFFER* params = NULL, XBUFFER* in = NULL, XBUFFER* out = NULL, int* returncode = NULL);
 
     bool                    Application_IsRunning           (XCHAR* command, XDWORD* ID = NULL);
-    bool                    Application_GetRunningList      (XVECTOR<XPROCESS*>& applist, bool onlywithvalidwindow = false);
+    bool                    Application_GetRunningList      (XVECTOR<XPROCESS*>& applist);
     bool                    Application_Terminate           (XDWORD processID, XDWORD  exitcode = 0);
 
   private:
