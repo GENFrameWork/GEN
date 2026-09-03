@@ -119,6 +119,17 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool checkdowngradesentinel)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
+* @brief      Capabilities set
+* @ingroup    DATAIO
+* 
+* @param[in]  config : Pointer to config.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12HANDSHAKECLIENT::Capabilities_Set(DIOSTREAMTLSCONFIG* config)
 {
   if(!isini || (state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE) || !config ||
@@ -466,16 +477,44 @@ void DIOSTREAMTLS12HANDSHAKECLIENT::AIAFetch_Set(bool active, int timeout)
   aiafetchtimeout = (timeout > 0)?timeout:DIOSTREAMTLSAIAFETCHER_TIMEOUT;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS12HANDSHAKECLIENT::ValidationPolicy_Set(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
+* @brief      Validation policy set
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Policy value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS12HANDSHAKECLIENT::ValidationPolicy_Set(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
 {
   certificatevalidator.SetPolicy(policy);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS12HANDSHAKECLIENT::RevocationLists_Set(XVECTOR<XBUFFER*>* CRLs)
+* @brief      Revocation lists set
+* @ingroup    DATAIO
+* 
+* @param[in]  CRLs : Pointer to CRLs.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS12HANDSHAKECLIENT::RevocationLists_Set(XVECTOR<XBUFFER*>* CRLs)
 {
   revocationlists = CRLs;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS12HANDSHAKECLIENT::OCSPDirect_Set(DIOSTREAMTLS_OCSPDIRECTFETCHER fetcher, void* context)
+* @brief      Ocsp direct set
+* @ingroup    DATAIO
+* 
+* @param[in]  fetcher : Fetcher value.
+* @param[in]  context : Pointer to context.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS12HANDSHAKECLIENT::OCSPDirect_Set(DIOSTREAMTLS_OCSPDIRECTFETCHER fetcher, void* context)
 {
   ocspdirectfetcher=fetcher; ocspdirectcontext=context;

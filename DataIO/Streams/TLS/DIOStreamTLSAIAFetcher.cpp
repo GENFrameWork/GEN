@@ -99,6 +99,8 @@ DIOSTREAMTLSAIAFETCHER::~DIOSTREAMTLSAIAFETCHER()
 * @param[out] tobuffer : Fetched document body (a DER certificate, or a PKCS#7 "degenerate" certs-only bag), on
 *             success. Left empty on failure.
 * @param[in]  timeout : Connect / idle timeout, in seconds.
+* @param[in]  maximumheadersize : Maximumheadersize value.
+* @param[in]  maximumbodysize : Maximumbodysize value.
 *
 * @note       Deliberately narrow in scope: only plain "http://" is fetched (see DIOSTREAMTLSAIAFETCHER_DEFAULTPORT
 *             above), only a single non-redirected 200 OK response is accepted, and the response is capped to

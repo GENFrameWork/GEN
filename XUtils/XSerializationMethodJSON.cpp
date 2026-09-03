@@ -209,6 +209,18 @@ bool XSERIALIZATIONMETHODJSON::Add(double var, XCHAR* name)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XSERIALIZATIONMETHODJSON::Add(long var, XCHAR* name)
+* @brief      Add
+* @ingroup    XUTILS
+* 
+* @param[in]  var : Var value.
+* @param[in]  name : Pointer to name.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODJSON::Add(long var, XCHAR* name)
 {
   if(!CheckHandleActive()) return false;

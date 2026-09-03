@@ -71,6 +71,13 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLSMEMORYPOLICY::DIOSTREAMTLSMEMORYPOLICY()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLSMEMORYPOLICY::DIOSTREAMTLSMEMORYPOLICY()
 {
   maximumrecordinputsize      = DIOSTREAMTLS_MEMORY_DEFAULT_RECORD_INPUT;
@@ -90,6 +97,20 @@ DIOSTREAMTLSMEMORYPOLICY::DIOSTREAMTLSMEMORYPOLICY()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSMEMORYPOLICY::SetConnectionBufferLimits(XDWORD recordinput, XDWORD handshakeinput, XDWORD transcript, XDWORD applicationinput)
+* @brief      Set connection buffer limits
+* @ingroup    DATAIO
+* 
+* @param[in]  recordinput : Recordinput value.
+* @param[in]  handshakeinput : Handshakeinput value.
+* @param[in]  transcript : Transcript value.
+* @param[in]  applicationinput : Applicationinput value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSMEMORYPOLICY::SetConnectionBufferLimits(XDWORD recordinput, XDWORD handshakeinput,
                                                           XDWORD transcript, XDWORD applicationinput)
 {
@@ -108,6 +129,19 @@ bool DIOSTREAMTLSMEMORYPOLICY::SetConnectionBufferLimits(XDWORD recordinput, XDW
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSMEMORYPOLICY::SetAIALimits(XDWORD headersize, XDWORD bodysize, XDWORD maximumfetches)
+* @brief      Set aia limits
+* @ingroup    DATAIO
+* 
+* @param[in]  headersize : Headersize value.
+* @param[in]  bodysize : Bodysize value.
+* @param[in]  maximumfetches : Maximumfetches value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSMEMORYPOLICY::SetAIALimits(XDWORD headersize, XDWORD bodysize, XDWORD maximumfetches)
 {
   if((headersize < 1024) || (headersize > (64*1024)) ||
@@ -120,6 +154,19 @@ bool DIOSTREAMTLSMEMORYPOLICY::SetAIALimits(XDWORD headersize, XDWORD bodysize, 
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSMEMORYPOLICY::SetRevocationLimits(XDWORD OCSPsize, XDWORD CRLsize, XDWORD maximumCRLs)
+* @brief      Set revocation limits
+* @ingroup    DATAIO
+* 
+* @param[in]  OCSPsize : OCSPsize value.
+* @param[in]  CRLsize : CRLsize value.
+* @param[in]  maximumCRLs : MaximumCRLs value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSMEMORYPOLICY::SetRevocationLimits(XDWORD OCSPsize, XDWORD CRLsize, XDWORD maximumCRLs)
 {
   if(!OCSPsize || (OCSPsize > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE) ||
@@ -132,6 +179,19 @@ bool DIOSTREAMTLSMEMORYPOLICY::SetRevocationLimits(XDWORD OCSPsize, XDWORD CRLsi
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSMEMORYPOLICY::SetTrustStoreLimits(XDWORD maximumroots, XDWORD maximumcertificatesize, XDWORD maximumtotalsize)
+* @brief      Set trust store limits
+* @ingroup    DATAIO
+* 
+* @param[in]  maximumroots : Maximumroots value.
+* @param[in]  maximumcertificatesize : Maximumcertificatesize value.
+* @param[in]  maximumtotalsize : Maximumtotalsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSMEMORYPOLICY::SetTrustStoreLimits(XDWORD maximumroots, XDWORD maximumcertificatesize,
                                                     XDWORD maximumtotalsize)
 {
@@ -145,6 +205,17 @@ bool DIOSTREAMTLSMEMORYPOLICY::SetTrustStoreLimits(XDWORD maximumroots, XDWORD m
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSMEMORYPOLICY::SetMaximumSessionTickets(XDWORD maximumtickets)
+* @brief      Set maximum session tickets
+* @ingroup    DATAIO
+* 
+* @param[in]  maximumtickets : Maximumtickets value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSMEMORYPOLICY::SetMaximumSessionTickets(XDWORD maximumtickets)
 {
   if(!maximumtickets || (maximumtickets > 64)) return false;
@@ -153,22 +224,159 @@ bool DIOSTREAMTLSMEMORYPOLICY::SetMaximumSessionTickets(XDWORD maximumtickets)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumRecordInputSize()
+* @brief      Get maximum record input size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumRecordInputSize()      { return maximumrecordinputsize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumHandshakeInputSize()
+* @brief      Get maximum handshake input size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumHandshakeInputSize()   { return maximumhandshakeinputsize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTranscriptSize()
+* @brief      Get maximum transcript size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTranscriptSize()       { return maximumtranscriptsize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumApplicationInputSize()
+* @brief      Get maximum application input size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumApplicationInputSize() { return maximumapplicationinputsize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIAHeaderSize()
+* @brief      Get maximum aia header size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIAHeaderSize()        { return maximumAIAheadersize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIABodySize()
+* @brief      Get maximum aia body size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIABodySize()          { return maximumAIAbodysize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIAFetches()
+* @brief      Get maximum aia fetches
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumAIAFetches()           { return maximumAIAfetches; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumOCSPResponseSize()
+* @brief      Get maximum ocsp response size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumOCSPResponseSize()     { return maximumOCSPresponsesize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumCRLSize()
+* @brief      Get maximum crl size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumCRLSize()              { return maximumCRLsize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumCRLs()
+* @brief      Get maximum cr ls
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumCRLs()                 { return maximumCRLs; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumSessionTickets()
+* @brief      Get maximum session tickets
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumSessionTickets()       { return maximumsessiontickets; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustRoots()
+* @brief      Get maximum trust roots
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustRoots()           { return maximumtrustroots; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustCertificateSize()
+* @brief      Get maximum trust certificate size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustCertificateSize() { return maximumtrustcertificatesize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustStoreSize()
+* @brief      Get maximum trust store size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSMEMORYPOLICY::GetMaximumTrustStoreSize()       { return maximumtruststoresize; }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(XWORD ciphersuite)
+* @brief      Is cipher suite supported
+* @ingroup    DATAIO
+* 
+* @param[in]  ciphersuite : Ciphersuite value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(XWORD ciphersuite)
 {
   switch(ciphersuite)
@@ -187,6 +395,17 @@ static bool DIOSTREAMTLSCONFIG_IsCipherSuiteSupported(XWORD ciphersuite)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(XWORD ciphersuite)
+* @brief      Is tls12 cipher suite supported
+* @ingroup    DATAIO
+* 
+* @param[in]  ciphersuite : Ciphersuite value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(XWORD ciphersuite)
 {
   switch(ciphersuite)
@@ -208,6 +427,17 @@ static bool DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(XWORD ciphersuite)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(XWORD group)
+* @brief      Is supported group supported
+* @ingroup    DATAIO
+* 
+* @param[in]  group : Group value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(XWORD group)
 {
   bool supported = (group == DIOSTREAMTLS_MSG_CURVEID_X25519)   ||
@@ -231,6 +461,18 @@ static bool DIOSTREAMTLSCONFIG_IsSupportedGroupSupported(XWORD group)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(XWORD scheme, bool certificate)
+* @brief      Is signature scheme supported
+* @ingroup    DATAIO
+* 
+* @param[in]  scheme : Scheme value.
+* @param[in]  certificate : Certificate value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(XWORD scheme, bool certificate)
 {
   switch(scheme)
@@ -255,6 +497,18 @@ static bool DIOSTREAMTLSCONFIG_IsSignatureSchemeSupported(XWORD scheme, bool cer
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_ServerNameMatch(XSTRING& pattern, XCHAR* servername)
+* @brief      Server name match
+* @ingroup    DATAIO
+* 
+* @param[in]  pattern : Pattern value.
+* @param[in]  servername : Pointer to servername.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_ServerNameMatch(XSTRING& pattern, XCHAR* servername)
 {
   XSTRING hostname;
@@ -286,6 +540,15 @@ class DIOSTREAMTLSCONFIG_LOCK
   public:
     DIOSTREAMTLSCONFIG_LOCK(XMUTEX* mutex) : mutex(mutex), locked(mutex?mutex->Lock():false) {}
     ~DIOSTREAMTLSCONFIG_LOCK() { if(locked) mutex->UnLock(); }
+    /**-------------------------------------------------------------------------------------------------------------------
+    * 
+    * @fn         bool IsLocked()
+    * @brief      Is locked
+    * @ingroup    DATAIO
+    * 
+    * @return     bool : true if the condition is met; otherwise false.
+    * 
+    * --------------------------------------------------------------------------------------------------------------------*/
     bool IsLocked() { return locked; }
   private:
     XMUTEX* mutex;
@@ -293,6 +556,18 @@ class DIOSTREAMTLSCONFIG_LOCK
 };
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_AddUInt16BE(XBUFFER& buffer, XWORD value)
+* @brief      Add u int16 be
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_AddUInt16BE(XBUFFER& buffer, XWORD value)
 {
   XBYTE data[2] = { (XBYTE)(value >> 8), (XBYTE)value };
@@ -300,6 +575,18 @@ static bool DIOSTREAMTLSCONFIG_AddUInt16BE(XBUFFER& buffer, XWORD value)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_AddUInt32BE(XBUFFER& buffer, XDWORD value)
+* @brief      Add u int32 be
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_AddUInt32BE(XBUFFER& buffer, XDWORD value)
 {
   XBYTE data[4] = { (XBYTE)(value >> 24), (XBYTE)(value >> 16), (XBYTE)(value >> 8), (XBYTE)value };
@@ -307,6 +594,18 @@ static bool DIOSTREAMTLSCONFIG_AddUInt32BE(XBUFFER& buffer, XDWORD value)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_AddUInt64BE(XBUFFER& buffer, XQWORD value)
+* @brief      Add u int64 be
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_AddUInt64BE(XBUFFER& buffer, XQWORD value)
 {
   XBYTE data[8];
@@ -315,6 +614,19 @@ static bool DIOSTREAMTLSCONFIG_AddUInt64BE(XBUFFER& buffer, XQWORD value)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_GetUInt16BE(XBUFFER& buffer, XDWORD& position, XWORD& value)
+* @brief      Get u int16 be
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  position : Position value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_GetUInt16BE(XBUFFER& buffer, XDWORD& position, XWORD& value)
 {
   if(position > buffer.GetSize() || (buffer.GetSize()-position) < 2) return false;
@@ -324,6 +636,19 @@ static bool DIOSTREAMTLSCONFIG_GetUInt16BE(XBUFFER& buffer, XDWORD& position, XW
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_GetUInt32BE(XBUFFER& buffer, XDWORD& position, XDWORD& value)
+* @brief      Get u int32 be
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  position : Position value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_GetUInt32BE(XBUFFER& buffer, XDWORD& position, XDWORD& value)
 {
   if(position > buffer.GetSize() || (buffer.GetSize()-position) < 4) return false;
@@ -334,6 +659,19 @@ static bool DIOSTREAMTLSCONFIG_GetUInt32BE(XBUFFER& buffer, XDWORD& position, XD
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_GetUInt64BE(XBUFFER& buffer, XDWORD& position, XQWORD& value)
+* @brief      Get u int64 be
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  position : Position value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_GetUInt64BE(XBUFFER& buffer, XDWORD& position, XQWORD& value)
 {
   if(position > buffer.GetSize() || (buffer.GetSize()-position) < 8) return false;
@@ -344,6 +682,16 @@ static bool DIOSTREAMTLSCONFIG_GetUInt64BE(XBUFFER& buffer, XDWORD& position, XQ
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void DIOSTREAMTLSCONFIG_SecureZero(void* data, XDWORD size)
+* @brief      Secure zero
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void DIOSTREAMTLSCONFIG_SecureZero(void* data, XDWORD size)
 {
   volatile XBYTE* clean = (volatile XBYTE*)data;
@@ -552,12 +900,32 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::SetPrivateKey(CIPHERKEY* privatekey)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLSSERVERCREDENTIALS::GetOCSPStapledResponse()
+* @brief      Get ocsp stapled response
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLSSERVERCREDENTIALS::GetOCSPStapledResponse()
 {
   return &OCSPstapledresponse;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::SetOCSPStapledResponse(XBUFFER& response)
+* @brief      Set ocsp stapled response
+* @ingroup    DATAIO
+* 
+* @param[in]  response : Response value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSSERVERCREDENTIALS::SetOCSPStapledResponse(XBUFFER& response)
 {
   if(response.IsEmpty() || (response.GetSize() > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE)) return false;
@@ -566,6 +934,17 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::SetOCSPStapledResponse(XBUFFER& response)
   return OCSPstapledresponse.Add(response);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::OCSPStapledResponse_Add(XBUFFER& response)
+* @brief      Ocsp stapled response add
+* @ingroup    DATAIO
+* 
+* @param[in]  response : Response value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSSERVERCREDENTIALS::OCSPStapledResponse_Add(XBUFFER& response)
 {
   if(response.IsEmpty() || response.GetSize() > CIPHERCERTIFICATEX509REVOCATION_MAX_OCSP_SIZE) return false;
@@ -574,12 +953,30 @@ bool DIOSTREAMTLSSERVERCREDENTIALS::OCSPStapledResponse_Add(XBUFFER& response)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XVECTOR<XBUFFER*>* DIOSTREAMTLSSERVERCREDENTIALS::GetOCSPStapledResponses()
+* @brief      Get ocsp stapled responses
+* @ingroup    DATAIO
+* 
+* @return     XVECTOR<XBUFFER*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XBUFFER*>* DIOSTREAMTLSSERVERCREDENTIALS::GetOCSPStapledResponses()
 {
   return &OCSPstapledresponses;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSSERVERCREDENTIALS::DeleteOCSPStapledResponse()
+* @brief      Delete ocsp stapled response
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSSERVERCREDENTIALS::DeleteOCSPStapledResponse()
 {
   OCSPstapledresponse.Delete();
@@ -644,6 +1041,15 @@ void DIOSTREAMTLSSERVERCREDENTIALS::Clean()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static XQWORD DIOSTREAMTLSCONFIG_CurrentEpoch()
+* @brief      Current epoch
+* @ingroup    DATAIO
+* 
+* @return     XQWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static XQWORD DIOSTREAMTLSCONFIG_CurrentEpoch()
 {
   XDATETIME* datetime = GEN_XFACTORY.CreateDateTime();
@@ -658,6 +1064,18 @@ static XQWORD DIOSTREAMTLSCONFIG_CurrentEpoch()
   return epoch;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLSCONFIG_ALPNFromType(DIOSTREAMTLS_ALPN_TYPE type, XBUFFER& protocol)
+* @brief      Alpn from type
+* @ingroup    DATAIO
+* 
+* @param[in]  type : Type value.
+* @param[in]  protocol : Protocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLSCONFIG_ALPNFromType(DIOSTREAMTLS_ALPN_TYPE type, XBUFFER& protocol)
 {
   protocol.Delete();
@@ -668,12 +1086,26 @@ static bool DIOSTREAMTLSCONFIG_ALPNFromType(DIOSTREAMTLS_ALPN_TYPE type, XBUFFER
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS13SESSIONTICKET::DIOSTREAMTLS13SESSIONTICKET()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS13SESSIONTICKET::DIOSTREAMTLS13SESSIONTICKET()
 {
   Clean();
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS13SESSIONTICKET::~DIOSTREAMTLS13SESSIONTICKET()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS13SESSIONTICKET::~DIOSTREAMTLS13SESSIONTICKET()
 {
   Delete();
@@ -681,24 +1113,177 @@ DIOSTREAMTLS13SESSIONTICKET::~DIOSTREAMTLS13SESSIONTICKET()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* DIOSTREAMTLS13SESSIONTICKET::GetServerName()
+* @brief      Get server name
+* @ingroup    DATAIO
+* 
+* @return     XSTRING* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMTLS13SESSIONTICKET::GetServerName() { return &servername; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetTicket()
+* @brief      Get ticket
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetTicket() { return &ticket; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetPSK()
+* @brief      Get psk
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetPSK() { return &psk; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13SESSIONTICKET::GetTicketAgeAdd()
+* @brief      Get ticket age add
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13SESSIONTICKET::GetTicketAgeAdd() { return ticketageadd; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSIONTICKET::SetTicketAgeAdd(XDWORD ageadd)
+* @brief      Set ticket age add
+* @ingroup    DATAIO
+* 
+* @param[in]  ageadd : Ageadd value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSIONTICKET::SetTicketAgeAdd(XDWORD ageadd) { ticketageadd = ageadd; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13SESSIONTICKET::GetLifetime()
+* @brief      Get lifetime
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13SESSIONTICKET::GetLifetime() { return lifetime; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSIONTICKET::SetLifetime(XDWORD lifetime)
+* @brief      Set lifetime
+* @ingroup    DATAIO
+* 
+* @param[in]  lifetime : Lifetime value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSIONTICKET::SetLifetime(XDWORD lifetime) { this->lifetime = lifetime; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XQWORD DIOSTREAMTLS13SESSIONTICKET::GetReceivedEpoch()
+* @brief      Get received epoch
+* @ingroup    DATAIO
+* 
+* @return     XQWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XQWORD DIOSTREAMTLS13SESSIONTICKET::GetReceivedEpoch() { return receivedepoch; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSIONTICKET::SetReceivedEpoch(XQWORD epoch)
+* @brief      Set received epoch
+* @ingroup    DATAIO
+* 
+* @param[in]  epoch : Epoch value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSIONTICKET::SetReceivedEpoch(XQWORD epoch) { receivedepoch = epoch; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XWORD DIOSTREAMTLS13SESSIONTICKET::GetCipherSuite()
+* @brief      Get cipher suite
+* @ingroup    DATAIO
+* 
+* @return     XWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XWORD DIOSTREAMTLS13SESSIONTICKET::GetCipherSuite() { return ciphersuite; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSIONTICKET::SetCipherSuite(XWORD ciphersuite)
+* @brief      Set cipher suite
+* @ingroup    DATAIO
+* 
+* @param[in]  ciphersuite : Ciphersuite value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSIONTICKET::SetCipherSuite(XWORD ciphersuite) { this->ciphersuite = ciphersuite; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocol()
+* @brief      Get application protocol
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTLS_ALPN_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocol() { return applicationprotocol; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSIONTICKET::SetApplicationProtocol(DIOSTREAMTLS_ALPN_TYPE protocol)
+* @brief      Set application protocol
+* @ingroup    DATAIO
+* 
+* @param[in]  protocol : Protocol value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSIONTICKET::SetApplicationProtocol(DIOSTREAMTLS_ALPN_TYPE protocol) { applicationprotocol = protocol; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocolRaw()
+* @brief      Get application protocol raw
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS13SESSIONTICKET::GetApplicationProtocolRaw() { return &applicationprotocolraw; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13SESSIONTICKET::GetMaximumEarlyDataSize()
+* @brief      Get maximum early data size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13SESSIONTICKET::GetMaximumEarlyDataSize() { return maximumearlydatasize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSIONTICKET::SetMaximumEarlyDataSize(XDWORD size)
+* @brief      Set maximum early data size
+* @ingroup    DATAIO
+* 
+* @param[in]  size : Size value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSIONTICKET::SetMaximumEarlyDataSize(XDWORD size) { maximumearlydatasize = size; }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSIONTICKET::IsExpired()
+* @brief      Is expired
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSIONTICKET::IsExpired()
 {
   XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
@@ -707,6 +1292,15 @@ bool DIOSTREAMTLS13SESSIONTICKET::IsExpired()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13SESSIONTICKET::GetObfuscatedAge()
+* @brief      Get obfuscated age
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13SESSIONTICKET::GetObfuscatedAge()
 {
   XQWORD now = DIOSTREAMTLSCONFIG_CurrentEpoch();
@@ -717,6 +1311,15 @@ XDWORD DIOSTREAMTLS13SESSIONTICKET::GetObfuscatedAge()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSIONTICKET::Delete()
+* @brief      Delete
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSIONTICKET::Delete()
 {
   if(!psk.IsEmpty()) psk.FillBuffer(0);
@@ -729,6 +1332,13 @@ bool DIOSTREAMTLS13SESSIONTICKET::Delete()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSIONTICKET::Clean()
+* @brief      Clean
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSIONTICKET::Clean()
 {
   ticketageadd        = 0;
@@ -775,6 +1385,15 @@ DIOSTREAMTLSCONFIG::~DIOSTREAMTLSCONFIG()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::Freeze()
+* @brief      Freeze
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::Freeze()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -785,6 +1404,15 @@ bool DIOSTREAMTLSCONFIG::Freeze()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::IsFrozen()
+* @brief      Is frozen
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::IsFrozen()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -909,12 +1537,32 @@ bool DIOSTREAMTLSCONFIG::CipherSuites_AddRecommendedProfile()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetTLS12CipherSuites()
+* @brief      Get tls12 cipher suites
+* @ingroup    DATAIO
+* 
+* @return     XVECTOR<XWORD>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetTLS12CipherSuites()
 {
   return &TLS12ciphersuites;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::TLS12CipherSuite_Add(XWORD ciphersuite)
+* @brief      Tls12 cipher suite add
+* @ingroup    DATAIO
+* 
+* @param[in]  ciphersuite : Ciphersuite value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TLS12CipherSuite_Add(XWORD ciphersuite)
 {
   if(IsFrozen() || !DIOSTREAMTLSCONFIG_IsTLS12CipherSuiteSupported(ciphersuite)) return false;
@@ -928,6 +1576,15 @@ bool DIOSTREAMTLSCONFIG::TLS12CipherSuite_Add(XWORD ciphersuite)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::TLS12CipherSuites_Delete()
+* @brief      Tls12 cipher suites delete
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::TLS12CipherSuites_Delete()
 {
   if(IsFrozen()) return false;
@@ -1122,6 +1779,15 @@ XVECTOR<DIOSTREAMTLS_ALPN_TYPE>* DIOSTREAMTLSCONFIG::GetApplicationProtocols()
   return &applicationprotocols;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSCONFIG::GetApplicationProtocolsCount()
+* @brief      Get application protocols count
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSCONFIG::GetApplicationProtocolsCount()
 {
   XDWORD position = 0;
@@ -1136,6 +1802,18 @@ XDWORD DIOSTREAMTLSCONFIG::GetApplicationProtocolsCount()
   return count;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::GetApplicationProtocol(XDWORD index, XBUFFER& applicationprotocol)
+* @brief      Get application protocol
+* @ingroup    DATAIO
+* 
+* @param[in]  index : Index value.
+* @param[in]  applicationprotocol : Applicationprotocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::GetApplicationProtocol(XDWORD index, XBUFFER& applicationprotocol)
 {
   XDWORD position = 0;
@@ -1152,6 +1830,17 @@ bool DIOSTREAMTLSCONFIG::GetApplicationProtocol(XDWORD index, XBUFFER& applicati
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(XBUFFER& applicationprotocol)
+* @brief      Application protocol add
+* @ingroup    DATAIO
+* 
+* @param[in]  applicationprotocol : Applicationprotocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ApplicationProtocol_Add(XBUFFER& applicationprotocol)
 {
   if(IsFrozen()) return false;
@@ -1367,12 +2056,32 @@ bool DIOSTREAMTLSCONFIG::TrustedRoots_AddDefaults()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY DIOSTREAMTLSCONFIG::GetTrustStoreFallbackPolicy()
+* @brief      Get trust store fallback policy
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY DIOSTREAMTLSCONFIG::GetTrustStoreFallbackPolicy()
 {
   return truststorefallbackpolicy;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetTrustStoreFallbackPolicy(DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY policy)
+* @brief      Set trust store fallback policy
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Policy value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetTrustStoreFallbackPolicy(DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY policy)
 {
   if(IsFrozen() || ((policy != DIOSTREAMTLS_TRUSTSTORE_FALLBACKPOLICY_NEVER) &&
@@ -1401,12 +2110,30 @@ bool DIOSTREAMTLSCONFIG::TrustedRoots_Delete()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE DIOSTREAMTLSCONFIG::GetClientAuthenticationMode()
+* @brief      Get client authentication mode
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE DIOSTREAMTLSCONFIG::GetClientAuthenticationMode()
 {
   return clientauthenticationmode;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLSCONFIG::SetClientAuthenticationMode(DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE mode)
+* @brief      Set client authentication mode
+* @ingroup    DATAIO
+* 
+* @param[in]  mode : Mode value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::SetClientAuthenticationMode(DIOSTREAMTLS_CLIENTAUTHENTICATION_MODE mode)
 {
   if(IsFrozen()) return;
@@ -1414,12 +2141,32 @@ void DIOSTREAMTLSCONFIG::SetClientAuthenticationMode(DIOSTREAMTLS_CLIENTAUTHENTI
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetClientTrustedRoots()
+* @brief      Get client trusted roots
+* @ingroup    DATAIO
+* 
+* @return     XVECTOR<XBUFFER*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetClientTrustedRoots()
 {
   return &clienttrustedroots;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::ClientTrustedRoot_Add(XBUFFER& root)
+* @brief      Client trusted root add
+* @ingroup    DATAIO
+* 
+* @param[in]  root : Root value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ClientTrustedRoot_Add(XBUFFER& root)
 {
   if(IsFrozen()) return false;
@@ -1452,6 +2199,17 @@ bool DIOSTREAMTLSCONFIG::ClientTrustedRoot_Add(XBUFFER& root)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
+* @brief      Client trusted roots load
+* @ingroup    DATAIO
+* 
+* @param[in]  provider : Provider value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provider)
 {
   if(IsFrozen()) return false;
@@ -1478,6 +2236,15 @@ bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Load(CIPHERTRUSTPROVIDERX509& provid
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Delete()
+* @brief      Client trusted roots delete
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ClientTrustedRoots_Delete()
 {
   if(IsFrozen()) return false;
@@ -1567,12 +2334,32 @@ CIPHERKEY* DIOSTREAMTLSCONFIG::GetLocalPrivateKey()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLSCONFIG::GetLocalOCSPStapledResponse()
+* @brief      Get local ocsp stapled response
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLSCONFIG::GetLocalOCSPStapledResponse()
 {
   return &localOCSPstapledresponse;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetLocalOCSPStapledResponse(XBUFFER& response)
+* @brief      Set local ocsp stapled response
+* @ingroup    DATAIO
+* 
+* @param[in]  response : Response value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetLocalOCSPStapledResponse(XBUFFER& response)
 {
   if(IsFrozen() || response.IsEmpty() || (response.GetSize() > memorypolicy.GetMaximumOCSPResponseSize())) return false;
@@ -1582,6 +2369,15 @@ bool DIOSTREAMTLSCONFIG::SetLocalOCSPStapledResponse(XBUFFER& response)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::DeleteLocalOCSPStapledResponse()
+* @brief      Delete local ocsp stapled response
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::DeleteLocalOCSPStapledResponse()
 {
   if(IsFrozen()) return false;
@@ -1961,6 +2757,18 @@ bool DIOSTREAMTLSCONFIG::Credentials_Validate(XVECTOR<XBUFFER*>* certificatechai
       signature.Delete();
 
       if(DIOSTREAMTLSSIGNATURE::Sign(signaturescheme, privatekey, publickey, content, signature) &&
+         /**-------------------------------------------------------------------------------------------------------------------
+         * 
+         * @fn         DIOSTREAMTLSSIGNATURE::Verify(signaturescheme, publickey, content, signature))
+         * @brief      Verify
+         * @ingroup    DATAIO
+         * 
+         * @param[in]  Value.
+         * @param[in]  Value.
+         * @param[in]  Value.
+         * @param[in]  Value.
+         * 
+         * --------------------------------------------------------------------------------------------------------------------*/
          DIOSTREAMTLSSIGNATURE::Verify(signaturescheme, publickey, content, signature))
         {
           keypairvalid = true;
@@ -2107,6 +2915,20 @@ bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBU
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey, XBUFFER*& OCSPstapledresponse)
+* @brief      Server credentials select
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : Pointer to servername.
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  privatekey : Pointer to privatekey.
+* @param[in]  OCSPstapledresponse : Pointer to OCSPstapledresponse.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::ServerCredentials_Select(XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey,
                                                    XBUFFER*& OCSPstapledresponse)
 {
@@ -2181,11 +3003,31 @@ bool DIOSTREAMTLSCONFIG::ServerCredentials_Delete()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_REVOCATIONPOLICY DIOSTREAMTLSCONFIG::GetRevocationPolicy()
+* @brief      Get revocation policy
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTLS_REVOCATIONPOLICY : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_REVOCATIONPOLICY DIOSTREAMTLSCONFIG::GetRevocationPolicy()
 {
   return revocationpolicy;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetRevocationPolicy(DIOSTREAMTLS_REVOCATIONPOLICY policy)
+* @brief      Set revocation policy
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Policy value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetRevocationPolicy(DIOSTREAMTLS_REVOCATIONPOLICY policy)
 {
   if(IsFrozen() || policy > DIOSTREAMTLS_REVOCATIONPOLICY_MUST_STAPLE) return false;
@@ -2261,11 +3103,31 @@ bool DIOSTREAMTLSCONFIG::SetAIAFetchTimeout(int timeout)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int DIOSTREAMTLSCONFIG::GetConnectionTimeout()
+* @brief      Get connection timeout
+* @ingroup    DATAIO
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMTLSCONFIG::GetConnectionTimeout()
 {
   return connectiontimeout;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetConnectionTimeout(int timeout)
+* @brief      Set connection timeout
+* @ingroup    DATAIO
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetConnectionTimeout(int timeout)
 {
   if(IsFrozen()) return false;
@@ -2274,11 +3136,31 @@ bool DIOSTREAMTLSCONFIG::SetConnectionTimeout(int timeout)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int DIOSTREAMTLSCONFIG::GetHandshakeTimeout()
+* @brief      Get handshake timeout
+* @ingroup    DATAIO
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMTLSCONFIG::GetHandshakeTimeout()
 {
   return handshaketimeout;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetHandshakeTimeout(int timeout)
+* @brief      Set handshake timeout
+* @ingroup    DATAIO
+* 
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetHandshakeTimeout(int timeout)
 {
   if(IsFrozen()) return false;
@@ -2287,11 +3169,29 @@ bool DIOSTREAMTLSCONFIG::SetHandshakeTimeout(int timeout)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCERTIFICATEX509VALIDATIONPOLICY* DIOSTREAMTLSCONFIG::GetCertificateValidationPolicy()
+* @brief      Get certificate validation policy
+* @ingroup    DATAIO
+* 
+* @return     CIPHERCERTIFICATEX509VALIDATIONPOLICY* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509VALIDATIONPOLICY* DIOSTREAMTLSCONFIG::GetCertificateValidationPolicy()
 {
   return &certificatevalidationpolicy;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLSCONFIG::SetCertificateValidationPolicy(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
+* @brief      Set certificate validation policy
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Policy value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::SetCertificateValidationPolicy(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
 {
   if(IsFrozen()) return;
@@ -2299,12 +3199,32 @@ void DIOSTREAMTLSCONFIG::SetCertificateValidationPolicy(CIPHERCERTIFICATEX509VAL
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLSMEMORYPOLICY* DIOSTREAMTLSCONFIG::GetMemoryPolicy()
+* @brief      Get memory policy
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTLSMEMORYPOLICY* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLSMEMORYPOLICY* DIOSTREAMTLSCONFIG::GetMemoryPolicy()
 {
   return &memorypolicy;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetMemoryPolicy(DIOSTREAMTLSMEMORYPOLICY& policy)
+* @brief      Set memory policy
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Policy value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetMemoryPolicy(DIOSTREAMTLSMEMORYPOLICY& policy)
 {
   if(IsFrozen()) return false;
@@ -2318,11 +3238,31 @@ bool DIOSTREAMTLSCONFIG::SetMemoryPolicy(DIOSTREAMTLSMEMORYPOLICY& policy)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetCertificateRevocationLists()
+* @brief      Get certificate revocation lists
+* @ingroup    DATAIO
+* 
+* @return     XVECTOR<XBUFFER*>* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XVECTOR<XBUFFER*>* DIOSTREAMTLSCONFIG::GetCertificateRevocationLists()
 {
   return &certificaterevocationlists;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::CertificateRevocationList_Add(XBUFFER& CRL)
+* @brief      Certificate revocation list add
+* @ingroup    DATAIO
+* 
+* @param[in]  CRL : CRL value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CertificateRevocationList_Add(XBUFFER& CRL)
 {
   if(IsFrozen()) return false;
@@ -2333,23 +3273,60 @@ bool DIOSTREAMTLSCONFIG::CertificateRevocationList_Add(XBUFFER& CRL)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::CertificateRevocationLists_Delete()
+* @brief      Certificate revocation lists delete
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CertificateRevocationLists_Delete()
 {
   if(IsFrozen()) return false;
   certificaterevocationlists.DeleteContents(); certificaterevocationlists.DeleteAll(); return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLSCONFIG::OCSPDirect_Set(DIOSTREAMTLS_OCSPDIRECTFETCHER fetcher, void* context)
+* @brief      Ocsp direct set
+* @ingroup    DATAIO
+* 
+* @param[in]  fetcher : Fetcher value.
+* @param[in]  context : Pointer to context.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::OCSPDirect_Set(DIOSTREAMTLS_OCSPDIRECTFETCHER fetcher, void* context)
 {
   if(IsFrozen()) return;
   ocspdirectfetcher=fetcher; ocspdirectcontext=context;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTLS_OCSPDIRECTFETCHER DIOSTREAMTLSCONFIG::GetOCSPDirectFetcher()
+* @brief      Get ocsp direct fetcher
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTLS_OCSPDIRECTFETCHER : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTLS_OCSPDIRECTFETCHER DIOSTREAMTLSCONFIG::GetOCSPDirectFetcher()
 {
   return ocspdirectfetcher;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void* DIOSTREAMTLSCONFIG::GetOCSPDirectContext()
+* @brief      Get ocsp direct context
+* @ingroup    DATAIO
+* 
+* @return     void* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void* DIOSTREAMTLSCONFIG::GetOCSPDirectContext()
 {
   return ocspdirectcontext;
@@ -2439,22 +3416,60 @@ bool DIOSTREAMTLSCONFIG::SetMaxVersion(XWORD version)
 
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::IsEarlyDataActive()
+* @brief      Is early data active
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::IsEarlyDataActive()
 {
   return earlydataactive;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLSCONFIG::EarlyData_Activate(bool active)
+* @brief      Early data activate
+* @ingroup    DATAIO
+* 
+* @param[in]  active : Active value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::EarlyData_Activate(bool active)
 {
   if(IsFrozen()) return;
   earlydataactive = active;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSCONFIG::GetMaximumEarlyDataSize()
+* @brief      Get maximum early data size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSCONFIG::GetMaximumEarlyDataSize()
 {
   return maximumearlydatasize;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetMaximumEarlyDataSize(XDWORD size)
+* @brief      Set maximum early data size
+* @ingroup    DATAIO
+* 
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetMaximumEarlyDataSize(XDWORD size)
 {
   if(IsFrozen() || size > DIOSTREAMTLS13_EARLYDATA_MAXSIZE) return false;
@@ -2462,6 +3477,18 @@ bool DIOSTREAMTLSCONFIG::SetMaximumEarlyDataSize(XDWORD size)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::EarlyDataReplayCheck_Set(DIOSTREAMTLS_EARLYDATA_REPLAYCHECK callback, void* context)
+* @brief      Early data replay check set
+* @ingroup    DATAIO
+* 
+* @param[in]  callback : Callback value.
+* @param[in]  context : Pointer to context.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::EarlyDataReplayCheck_Set(DIOSTREAMTLS_EARLYDATA_REPLAYCHECK callback, void* context)
 {
   if(IsFrozen()) return false;
@@ -2470,14 +3497,47 @@ bool DIOSTREAMTLSCONFIG::EarlyDataReplayCheck_Set(DIOSTREAMTLS_EARLYDATA_REPLAYC
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::EarlyDataReplayCheck(XBUFFER& ticketidentity)
+* @brief      Early data replay check
+* @ingroup    DATAIO
+* 
+* @param[in]  ticketidentity : Ticketidentity value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::EarlyDataReplayCheck(XBUFFER& ticketidentity)
 {
   return earlydataactive && earlydatareplaycheck && earlydatareplaycheck(ticketidentity, earlydatareplaycontext);
 }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::IsEarlyDataAcceptable()
+* @brief      Is early data acceptable
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::IsEarlyDataAcceptable()
 {
   return earlydataactive && maximumearlydatasize && earlydatareplaycheck;
 }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::EarlyDataTicketAge_IsAcceptable(XQWORD issueepoch, XDWORD obfuscatedage, XDWORD ageadd)
+* @brief      Early data ticket age is acceptable
+* @ingroup    DATAIO
+* 
+* @param[in]  issueepoch : Issueepoch value.
+* @param[in]  obfuscatedage : Obfuscatedage value.
+* @param[in]  ageadd : Ageadd value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::EarlyDataTicketAge_IsAcceptable(XQWORD issueepoch, XDWORD obfuscatedage, XDWORD ageadd)
 {
   XQWORD now=DIOSTREAMTLSCONFIG_CurrentEpoch();
@@ -2490,6 +3550,15 @@ bool DIOSTREAMTLSCONFIG::EarlyDataTicketAge_IsAcceptable(XQWORD issueepoch, XDWO
   return diff<=DIOSTREAMTLS13_EARLYDATA_AGE_TOLERANCE_MS;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::IsSessionResumptionActive()
+* @brief      Is session resumption active
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::IsSessionResumptionActive()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -2498,6 +3567,15 @@ bool DIOSTREAMTLSCONFIG::IsSessionResumptionActive()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLSCONFIG::SessionResumption_Activate(bool active)
+* @brief      Session resumption activate
+* @ingroup    DATAIO
+* 
+* @param[in]  active : Active value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLSCONFIG::SessionResumption_Activate(bool active)
 {
   if(IsFrozen()) return;
@@ -2518,6 +3596,15 @@ void DIOSTREAMTLSCONFIG::SessionResumption_Activate(bool active)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketLifetime()
+* @brief      Get session ticket lifetime
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketLifetime()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -2526,6 +3613,17 @@ XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketLifetime()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetSessionTicketLifetime(XDWORD lifetime)
+* @brief      Set session ticket lifetime
+* @ingroup    DATAIO
+* 
+* @param[in]  lifetime : Lifetime value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetSessionTicketLifetime(XDWORD lifetime)
 {
   if(IsFrozen()) return false;
@@ -2536,6 +3634,15 @@ bool DIOSTREAMTLSCONFIG::SetSessionTicketLifetime(XDWORD lifetime)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketKeyRotationInterval()
+* @brief      Get session ticket key rotation interval
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketKeyRotationInterval()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -2543,6 +3650,17 @@ XDWORD DIOSTREAMTLSCONFIG::GetSessionTicketKeyRotationInterval()
   return sessionticketkeyrotationinterval;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SetSessionTicketKeyRotationInterval(XDWORD interval)
+* @brief      Set session ticket key rotation interval
+* @ingroup    DATAIO
+* 
+* @param[in]  interval : Interval value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SetSessionTicketKeyRotationInterval(XDWORD interval)
 {
   if(IsFrozen()) return false;
@@ -2554,6 +3672,15 @@ bool DIOSTREAMTLSCONFIG::SetSessionTicketKeyRotationInterval(XDWORD interval)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Rotate()
+* @brief      Session ticket key ring rotate
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Rotate()
 {
   XRAND* random = GEN_XFACTORY.CreateRand();
@@ -2649,6 +3776,18 @@ bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Rotate()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Export(XBUFFER& wrappingkey, XBUFFER& encryptedkeyring)
+* @brief      Session ticket key ring export
+* @ingroup    DATAIO
+* 
+* @param[in]  wrappingkey : Wrappingkey value.
+* @param[in]  encryptedkeyring : Encryptedkeyring value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Export(XBUFFER& wrappingkey, XBUFFER& encryptedkeyring)
 {
   static XBYTE header[] = { 'G','E','N','-','T','L','S','1','3','-','K','R','-','2' };
@@ -2707,6 +3846,18 @@ bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Export(XBUFFER& wrappingkey, XBUFF
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Import(XBUFFER& wrappingkey, XBUFFER& encryptedkeyring)
+* @brief      Session ticket key ring import
+* @ingroup    DATAIO
+* 
+* @param[in]  wrappingkey : Wrappingkey value.
+* @param[in]  encryptedkeyring : Encryptedkeyring value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Import(XBUFFER& wrappingkey, XBUFFER& encryptedkeyring)
 {
   static XBYTE header[] = { 'G','E','N','-','T','L','S','1','3','-','K','R','-','2' };
@@ -2789,6 +3940,20 @@ bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Import(XBUFFER& wrappingkey, XBUFF
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicketKeyRingSynchronizer_Set(DIOSTREAMTLS_SESSIONTICKETKEYRING_LOAD load, DIOSTREAMTLS_SESSIONTICKETKEYRING_SAVE save, XBUFFER& wrappingkey, void* context)
+* @brief      Session ticket key ring synchronizer set
+* @ingroup    DATAIO
+* 
+* @param[in]  load : Load value.
+* @param[in]  save : Save value.
+* @param[in]  wrappingkey : Wrappingkey value.
+* @param[in]  context : Pointer to context.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicketKeyRingSynchronizer_Set(DIOSTREAMTLS_SESSIONTICKETKEYRING_LOAD load,
                                                                DIOSTREAMTLS_SESSIONTICKETKEYRING_SAVE save,
                                                                XBUFFER& wrappingkey, void* context)
@@ -2806,6 +3971,17 @@ bool DIOSTREAMTLSCONFIG::SessionTicketKeyRingSynchronizer_Set(DIOSTREAMTLS_SESSI
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Synchronize(bool publish)
+* @brief      Session ticket key ring synchronize
+* @ingroup    DATAIO
+* 
+* @param[in]  publish : Publish value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Synchronize(bool publish)
 {
   DIOSTREAMTLS_SESSIONTICKETKEYRING_LOAD load = NULL;
@@ -2842,6 +4018,15 @@ bool DIOSTREAMTLSCONFIG::SessionTicketKeyRing_Synchronize(bool publish)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionResumption_ServerInitialize()
+* @brief      Session resumption server initialize
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionResumption_ServerInitialize()
 {
   bool loadavailable = false;
@@ -2877,6 +4062,23 @@ bool DIOSTREAMTLSCONFIG::SessionResumption_ServerInitialize()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd, XDWORD lifetime, XWORD ciphersuite, DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
+* @brief      Session ticket store
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : Pointer to servername.
+* @param[in]  ticket : Ticket value.
+* @param[in]  PSK : PSK value.
+* @param[in]  ageadd : Ageadd value.
+* @param[in]  lifetime : Lifetime value.
+* @param[in]  ciphersuite : Ciphersuite value.
+* @param[in]  applicationprotocol : Applicationprotocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd,
                                               XDWORD lifetime, XWORD ciphersuite,
                                               DIOSTREAMTLS_ALPN_TYPE applicationprotocol)
@@ -2887,6 +4089,24 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Store(XCHAR* servername, XBUFFER& ticket,
                                 protocol.IsEmpty()?NULL:&protocol, 0);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicket_StoreRaw(XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd, XDWORD lifetime, XWORD ciphersuite, XBUFFER* applicationprotocol, XDWORD maximumearlydatasize)
+* @brief      Session ticket store raw
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : Pointer to servername.
+* @param[in]  ticket : Ticket value.
+* @param[in]  PSK : PSK value.
+* @param[in]  ageadd : Ageadd value.
+* @param[in]  lifetime : Lifetime value.
+* @param[in]  ciphersuite : Ciphersuite value.
+* @param[in]  applicationprotocol : Pointer to applicationprotocol.
+* @param[in]  maximumearlydatasize : Maximumearlydatasize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicket_StoreRaw(XCHAR* servername, XBUFFER& ticket, XBUFFER& PSK, XDWORD ageadd,
                                                  XDWORD lifetime, XWORD ciphersuite, XBUFFER* applicationprotocol, XDWORD maximumearlydatasize)
 {
@@ -2936,6 +4156,18 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_StoreRaw(XCHAR* servername, XBUFFER& tick
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicket_Copy(XCHAR* servername, DIOSTREAMTLS13SESSIONTICKET& destination)
+* @brief      Session ticket copy
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : Pointer to servername.
+* @param[in]  destination : Destination value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicket_Copy(XCHAR* servername, DIOSTREAMTLS13SESSIONTICKET& destination)
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -2969,6 +4201,15 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Copy(XCHAR* servername, DIOSTREAMTLS13SES
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTickets_Delete()
+* @brief      Session tickets delete
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTickets_Delete()
 {
   DIOSTREAMTLSCONFIG_LOCK lock(configmutex);
@@ -2979,6 +4220,24 @@ bool DIOSTREAMTLSCONFIG::SessionTickets_Delete()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicket_Seal(XBUFFER& PSK, XWORD ciphersuite, DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername, XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize)
+* @brief      Session ticket seal
+* @ingroup    DATAIO
+* 
+* @param[in]  PSK : PSK value.
+* @param[in]  ciphersuite : Ciphersuite value.
+* @param[in]  applicationprotocol : Applicationprotocol value.
+* @param[in]  servername : Pointer to servername.
+* @param[in]  lifetime : Lifetime value.
+* @param[in]  ageadd : Ageadd value.
+* @param[in]  ticket : Ticket value.
+* @param[in]  maximumearlydatasize : Maximumearlydatasize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicket_Seal(XBUFFER& PSK, XWORD ciphersuite,
                                              DIOSTREAMTLS_ALPN_TYPE applicationprotocol, XCHAR* servername,
                                              XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize)
@@ -2988,6 +4247,24 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Seal(XBUFFER& PSK, XWORD ciphersuite,
   return SessionTicket_SealRaw(PSK, ciphersuite, protocol.IsEmpty()?NULL:&protocol, servername, lifetime, ageadd, ticket, maximumearlydatasize);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicket_SealRaw(XBUFFER& PSK, XWORD ciphersuite, XBUFFER* applicationprotocol, XCHAR* servername, XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize)
+* @brief      Session ticket seal raw
+* @ingroup    DATAIO
+* 
+* @param[in]  PSK : PSK value.
+* @param[in]  ciphersuite : Ciphersuite value.
+* @param[in]  applicationprotocol : Pointer to applicationprotocol.
+* @param[in]  servername : Pointer to servername.
+* @param[in]  lifetime : Lifetime value.
+* @param[in]  ageadd : Ageadd value.
+* @param[in]  ticket : Ticket value.
+* @param[in]  maximumearlydatasize : Maximumearlydatasize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicket_SealRaw(XBUFFER& PSK, XWORD ciphersuite,
                                                 XBUFFER* applicationprotocol, XCHAR* servername,
                                                 XDWORD lifetime, XDWORD ageadd, XBUFFER& ticket, XDWORD maximumearlydatasize)
@@ -3058,6 +4335,24 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_SealRaw(XBUFFER& PSK, XWORD ciphersuite,
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite, DIOSTREAMTLS_ALPN_TYPE& applicationprotocol, XSTRING& servername, XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
+* @brief      Session ticket open
+* @ingroup    DATAIO
+* 
+* @param[in]  ticket : Ticket value.
+* @param[in]  PSK : PSK value.
+* @param[in]  ciphersuite : Ciphersuite value.
+* @param[in]  applicationprotocol : Applicationprotocol value.
+* @param[in]  servername : Servername value.
+* @param[in]  issueepoch : Issueepoch value.
+* @param[in]  lifetime : Lifetime value.
+* @param[in]  ageadd : Ageadd value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite,
                                              DIOSTREAMTLS_ALPN_TYPE& applicationprotocol, XSTRING& servername,
                                              XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd)
@@ -3071,6 +4366,25 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_Open(XBUFFER& ticket, XBUFFER& PSK, XWORD
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite, XBUFFER& applicationprotocol, XSTRING& servername, XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd, XDWORD& maximumearlydatasize)
+* @brief      Session ticket open raw
+* @ingroup    DATAIO
+* 
+* @param[in]  ticket : Ticket value.
+* @param[in]  PSK : PSK value.
+* @param[in]  ciphersuite : Ciphersuite value.
+* @param[in]  applicationprotocol : Applicationprotocol value.
+* @param[in]  servername : Servername value.
+* @param[in]  issueepoch : Issueepoch value.
+* @param[in]  lifetime : Lifetime value.
+* @param[in]  ageadd : Ageadd value.
+* @param[in]  maximumearlydatasize : Maximumearlydatasize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XWORD& ciphersuite,
                                                 XBUFFER& applicationprotocol, XSTRING& servername,
                                                 XQWORD& issueepoch, XDWORD& lifetime, XDWORD& ageadd, XDWORD& maximumearlydatasize)
@@ -3182,6 +4496,15 @@ bool DIOSTREAMTLSCONFIG::SessionTicket_OpenRaw(XBUFFER& ticket, XBUFFER& PSK, XW
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::CryptographicPolicy_Validate()
+* @brief      Cryptographic policy validate
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::CryptographicPolicy_Validate()
 {
   const bool TLS12enabled = (minversion <= DIOSTREAMTLS_MSG_VERSION_TLS_1_2) &&
@@ -3252,6 +4575,15 @@ bool DIOSTREAMTLSCONFIG::CryptographicPolicy_Validate()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSCONFIG::MemoryPolicy_Validate()
+* @brief      Memory policy validate
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSCONFIG::MemoryPolicy_Validate()
 {
   if(memorypolicy.GetMaximumAIABodySize() > memorypolicy.GetMaximumHandshakeInputSize()) return false;

@@ -1137,6 +1137,18 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, DIOSTREAMTLS_ALPN_T
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, XBUFFER& protocol)
+* @brief      List get
+* @ingroup    DATAIO
+* 
+* @param[in]  index : Index value.
+* @param[in]  protocol : Protocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, XBUFFER& protocol)
 {
   XDWORD position = 0;
@@ -1154,6 +1166,17 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Get(XDWORD index, XBUFFER& protocol)
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Is(XBUFFER& protocol)
+* @brief      List is
+* @ingroup    DATAIO
+* 
+* @param[in]  protocol : Protocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Is(XBUFFER& protocol)
 {
   for(XDWORD c=0; c<List_GetNProtocols(); c++)
@@ -1247,6 +1270,17 @@ bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(DIOSTREAMTLS_ALPN_TYPE alpn_type)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(XBUFFER& protocol)
+* @brief      List add
+* @ingroup    DATAIO
+* 
+* @param[in]  protocol : Protocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_EXTENSION_ALPN::List_Add(XBUFFER& protocol)
 {
   if(protocol.IsEmpty() || protocol.GetSize() > 255 || List_Is(protocol) ||

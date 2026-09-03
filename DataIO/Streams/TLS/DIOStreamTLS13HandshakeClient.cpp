@@ -64,6 +64,18 @@
 
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKECLIENT_SignatureSchemeOffered(XVECTOR<XWORD>& offered, XWORD scheme)
+* @brief      Signature scheme offered
+* @ingroup    DATAIO
+* 
+* @param[in]  offered : Offered value.
+* @param[in]  scheme : Scheme value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKECLIENT_SignatureSchemeOffered(XVECTOR<XWORD>& offered, XWORD scheme)
 {
   for(XDWORD c=0; c<offered.GetSize(); c++) if(offered.Get(c) == scheme) return true;
@@ -71,6 +83,17 @@ static bool DIOSTREAMTLS13_HANDSHAKECLIENT_SignatureSchemeOffered(XVECTOR<XWORD>
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static XWORD DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateSignatureScheme(CIPHERCERTIFICATEX509& certificate)
+* @brief      Certificate signature scheme
+* @ingroup    DATAIO
+* 
+* @param[in]  certificate : Certificate value.
+* 
+* @return     XWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static XWORD DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateSignatureScheme(CIPHERCERTIFICATEX509& certificate)
 {
   switch(certificate.GetAlgorithmType())
@@ -99,6 +122,18 @@ static XWORD DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateSignatureScheme(CIPHERCER
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateChainCompatible(XVECTOR<XBUFFER*>* chain, XVECTOR<XWORD>& offered)
+* @brief      Certificate chain compatible
+* @ingroup    DATAIO
+* 
+* @param[in]  chain : Pointer to chain.
+* @param[in]  offered : Offered value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateChainCompatible(XVECTOR<XBUFFER*>* chain, XVECTOR<XWORD>& offered)
 {
   if(!chain || chain->IsEmpty() || offered.IsEmpty()) return false;
@@ -130,6 +165,18 @@ static bool DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateChainCompatible(XVECTOR<XB
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateAuthorityCompatible(XVECTOR<XBUFFER*>* chain, XVECTOR<XBUFFER*>& authorities)
+* @brief      Certificate authority compatible
+* @ingroup    DATAIO
+* 
+* @param[in]  chain : Pointer to chain.
+* @param[in]  authorities : Pointer to authorities.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKECLIENT_CertificateAuthorityCompatible(XVECTOR<XBUFFER*>* chain, XVECTOR<XBUFFER*>& authorities)
 {
   if(authorities.IsEmpty()) return true;
@@ -592,20 +639,76 @@ DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13HANDSHAKECLIENT::GetApplicationProtocol()
   return applicationprotocol;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS13HANDSHAKECLIENT::GetApplicationProtocolRaw()
+* @brief      Get application protocol raw
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS13HANDSHAKECLIENT::GetApplicationProtocolRaw()
 {
   return &applicationprotocolraw;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsSessionResumed()
+* @brief      Is session resumed
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::IsSessionResumed()
 {
   return resumptionaccepted;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsEarlyDataOffered()
+* @brief      Is early data offered
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::IsEarlyDataOffered() { return earlydataoffered; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::IsEarlyDataAccepted()
+* @brief      Is early data accepted
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::IsEarlyDataAccepted() { return earlydataaccepted; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13HANDSHAKECLIENT::GetMaximumEarlyDataSize()
+* @brief      Get maximum early data size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13HANDSHAKECLIENT::GetMaximumEarlyDataSize() { return maximumearlydatasize; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Prepare(XDWORD size)
+* @brief      Early data prepare
+* @ingroup    DATAIO
+* 
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Prepare(XDWORD size)
 {
   if(state!=DIOSTREAMTLS13HANDSHAKECLIENT_STATE_NONE || !config || !config->IsEarlyDataActive() || !size || size>config->GetMaximumEarlyDataSize()) return false;
@@ -613,11 +716,36 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Prepare(XDWORD size)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
+* @brief      Early data protect
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  records : Records value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
 {
   if(!earlydataoffered || !maximumearlydatasize || size>maximumearlydatasize) return false;
   return session && session->EarlyData_Protect(data,size,records);
 }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Protect(XBUFFER& data, XBUFFER& records)
+* @brief      Early data protect
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Data value.
+* @param[in]  records : Records value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::EarlyData_Protect(XBUFFER& data, XBUFFER& records)
 {
   return EarlyData_Protect(data.Get(),data.GetSize(),records);
@@ -2938,6 +3066,17 @@ bool DIOSTREAMTLS13HANDSHAKECLIENT::ApplicationProtocol_IsOffered(DIOSTREAMTLS_A
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKECLIENT::ApplicationProtocol_IsOffered(XBUFFER& applicationprotocol)
+* @brief      Application protocol is offered
+* @ingroup    DATAIO
+* 
+* @param[in]  applicationprotocol : Applicationprotocol value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKECLIENT::ApplicationProtocol_IsOffered(XBUFFER& applicationprotocol)
 {
   for(XDWORD c=0; c<offeredapplicationprotocolsraw.GetSize(); c++)

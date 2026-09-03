@@ -18,6 +18,16 @@
 
 namespace
 {
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void SecureErase(void* data,XDWORD size)
+  * @brief      Secure erase
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  data : Pointer to data.
+  * @param[in]  size : Size value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void SecureErase(void* data,XDWORD size)
   {
     volatile XBYTE* bytes=(volatile XBYTE*)data;
@@ -32,22 +42,115 @@ namespace
     XMPINTEGER T;
   };
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool Const(XMPINTEGER& v, const XCHAR* text)
+  * @brief      Const
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  v : V value.
+  * @param[in]  text : Pointer to text.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool Const(XMPINTEGER& v, const XCHAR* text) { return v.SetFromString(16, (XCHAR*)text); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ModMul(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& b,XMPINTEGER& p)
+  * @brief      Mod mul
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * @param[in]  p : P value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ModMul(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& b,XMPINTEGER& p)
   { XMPINTEGER t; return t.Multiplication(&a,&b) && r.Module(&r,&t,&p); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ModAdd(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& b,XMPINTEGER& p)
+  * @brief      Mod add
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * @param[in]  p : P value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ModAdd(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& b,XMPINTEGER& p)
   { XMPINTEGER t; return t.AdditionSigned(&a,&b) && r.Module(&r,&t,&p); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ModSub(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& b,XMPINTEGER& p)
+  * @brief      Mod sub
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * @param[in]  p : P value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ModSub(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& b,XMPINTEGER& p)
   { XMPINTEGER t; return t.SubtractionSigned(&a,&b) && r.Module(&r,&t,&p); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ModDouble(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& p)
+  * @brief      Mod double
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  a : A value.
+  * @param[in]  p : P value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ModDouble(XMPINTEGER& r,XMPINTEGER& a,XMPINTEGER& p)
   { XMPINTEGER t; return t.Multiplication(&a,2) && r.Module(&r,&t,&p); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ImportLE(XMPINTEGER& v,const XBYTE* data,XDWORD size)
+  * @brief      Import le
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  v : V value.
+  * @param[in]  data : Pointer to data.
+  * @param[in]  size : Size value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ImportLE(XMPINTEGER& v,const XBYTE* data,XDWORD size)
   {
     XBYTE temp[64]; if(!data||size>sizeof(temp))return false; for(XDWORD i=0;i<size;i++)temp[i]=data[size-1-i];
     bool s=v.ImportFromBinary(temp,size);SecureErase(temp,sizeof(temp));return s;
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ExportLE(XMPINTEGER& v,XBYTE* data,XDWORD size)
+  * @brief      Export le
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  v : V value.
+  * @param[in]  data : Pointer to data.
+  * @param[in]  size : Size value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ExportLE(XMPINTEGER& v,XBYTE* data,XDWORD size)
   {
     XBYTE temp[64]; if(!data||size>sizeof(temp))return false;memset(temp,0,sizeof(temp));
@@ -56,12 +159,45 @@ namespace
     SecureErase(temp,sizeof(temp));return status;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool Hash512(const XBYTE* a,XDWORD as,const XBYTE* b,XDWORD bs,const XBYTE* c,XDWORD cs,XBYTE out[64])
+  * @brief      Hash512
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  a : Pointer to a.
+  * @param[in]  as : As value.
+  * @param[in]  b : Pointer to b.
+  * @param[in]  bs : Bs value.
+  * @param[in]  c : Pointer to c.
+  * @param[in]  cs : Cs value.
+  * @param[in]  Value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool Hash512(const XBYTE* a,XDWORD as,const XBYTE* b,XDWORD bs,const XBYTE* c,XDWORD cs,XBYTE out[64])
   {
     XSECUREBUFFER in;if(as&&!in.Add((XBYTE*)a,as))return false;if(bs&&!in.Add((XBYTE*)b,bs))return false;if(cs&&!in.Add((XBYTE*)c,cs))return false;
     HASHSHA2 hash(HASHSHA2TYPE_512);if(!hash.Do(in)||!hash.GetResult()||hash.GetResult()->GetSize()!=64)return false;memcpy(out,hash.GetResult()->Get(),64);return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool InitConstants(XMPINTEGER& p,XMPINTEGER& l,XMPINTEGER& d,XMPINTEGER& bx,XMPINTEGER& by,XMPINTEGER& sqrtm1)
+  * @brief      Init constants
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  p : P value.
+  * @param[in]  l : L value.
+  * @param[in]  d : D value.
+  * @param[in]  bx : Bx value.
+  * @param[in]  by : By value.
+  * @param[in]  sqrtm1 : Sqrtm1 value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool InitConstants(XMPINTEGER& p,XMPINTEGER& l,XMPINTEGER& d,XMPINTEGER& bx,XMPINTEGER& by,XMPINTEGER& sqrtm1)
   {
     return Const(p,__L("7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFED")) &&
@@ -72,17 +208,71 @@ namespace
            Const(sqrtm1,__L("2B8324804FC1DF0B2B4D00993DFBD7A72F431806AD2FE478C4EE1B274A0EA0B0"));
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointIdentity(EDPOINT& p)
+  * @brief      Point identity
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  p : P value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointIdentity(EDPOINT& p)
   { return p.X.LeftSet(0)&&p.Y.LeftSet(1)&&p.Z.LeftSet(1)&&p.T.LeftSet(0); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointAffine(EDPOINT& p,XMPINTEGER& x,XMPINTEGER& y,XMPINTEGER& prime)
+  * @brief      Point affine
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  p : P value.
+  * @param[in]  x : X value.
+  * @param[in]  y : Y value.
+  * @param[in]  prime : Prime value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointAffine(EDPOINT& p,XMPINTEGER& x,XMPINTEGER& y,XMPINTEGER& prime)
   {
     XMPINTEGER zi;if(!zi.ModularInverse(&p.Z,&prime)||!ModMul(x,p.X,zi,prime)||!ModMul(y,p.Y,zi,prime))return false;return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointFromAffine(EDPOINT& p,XMPINTEGER& x,XMPINTEGER& y,XMPINTEGER& prime)
+  * @brief      Point from affine
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  p : P value.
+  * @param[in]  x : X value.
+  * @param[in]  y : Y value.
+  * @param[in]  prime : Prime value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointFromAffine(EDPOINT& p,XMPINTEGER& x,XMPINTEGER& y,XMPINTEGER& prime)
   { return p.X.CopyFrom(&x)&&p.Y.CopyFrom(&y)&&p.Z.LeftSet(1)&&ModMul(p.T,x,y,prime); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointAdd(EDPOINT& r,EDPOINT& p1,EDPOINT& p2,XMPINTEGER& prime,XMPINTEGER& d)
+  * @brief      Point add
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  p1 : P1 value.
+  * @param[in]  p2 : P2 value.
+  * @param[in]  prime : Prime value.
+  * @param[in]  d : D value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointAdd(EDPOINT& r,EDPOINT& p1,EDPOINT& p2,XMPINTEGER& prime,XMPINTEGER& d)
   {
     XMPINTEGER ymx1,ymx2,ypx1,ypx2,A,B,C,D,E,F,G,H,t1,t2;
@@ -94,6 +284,19 @@ namespace
        !ModMul(r.T,E,H,prime)||!ModMul(r.Z,F,G,prime)) return false;return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointDouble(EDPOINT& r,EDPOINT& p,XMPINTEGER& prime)
+  * @brief      Point double
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  p : P value.
+  * @param[in]  prime : Prime value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointDouble(EDPOINT& r,EDPOINT& p,XMPINTEGER& prime)
   {
     XMPINTEGER A,B,C,D,E,F,G,H,t1,t2;
@@ -109,6 +312,21 @@ namespace
   // signature nonce (see e.g. the "Minerva"-class attacks against non-constant-time Ed25519/ECDSA scalar mul).
   static const XDWORD CIPHERED25519_SCALARBITS = 256;
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool IntegerSelect(XMPINTEGER& result,XMPINTEGER& value0,XMPINTEGER& value1,XBYTE select1,XDWORD fixedlimbs)
+  * @brief      Integer select
+  * @ingroup    CIPHER
+  * 
+  * @param[out] result : Result value.
+  * @param[in]  value0 : Value0 value.
+  * @param[in]  value1 : Value1 value.
+  * @param[in]  select1 : Select1 value.
+  * @param[in]  fixedlimbs : Fixedlimbs value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool IntegerSelect(XMPINTEGER& result,XMPINTEGER& value0,XMPINTEGER& value1,XBYTE select1,XDWORD fixedlimbs)
   {
     if(!fixedlimbs||!value0.Grow(fixedlimbs)||!value1.Grow(fixedlimbs)||!result.Grow(fixedlimbs))return false;
@@ -120,12 +338,42 @@ namespace
     return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointSelect(EDPOINT& result,EDPOINT& point0,EDPOINT& point1,XBYTE select1,XDWORD fixedlimbs)
+  * @brief      Point select
+  * @ingroup    CIPHER
+  * 
+  * @param[out] result : Result value.
+  * @param[in]  point0 : Point0 value.
+  * @param[in]  point1 : Point1 value.
+  * @param[in]  select1 : Select1 value.
+  * @param[in]  fixedlimbs : Fixedlimbs value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointSelect(EDPOINT& result,EDPOINT& point0,EDPOINT& point1,XBYTE select1,XDWORD fixedlimbs)
   {
     return IntegerSelect(result.X,point0.X,point1.X,select1,fixedlimbs)&&IntegerSelect(result.Y,point0.Y,point1.Y,select1,fixedlimbs)&&
            IntegerSelect(result.Z,point0.Z,point1.Z,select1,fixedlimbs)&&IntegerSelect(result.T,point0.T,point1.T,select1,fixedlimbs);
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointMul(EDPOINT& r,XMPINTEGER& scalar,EDPOINT& point,XMPINTEGER& prime,XMPINTEGER& d)
+  * @brief      Point mul
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  scalar : Scalar value.
+  * @param[in]  point : Point value.
+  * @param[in]  prime : Prime value.
+  * @param[in]  d : D value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointMul(EDPOINT& r,XMPINTEGER& scalar,EDPOINT& point,XMPINTEGER& prime,XMPINTEGER& d)
   {
     const XDWORD fixedlimbs=XMPINTEGER_BITSTOLIMBS(CIPHERED25519_SCALARBITS);
@@ -154,11 +402,39 @@ namespace
     r.X.Swap(&acc.X);r.Y.Swap(&acc.Y);r.Z.Swap(&acc.Z);r.T.Swap(&acc.T);return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointEncode(EDPOINT& p,XBYTE out[32],XMPINTEGER& prime)
+  * @brief      Point encode
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  p : P value.
+  * @param[in]  Value.
+  * @param[in]  prime : Prime value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointEncode(EDPOINT& p,XBYTE out[32],XMPINTEGER& prime)
   {
     XMPINTEGER x,y;if(!PointAffine(p,x,y,prime)||!ExportLE(y,out,32))return false; if(x.GetBit(0))out[31]|=0x80;else out[31]&=0x7f;return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointDecode(const XBYTE in[32],EDPOINT& point,XMPINTEGER& prime,XMPINTEGER& d,XMPINTEGER& sqrtm1)
+  * @brief      Point decode
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  Value.
+  * @param[in]  point : Point value.
+  * @param[in]  prime : Prime value.
+  * @param[in]  d : D value.
+  * @param[in]  sqrtm1 : Sqrtm1 value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointDecode(const XBYTE in[32],EDPOINT& point,XMPINTEGER& prime,XMPINTEGER& d,XMPINTEGER& sqrtm1)
   {
     XBYTE enc[32];memcpy(enc,in,32);int sign=(enc[31]>>7)&1;enc[31]&=0x7f;XMPINTEGER y;if(!ImportLE(y,enc,32)||y.CompareSignedValues(prime)>=0)return false;
@@ -170,6 +446,21 @@ namespace
     return PointFromAffine(point,x,y,prime);
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PointIsPrimeOrder(EDPOINT& point,XMPINTEGER& order,XMPINTEGER& prime,XMPINTEGER& d,bool rejectidentity)
+  * @brief      Point is prime order
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  point : Point value.
+  * @param[in]  order : Order value.
+  * @param[in]  prime : Prime value.
+  * @param[in]  d : D value.
+  * @param[in]  rejectidentity : Rejectidentity value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PointIsPrimeOrder(EDPOINT& point,XMPINTEGER& order,XMPINTEGER& prime,XMPINTEGER& d,bool rejectidentity)
   {
     EDPOINT multiple;
@@ -188,9 +479,35 @@ namespace
     return status;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ScalarFromLEMod(XMPINTEGER& s,const XBYTE* data,XDWORD size,XMPINTEGER& l)
+  * @brief      Scalar from le mod
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  s : S value.
+  * @param[in]  data : Pointer to data.
+  * @param[in]  size : Size value.
+  * @param[in]  l : L value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ScalarFromLEMod(XMPINTEGER& s,const XBYTE* data,XDWORD size,XMPINTEGER& l)
   { XMPINTEGER t;if(!ImportLE(t,data,size))return false;return s.Module(&s,&t,&l); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PublicFromSeed(const XBYTE seed[32],XBYTE publickey[32])
+  * @brief      Public from seed
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  Value.
+  * @param[in]  Value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PublicFromSeed(const XBYTE seed[32],XBYTE publickey[32])
   {
     XMPINTEGER p,l,d,bx,by,sqrtm1,a;XBYTE h[64]={0};EDPOINT B,A;bool status=false;
@@ -206,24 +523,85 @@ namespace
   }
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERED25519::CIPHERED25519()
+* @brief      Constructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERED25519::CIPHERED25519(){Clean();}
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERED25519::~CIPHERED25519()
+* @brief      Destructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERED25519::~CIPHERED25519(){Clean();}
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERED25519::Random(XBYTE* data,XDWORD size)
+* @brief      Random
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERED25519::Random(XBYTE* data,XDWORD size)
 {
   if(!data||!size)return false;XRAND* xrand=GEN_XFACTORY.CreateRand();if(!xrand)return false;bool status=false;if(xrand->Ini()&&xrand->IsCryptographicallySecure())status=xrand->Generate(data,size);GEN_XFACTORY.DeleteRand(xrand);return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERED25519::KeyPair_Create(XBUFFER& privatekey,XBUFFER& publickey)
+* @brief      Key pair create
+* @ingroup    CIPHER
+* 
+* @param[in]  privatekey : Privatekey value.
+* @param[in]  publickey : Publickey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERED25519::KeyPair_Create(XBUFFER& privatekey,XBUFFER& publickey)
 {
   XBYTE seed[32]={0},pub[32]={0};privatekey.SecureDelete();publickey.Delete();bool status=Random(seed,sizeof(seed))&&PublicFromSeed(seed,pub)&&privatekey.Add(seed,32)&&publickey.Add(pub,32);if(!status){privatekey.SecureDelete();publickey.Delete();}SecureErase(seed,sizeof(seed));SecureErase(pub,sizeof(pub));return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERED25519::PublicKey_Create(XBUFFER& privatekey,XBUFFER& publickey)
+* @brief      Public key create
+* @ingroup    CIPHER
+* 
+* @param[in]  privatekey : Privatekey value.
+* @param[in]  publickey : Publickey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERED25519::PublicKey_Create(XBUFFER& privatekey,XBUFFER& publickey)
 {
   if(privatekey.GetSize()!=32)return false;XBYTE pub[32]={0};publickey.Delete();bool status=PublicFromSeed(privatekey.Get(),pub)&&publickey.Add(pub,32);if(!status)publickey.Delete();SecureErase(pub,sizeof(pub));return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERED25519::PublicKey_IsValid(XBUFFER& publickey)
+* @brief      Public key is valid
+* @ingroup    CIPHER
+* 
+* @param[in]  publickey : Publickey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERED25519::PublicKey_IsValid(XBUFFER& publickey)
 {
   if(publickey.GetSize()!=CIPHERED25519_PUBLICKEYSIZE)return false;
@@ -234,6 +612,20 @@ bool CIPHERED25519::PublicKey_IsValid(XBUFFER& publickey)
   SecureErase(canonical,sizeof(canonical));return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERED25519::Sign(XBUFFER& privatekey,XBUFFER& publickey,XBUFFER& input,XBUFFER& signature)
+* @brief      Sign
+* @ingroup    CIPHER
+* 
+* @param[in]  privatekey : Privatekey value.
+* @param[in]  publickey : Publickey value.
+* @param[in]  input : Input value.
+* @param[in]  signature : Signature value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERED25519::Sign(XBUFFER& privatekey,XBUFFER& publickey,XBUFFER& input,XBUFFER& signature)
 {
   signature.Delete();if(privatekey.GetSize()!=32||publickey.GetSize()!=32||!PublicKey_IsValid(publickey))return false;
@@ -254,6 +646,19 @@ bool CIPHERED25519::Sign(XBUFFER& privatekey,XBUFFER& publickey,XBUFFER& input,X
   if(!status)signature.Delete();SecureErase(derived,sizeof(derived));SecureErase(h,sizeof(h));SecureErase(rh,sizeof(rh));SecureErase(kh,sizeof(kh));SecureErase(Renc,sizeof(Renc));SecureErase(Senc,sizeof(Senc));return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERED25519::Verify(XBUFFER& publickey,XBUFFER& input,XBUFFER& signature)
+* @brief      Verify
+* @ingroup    CIPHER
+* 
+* @param[in]  publickey : Publickey value.
+* @param[in]  input : Input value.
+* @param[in]  signature : Signature value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERED25519::Verify(XBUFFER& publickey,XBUFFER& input,XBUFFER& signature)
 {
   if(publickey.GetSize()!=32||signature.GetSize()!=64||!PublicKey_IsValid(publickey))return false;
@@ -273,4 +678,11 @@ bool CIPHERED25519::Verify(XBUFFER& publickey,XBUFFER& input,XBUFFER& signature)
   SecureErase(kh,sizeof(kh));SecureErase(left,sizeof(left));SecureErase(right,sizeof(right));SecureErase(canonicalR,sizeof(canonicalR));return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERED25519::Clean()
+* @brief      Clean
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERED25519::Clean(){}

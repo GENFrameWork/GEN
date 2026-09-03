@@ -114,6 +114,18 @@ bool DIOSTREAMTLSSIGNATURE::IsSupported(XWORD signaturescheme, CIPHERKEY* key)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLSSIGNATURE::IsSupported(XWORD signaturescheme, CIPHERCERTIFICATEX509* certificate)
+* @brief      Is supported
+* @ingroup    DATAIO
+* 
+* @param[in]  signaturescheme : Signaturescheme value.
+* @param[in]  certificate : Pointer to certificate.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSSIGNATURE::IsSupported(XWORD signaturescheme, CIPHERCERTIFICATEX509* certificate)
 {
   if(!certificate || !certificate->GetPublicCipherKey()) return false;
@@ -277,6 +289,7 @@ bool DIOSTREAMTLSSIGNATURE::Verify(XWORD signaturescheme, CIPHERKEY* key, XBUFFE
 *             leaf certificate's public key, needed because the private key alone does not carry the modulus.
 * @param[in]  content : Content to sign.
 * @param[out] signature : Produced signature.
+* @param[in]  signaturescheme : Signaturescheme value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *

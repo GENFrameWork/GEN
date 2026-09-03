@@ -19,6 +19,16 @@
 #include "GEN_Control.h"
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void CIPHERCHACHA20POLY1305_SecureErase(void* data, XDWORD size)
+* @brief      Secure erase
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void CIPHERCHACHA20POLY1305_SecureErase(void* data, XDWORD size)
 {
   volatile XBYTE* bytes = (volatile XBYTE*)data;
@@ -26,6 +36,15 @@ static void CIPHERCHACHA20POLY1305_SecureErase(void* data, XDWORD size)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCHACHA20POLY1305::CIPHERCHACHA20POLY1305() : CIPHER()
+* @brief      Constructor of class
+* @ingroup    CIPHER
+* 
+* @param[in]  Value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCHACHA20POLY1305::CIPHERCHACHA20POLY1305() : CIPHER()
 {
   Clean();
@@ -35,12 +54,31 @@ CIPHERCHACHA20POLY1305::CIPHERCHACHA20POLY1305() : CIPHER()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCHACHA20POLY1305::~CIPHERCHACHA20POLY1305()
+* @brief      Destructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCHACHA20POLY1305::~CIPHERCHACHA20POLY1305()
 {
   Clean();
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCHACHA20POLY1305::SetKey(CIPHERKEY* key, bool integritycheck)
+* @brief      Set key
+* @ingroup    CIPHER
+* 
+* @param[in]  key : Pointer to key.
+* @param[in]  integritycheck : Integritycheck value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCHACHA20POLY1305::SetKey(CIPHERKEY* key, bool integritycheck)
 {
   keyisready = false;
@@ -57,24 +95,62 @@ bool CIPHERCHACHA20POLY1305::SetKey(CIPHERKEY* key, bool integritycheck)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCHACHA20POLY1305::IsAEAD()
+* @brief      Is aead
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCHACHA20POLY1305::IsAEAD()
 {
   return true;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERCHACHA20POLY1305::GetAEADNonceSize()
+* @brief      Get aead nonce size
+* @ingroup    CIPHER
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERCHACHA20POLY1305::GetAEADNonceSize()
 {
   return CIPHERCHACHA20POLY1305_NONCESIZE;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERCHACHA20POLY1305::GetAEADTagSize()
+* @brief      Get aead tag size
+* @ingroup    CIPHER
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERCHACHA20POLY1305::GetAEADTagSize()
 {
   return CIPHERCHACHA20POLY1305_TAGSIZE;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERCHACHA20POLY1305::Load32LE(const XBYTE* data)
+* @brief      Load32 le
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERCHACHA20POLY1305::Load32LE(const XBYTE* data)
 {
   return ((XDWORD)data[0])        |
@@ -84,6 +160,16 @@ XDWORD CIPHERCHACHA20POLY1305::Load32LE(const XBYTE* data)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCHACHA20POLY1305::Store32LE(XBYTE* data, XDWORD value)
+* @brief      Store32 le
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  value : Value value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCHACHA20POLY1305::Store32LE(XBYTE* data, XDWORD value)
 {
   data[0] = (XBYTE)value;
@@ -93,18 +179,52 @@ void CIPHERCHACHA20POLY1305::Store32LE(XBYTE* data, XDWORD value)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCHACHA20POLY1305::Store64LE(XBYTE* data, XQWORD value)
+* @brief      Store64 le
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  value : Value value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCHACHA20POLY1305::Store64LE(XBYTE* data, XQWORD value)
 {
   for(int c=0; c<8; c++) data[c] = (XBYTE)(value >> (c*8));
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERCHACHA20POLY1305::RotateLeft32(XDWORD value, int bits)
+* @brief      Rotate left32
+* @ingroup    CIPHER
+* 
+* @param[in]  value : Value value.
+* @param[in]  bits : Bits value.
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERCHACHA20POLY1305::RotateLeft32(XDWORD value, int bits)
 {
   return (value << bits) | (value >> (32-bits));
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCHACHA20POLY1305::QuarterRound(XDWORD& a, XDWORD& b, XDWORD& c, XDWORD& d)
+* @brief      Quarter round
+* @ingroup    CIPHER
+* 
+* @param[in]  a : A value.
+* @param[in]  b : B value.
+* @param[in]  c : C value.
+* @param[in]  d : D value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCHACHA20POLY1305::QuarterRound(XDWORD& a, XDWORD& b, XDWORD& c, XDWORD& d)
 {
   a += b; d ^= a; d = RotateLeft32(d, 16);
@@ -114,6 +234,18 @@ void CIPHERCHACHA20POLY1305::QuarterRound(XDWORD& a, XDWORD& b, XDWORD& c, XDWOR
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCHACHA20POLY1305::Block(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE], XDWORD counter, const XBYTE nonce[CIPHERCHACHA20POLY1305_NONCESIZE], XBYTE output[64])
+* @brief      Block
+* @ingroup    CIPHER
+* 
+* @param[in]  Value.
+* @param[in]  counter : Counter value.
+* @param[in]  Value.
+* @param[in]  Value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCHACHA20POLY1305::Block(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE], XDWORD counter,
                                    const XBYTE nonce[CIPHERCHACHA20POLY1305_NONCESIZE], XBYTE output[64])
 {
@@ -149,6 +281,20 @@ void CIPHERCHACHA20POLY1305::Block(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZ
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCHACHA20POLY1305::Crypt(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE], XDWORD counter, const XBYTE nonce[CIPHERCHACHA20POLY1305_NONCESIZE], const XBYTE* input, XBYTE* output, XDWORD size)
+* @brief      Crypt
+* @ingroup    CIPHER
+* 
+* @param[in]  Value.
+* @param[in]  counter : Counter value.
+* @param[in]  Value.
+* @param[in]  input : Pointer to input.
+* @param[out] output : Pointer to output.
+* @param[in]  size : Size value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCHACHA20POLY1305::Crypt(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE], XDWORD counter,
                                    const XBYTE nonce[CIPHERCHACHA20POLY1305_NONCESIZE],
                                    const XBYTE* input, XBYTE* output, XDWORD size)
@@ -168,6 +314,18 @@ void CIPHERCHACHA20POLY1305::Crypt(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZ
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCHACHA20POLY1305::Poly1305(const XBYTE key[32], const XBYTE* message, XQWORD size, XBYTE tag[16])
+* @brief      Poly1305
+* @ingroup    CIPHER
+* 
+* @param[in]  Value.
+* @param[in]  message : Pointer to message.
+* @param[in]  size : Size value.
+* @param[in]  Value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCHACHA20POLY1305::Poly1305(const XBYTE key[32], const XBYTE* message, XQWORD size, XBYTE tag[16])
 {
   XDWORD r0 = ( Load32LE(key + 0)                    ) & 0x3ffffff;
@@ -276,6 +434,22 @@ void CIPHERCHACHA20POLY1305::Poly1305(const XBYTE key[32], const XBYTE* message,
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCHACHA20POLY1305::CalculateTag(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE], const XBYTE nonce[CIPHERCHACHA20POLY1305_NONCESIZE], XBUFFER& additionaldata, const XBYTE* ciphertext, XDWORD size, XBYTE tag[16])
+* @brief      Calculate tag
+* @ingroup    CIPHER
+* 
+* @param[in]  Value.
+* @param[in]  Value.
+* @param[in]  additionaldata : Additionaldata value.
+* @param[in]  ciphertext : Pointer to ciphertext.
+* @param[in]  size : Size value.
+* @param[in]  Value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCHACHA20POLY1305::CalculateTag(const XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE],
                                            const XBYTE nonce[CIPHERCHACHA20POLY1305_NONCESIZE],
                                            XBUFFER& additionaldata, const XBYTE* ciphertext, XDWORD size, XBYTE tag[16])
@@ -307,6 +481,17 @@ bool CIPHERCHACHA20POLY1305::CalculateTag(const XBYTE key[CIPHERCHACHA20POLY1305
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCHACHA20POLY1305::GetRawKey(XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE])
+* @brief      Get raw key
+* @ingroup    CIPHER
+* 
+* @param[in]  Value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCHACHA20POLY1305::GetRawKey(XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE])
 {
   if(!keyisready) return false;
@@ -322,6 +507,21 @@ bool CIPHERCHACHA20POLY1305::GetRawKey(XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE]
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCHACHA20POLY1305::CipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+* @brief      Cipher aead
+* @ingroup    CIPHER
+* 
+* @param[in]  input : Pointer to input.
+* @param[in]  size : Size value.
+* @param[in]  nonce : Nonce value.
+* @param[in]  additionaldata : Additionaldata value.
+* @param[in]  tag : Tag value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCHACHA20POLY1305::CipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
 {
   XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE] = { 0 };
@@ -351,6 +551,21 @@ bool CIPHERCHACHA20POLY1305::CipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonc
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCHACHA20POLY1305::UncipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
+* @brief      Uncipher aead
+* @ingroup    CIPHER
+* 
+* @param[in]  input : Pointer to input.
+* @param[in]  size : Size value.
+* @param[in]  nonce : Nonce value.
+* @param[in]  additionaldata : Additionaldata value.
+* @param[in]  tag : Tag value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCHACHA20POLY1305::UncipherAEAD(XBYTE* input, XDWORD size, XBUFFER& nonce, XBUFFER& additionaldata, XBUFFER& tag)
 {
   XBYTE key[CIPHERCHACHA20POLY1305_KEYSIZE] = { 0 };
@@ -361,6 +576,17 @@ bool CIPHERCHACHA20POLY1305::UncipherAEAD(XBYTE* input, XDWORD size, XBUFFER& no
      tag.GetSize() != CIPHERCHACHA20POLY1305_TAGSIZE || !GetRawKey(key)) return false;
 
   if(CalculateTag(key, nonce.Get(), additionaldata, input, size, expected) &&
+     /**-------------------------------------------------------------------------------------------------------------------
+     * 
+     * @fn         CIPHER::CompareConstantTime(expected, tag.Get(), sizeof(expected)))
+     * @brief      Compare constant time
+     * @ingroup    CIPHER
+     * 
+     * @param[in]  Value.
+     * @param[in]  Value.
+     * @param[in]  Value.
+     * 
+     * --------------------------------------------------------------------------------------------------------------------*/
      CIPHER::CompareConstantTime(expected, tag.Get(), sizeof(expected)))
     {
       result->Delete();
@@ -382,6 +608,13 @@ bool CIPHERCHACHA20POLY1305::UncipherAEAD(XBYTE* input, XDWORD size, XBUFFER& no
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCHACHA20POLY1305::Clean()
+* @brief      Clean
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCHACHA20POLY1305::Clean()
 {
   keyisready = false;

@@ -97,6 +97,7 @@ DIOWEBHEADER::~DIOWEBHEADER()
 * 
 * @param[in]  diostream : Diostream pointer to use.
 * @param[in]  timeout : Timeout value.
+* @param[in]  maximumsize : Maximumsize value.
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 

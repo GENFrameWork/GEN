@@ -10,17 +10,43 @@
 
 #include "GEN_Control.h"
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERX25519MLKEM768::CIPHERX25519MLKEM768()
+* @brief      Constructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERX25519MLKEM768::CIPHERX25519MLKEM768()
 {
   Clean();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERX25519MLKEM768::~CIPHERX25519MLKEM768()
+* @brief      Destructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERX25519MLKEM768::~CIPHERX25519MLKEM768()
 {
   Delete();
   Clean();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERX25519MLKEM768::X25519KeyPair_Create(CIPHERECDSAX25519& x25519, XBUFFER& publickey)
+* @brief      X25519 key pair create
+* @ingroup    CIPHER
+* 
+* @param[in]  x25519 : X25519 value.
+* @param[in]  publickey : Publickey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERX25519MLKEM768::X25519KeyPair_Create(CIPHERECDSAX25519& x25519, XBUFFER& publickey)
 {
   publickey.Delete();
@@ -29,6 +55,20 @@ bool CIPHERX25519MLKEM768::X25519KeyPair_Create(CIPHERECDSAX25519& x25519, XBUFF
          publickey.Add(x25519.GetKey(CIPHERECDSAX25519_TYPEKEY_PUBLIC), CIPHERECDSAX25519_MAXKEY);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERX25519MLKEM768::X25519SharedSecret_Create(CIPHERECDSAX25519& x25519, XBYTE* peerpublic, XBUFFER& sharedsecret, bool* invalidpeershare)
+* @brief      X25519 shared secret create
+* @ingroup    CIPHER
+* 
+* @param[in]  x25519 : X25519 value.
+* @param[in]  peerpublic : Pointer to peerpublic.
+* @param[in]  sharedsecret : Sharedsecret value.
+* @param[in]  invalidpeershare : Pointer to invalidpeershare.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERX25519MLKEM768::X25519SharedSecret_Create(CIPHERECDSAX25519& x25519, XBYTE* peerpublic, XBUFFER& sharedsecret,
                                                       bool* invalidpeershare)
 {
@@ -59,6 +99,17 @@ bool CIPHERX25519MLKEM768::X25519SharedSecret_Create(CIPHERECDSAX25519& x25519, 
   return sharedsecret.Add(secret, CIPHERECDSAX25519_MAXKEY);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERX25519MLKEM768::ClientKeyShare_Create(XBUFFER& clientshare)
+* @brief      Client key share create
+* @ingroup    CIPHER
+* 
+* @param[in]  clientshare : Clientshare value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERX25519MLKEM768::ClientKeyShare_Create(XBUFFER& clientshare)
 {
   XBUFFER mlkempublic;
@@ -81,6 +132,19 @@ bool CIPHERX25519MLKEM768::ClientKeyShare_Create(XBUFFER& clientshare)
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERX25519MLKEM768::ClientSharedSecret_Create(XBUFFER& servershare, XBUFFER& sharedsecret, bool* invalidpeershare)
+* @brief      Client shared secret create
+* @ingroup    CIPHER
+* 
+* @param[in]  servershare : Servershare value.
+* @param[in]  sharedsecret : Sharedsecret value.
+* @param[in]  invalidpeershare : Pointer to invalidpeershare.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERX25519MLKEM768::ClientSharedSecret_Create(XBUFFER& servershare, XBUFFER& sharedsecret, bool* invalidpeershare)
 {
   XBUFFER ciphertext;
@@ -117,6 +181,20 @@ bool CIPHERX25519MLKEM768::ClientSharedSecret_Create(XBUFFER& servershare, XBUFF
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERX25519MLKEM768::ServerKeyShare_Create(XBUFFER& clientshare, XBUFFER& servershare, XBUFFER& sharedsecret, bool* invalidpeershare)
+* @brief      Server key share create
+* @ingroup    CIPHER
+* 
+* @param[in]  clientshare : Clientshare value.
+* @param[in]  servershare : Servershare value.
+* @param[in]  sharedsecret : Sharedsecret value.
+* @param[in]  invalidpeershare : Pointer to invalidpeershare.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERX25519MLKEM768::ServerKeyShare_Create(XBUFFER& clientshare, XBUFFER& servershare, XBUFFER& sharedsecret,
                                                   bool* invalidpeershare)
 {
@@ -170,12 +248,26 @@ bool CIPHERX25519MLKEM768::ServerKeyShare_Create(XBUFFER& clientshare, XBUFFER& 
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERX25519MLKEM768::Delete()
+* @brief      Delete
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERX25519MLKEM768::Delete()
 {
   x25519.CleanAllKeys();
   mlkemprivate.SecureDelete();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERX25519MLKEM768::Clean()
+* @brief      Clean
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERX25519MLKEM768::Clean()
 {
 }

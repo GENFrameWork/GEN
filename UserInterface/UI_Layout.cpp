@@ -269,6 +269,7 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT_CHROMEROLE chromerole)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+* @fn         bool UI_LAYOUT::Elements_DeleteAll()
 * @brief      Elements GEN_DELETE all
 * @ingroup    USERINTERFACE
 * 

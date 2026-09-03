@@ -28,42 +28,101 @@
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTCPIPPROXYCFG::DIOSTREAMTCPIPPROXYCFG()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPPROXYCFG::DIOSTREAMTCPIPPROXYCFG()
 {
   Clean();
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTCPIPPROXYCFG::~DIOSTREAMTCPIPPROXYCFG()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPPROXYCFG::~DIOSTREAMTCPIPPROXYCFG()
 {
   Clean();
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTCPIPPROXYTYPE DIOSTREAMTCPIPPROXYCFG::GetType()
+* @brief      Get type
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTCPIPPROXYTYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPPROXYTYPE DIOSTREAMTCPIPPROXYCFG::GetType()
 {
   return type;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTCPIPPROXYCFG::SetType(DIOSTREAMTCPIPPROXYTYPE type)
+* @brief      Set type
+* @ingroup    DATAIO
+* 
+* @param[in]  type : Type value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIPPROXYCFG::SetType(DIOSTREAMTCPIPPROXYTYPE type)
 {
   this->type = type;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTCPIPPROXYMODE DIOSTREAMTCPIPPROXYCFG::GetMode()
+* @brief      Get mode
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMTCPIPPROXYMODE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPPROXYMODE DIOSTREAMTCPIPPROXYCFG::GetMode()
 {
   return mode;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTCPIPPROXYCFG::SetMode(DIOSTREAMTCPIPPROXYMODE mode)
+* @brief      Set mode
+* @ingroup    DATAIO
+* 
+* @param[in]  mode : Mode value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIPPROXYCFG::SetMode(DIOSTREAMTCPIPPROXYMODE mode)
 {
   this->mode = mode;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTCPIPPROXYCFG::IsActive()
+* @brief      Is active
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTCPIPPROXYCFG::IsActive()
 {
   if(type == DIOSTREAMTCPIPPROXYTYPE_NONE) return false;
@@ -75,36 +134,88 @@ bool DIOSTREAMTCPIPPROXYCFG::IsActive()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOURL* DIOSTREAMTCPIPPROXYCFG::GetURL()
+* @brief      Get url
+* @ingroup    DATAIO
+* 
+* @return     DIOURL* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOURL* DIOSTREAMTCPIPPROXYCFG::GetURL()
 {
   return &url;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int DIOSTREAMTCPIPPROXYCFG::GetPort()
+* @brief      Get port
+* @ingroup    DATAIO
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int DIOSTREAMTCPIPPROXYCFG::GetPort()
 {
   return port;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTCPIPPROXYCFG::SetPort(int port)
+* @brief      Set port
+* @ingroup    DATAIO
+* 
+* @param[in]  port : Port value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIPPROXYCFG::SetPort(int port)
 {
   this->port = port;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* DIOSTREAMTCPIPPROXYCFG::GetLogin()
+* @brief      Get login
+* @ingroup    DATAIO
+* 
+* @return     XSTRING* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMTCPIPPROXYCFG::GetLogin()
 {
   return &login;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* DIOSTREAMTCPIPPROXYCFG::GetPassword()
+* @brief      Get password
+* @ingroup    DATAIO
+* 
+* @return     XSTRING* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* DIOSTREAMTCPIPPROXYCFG::GetPassword()
 {
   return &password;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTCPIPPROXYCFG::Clean()
+* @brief      Clean
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTCPIPPROXYCFG::Clean()
 {
   type = DIOSTREAMTCPIPPROXYTYPE_NONE;
@@ -113,16 +224,45 @@ void DIOSTREAMTCPIPPROXYCFG::Clean()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTCPIPPROXY::DIOSTREAMTCPIPPROXY()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPPROXY::DIOSTREAMTCPIPPROXY()
 {
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMTCPIPPROXY::~DIOSTREAMTCPIPPROXY()
+* @brief      Destructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMTCPIPPROXY::~DIOSTREAMTCPIPPROXY()
 {
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTCPIPPROXY::Connect(DIOSTREAM* stream, DIOSTREAMTCPIPPROXYCFG* cfg, XCHAR* target, int targetport, int timeout)
+* @brief      Connect
+* @ingroup    DATAIO
+* 
+* @param[in]  stream : Pointer to stream.
+* @param[in]  cfg : Pointer to cfg.
+* @param[out] target : Pointer to target.
+* @param[in]  targetport : Targetport value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTCPIPPROXY::Connect(DIOSTREAM* stream, DIOSTREAMTCPIPPROXYCFG* cfg, XCHAR* target, int targetport, int timeout)
 {
   if(!stream || !cfg || !target || !target[0] || (targetport <= 0)) return false;
@@ -139,6 +279,21 @@ bool DIOSTREAMTCPIPPROXY::Connect(DIOSTREAM* stream, DIOSTREAMTCPIPPROXYCFG* cfg
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTCPIPPROXY::ConnectHTTP(DIOSTREAM* stream, DIOSTREAMTCPIPPROXYCFG* cfg, XCHAR* target, int targetport, int timeout)
+* @brief      Connect http
+* @ingroup    DATAIO
+* 
+* @param[in]  stream : Pointer to stream.
+* @param[in]  cfg : Pointer to cfg.
+* @param[out] target : Pointer to target.
+* @param[in]  targetport : Targetport value.
+* @param[in]  timeout : Timeout value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTCPIPPROXY::ConnectHTTP(DIOSTREAM* stream, DIOSTREAMTCPIPPROXYCFG* cfg, XCHAR* target, int targetport, int timeout)
 {
   XSTRING request;

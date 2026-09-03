@@ -76,36 +76,88 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBCLIENT_OPERATIONERROR::DIOWEBCLIENT_OPERATIONERROR()
+* @brief      Constructor of class
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_OPERATIONERROR::DIOWEBCLIENT_OPERATIONERROR()
 {
   Clean();
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBCLIENT_ERRORSTAGE DIOWEBCLIENT_OPERATIONERROR::GetStage()
+* @brief      Get stage
+* @ingroup    DATAIO
+* 
+* @return     DIOWEBCLIENT_ERRORSTAGE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_ERRORSTAGE DIOWEBCLIENT_OPERATIONERROR::GetStage()
 {
   return stage;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBCLIENT_ERROR DIOWEBCLIENT_OPERATIONERROR::GetError()
+* @brief      Get error
+* @ingroup    DATAIO
+* 
+* @return     DIOWEBCLIENT_ERROR : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_ERROR DIOWEBCLIENT_OPERATIONERROR::GetError()
 {
   return error;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOSTREAMERROR DIOWEBCLIENT_OPERATIONERROR::GetStreamError()
+* @brief      Get stream error
+* @ingroup    DATAIO
+* 
+* @return     DIOSTREAMERROR : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOSTREAMERROR DIOWEBCLIENT_OPERATIONERROR::GetStreamError()
 {
   return streamerror;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int DIOWEBCLIENT_OPERATIONERROR::GetHTTPStatus()
+* @brief      Get http status
+* @ingroup    DATAIO
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBCLIENT_OPERATIONERROR::GetHTTPStatus()
 {
   return HTTPstatus;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         const XCHAR* DIOWEBCLIENT_OPERATIONERROR::GetDescription()
+* @brief      Get description
+* @ingroup    DATAIO
+* 
+* @return     const XCHAR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 const XCHAR* DIOWEBCLIENT_OPERATIONERROR::GetDescription()
 {
   switch(error)
@@ -131,12 +183,33 @@ const XCHAR* DIOWEBCLIENT_OPERATIONERROR::GetDescription()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT_OPERATIONERROR::IsSet()
+* @brief      Is set
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT_OPERATIONERROR::IsSet()
 {
   return error != DIOWEBCLIENT_ERROR_NONE;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBCLIENT_OPERATIONERROR::Set(DIOWEBCLIENT_ERRORSTAGE stage, DIOWEBCLIENT_ERROR error, DIOSTREAMERROR streamerror, int HTTPstatus)
+* @brief      Set
+* @ingroup    DATAIO
+* 
+* @param[in]  stage : Stage value.
+* @param[in]  error : Error value.
+* @param[in]  streamerror : Streamerror value.
+* @param[in]  HTTPstatus : HTTPstatus value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_OPERATIONERROR::Set(DIOWEBCLIENT_ERRORSTAGE stage, DIOWEBCLIENT_ERROR error,
                                       DIOSTREAMERROR streamerror, int HTTPstatus)
 {
@@ -147,6 +220,13 @@ void DIOWEBCLIENT_OPERATIONERROR::Set(DIOWEBCLIENT_ERRORSTAGE stage, DIOWEBCLIEN
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBCLIENT_OPERATIONERROR::Clean()
+* @brief      Clean
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT_OPERATIONERROR::Clean()
 {
   stage       = DIOWEBCLIENT_ERRORSTAGE_NONE;
@@ -1061,18 +1141,45 @@ void DIOWEBCLIENT::AutoHTTPFallback_Activate(bool activate)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBCLIENT_OPERATIONERROR* DIOWEBCLIENT::GetLastOperationError()
+* @brief      Get last operation error
+* @ingroup    DATAIO
+* 
+* @return     DIOWEBCLIENT_OPERATIONERROR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_OPERATIONERROR* DIOWEBCLIENT::GetLastOperationError()
 {
   return &lastoperationerror;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBCLIENT_OPERATIONERROR* DIOWEBCLIENT::GetLastHTTPSAttemptError()
+* @brief      Get last https attempt error
+* @ingroup    DATAIO
+* 
+* @return     DIOWEBCLIENT_OPERATIONERROR* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBCLIENT_OPERATIONERROR* DIOWEBCLIENT::GetLastHTTPSAttemptError()
 {
   return &lastHTTPSattempterror;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::WasHTTPFallbackUsed()
+* @brief      Was http fallback used
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::WasHTTPFallbackUsed()
 {
   return HTTPfallbackused;
@@ -2033,6 +2140,9 @@ bool DIOWEBCLIENT::Body_Decompress(bool istobuffer, void* to)
 * @param[in]  localIP : Local IP pointer to use.
 * @param[in]  istobuffer : Istobuffer value.
 * @param[in]  to : To pointer to use.
+* @param[in]  redirectcount : Redirectcount value.
+* @param[in]  internaloperation : Internaloperation value.
+* @param[in]  inheritedtimer : Pointer to inheritedtimer.
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
@@ -2942,6 +3052,9 @@ bool DIOWEBCLIENT::GetSubStringWWWWAuthenticate(XSTRING& www_authenticate, XCHAR
 * @note       INTERNAL
 * @ingroup    DATAIO
 * 
+* @param[in]  first : First value.
+* @param[in]  second : Second value.
+* 
 * @return     bool : true when scheme and authority are equal; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -2968,6 +3081,9 @@ bool DIOWEBCLIENT::RedirectOrigin_IsSame(DIOURL& first, DIOURL& second)
 * @brief      Remove credential-bearing request headers before a cross-origin redirect
 * @note       INTERNAL
 * @ingroup    DATAIO
+* 
+* @param[in]  source : Pointer to source.
+* @param[in]  filtered : Filtered value.
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
@@ -3011,6 +3127,13 @@ bool DIOWEBCLIENT::Headers_FilterSensitive(XCHAR* source, XSTRING& filtered)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBCLIENT::OperationError_Reset()
+* @brief      Operation error reset
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::OperationError_Reset()
 {
   lastoperationerror.Clean();
@@ -3019,6 +3142,17 @@ void DIOWEBCLIENT::OperationError_Reset()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBCLIENT::OperationError_Set(DIOWEBCLIENT_ERROR error, DIOSTREAMERROR streamerror, int HTTPstatus)
+* @brief      Operation error set
+* @ingroup    DATAIO
+* 
+* @param[in]  error : Error value.
+* @param[in]  streamerror : Streamerror value.
+* @param[in]  HTTPstatus : HTTPstatus value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::OperationError_Set(DIOWEBCLIENT_ERROR error, DIOSTREAMERROR streamerror, int HTTPstatus)
 {
   DIOWEBCLIENT_ERRORSTAGE stage = DIOWEBCLIENT_ERRORSTAGE_CONFIGURATION;
@@ -3045,6 +3179,15 @@ void DIOWEBCLIENT::OperationError_Set(DIOWEBCLIENT_ERROR error, DIOSTREAMERROR s
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBCLIENT::OperationError_FromStream(DIOWEBCLIENT_ERROR defaulterror)
+* @brief      Operation error from stream
+* @ingroup    DATAIO
+* 
+* @param[in]  defaulterror : Defaulterror value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBCLIENT::OperationError_FromStream(DIOWEBCLIENT_ERROR defaulterror)
 {
   DIOSTREAMERROR streamerror = diostream?diostream->PeekLastDIOError():DIOSTREAMERROR_NONE;
@@ -3067,6 +3210,15 @@ void DIOWEBCLIENT::OperationError_FromStream(DIOWEBCLIENT_ERROR defaulterror)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBCLIENT::OperationError_AllowsHTTPFallback()
+* @brief      Operation error allows http fallback
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBCLIENT::OperationError_AllowsHTTPFallback()
 {
   // Master switch: when the automatic HTTP fallback is deactivated, a scheme-less URL never retries over

@@ -1709,6 +1709,17 @@ void SCRIPT_LNG_G::EvalExp3(SCRIPT_LNG_G_VAR& value)
           case __C('*'): value.SetValueInteger(value.GetValueInteger() * partialvalue.GetValueInteger());
                          break;
 
+          /**-------------------------------------------------------------------------------------------------------------------
+          * 
+          * @fn         case __C( ): if(partialvalue.GetValueInteger() == 0)
+          * @brief      C
+          * @ingroup    SCRIPT
+          * 
+          * @param[in]  Value.
+          * 
+          * @return     case : Requested value.
+          * 
+          * --------------------------------------------------------------------------------------------------------------------*/
           case __C('/'): if(partialvalue.GetValueInteger() == 0)
                            {
                              HaveError(SCRIPT_LNG_G_ERRORCODE_DIV_BY_ZERO);

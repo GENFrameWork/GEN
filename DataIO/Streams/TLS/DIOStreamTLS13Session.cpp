@@ -121,6 +121,17 @@ bool DIOSTREAMTLS13SESSION::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE 
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
+* @brief      Memory policy set
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Policy value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
 {
   if(!recordinput.IsEmpty() || !handshakeinput.IsEmpty() || !transcript.IsEmpty() || !applicationinput.IsEmpty()) return false;
@@ -1003,8 +1014,16 @@ bool DIOSTREAMTLS13SESSION::TranscriptHash(XBUFFER& transcripthash)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* @fn         bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate
+* @fn         bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate(XBUFFER& PSK, XBUFFER& clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Install TLS 1.3 client early traffic keys in the requested direction
+* @ingroup    DATAIO
+*
+* @param[in]  PSK : Pre-shared key used to derive the early secret.
+* @param[in]  clienthello : ClientHello message covered by the early traffic secret transcript hash.
+* @param[in]  direction : Direction (local/remote) the early keys are activated for.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate(XBUFFER& PSK, XBUFFER& clienthello, DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {
@@ -1019,6 +1038,19 @@ bool DIOSTREAMTLS13SESSION::EarlyKeys_Activate(XBUFFER& PSK, XBUFFER& clienthell
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
+* @brief      Early data protect
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  records : Records value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER& records)
 {
   if(!isini || role!=DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT || epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL]!=DIOSTREAMTLS13SESSION_EPOCH_EARLY ||
@@ -1028,8 +1060,32 @@ bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBYTE* data, XDWORD size, XBUFFER&
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBUFFER& data, XBUFFER& records)
+* @brief      Early data protect
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Data value.
+* @param[in]  records : Records value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::EarlyData_Protect(XBUFFER& data, XBUFFER& records) { return EarlyData_Protect(data.Get(), data.GetSize(), records); }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13SESSION::EarlyData_Read(XBYTE* data, XDWORD size)
+* @brief      Early data read
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13SESSION::EarlyData_Read(XBYTE* data, XDWORD size)
 {
   if(!data || !size) return 0;
@@ -1037,8 +1093,26 @@ XDWORD DIOSTREAMTLS13SESSION::EarlyData_Read(XBYTE* data, XDWORD size)
   return earlydatainput.Extract(data,0,size);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13SESSION::GetEarlyDataSize()
+* @brief      Get early data size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13SESSION::GetEarlyDataSize() { return earlydatainput.GetSize(); }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSION::EarlyData_Commit()
+* @brief      Early data commit
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::EarlyData_Commit()
 {
   if(!isini || role != DIOSTREAMTLSKEYSCHEDULE_ROLE_SERVER || !earlydataaccepted) return false;
@@ -1050,6 +1124,15 @@ bool DIOSTREAMTLS13SESSION::EarlyData_Commit()
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSION::EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @brief      Early data end
+* @ingroup    DATAIO
+* 
+* @param[in]  direction : Direction value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSION::EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {
   if(direction<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS && epoch[direction]==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
@@ -1059,6 +1142,15 @@ void DIOSTREAMTLS13SESSION::EarlyData_End(DIOSTREAMTLSKEYSCHEDULE_DIRECTION dire
     }
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSION::EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
+* @brief      Early keys deactivate
+* @ingroup    DATAIO
+* 
+* @param[in]  direction : Direction value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSION::EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {
   if(direction<DIOSTREAMTLSKEYSCHEDULE_MAXDIRECTIONS && epoch[direction]==DIOSTREAMTLS13SESSION_EPOCH_EARLY)
@@ -1068,8 +1160,28 @@ void DIOSTREAMTLS13SESSION::EarlyKeys_Deactivate(DIOSTREAMTLSKEYSCHEDULE_DIRECTI
     }
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS13SESSION::EarlyData_Accepted(bool accepted)
+* @brief      Early data accepted
+* @ingroup    DATAIO
+* 
+* @param[in]  accepted : Accepted value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS13SESSION::EarlyData_Accepted(bool accepted) { earlydataaccepted=accepted; }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSION::EarlyData_Limit(XDWORD maximumsize)
+* @brief      Early data limit
+* @ingroup    DATAIO
+* 
+* @param[in]  maximumsize : Maximumsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::EarlyData_Limit(XDWORD maximumsize)
 {
   if(!maximumsize || maximumsize>DIOSTREAMTLS13_EARLYDATA_MAXSIZE || maximumsize>maximumapplicationinputsize || earlydatareceived) return false;
@@ -1080,6 +1192,13 @@ bool DIOSTREAMTLS13SESSION::EarlyData_Limit(XDWORD maximumsize)
 /**-------------------------------------------------------------------------------------------------------------------
 * @fn         bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 * @brief      Derive and install both handshake traffic directions
+* @ingroup    DATAIO
+*
+* @param[in]  sharedsecret : (EC)DHE shared secret used to derive the handshake secret.
+* @param[in]  PSK : Pointer to the pre-shared key when resuming; NULL for a full handshake.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::HandshakeKeys_Activate(XBUFFER& sharedsecret, XBUFFER* PSK)
 {
@@ -1582,6 +1701,17 @@ bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Add(XBUFFER& records)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSION::NewSessionTicket_Extract(XBUFFER& message)
+* @brief      New session ticket extract
+* @ingroup    DATAIO
+* 
+* @param[in]  message : Message value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::NewSessionTicket_Extract(XBUFFER& message)
 {
   message.Delete();
@@ -1590,6 +1720,17 @@ bool DIOSTREAMTLS13SESSION::NewSessionTicket_Extract(XBUFFER& message)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Extract(XBUFFER& records)
+* @brief      Post handshake output extract
+* @ingroup    DATAIO
+* 
+* @param[in]  records : Records value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Extract(XBUFFER& records)
 {
   records.Delete();

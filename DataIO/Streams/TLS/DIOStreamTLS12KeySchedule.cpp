@@ -54,6 +54,15 @@
 
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void DIOStreamTLS12_BufferErase(XBUFFER& buffer)
+* @brief      Dio stream tls12 buffer erase
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void DIOStreamTLS12_BufferErase(XBUFFER& buffer)
 {
   volatile XBYTE* data = buffer.Get();
@@ -68,6 +77,13 @@ class DIOSTREAMTLS12SECUREBUFFER : public XBUFFER
 {
   public:
 
+    /**-------------------------------------------------------------------------------------------------------------------
+    * 
+    * @fn         virtual ~DIOSTREAMTLS12SECUREBUFFER()
+    * @brief      Destructor of class
+    * @ingroup    DATAIO
+    * 
+    * --------------------------------------------------------------------------------------------------------------------*/
     virtual ~DIOSTREAMTLS12SECUREBUFFER()
     {
       DIOStreamTLS12_BufferErase((*this));
@@ -79,6 +95,13 @@ class DIOSTREAMTLS12SECUREHMAC : public HASHHMAC
 {
   public:
 
+    /**-------------------------------------------------------------------------------------------------------------------
+    * 
+    * @fn         virtual ~DIOSTREAMTLS12SECUREHMAC()
+    * @brief      Destructor of class
+    * @ingroup    DATAIO
+    * 
+    * --------------------------------------------------------------------------------------------------------------------*/
     virtual ~DIOSTREAMTLS12SECUREHMAC()
     {
       if(GetKey())    DIOStreamTLS12_BufferErase((*GetKey()));
@@ -445,7 +468,11 @@ bool DIOSTREAMTLS12KEYSCHEDULE::MasterSecret_Create(XBUFFER& premastersecret, XB
 * @fn         bool DIOSTREAMTLS12KEYSCHEDULE::MasterSecretExtended_Create(XBUFFER& premastersecret, XBUFFER& sessionhash)
 * @brief      Derive the extended master secret according to RFC 7627
 * @ingroup    DATAIO
+* 
+* @param[in]  premastersecret : Premastersecret value.
+* @param[in]  sessionhash : Sessionhash value.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12KEYSCHEDULE::MasterSecretExtended_Create(XBUFFER& premastersecret, XBUFFER& sessionhash)
 {

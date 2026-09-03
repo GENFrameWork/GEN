@@ -32,16 +32,58 @@ namespace
     1722,1607,1212,2117,1874,1455,1029,2300,2110,1219,2935,394,885,2444,2154,1175
   };
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static uint64_t Load64LE(const uint8_t* p)
+  * @brief      Load64 le
+  * @ingroup    GEN
+  * 
+  * @param[in]  p : Pointer to p.
+  * 
+  * @return     uint64_t : Requested value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static uint64_t Load64LE(const uint8_t* p)
   {
     uint64_t v=0; for(int i=0;i<8;i++) v |= ((uint64_t)p[i]) << (8*i); return v;
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void Store64LE(uint8_t* p,uint64_t v)
+  * @brief      Store64 le
+  * @ingroup    GEN
+  * 
+  * @param[in]  p : Pointer to p.
+  * @param[in]  v : V value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void Store64LE(uint8_t* p,uint64_t v)
   {
     for(int i=0;i<8;i++) p[i]=(uint8_t)(v>>(8*i));
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static uint64_t ROL64(uint64_t x,int n)
+  * @brief      Rol64
+  * @ingroup    GEN
+  * 
+  * @param[in]  x : X value.
+  * @param[in]  n : N value.
+  * 
+  * @return     uint64_t : Requested value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static uint64_t ROL64(uint64_t x,int n) { return (x<<n)|(x>>(64-n)); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void KeccakF(uint64_t st[25])
+  * @brief      Keccak f
+  * @ingroup    GEN
+  * 
+  * @param[in]  Value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void KeccakF(uint64_t st[25])
   {
     static const uint64_t rc[24]={
@@ -66,6 +108,20 @@ namespace
     }
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void Sponge(const uint8_t* in,size_t inlen,uint8_t* out,size_t outlen,size_t rate,uint8_t domain)
+  * @brief      Sponge
+  * @ingroup    GEN
+  * 
+  * @param[in]  in : Pointer to in.
+  * @param[in]  inlen : Inlen value.
+  * @param[out] out : Pointer to out.
+  * @param[in]  outlen : Outlen value.
+  * @param[in]  rate : Rate value.
+  * @param[in]  domain : Domain value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void Sponge(const uint8_t* in,size_t inlen,uint8_t* out,size_t outlen,size_t rate,uint8_t domain)
   {
     uint64_t st[25]={0};
@@ -88,18 +144,131 @@ namespace
     }
     memset(st,0,sizeof(st)); memset(block,0,sizeof(block));
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void SHA3_256(const uint8_t* in,size_t len,uint8_t out[32])
+  * @brief      256
+  * @ingroup    GEN
+  * 
+  * @param[in]  in : Pointer to in.
+  * @param[in]  len : Len value.
+  * @param[in]  Value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void SHA3_256(const uint8_t* in,size_t len,uint8_t out[32]) { Sponge(in,len,out,32,136,0x06); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void SHA3_512(const uint8_t* in,size_t len,uint8_t out[64])
+  * @brief      512
+  * @ingroup    GEN
+  * 
+  * @param[in]  in : Pointer to in.
+  * @param[in]  len : Len value.
+  * @param[in]  Value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void SHA3_512(const uint8_t* in,size_t len,uint8_t out[64]) { Sponge(in,len,out,64,72,0x06); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void SHAKE128(const uint8_t* in,size_t len,uint8_t* out,size_t outlen)
+  * @brief      Shake128
+  * @ingroup    GEN
+  * 
+  * @param[in]  in : Pointer to in.
+  * @param[in]  len : Len value.
+  * @param[out] out : Pointer to out.
+  * @param[in]  outlen : Outlen value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void SHAKE128(const uint8_t* in,size_t len,uint8_t* out,size_t outlen) { Sponge(in,len,out,outlen,168,0x1f); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void SHAKE256(const uint8_t* in,size_t len,uint8_t* out,size_t outlen)
+  * @brief      Shake256
+  * @ingroup    GEN
+  * 
+  * @param[in]  in : Pointer to in.
+  * @param[in]  len : Len value.
+  * @param[out] out : Pointer to out.
+  * @param[in]  outlen : Outlen value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void SHAKE256(const uint8_t* in,size_t len,uint8_t* out,size_t outlen) { Sponge(in,len,out,outlen,136,0x1f); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static uint16_t Add(uint16_t a,uint16_t b)
+  * @brief      Add
+  * @ingroup    GEN
+  * 
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * 
+  * @return     uint16_t : Requested value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static uint16_t Add(uint16_t a,uint16_t b) { uint16_t x=a+b; if(x>=Q)x-=Q; return x; }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static uint16_t Sub(uint16_t a,uint16_t b)
+  * @brief      Sub
+  * @ingroup    GEN
+  * 
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * 
+  * @return     uint16_t : Requested value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static uint16_t Sub(uint16_t a,uint16_t b) { return a>=b?a-b:(uint16_t)(a+Q-b); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static uint16_t Mul(uint16_t a,uint16_t b)
+  * @brief      Mul
+  * @ingroup    GEN
+  * 
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * 
+  * @return     uint16_t : Requested value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static uint16_t Mul(uint16_t a,uint16_t b) { return (uint16_t)(((uint32_t)a*b)%Q); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void PolyAdd(POLY r,const POLY a,const POLY b)
+  * @brief      Poly add
+  * @ingroup    GEN
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void PolyAdd(POLY r,const POLY a,const POLY b) { for(int i=0;i<N;i++) r[i]=Add(a[i],b[i]); }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void PolySub(POLY r,const POLY a,const POLY b)
+  * @brief      Poly sub
+  * @ingroup    GEN
+  * 
+  * @param[in]  r : R value.
+  * @param[in]  a : A value.
+  * @param[in]  b : B value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void PolySub(POLY r,const POLY a,const POLY b) { for(int i=0;i<N;i++) r[i]=Sub(a[i],b[i]); }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void NTT(POLY f)
+  * @brief      Ntt
+  * @ingroup    GEN
+  * 
+  * @param[in]  f : F value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void NTT(POLY f)
   {
     int kk=1;
@@ -108,6 +277,15 @@ namespace
       for(int j=start;j<start+len;j++) { uint16_t t=Mul(z,f[j+len]); f[j+len]=Sub(f[j],t); f[j]=Add(f[j],t); }
     }
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void InvNTT(POLY f)
+  * @brief      Inv ntt
+  * @ingroup    GEN
+  * 
+  * @param[in]  f : F value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void InvNTT(POLY f)
   {
     int kk=127;
@@ -117,6 +295,17 @@ namespace
     }
     for(int i=0;i<N;i++) f[i]=Mul(f[i],3303);
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void NTTMul(POLY h,const POLY f,const POLY g)
+  * @brief      Ntt mul
+  * @ingroup    GEN
+  * 
+  * @param[in]  h : H value.
+  * @param[in]  f : F value.
+  * @param[in]  g : G value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void NTTMul(POLY h,const POLY f,const POLY g)
   {
     for(int i=0;i<N;i+=2) {
@@ -126,6 +315,18 @@ namespace
     }
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static uint16_t Compress(uint16_t x,int d)
+  * @brief      Compress
+  * @ingroup    GEN
+  * 
+  * @param[in]  x : X value.
+  * @param[in]  d : D value.
+  * 
+  * @return     uint16_t : Requested value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static uint16_t Compress(uint16_t x,int d)
   {
     uint32_t dividend=(uint32_t)x<<d;
@@ -135,6 +336,18 @@ namespace
     quotient += ((uint32_t)(Q+Q/2)-remainder)>>31 & 1;
     return (uint16_t)(quotient&((1u<<d)-1));
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static uint16_t Decompress(uint16_t y,int d)
+  * @brief      Decompress
+  * @ingroup    GEN
+  * 
+  * @param[in]  y : Y value.
+  * @param[in]  d : D value.
+  * 
+  * @return     uint16_t : Requested value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static uint16_t Decompress(uint16_t y,int d)
   {
     uint32_t dividend=(uint32_t)y*Q;
@@ -143,25 +356,82 @@ namespace
     return (uint16_t)quotient;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void Encode12(uint8_t* out,const POLY f)
+  * @brief      Encode12
+  * @ingroup    GEN
+  * 
+  * @param[out] out : Pointer to out.
+  * @param[in]  f : F value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void Encode12(uint8_t* out,const POLY f)
   {
     for(int i=0;i<N;i+=2) { uint32_t x=(uint32_t)f[i]|((uint32_t)f[i+1]<<12); *out++=(uint8_t)x;*out++=(uint8_t)(x>>8);*out++=(uint8_t)(x>>16); }
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool Decode12(POLY f,const uint8_t* in)
+  * @brief      Decode12
+  * @ingroup    GEN
+  * 
+  * @param[in]  f : F value.
+  * @param[in]  in : Pointer to in.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool Decode12(POLY f,const uint8_t* in)
   {
     for(int i=0;i<N;i+=2) { uint32_t x=(uint32_t)in[0]|((uint32_t)in[1]<<8)|((uint32_t)in[2]<<16); in+=3; f[i]=(uint16_t)(x&0xfff); f[i+1]=(uint16_t)(x>>12); if(f[i]>=Q||f[i+1]>=Q)return false; }
     return true;
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void EncodeD(uint8_t* out,const POLY f,int d,bool compress)
+  * @brief      Encode d
+  * @ingroup    GEN
+  * 
+  * @param[out] out : Pointer to out.
+  * @param[in]  f : F value.
+  * @param[in]  d : D value.
+  * @param[in]  compress : Compress value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void EncodeD(uint8_t* out,const POLY f,int d,bool compress)
   {
     const size_t bytes=(N*d)/8; memset(out,0,bytes); uint32_t bit=0;
     for(int i=0;i<N;i++) { uint16_t v=compress?Compress(f[i],d):f[i]; for(int j=0;j<d;j++,bit++) if(v&(1u<<j)) out[bit>>3]|=(uint8_t)(1u<<(bit&7)); }
   }
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void DecodeD(POLY f,const uint8_t* in,int d,bool decompress)
+  * @brief      Decode d
+  * @ingroup    GEN
+  * 
+  * @param[in]  f : F value.
+  * @param[in]  in : Pointer to in.
+  * @param[in]  d : D value.
+  * @param[in]  decompress : Decompress value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void DecodeD(POLY f,const uint8_t* in,int d,bool decompress)
   {
     uint32_t bit=0; for(int i=0;i<N;i++) { uint16_t v=0; for(int j=0;j<d;j++,bit++) v|=(uint16_t)(((in[bit>>3]>>(bit&7))&1u)<<j); f[i]=decompress?Decompress(v,d):v; }
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void SampleCBD(POLY f,const uint8_t sigma[32],uint8_t nonce)
+  * @brief      Sample cbd
+  * @ingroup    GEN
+  * 
+  * @param[in]  f : F value.
+  * @param[in]  Value.
+  * @param[in]  nonce : Nonce value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void SampleCBD(POLY f,const uint8_t sigma[32],uint8_t nonce)
   {
     uint8_t in[33],b[128]; memcpy(in,sigma,32);in[32]=nonce; SHAKE256(in,sizeof(in),b,sizeof(b));
@@ -169,6 +439,20 @@ namespace
     memset(in,0,sizeof(in));memset(b,0,sizeof(b));
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool SampleNTT(POLY a,const uint8_t rho[32],uint8_t ii,uint8_t jj)
+  * @brief      Sample ntt
+  * @ingroup    GEN
+  * 
+  * @param[in]  a : A value.
+  * @param[in]  Value.
+  * @param[in]  ii : Ii value.
+  * @param[in]  jj : Jj value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool SampleNTT(POLY a,const uint8_t rho[32],uint8_t ii,uint8_t jj)
   {
     uint8_t in[34],stream[1024]; memcpy(in,rho,32);in[32]=ii;in[33]=jj;SHAKE128(in,sizeof(in),stream,sizeof(stream));
@@ -176,6 +460,19 @@ namespace
     return n==N;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ParseEK(POLYVEC t,POLY A[9],const uint8_t ek[1184])
+  * @brief      Parse ek
+  * @ingroup    GEN
+  * 
+  * @param[in]  t : T value.
+  * @param[in]  Value.
+  * @param[in]  Value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ParseEK(POLYVEC t,POLY A[9],const uint8_t ek[1184])
   {
     const uint8_t* p=ek; for(int i=0;i<K;i++){ if(!Decode12(t[i],p))return false;p+=384; } const uint8_t* rho=p;
@@ -183,6 +480,18 @@ namespace
     return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void PKEEncrypt(uint8_t c[1088],const uint8_t ek[1184],const uint8_t m[32],const uint8_t rnd[32])
+  * @brief      Pke encrypt
+  * @ingroup    GEN
+  * 
+  * @param[in]  Value.
+  * @param[in]  Value.
+  * @param[in]  Value.
+  * @param[in]  Value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void PKEEncrypt(uint8_t c[1088],const uint8_t ek[1184],const uint8_t m[32],const uint8_t rnd[32])
   {
     POLYVEC t,r,e1,u; POLY A[9],e2,mu,vntt,v,temp,prod; ParseEK(t,A,ek);
@@ -199,6 +508,19 @@ namespace
     memset(r,0,sizeof(r)); memset(e1,0,sizeof(e1)); memset(e2,0,sizeof(e2));
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool PKEDecrypt(uint8_t m[32],const uint8_t dkpke[1152],const uint8_t c[1088])
+  * @brief      Pke decrypt
+  * @ingroup    GEN
+  * 
+  * @param[in]  Value.
+  * @param[in]  Value.
+  * @param[in]  Value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool PKEDecrypt(uint8_t m[32],const uint8_t dkpke[1152],const uint8_t c[1088])
   {
     POLYVEC s,u; POLY v,mask,prod,temp,w; const uint8_t* p=dkpke;
@@ -210,15 +532,53 @@ namespace
     memset(s,0,sizeof(s)); return true;
   }
 
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static bool ConstantEqual(const uint8_t* a,const uint8_t* b,size_t n)
+  * @brief      Constant equal
+  * @ingroup    GEN
+  * 
+  * @param[in]  a : Pointer to a.
+  * @param[in]  b : Pointer to b.
+  * @param[in]  n : N value.
+  * 
+  * @return     bool : true if the operation is successful; otherwise false.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static bool ConstantEqual(const uint8_t* a,const uint8_t* b,size_t n)
   { uint8_t d=0;for(size_t i=0;i<n;i++)d|=a[i]^b[i];return d==0; }
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM768CORE::PublicKey_Check(const uint8_t publickey[1184])
+* @brief      Public key check
+* @ingroup    GEN
+* 
+* @param[in]  Value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM768CORE::PublicKey_Check(const uint8_t publickey[1184])
 {
   if(!publickey)return false; POLY f; for(int i=0;i<3;i++)if(!Decode12(f,publickey+i*384))return false; return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM768CORE::KeyPair(const uint8_t d[32],const uint8_t z[32],uint8_t ek[1184],uint8_t dk[2400])
+* @brief      Key pair
+* @ingroup    GEN
+* 
+* @param[in]  Value.
+* @param[in]  Value.
+* @param[in]  Value.
+* @param[in]  Value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM768CORE::KeyPair(const uint8_t d[32],const uint8_t z[32],uint8_t ek[1184],uint8_t dk[2400])
 {
   if(!d||!z||!ek||!dk)return false;
@@ -232,6 +592,20 @@ bool CIPHERMLKEM768CORE::KeyPair(const uint8_t d[32],const uint8_t z[32],uint8_t
   memset(seed,0,sizeof(seed));memset(G,0,sizeof(G));memset(s,0,sizeof(s));memset(e,0,sizeof(e));return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM768CORE::Encapsulate(const uint8_t randomness[32],const uint8_t ek[1184],uint8_t c[1088],uint8_t ss[32])
+* @brief      Encapsulate
+* @ingroup    GEN
+* 
+* @param[in]  Value.
+* @param[in]  Value.
+* @param[in]  Value.
+* @param[in]  Value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM768CORE::Encapsulate(const uint8_t randomness[32],const uint8_t ek[1184],uint8_t c[1088],uint8_t ss[32])
 {
   if(!randomness||!ek||!c||!ss||!PublicKey_Check(ek))return false;
@@ -239,6 +613,19 @@ bool CIPHERMLKEM768CORE::Encapsulate(const uint8_t randomness[32],const uint8_t 
   memset(h,0,sizeof(h));memset(input,0,sizeof(input));memset(g,0,sizeof(g));return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM768CORE::Decapsulate(const uint8_t dk[2400],const uint8_t c[1088],uint8_t ss[32])
+* @brief      Decapsulate
+* @ingroup    GEN
+* 
+* @param[in]  Value.
+* @param[in]  Value.
+* @param[in]  Value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM768CORE::Decapsulate(const uint8_t dk[2400],const uint8_t c[1088],uint8_t ss[32])
 {
   if(!dk||!c||!ss)return false;

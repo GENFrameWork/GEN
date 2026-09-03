@@ -207,9 +207,6 @@ class DIOSTREAMTLS : public T
 
                                               if(config->IsServer())
                                                 {
-                                                  // The server-side implementation currently implements TLS 1.3 only.  Do not silently
-                                                  // ignore a TLS 1.2 range configured by the caller: that would make DIOSTREAMTLSCONFIG
-                                                  // advertise a capability that this role cannot honour.
                                                   if((minversion != DIOSTREAMTLS_MSG_VERSION_TLS_1_3) ||
                                                      (maxversion != DIOSTREAMTLS_MSG_VERSION_TLS_1_3))
                                                     {
@@ -1076,9 +1073,6 @@ class DIOSTREAMTLS : public T
 
                                                   if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_ALERT) return false;
 
-                                                  // A TLS 1.3 client may send a dummy ChangeCipherSpec after HRR for
-                                                  // middlebox compatibility.  It is not part of the transcript and must
-                                                  // not terminate the wait for ClientHello2.
                                                   if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_CHANGE_CIPHER_SPEC)
                                                     {
                                                       if(!handshakeserver.IsWaitingClientHelloRetry() ||
@@ -1116,10 +1110,6 @@ class DIOSTREAMTLS : public T
                                                       return false;
                                                     }
 
-                                                  // HelloRetryRequest is still part of ClientHello processing.  Keep extracting
-                                                  // handshake messages until the retried ClientHello has been accepted and the
-                                                  // real server flight has been generated.  This also handles ClientHello2 already
-                                                  // queued in the same transport read without involving the Finished state machine.
                                                   clienthelloprocessed = !handshakeserver.IsWaitingClientHelloRetry();
                                                 }
 
@@ -1190,9 +1180,6 @@ class DIOSTREAMTLS : public T
                                                 {
                                                   TLSError_Set(DIOSTREAMTLS_ERROR_RECORD);
 
-                                                  // A fatal alert received from the peer already terminates the TLS
-                                                  // connection.  RFC 8446 does not require, and interoperability is
-                                                  // improved by avoiding, a second fatal alert in response.
                                                   if(session.GetReceivedAlertLevel() != DIOSTREAMTLS_ALERT_LEVEL_FATAL)
                                                     {
                                                       Alert_Send(DIOSTREAMTLS_ALERT_LEVEL_FATAL, session.GetLastRecordAlertDescription());

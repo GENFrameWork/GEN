@@ -70,6 +70,15 @@
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 //DIOLINUXGPIORPI::DIOLINUXGPIORPI(): DIOGPIO()
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOLINUXGPIORPI::DIOLINUXGPIORPI(): DIOLINUXGPIO()
+* @brief      Constructor of class
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[in]  Value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOLINUXGPIORPI::DIOLINUXGPIORPI(): DIOLINUXGPIO()
 {
   Clean();

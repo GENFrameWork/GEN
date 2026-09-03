@@ -60,6 +60,18 @@
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOURL_IsIPv4Range(const XCHAR* host, XDWORD length)
+* @brief      Is i pv4 range
+* @ingroup    DATAIO
+* 
+* @param[in]  host : Pointer to host.
+* @param[in]  length : Length value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOURL_IsIPv4Range(const XCHAR* host, XDWORD length)
 {
   if(!host || !length) return false;
@@ -88,6 +100,17 @@ static bool DIOURL_IsIPv4Range(const XCHAR* host, XDWORD length)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOURL_IsIPv4(XCHAR* host)
+* @brief      Is i pv4
+* @ingroup    DATAIO
+* 
+* @param[in]  host : Pointer to host.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOURL_IsIPv4(XCHAR* host)
 {
   if(!host) return false;
@@ -97,6 +120,17 @@ static bool DIOURL_IsIPv4(XCHAR* host)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOURL_IsIPv6(XCHAR* host)
+* @brief      Is i pv6
+* @ingroup    DATAIO
+* 
+* @param[in]  host : Pointer to host.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOURL_IsIPv6(XCHAR* host)
 {
   if(!host || !host[0]) return false;
@@ -176,6 +210,18 @@ static bool DIOURL_IsIPv6(XCHAR* host)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOURL_IDNACodePointAllowed(XDWORD point, bool first)
+* @brief      Idna code point allowed
+* @ingroup    DATAIO
+* 
+* @param[in]  point : Point value.
+* @param[in]  first : First value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOURL_IDNACodePointAllowed(XDWORD point, bool first)
 {
   if(point < 0xA0 || (point >= 0xD800 && point <= 0xDFFF) || point > 0x10FFFF) return false;
@@ -191,11 +237,35 @@ static bool DIOURL_IDNACodePointAllowed(XDWORD point, bool first)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static XBYTE DIOURL_PunycodeDigit(XDWORD digit)
+* @brief      Punycode digit
+* @ingroup    DATAIO
+* 
+* @param[in]  digit : Digit value.
+* 
+* @return     XBYTE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static XBYTE DIOURL_PunycodeDigit(XDWORD digit)
 {
   return (XBYTE)((digit < 26)?(__C('a') + digit):(__C('0') + digit - 26));
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static XDWORD DIOURL_PunycodeAdapt(XDWORD delta, XDWORD points, bool first)
+* @brief      Punycode adapt
+* @ingroup    DATAIO
+* 
+* @param[in]  delta : Delta value.
+* @param[in]  points : Points value.
+* @param[in]  first : First value.
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static XDWORD DIOURL_PunycodeAdapt(XDWORD delta, XDWORD points, bool first)
 {
   delta = first?(delta / 700):(delta / 2);
@@ -205,6 +275,18 @@ static XDWORD DIOURL_PunycodeAdapt(XDWORD delta, XDWORD points, bool first)
   return k + ((36 * delta) / (delta + 38));
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOURL_PunycodeLabel(XSTRING& label, XSTRING& output)
+* @brief      Punycode label
+* @ingroup    DATAIO
+* 
+* @param[in]  label : Label value.
+* @param[out] output : Output value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOURL_PunycodeLabel(XSTRING& label, XSTRING& output)
 {
   XVECTOR<XDWORD> points;
@@ -293,6 +375,17 @@ static bool DIOURL_PunycodeLabel(XSTRING& label, XSTRING& output)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOURL_HOSTTYPE DIOURL::Host_GetType(XCHAR* host)
+* @brief      Host get type
+* @ingroup    DATAIO
+* 
+* @param[in]  host : Pointer to host.
+* 
+* @return     DIOURL_HOSTTYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOURL_HOSTTYPE DIOURL::Host_GetType(XCHAR* host)
 {
   if(DIOURL_IsIPv4(host)) return DIOURL_HOSTTYPE_IPV4;
@@ -300,6 +393,19 @@ DIOURL_HOSTTYPE DIOURL::Host_GetType(XCHAR* host)
   return (host && host[0])?DIOURL_HOSTTYPE_DNS:DIOURL_HOSTTYPE_UNKNOWN;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOURL::Host_Canonicalize(XCHAR* host, XSTRING& canonicalhost, DIOURL_HOSTTYPE& type)
+* @brief      Host canonicalize
+* @ingroup    DATAIO
+* 
+* @param[in]  host : Pointer to host.
+* @param[in]  canonicalhost : Canonicalhost value.
+* @param[in]  type : Type value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOURL::Host_Canonicalize(XCHAR* host, XSTRING& canonicalhost, DIOURL_HOSTTYPE& type)
 {
   canonicalhost.Empty();

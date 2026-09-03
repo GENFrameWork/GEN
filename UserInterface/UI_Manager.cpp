@@ -5024,6 +5024,7 @@ UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAY
 * @param[in]  xml : XML value.
 * @param[in]  screen : Screen object to use.
 * @param[in]  viewportindex : Viewportindex value.
+* @param[in]  xmlpathfile : Xmlpathfile value.
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 

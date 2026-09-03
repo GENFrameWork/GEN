@@ -57,12 +57,35 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509VALIDATOR_IsSelfIssued(CIPHERCERTIFICATEX509* certificate)
+* @brief      Is self issued
+* @ingroup    CIPHER
+* 
+* @param[in]  certificate : Pointer to certificate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509VALIDATOR_IsSelfIssued(CIPHERCERTIFICATEX509* certificate)
 {
   return certificate && certificate->GetIssuerData() && certificate->GetSubjectData() &&
          certificate->GetIssuerData()->Compare((*certificate->GetSubjectData()));
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static XDWORD CIPHERCERTIFICATEX509VALIDATOR_NonSelfIssuedCABelow(XVECTOR<CIPHERCERTIFICATEX509*>& certificates, XDWORD issuerindex)
+* @brief      Non self issued ca below
+* @ingroup    CIPHER
+* 
+* @param[in]  certificates : Pointer to certificates.
+* @param[in]  issuerindex : Issuerindex value.
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static XDWORD CIPHERCERTIFICATEX509VALIDATOR_NonSelfIssuedCABelow(XVECTOR<CIPHERCERTIFICATEX509*>& certificates,
                                                                    XDWORD issuerindex)
 {
@@ -82,6 +105,18 @@ static XDWORD CIPHERCERTIFICATEX509VALIDATOR_NonSelfIssuedCABelow(XVECTOR<CIPHER
   return count;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509VALIDATOR_IssuerIdentifierMatches(CIPHERCERTIFICATEX509* certificate, CIPHERCERTIFICATEX509* issuer)
+* @brief      Issuer identifier matches
+* @ingroup    CIPHER
+* 
+* @param[in]  certificate : Pointer to certificate.
+* @param[in]  issuer : Pointer to issuer.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509VALIDATOR_IssuerIdentifierMatches(CIPHERCERTIFICATEX509* certificate,
                                                                     CIPHERCERTIFICATEX509* issuer)
 {
@@ -95,6 +130,19 @@ static bool CIPHERCERTIFICATEX509VALIDATOR_IssuerIdentifierMatches(CIPHERCERTIFI
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(CIPHERCERTIFICATEX509* root, XVECTOR<CIPHERCERTIFICATEX509*>& certificates, bool rootisinchain)
+* @brief      Root constraints permit
+* @ingroup    CIPHER
+* 
+* @param[in]  root : Pointer to root.
+* @param[in]  certificates : Pointer to certificates.
+* @param[in]  rootisinchain : Rootisinchain value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(CIPHERCERTIFICATEX509* root,
                                                                   XVECTOR<CIPHERCERTIFICATEX509*>& certificates,
                                                                   bool rootisinchain)
@@ -110,6 +158,13 @@ static bool CIPHERCERTIFICATEX509VALIDATOR_RootConstraintsPermit(CIPHERCERTIFICA
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCERTIFICATEX509VALIDATIONPOLICY::CIPHERCERTIFICATEX509VALIDATIONPOLICY()
+* @brief      Constructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509VALIDATIONPOLICY::CIPHERCERTIFICATEX509VALIDATIONPOLICY()
 {
   minimumRSAKeyBits          = 2048;
@@ -133,19 +188,138 @@ CIPHERCERTIFICATEX509VALIDATIONPOLICY::CIPHERCERTIFICATEX509VALIDATIONPOLICY()
   #endif
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetMinimumRSAKeyBits()
+* @brief      Get minimum rsa key bits
+* @ingroup    CIPHER
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetMinimumRSAKeyBits() { return minimumRSAKeyBits; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetMinimumRSAKeyBits(XDWORD bits)
+* @brief      Set minimum rsa key bits
+* @ingroup    CIPHER
+* 
+* @param[in]  bits : Bits value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetMinimumRSAKeyBits(XDWORD bits) { minimumRSAKeyBits = bits; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetAllowSHA1()
+* @brief      Get allow sha1
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetAllowSHA1() { return allowSHA1; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetAllowSHA1(bool allow)
+* @brief      Set allow sha1
+* @ingroup    CIPHER
+* 
+* @param[in]  allow : Allow value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetAllowSHA1(bool allow) { allowSHA1 = allow; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetAllowExpired()
+* @brief      Get allow expired
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetAllowExpired() { return allowExpired; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetAllowExpired(bool allow)
+* @brief      Set allow expired
+* @ingroup    CIPHER
+* 
+* @param[in]  allow : Allow value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetAllowExpired(bool allow) { allowExpired = allow; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetRequireServerAuthEKU()
+* @brief      Get require server auth eku
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetRequireServerAuthEKU() { return requireServerAuthEKU; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetRequireServerAuthEKU(bool require)
+* @brief      Set require server auth eku
+* @ingroup    CIPHER
+* 
+* @param[in]  require : Require value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetRequireServerAuthEKU(bool require) { requireServerAuthEKU = require; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetRequireClientAuthEKU()
+* @brief      Get require client auth eku
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetRequireClientAuthEKU() { return requireClientAuthEKU; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetRequireClientAuthEKU(bool require)
+* @brief      Set require client auth eku
+* @ingroup    CIPHER
+* 
+* @param[in]  require : Require value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetRequireClientAuthEKU(bool require) { requireClientAuthEKU = require; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetMaximumChainDepth()
+* @brief      Get maximum chain depth
+* @ingroup    CIPHER
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERCERTIFICATEX509VALIDATIONPOLICY::GetMaximumChainDepth() { return maximumChainDepth; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetMaximumChainDepth(XDWORD depth)
+* @brief      Set maximum chain depth
+* @ingroup    CIPHER
+* 
+* @param[in]  depth : Depth value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetMaximumChainDepth(XDWORD depth) { maximumChainDepth = depth; }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::IsSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm)
+* @brief      Is signature algorithm allowed
+* @ingroup    CIPHER
+* 
+* @param[in]  algorithm : Algorithm value.
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::IsSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm)
 {
   if((algorithm == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_SHA1WITHRSAENCRYPTION) ||
@@ -154,6 +328,16 @@ bool CIPHERCERTIFICATEX509VALIDATIONPOLICY::IsSignatureAlgorithmAllowed(CIPHERCE
   return (allowedSignatureAlgorithms & (((XQWORD)1) << (XDWORD)algorithm))?true:false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm, bool allowed)
+* @brief      Set signature algorithm allowed
+* @ingroup    CIPHER
+* 
+* @param[in]  algorithm : Algorithm value.
+* @param[in]  allowed : Allowed value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATIONPOLICY::SetSignatureAlgorithmAllowed(CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm, bool allowed)
 {
   if(((XDWORD)algorithm >= 64) || (algorithm == CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN)) return;
@@ -196,7 +380,13 @@ CIPHERCERTIFICATEX509VALIDATOR::~CIPHERCERTIFICATEX509VALIDATOR()
 * @fn         bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XCHAR* servername, XDATETIME* datetime)
 * @brief      Validate an ordered X.509 server chain against explicitly configured trust anchors
 * @ingroup    CIPHER
+* 
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  trustedroots : Pointer to trustedroots.
+* @param[in]  servername : Pointer to servername.
+* @param[in]  datetime : Pointer to datetime.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XCHAR* servername, XDATETIME* datetime)
 {
@@ -209,7 +399,12 @@ bool CIPHERCERTIFICATEX509VALIDATOR::Validate(XVECTOR<XBUFFER*>* certificatechai
 * @fn         bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClient(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
 * @brief      Validate an ordered X.509 client-authentication chain against explicitly configured trust anchors
 * @ingroup    CIPHER
+* 
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  trustedroots : Pointer to trustedroots.
+* @param[in]  datetime : Pointer to datetime.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClient(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
 {
@@ -217,6 +412,20 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClient(XVECTOR<XBUFFER*>* certifica
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPaths(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XCHAR* servername, XDATETIME* datetime)
+* @brief      Validate all paths
+* @ingroup    CIPHER
+* 
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  trustedroots : Pointer to trustedroots.
+* @param[in]  servername : Pointer to servername.
+* @param[in]  datetime : Pointer to datetime.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPaths(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots,
                                                        XCHAR* servername, XDATETIME* datetime)
 {
@@ -225,6 +434,19 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPaths(XVECTOR<XBUFFER*>* certifi
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClientAllPaths(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
+* @brief      Validate client all paths
+* @ingroup    CIPHER
+* 
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  trustedroots : Pointer to trustedroots.
+* @param[in]  datetime : Pointer to datetime.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClientAllPaths(XVECTOR<XBUFFER*>* certificatechain,
                                                              XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
 {
@@ -233,6 +455,21 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateClientAllPaths(XVECTOR<XBUFFER*>* c
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPathsInternal(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE purpose, XCHAR* servername, XDATETIME* datetime)
+* @brief      Validate all paths internal
+* @ingroup    CIPHER
+* 
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  trustedroots : Pointer to trustedroots.
+* @param[in]  purpose : Purpose value.
+* @param[in]  servername : Pointer to servername.
+* @param[in]  datetime : Pointer to datetime.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPathsInternal(XVECTOR<XBUFFER*>* certificatechain,
                                                                XVECTOR<XBUFFER*>* trustedroots,
                                                                CIPHERCERTIFICATEX509VALIDATOR_PURPOSE purpose,
@@ -302,11 +539,29 @@ bool CIPHERCERTIFICATEX509VALIDATOR::ValidateAllPathsInternal(XVECTOR<XBUFFER*>*
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCERTIFICATEX509VALIDATIONPOLICY* CIPHERCERTIFICATEX509VALIDATOR::GetPolicy()
+* @brief      Get policy
+* @ingroup    CIPHER
+* 
+* @return     CIPHERCERTIFICATEX509VALIDATIONPOLICY* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509VALIDATIONPOLICY* CIPHERCERTIFICATEX509VALIDATOR::GetPolicy()
 {
   return &policy;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCERTIFICATEX509VALIDATOR::SetPolicy(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
+* @brief      Set policy
+* @ingroup    CIPHER
+* 
+* @param[in]  policy : Policy value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCERTIFICATEX509VALIDATOR::SetPolicy(CIPHERCERTIFICATEX509VALIDATIONPOLICY& policy)
 {
   this->policy = policy;
@@ -319,7 +574,14 @@ void CIPHERCERTIFICATEX509VALIDATOR::SetPolicy(CIPHERCERTIFICATEX509VALIDATIONPO
 * @brief      Validate an ordered X.509 chain for the requested TLS authentication purpose
 * @note       INTERNAL
 * @ingroup    CIPHER
+* 
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  trustedroots : Pointer to trustedroots.
+* @param[in]  purpose : Purpose value.
+* @param[in]  servername : Pointer to servername.
+* @param[in]  datetime : Pointer to datetime.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509VALIDATOR::ValidateInternal(XVECTOR<XBUFFER*>* certificatechain, XVECTOR<XBUFFER*>* trustedroots, CIPHERCERTIFICATEX509VALIDATOR_PURPOSE purpose, XCHAR* servername, XDATETIME* datetime)
 {

@@ -118,6 +118,17 @@ bool DIOSTREAMTLS12SESSION::Ini(XWORD ciphersuite, DIOSTREAMTLSKEYSCHEDULE_ROLE 
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS12SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
+* @brief      Memory policy set
+* @ingroup    DATAIO
+* 
+* @param[in]  policy : Policy value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS12SESSION::MemoryPolicy_Set(DIOSTREAMTLSMEMORYPOLICY& policy)
 {
   if(!recordinput.IsEmpty() || !handshakeinput.IsEmpty() || !transcript.IsEmpty() || !applicationinput.IsEmpty()) return false;
@@ -391,6 +402,7 @@ void DIOSTREAMTLS12SESSION::KeyExchange_Delete()
 * @param[in]  premastersecret : ECDHE shared secret.
 * @param[in]  clientrandom : ClientHello random.
 * @param[in]  serverrandom : ServerHello random.
+* @param[in]  sessionhash : Pointer to sessionhash.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *

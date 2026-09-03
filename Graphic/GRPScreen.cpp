@@ -1542,6 +1542,9 @@ bool GRPSCREEN::GetCFGChromesCursorPosition(int& uix, int& uiy)
 *             "form" element would leave its icon/title/buttons drawn on their own.
 * @ingroup    GRAPHIC
 * 
+* @param[in]  element : Pointer to element.
+* @param[in]  visible : Visible value.
+* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void GRPSCREEN_SetElementVisibleRecursive(UI_ELEMENT* element, bool visible)
 {
@@ -1564,6 +1567,9 @@ static void GRPSCREEN_SetElementVisibleRecursive(UI_ELEMENT* element, bool visib
 *             see UI_SKINCANVAS::SetAroundFromSubElements()/CalculePosition()), so moving just the button's own
 *             element would leave its icon/graphic drawn at the old spot.
 * @ingroup    GRAPHIC
+* 
+* @param[in]  element : Pointer to element.
+* @param[in]  dx : Dx value.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 static void GRPSCREEN_ShiftElementXRecursive(UI_ELEMENT* element, double dx)

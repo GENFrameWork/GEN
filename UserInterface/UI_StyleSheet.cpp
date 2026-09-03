@@ -185,6 +185,7 @@ bool UI_CSSSELECTOR::IsRootOnly()
 * @param[in]  elementtype : Element type string (as reported by UI_ELEMENT::GetTypeString()).
 * @param[in]  elementid : Element id (name).
 * @param[in]  elementclasses : Element class list (may be empty).
+* @param[in]  activepseudos : Pointer to activepseudos.
 *
 * @return     bool : true if the selector matches; false otherwise.
 *
@@ -412,6 +413,7 @@ void UI_STYLESHEET::Rules_DeleteAll()
 * @param[in]  elementid : Element id (name).
 * @param[in]  elementclasses : Element class list.
 * @param[in,out] out : Style bag to accumulate declarations into.
+* @param[in]  activepseudos : Pointer to activepseudos.
 *
 * @return     bool : true if at least one rule matched; false otherwise.
 *

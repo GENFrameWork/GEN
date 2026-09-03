@@ -30,6 +30,17 @@ class CIPHERREV_READER
 {
   public:
     CIPHERREV_READER(const XBYTE* data, XDWORD size) : data(data), size(size), position(0) {}
+    /**-------------------------------------------------------------------------------------------------------------------
+    * 
+    * @fn         bool Read(CIPHERREV_DER& item)
+    * @brief      Read
+    * @ingroup    CIPHER
+    * 
+    * @param[in]  item : Item value.
+    * 
+    * @return     bool : true if the operation is successful; otherwise false.
+    * 
+    * --------------------------------------------------------------------------------------------------------------------*/
     bool Read(CIPHERREV_DER& item)
     {
       if(!data || position>=size) return false;
@@ -48,6 +59,15 @@ class CIPHERREV_READER
       item.encoded=data+start; item.data=data+position; item.size=length;
       position+=length; item.encodedsize=position-start; return true;
     }
+    /**-------------------------------------------------------------------------------------------------------------------
+    * 
+    * @fn         bool End() const
+    * @brief      End
+    * @ingroup    CIPHER
+    * 
+    * @return     bool : true if the operation is successful; otherwise false.
+    * 
+    * --------------------------------------------------------------------------------------------------------------------*/
     bool End() const { return position==size; }
   private:
     const XBYTE* data; XDWORD size; XDWORD position;
@@ -59,11 +79,37 @@ enum CIPHERREV_HASH
   CIPHERREV_HASH_SHA384, CIPHERREV_HASH_SHA512
 };
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_OID(const CIPHERREV_DER& item,const XBYTE* OID,XDWORD size)
+* @brief      Oid
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  OID : Pointer to OID.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_OID(const CIPHERREV_DER& item,const XBYTE* OID,XDWORD size)
 {
   return item.tag==0x06 && item.size==size && !memcmp(item.data,OID,size);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_AlgorithmIdentifier(const CIPHERREV_DER& algorithm,CIPHERREV_DER& OID,CIPHERREV_DER* parameters=NULL)
+* @brief      Algorithm identifier
+* @ingroup    CIPHER
+* 
+* @param[in]  algorithm : Algorithm value.
+* @param[in]  OID : OID value.
+* @param[in]  parameters : Pointer to parameters.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_AlgorithmIdentifier(const CIPHERREV_DER& algorithm,CIPHERREV_DER& OID,CIPHERREV_DER* parameters=NULL)
 {
   if(algorithm.tag!=0x30) return false;
@@ -77,6 +123,17 @@ static bool CIPHERREV_AlgorithmIdentifier(const CIPHERREV_DER& algorithm,CIPHERR
   return reader.End();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static CIPHERREV_HASH CIPHERREV_HashAlgorithm(const CIPHERREV_DER& algorithm)
+* @brief      Hash algorithm
+* @ingroup    CIPHER
+* 
+* @param[in]  algorithm : Algorithm value.
+* 
+* @return     CIPHERREV_HASH : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static CIPHERREV_HASH CIPHERREV_HashAlgorithm(const CIPHERREV_DER& algorithm)
 {
   static const XBYTE SHA1[]   ={0x2B,0x0E,0x03,0x02,0x1A};
@@ -93,6 +150,20 @@ static CIPHERREV_HASH CIPHERREV_HashAlgorithm(const CIPHERREV_DER& algorithm)
   return CIPHERREV_HASH_UNKNOWN;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_Hash(CIPHERREV_HASH type,const XBYTE* data,XDWORD size,XBUFFER& result)
+* @brief      Hash
+* @ingroup    CIPHER
+* 
+* @param[in]  type : Type value.
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[out] result : Result value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_Hash(CIPHERREV_HASH type,const XBYTE* data,XDWORD size,XBUFFER& result)
 {
   result.Empty();
@@ -107,6 +178,17 @@ static bool CIPHERREV_Hash(CIPHERREV_HASH type,const XBYTE* data,XDWORD size,XBU
   HASHSHA2 hash(SHA2type); return hash.Do((XBYTE*)data,size) && result.Add((*hash.GetResult()));
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static CIPHERCERTIFICATEX509_ALGORITHM_TYPE CIPHERREV_SignatureAlgorithm(const CIPHERREV_DER& algorithm)
+* @brief      Signature algorithm
+* @ingroup    CIPHER
+* 
+* @param[in]  algorithm : Algorithm value.
+* 
+* @return     CIPHERCERTIFICATEX509_ALGORITHM_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static CIPHERCERTIFICATEX509_ALGORITHM_TYPE CIPHERREV_SignatureAlgorithm(const CIPHERREV_DER& algorithm)
 {
   static const XBYTE RSA1[]  ={0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x01,0x05};
@@ -133,6 +215,19 @@ static CIPHERCERTIFICATEX509_ALGORITHM_TYPE CIPHERREV_SignatureAlgorithm(const C
   return CIPHERCERTIFICATEX509_ALGORITHM_TYPE_UNKNOWN;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_PSSParameters(const CIPHERREV_DER& algorithm,CIPHERREV_HASH& hashtype,XDWORD& saltsize)
+* @brief      Pss parameters
+* @ingroup    CIPHER
+* 
+* @param[in]  algorithm : Algorithm value.
+* @param[in]  hashtype : Hashtype value.
+* @param[in]  saltsize : Saltsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_PSSParameters(const CIPHERREV_DER& algorithm,CIPHERREV_HASH& hashtype,XDWORD& saltsize)
 {
   static const XBYTE PSS[]={0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x01,0x0A};
@@ -169,6 +264,20 @@ static bool CIPHERREV_PSSParameters(const CIPHERREV_DER& algorithm,CIPHERREV_HAS
          (hashtype==CIPHERREV_HASH_SHA256 || hashtype==CIPHERREV_HASH_SHA384 || hashtype==CIPHERREV_HASH_SHA512);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_Verify(const CIPHERREV_DER& TBS,const CIPHERREV_DER& algorithm, const CIPHERREV_DER& bits,CIPHERCERTIFICATEX509& signer)
+* @brief      Verify
+* @ingroup    CIPHER
+* 
+* @param[in]  TBS : TBS value.
+* @param[in]  algorithm : Algorithm value.
+* @param[in]  bits : Bits value.
+* @param[in]  signer : Signer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_Verify(const CIPHERREV_DER& TBS,const CIPHERREV_DER& algorithm,
                              const CIPHERREV_DER& bits,CIPHERCERTIFICATEX509& signer)
 {
@@ -192,12 +301,35 @@ static bool CIPHERREV_Verify(const CIPHERREV_DER& TBS,const CIPHERREV_DER& algor
 #endif
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_Serial(const CIPHERREV_DER& serial)
+* @brief      Serial
+* @ingroup    CIPHER
+* 
+* @param[in]  serial : Serial value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_Serial(const CIPHERREV_DER& serial)
 {
   return serial.tag==0x02 && serial.size && !(serial.data[0]&0x80) &&
          !(serial.size>1 && !serial.data[0] && !(serial.data[1]&0x80));
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_SerialEqual(const CIPHERREV_DER& serial,XBUFFER* expected)
+* @brief      Serial equal
+* @ingroup    CIPHER
+* 
+* @param[in]  serial : Serial value.
+* @param[in]  expected : Pointer to expected.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_SerialEqual(const CIPHERREV_DER& serial,XBUFFER* expected)
 {
   if(!CIPHERREV_Serial(serial) || !expected || expected->IsEmpty()) return false;
@@ -208,6 +340,19 @@ static bool CIPHERREV_SerialEqual(const CIPHERREV_DER& serial,XBUFFER* expected)
   return leftsize==rightsize && CIPHER::CompareConstantTime((XBYTE*)left,right,leftsize);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_Time(const CIPHERREV_DER& item,XDATETIME& datetime,bool generalizedonly=false)
+* @brief      Time
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  datetime : Datetime value.
+* @param[in]  generalizedonly : Generalizedonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_Time(const CIPHERREV_DER& item,XDATETIME& datetime,bool generalizedonly=false)
 {
   if((item.tag!=0x17 && item.tag!=0x18) || (generalizedonly && item.tag!=0x18) ||
@@ -224,6 +369,17 @@ static bool CIPHERREV_Time(const CIPHERREV_DER& item,XDATETIME& datetime,bool ge
   datetime.SetMilliSeconds(0); datetime.SetIsLocal(false); return datetime.IsValidDate();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_Now(XQWORD& now)
+* @brief      Now
+* @ingroup    CIPHER
+* 
+* @param[in]  now : Now value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_Now(XQWORD& now)
 {
   XDATETIME* datetime=GEN_XFACTORY.CreateDateTime(); if(!datetime) return false;
@@ -231,6 +387,20 @@ static bool CIPHERREV_Now(XQWORD& now)
   GEN_XFACTORY.DeleteDateTime(datetime); return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_TimeWindow(const CIPHERREV_DER& from,const CIPHERREV_DER* until,XQWORD now,bool generalizedonly)
+* @brief      Time window
+* @ingroup    CIPHER
+* 
+* @param[in]  from : From value.
+* @param[in]  until : Pointer to until.
+* @param[in]  now : Now value.
+* @param[in]  generalizedonly : Generalizedonly value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_TimeWindow(const CIPHERREV_DER& from,const CIPHERREV_DER* until,XQWORD now,bool generalizedonly)
 {
   XDATETIME first;
@@ -244,6 +414,17 @@ static bool CIPHERREV_TimeWindow(const CIPHERREV_DER& from,const CIPHERREV_DER* 
   return lastseconds>=firstseconds && now<=lastseconds+CIPHERREV_CLOCKSKEW_SECONDS;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_Extensions(const CIPHERREV_DER& wrapper)
+* @brief      Extensions
+* @ingroup    CIPHER
+* 
+* @param[in]  wrapper : Wrapper value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_Extensions(const CIPHERREV_DER& wrapper)
 {
   CIPHERREV_DER sequence=wrapper;
@@ -268,6 +449,17 @@ static bool CIPHERREV_Extensions(const CIPHERREV_DER& wrapper)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_CRLEntryExtensions(const CIPHERREV_DER& sequence)
+* @brief      Crl entry extensions
+* @ingroup    CIPHER
+* 
+* @param[in]  sequence : Sequence value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_CRLEntryExtensions(const CIPHERREV_DER& sequence)
 {
   static const XBYTE REASON[]={0x55,0x1D,0x15};
@@ -298,6 +490,18 @@ static bool CIPHERREV_CRLEntryExtensions(const CIPHERREV_DER& sequence)
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_ResponderMatches(const CIPHERREV_DER& responder,CIPHERCERTIFICATEX509& signer)
+* @brief      Responder matches
+* @ingroup    CIPHER
+* 
+* @param[in]  responder : Responder value.
+* @param[in]  signer : Signer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_ResponderMatches(const CIPHERREV_DER& responder,CIPHERCERTIFICATEX509& signer)
 {
   if(responder.tag==0xA1)
@@ -316,6 +520,18 @@ static bool CIPHERREV_ResponderMatches(const CIPHERREV_DER& responder,CIPHERCERT
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_DelegatedAuthorized(CIPHERCERTIFICATEX509& responder,CIPHERCERTIFICATEX509& issuer)
+* @brief      Delegated authorized
+* @ingroup    CIPHER
+* 
+* @param[in]  responder : Responder value.
+* @param[in]  issuer : Issuer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_DelegatedAuthorized(CIPHERCERTIFICATEX509& responder,CIPHERCERTIFICATEX509& issuer)
 {
   return responder.GetIssuerData() && issuer.GetSubjectData() &&
@@ -326,6 +542,19 @@ static bool CIPHERREV_DelegatedAuthorized(CIPHERCERTIFICATEX509& responder,CIPHE
          (!responder.HasKeyUsage() || responder.IsKeyUsageDigitalSignature()) && !responder.HasUnknownCriticalExtension();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_CertIDMatches(const CIPHERREV_DER& certID,CIPHERCERTIFICATEX509& certificate, CIPHERCERTIFICATEX509& issuer)
+* @brief      Cert id matches
+* @ingroup    CIPHER
+* 
+* @param[in]  certID : CertID value.
+* @param[in]  certificate : Certificate value.
+* @param[in]  issuer : Issuer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_CertIDMatches(const CIPHERREV_DER& certID,CIPHERCERTIFICATEX509& certificate,
                                     CIPHERCERTIFICATEX509& issuer)
 {
@@ -341,6 +570,18 @@ static bool CIPHERREV_CertIDMatches(const CIPHERREV_DER& certID,CIPHERCERTIFICAT
          CIPHER::CompareConstantTime(expectedkey.Get(),(XBYTE*)keyhash.data,keyhash.size);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERREV_CRLExtensions(const CIPHERREV_DER& wrapper,CIPHERCERTIFICATEX509& issuer)
+* @brief      Crl extensions
+* @ingroup    CIPHER
+* 
+* @param[in]  wrapper : Wrapper value.
+* @param[in]  issuer : Issuer value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERREV_CRLExtensions(const CIPHERREV_DER& wrapper,CIPHERCERTIFICATEX509& issuer)
 {
   static const XBYTE AKI[]={0x55,0x1D,0x23}, NUMBER[]={0x55,0x1D,0x14};
@@ -380,6 +621,19 @@ static bool CIPHERREV_CRLExtensions(const CIPHERREV_DER& wrapper,CIPHERCERTIFICA
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCERTIFICATEX509REVOCATION_RESULT CIPHERCERTIFICATEX509REVOCATION::ValidateCRL( XBUFFER& CRL,CIPHERCERTIFICATEX509& certificate,CIPHERCERTIFICATEX509& issuer)
+* @brief      Validate crl
+* @ingroup    CIPHER
+* 
+* @param[in]  CRL : CRL value.
+* @param[in]  certificate : Certificate value.
+* @param[in]  issuer : Issuer value.
+* 
+* @return     CIPHERCERTIFICATEX509REVOCATION_RESULT : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509REVOCATION_RESULT CIPHERCERTIFICATEX509REVOCATION::ValidateCRL(
   XBUFFER& CRL,CIPHERCERTIFICATEX509& certificate,CIPHERCERTIFICATEX509& issuer)
 {
@@ -464,6 +718,19 @@ CIPHERCERTIFICATEX509REVOCATION_RESULT CIPHERCERTIFICATEX509REVOCATION::Validate
   return revoked?CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED:CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCERTIFICATEX509REVOCATION_RESULT CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP( XBUFFER& response,CIPHERCERTIFICATEX509& certificate,CIPHERCERTIFICATEX509& issuer)
+* @brief      Validate ocsp
+* @ingroup    CIPHER
+* 
+* @param[in]  response : Response value.
+* @param[in]  certificate : Certificate value.
+* @param[in]  issuer : Issuer value.
+* 
+* @return     CIPHERCERTIFICATEX509REVOCATION_RESULT : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509REVOCATION_RESULT CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(
   XBUFFER& response,CIPHERCERTIFICATEX509& certificate,CIPHERCERTIFICATEX509& issuer)
 {

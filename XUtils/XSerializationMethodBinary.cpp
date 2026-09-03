@@ -58,6 +58,19 @@
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool XSERIALIZATIONMETHODBINARY_ReadType(XBUFFER* buffer, XDWORD& position, XSERIALIZATIONMETHODBINARY_TYPEELEMENT expected)
+* @brief      Read type
+* @ingroup    XUTILS
+* 
+* @param[in]  buffer : Pointer to buffer.
+* @param[in]  position : Position value.
+* @param[in]  expected : Expected value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool XSERIALIZATIONMETHODBINARY_ReadType(XBUFFER* buffer, XDWORD& position,
                                                  XSERIALIZATIONMETHODBINARY_TYPEELEMENT expected)
 {
@@ -69,6 +82,19 @@ static bool XSERIALIZATIONMETHODBINARY_ReadType(XBUFFER* buffer, XDWORD& positio
 
 
 template <class T>
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool XSERIALIZATIONMETHODBINARY_ReadValue(XBUFFER* buffer, XDWORD& position, T& value)
+* @brief      Read value
+* @ingroup    XUTILS
+* 
+* @param[in]  buffer : Pointer to buffer.
+* @param[in]  position : Position value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool XSERIALIZATIONMETHODBINARY_ReadValue(XBUFFER* buffer, XDWORD& position, T& value)
 {
   if(!buffer || position > buffer->GetSize() || (buffer->GetSize()-position) < sizeof(T) ||
@@ -78,6 +104,19 @@ static bool XSERIALIZATIONMETHODBINARY_ReadValue(XBUFFER* buffer, XDWORD& positi
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool XSERIALIZATIONMETHODBINARY_AddData(XBUFFER* target, XSERIALIZATIONMETHODBINARY_TYPEELEMENT type, XBUFFER& data)
+* @brief      Add data
+* @ingroup    XUTILS
+* 
+* @param[out] target : Pointer to target.
+* @param[in]  type : Type value.
+* @param[in]  data : Data value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool XSERIALIZATIONMETHODBINARY_AddData(XBUFFER* target,
                                                 XSERIALIZATIONMETHODBINARY_TYPEELEMENT type,
                                                 XBUFFER& data)
@@ -88,6 +127,20 @@ static bool XSERIALIZATIONMETHODBINARY_AddData(XBUFFER* target,
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool XSERIALIZATIONMETHODBINARY_ReadData(XBUFFER* source, XDWORD& position, XSERIALIZATIONMETHODBINARY_TYPEELEMENT type, XBUFFER& data)
+* @brief      Read data
+* @ingroup    XUTILS
+* 
+* @param[in]  source : Pointer to source.
+* @param[in]  position : Position value.
+* @param[in]  type : Type value.
+* @param[in]  data : Data value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool XSERIALIZATIONMETHODBINARY_ReadData(XBUFFER* source, XDWORD& position,
                                                  XSERIALIZATIONMETHODBINARY_TYPEELEMENT type,
                                                  XBUFFER& data)
@@ -827,6 +880,19 @@ bool XSERIALIZATIONMETHODBINARY::ExtractArray(XDWORD nelements, XCHAR* name)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XSERIALIZATIONMETHODBINARY::ExtractArrayElement(XDWORD index, XCHAR* name, bool open)
+* @brief      Extract array element
+* @ingroup    XUTILS
+* 
+* @param[in]  index : Index value.
+* @param[in]  name : Pointer to name.
+* @param[in]  open : Open value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool XSERIALIZATIONMETHODBINARY::ExtractArrayElement(XDWORD index, XCHAR* name, bool open)
 {
   return true;

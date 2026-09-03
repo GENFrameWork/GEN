@@ -75,6 +75,18 @@
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 template<class T>
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static T XVARIANT_GetNumericValue(XVARIANT_TYPE type, const void* data)
+* @brief      Get numeric value
+* @ingroup    XUTILS
+* 
+* @param[in]  type : Type value.
+* @param[in]  data : Pointer to data.
+* 
+* @return     T : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static T XVARIANT_GetNumericValue(XVARIANT_TYPE type, const void* data)
 {
   if(!data)

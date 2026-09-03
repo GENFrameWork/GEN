@@ -74,6 +74,11 @@ static const XBYTE CIPHERPEMCODEC_OID_ED25519[]       = { 0x2B, 0x65, 0x70 };
 * @note       INTERNAL. index/size are absolute offsets into data (size is an exclusive upper bound, not
 *             necessarily the whole buffer's size -- this lets callers bound a read to a single nested SEQUENCE).
 * @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  index : Index value.
+* @param[in]  length : Length value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -112,6 +117,13 @@ bool CIPHERPEMCODEC::DER_ReadLength(XBYTE* data, XDWORD size, XDWORD& index, XDW
 * @brief      Read a DER tag + length at data[index], advancing index past the whole TLV (tag+length+value).
 * @note       INTERNAL
 * @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  index : Index value.
+* @param[in]  tag : Tag value.
+* @param[in]  valueoffset : Valueoffset value.
+* @param[in]  valuelength : Valuelength value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -138,6 +150,11 @@ bool CIPHERPEMCODEC::DER_ReadTagLength(XBYTE* data, XDWORD size, XDWORD& index, 
 * @note       INTERNAL. A leading 0x00 pad byte (present when the DER encoder needed to keep the value
 *             non-negative) does not change the imported magnitude, so it is not stripped here.
 * @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  index : Index value.
+* @param[in]  value : Value value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -159,6 +176,8 @@ bool CIPHERPEMCODEC::DER_ReadInteger(XBYTE* data, XDWORD size, XDWORD& index, XM
 * @fn         bool CIPHERPEMCODEC::IsPEM(XBUFFER& filedata)
 * @brief      Is PEM (starts with "-----BEGIN ", ignoring leading whitespace)
 * @ingroup    CIPHER
+* 
+* @param[in]  filedata : Filedata value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -193,6 +212,10 @@ bool CIPHERPEMCODEC::IsPEM(XBUFFER& filedata)
 * @brief      Scan lines for the first complete "-----BEGIN xxx PRIVATE KEY----- ... -----END xxx PRIVATE KEY-----"
 *             block and base64-decode its body into DER.
 * @ingroup    CIPHER
+* 
+* @param[in]  lines : Pointer to lines.
+* @param[in]  blockheader : Blockheader value.
+* @param[in]  der : Der value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -256,6 +279,11 @@ bool CIPHERPEMCODEC::PrivateKeyBlock_Decode(XVECTOR<XSTRING*>& lines, XSTRING& b
 * @fn         bool CIPHERPEMCODEC::RSAPrivateKey_Decode(XBUFFER& der, XMPINTEGER& prime1, XMPINTEGER& prime2, XMPINTEGER& exponent)
 * @brief      Decode a PKCS#1 RSAPrivateKey DER blob into prime1/prime2/privateExponent.
 * @ingroup    CIPHER
+* 
+* @param[in]  der : Der value.
+* @param[in]  prime1 : Prime1 value.
+* @param[in]  prime2 : Prime2 value.
+* @param[in]  exponent : Exponent value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -300,6 +328,9 @@ bool CIPHERPEMCODEC::RSAPrivateKey_Decode(XBUFFER& der, XMPINTEGER& prime1, XMPI
 * @fn         bool CIPHERPEMCODEC::ECPrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
 * @brief      Decode a SEC1 ECPrivateKey DER blob into its privateKey OCTET STRING (the scalar D).
 * @ingroup    CIPHER
+* 
+* @param[in]  der : Der value.
+* @param[in]  privatekey : Privatekey value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -333,6 +364,18 @@ bool CIPHERPEMCODEC::ECPrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERPEMCODEC::Ed25519PrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
+* @brief      Ed25519 private key decode
+* @ingroup    CIPHER
+* 
+* @param[in]  der : Der value.
+* @param[in]  privatekey : Privatekey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERPEMCODEC::Ed25519PrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
 {
   XBYTE* data=der.Get();
@@ -363,6 +406,12 @@ bool CIPHERPEMCODEC::Ed25519PrivateKey_Decode(XBUFFER& der, XBUFFER& privatekey)
 * @brief      Decode an unencrypted PKCS#8 PrivateKeyInfo DER blob: identify its algorithm and return the nested
 *             RSAPrivateKey / ECPrivateKey DER blob.
 * @ingroup    CIPHER
+* 
+* @param[in]  der : Der value.
+* @param[in]  isrsa : Isrsa value.
+* @param[in]  isec : Isec value.
+* @param[in]  ised25519 : Ised25519 value.
+* @param[in]  innerkey : Innerkey value.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -435,6 +484,19 @@ bool CIPHERPEMCODEC::PKCS8PrivateKey_Decode(XBUFFER& der, bool& isrsa, bool& ise
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERPEMCODEC_IntegerToDWORD(XBYTE* data, XDWORD size, XDWORD& value)
+* @brief      Integer to dword
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERPEMCODEC_IntegerToDWORD(XBYTE* data, XDWORD size, XDWORD& value)
 {
   value = 0;
@@ -445,6 +507,22 @@ static bool CIPHERPEMCODEC_IntegerToDWORD(XBYTE* data, XDWORD size, XDWORD& valu
 
 static bool CIPHERPEMCODEC_PKCS12KDF(XSTRING& password,XBYTE id,XBUFFER& salt,XDWORD iterations,HASHTYPE type,XDWORD outputsize,XSECUREBUFFER& output);
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERPEMCODEC_PBKDF2(XBUFFER& password, XBUFFER& salt, XDWORD iterations, HASHTYPE hashtype, XDWORD keysize, XSECUREBUFFER& key)
+* @brief      Pbkdf2
+* @ingroup    CIPHER
+* 
+* @param[in]  password : Password value.
+* @param[in]  salt : Salt value.
+* @param[in]  iterations : Iterations value.
+* @param[in]  hashtype : Hashtype value.
+* @param[in]  keysize : Keysize value.
+* @param[in]  key : Key value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERPEMCODEC_PBKDF2(XBUFFER& password, XBUFFER& salt, XDWORD iterations,
                                    HASHTYPE hashtype, XDWORD keysize, XSECUREBUFFER& key)
 {
@@ -503,6 +581,19 @@ static bool CIPHERPEMCODEC_PBKDF2(XBUFFER& password, XBUFFER& salt, XDWORD itera
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERPEMCODEC::PKCS8EncryptedPrivateKey_Decode(XBUFFER& der, XSTRING& password, XSECUREBUFFER& privatekeyinfo)
+* @brief      Pkcs8 encrypted private key decode
+* @ingroup    CIPHER
+* 
+* @param[in]  der : Der value.
+* @param[in]  password : Password value.
+* @param[in]  privatekeyinfo : Privatekeyinfo value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERPEMCODEC::PKCS8EncryptedPrivateKey_Decode(XBUFFER& der, XSTRING& password, XSECUREBUFFER& privatekeyinfo)
 {
   static const XBYTE OIDPBES2[]      = { 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x05,0x0D };
@@ -608,6 +699,18 @@ bool CIPHERPEMCODEC::PKCS8EncryptedPrivateKey_Decode(XBUFFER& der, XSTRING& pass
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERPEMCODEC::PKCS7Certificates_Decode(XBUFFER& der, XVECTOR<XBUFFER*>& certificates)
+* @brief      Pkcs7 certificates decode
+* @ingroup    CIPHER
+* 
+* @param[in]  der : Der value.
+* @param[in]  certificates : Pointer to certificates.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERPEMCODEC::PKCS7Certificates_Decode(XBUFFER& der, XVECTOR<XBUFFER*>& certificates)
 {
   static const XBYTE OIDSIGNEDDATA[] = { 0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x07,0x02 };
@@ -641,16 +744,55 @@ bool CIPHERPEMCODEC::PKCS7Certificates_Decode(XBUFFER& der, XVECTOR<XBUFFER*>& c
   return !certificates.IsEmpty();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERPEMCODEC_DERLength(XBUFFER& output, XDWORD length)
+* @brief      Der length
+* @ingroup    CIPHER
+* 
+* @param[out] output : Output value.
+* @param[in]  length : Length value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERPEMCODEC_DERLength(XBUFFER& output, XDWORD length)
 {
   if(length<128) return output.Add((XBYTE)length);
   XBYTE bytes[4]; XDWORD n=0,value=length; while(value){bytes[3-n++]=(XBYTE)value;value>>=8;}
   if(!output.Add((XBYTE)(0x80|n)))return false; return output.Add(bytes+4-n,n);
 }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERPEMCODEC_DERWrap(XBYTE tag,XBUFFER& content,XBUFFER& output)
+* @brief      Der wrap
+* @ingroup    CIPHER
+* 
+* @param[in]  tag : Tag value.
+* @param[in]  content : Content value.
+* @param[out] output : Output value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERPEMCODEC_DERWrap(XBYTE tag,XBUFFER& content,XBUFFER& output)
 {
   return output.Add(tag)&&CIPHERPEMCODEC_DERLength(output,content.GetSize())&&output.Add(content);
 }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERPEMCODEC_PKCS12SafeContents(XBUFFER& safe,XSTRING& password,XVECTOR<XBUFFER*>& certificates,XSECUREBUFFER& privatekeyinfo)
+* @brief      Pkcs12 safe contents
+* @ingroup    CIPHER
+* 
+* @param[in]  safe : Safe value.
+* @param[in]  password : Password value.
+* @param[in]  certificates : Pointer to certificates.
+* @param[in]  privatekeyinfo : Privatekeyinfo value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERPEMCODEC_PKCS12SafeContents(XBUFFER& safe,XSTRING& password,XVECTOR<XBUFFER*>& certificates,XSECUREBUFFER& privatekeyinfo)
 {
   static const XBYTE OIDKEYBAG[]={0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x0C,0x0A,0x01,0x01};
@@ -686,6 +828,17 @@ static bool CIPHERPEMCODEC_PKCS12SafeContents(XBUFFER& safe,XSTRING& password,XV
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static HASH* CIPHERPEMCODEC_HashCreate(HASHTYPE type)
+* @brief      Hash create
+* @ingroup    CIPHER
+* 
+* @param[in]  type : Type value.
+* 
+* @return     HASH* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static HASH* CIPHERPEMCODEC_HashCreate(HASHTYPE type)
 {
   switch(type)
@@ -698,6 +851,23 @@ static HASH* CIPHERPEMCODEC_HashCreate(HASHTYPE type)
     }
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERPEMCODEC_PKCS12KDF(XSTRING& password,XBYTE id,XBUFFER& salt,XDWORD iterations,HASHTYPE type,XDWORD outputsize,XSECUREBUFFER& output)
+* @brief      Pkcs12 kdf
+* @ingroup    CIPHER
+* 
+* @param[in]  password : Password value.
+* @param[in]  id : Id value.
+* @param[in]  salt : Salt value.
+* @param[in]  iterations : Iterations value.
+* @param[in]  type : Type value.
+* @param[in]  outputsize : Outputsize value.
+* @param[out] output : Output value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERPEMCODEC_PKCS12KDF(XSTRING& password,XBYTE id,XBUFFER& salt,XDWORD iterations,HASHTYPE type,XDWORD outputsize,XSECUREBUFFER& output)
 {
   output.SecureDelete(); HASH* hash=CIPHERPEMCODEC_HashCreate(type); if(!hash||!iterations||!outputsize){if(hash)GEN_DELETE hash;return false;}
@@ -721,6 +891,21 @@ static bool CIPHERPEMCODEC_PKCS12KDF(XSTRING& password,XBYTE id,XBUFFER& salt,XD
   passwordbytes.SecureDelete();I.SecureDelete();GEN_DELETE hash;if(!status)output.SecureDelete();return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERPEMCODEC_PKCS12MACVerify(XBYTE* authsafe,XDWORD authsafesize,XBYTE* data,XDWORD size,XSTRING& password)
+* @brief      Pkcs12 mac verify
+* @ingroup    CIPHER
+* 
+* @param[in]  authsafe : Pointer to authsafe.
+* @param[in]  authsafesize : Authsafesize value.
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  password : Password value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERPEMCODEC_PKCS12MACVerify(XBYTE* authsafe,XDWORD authsafesize,XBYTE* data,XDWORD size,XSTRING& password)
 {
   static const XBYTE SHA1OID[]={0x2B,0x0E,0x03,0x02,0x1A};
@@ -745,6 +930,20 @@ static bool CIPHERPEMCODEC_PKCS12MACVerify(XBYTE* authsafe,XDWORD authsafesize,X
   key.SecureDelete();GEN_DELETE hash;return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERPEMCODEC::PKCS12_Decode(XBUFFER& der,XSTRING& password,XVECTOR<XBUFFER*>& certificates,XSECUREBUFFER& privatekeyinfo)
+* @brief      Decode
+* @ingroup    CIPHER
+* 
+* @param[in]  der : Der value.
+* @param[in]  password : Password value.
+* @param[in]  certificates : Pointer to certificates.
+* @param[in]  privatekeyinfo : Privatekeyinfo value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERPEMCODEC::PKCS12_Decode(XBUFFER& der,XSTRING& password,XVECTOR<XBUFFER*>& certificates,XSECUREBUFFER& privatekeyinfo)
 {
   static const XBYTE OIDDATA[]={0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,0x07,0x01};

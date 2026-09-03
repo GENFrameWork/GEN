@@ -126,7 +126,6 @@
 * @param[in]  spandeg : signed span in degrees.
 * @param[in]  firstpoint : true on the first append (emits a MoveTo); set to false afterwards.
 * 
-* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressRadial_AppendArc(GRP2DPATH& path, double cx, double cy, double r, double startdeg, double spandeg, bool& firstpoint)
 {
@@ -171,7 +170,6 @@ static void UI_SkinCanvas_ProgressRadial_AppendArc(GRP2DPATH& path, double cx, d
 * @param[in]  d : D value.
 * @param[in]  formradius : Formradius value.
 * 
-* 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, double d, double formradius)
 {
@@ -202,7 +200,6 @@ static void DrawScrollPill(GRP2DCANVAS* canvas, double a, double b, double c, do
 * @param[in]  x2 : X2 value.
 * @param[in]  y2 : Y2 value.
 * @param[in]  radius : Radius value.
-* 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius)
@@ -261,7 +258,6 @@ static void UI_SkinCanvas_ProgressBar_DrawRect(GRP2DCANVAS* canvas, double x1, d
 * @param[in]  maxx : Maxx value.
 * @param[in]  maxy : Maxy value.
 * @param[in]  r : R value.
-* 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double r)
@@ -716,7 +712,6 @@ static void UI_SkinCanvas_DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* 
 * @param[in]  gy1 : Gy1 value.
 * @param[in]  gx2 : Gx2 value.
 * @param[in]  gy2 : Gy2 value.
-* 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressBar_DrawGradientRect(GRP2DCANVAS* canvas, double x1, double y1, double x2, double y2, double radius,
@@ -2513,7 +2508,6 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bo
 * @param[in]  tx : Tx value.
 * @param[in]  ty : Ty value.
 * 
-* 
 * --------------------------------------------------------------------------------------------------------------------*/
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -2533,7 +2527,6 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressRadial(UI_ELEMENT* element, bo
 * @param[in]  oy : Oy value.
 * @param[in]  tx : Tx value.
 * @param[in]  ty : Ty value.
-* 
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ProgressImage_Layout(int allocation, double imgw, double imgh, double textw, double texth, double gap,
@@ -4338,7 +4331,6 @@ bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas
 * @param[in]  miny : Miny value.
 * @param[in]  maxy : Maxy value.
 * 
-* 
 * --------------------------------------------------------------------------------------------------------------------*/
 
 // Accumulate the screen bounding box of an element's descendants, but only on the axes flagged (vx/vy). Used to size a
@@ -4346,6 +4338,22 @@ bool UI_SKINCANVAS::DrawBackgroundColor(UI_ELEMENT* element, GRP2DCANVAS* canvas
 // no longer own rebuild areas, so without this their overflowing pixels (e.g. an animated icon sticking out of the bar)
 // would never be erased and would pile up. Positions are absolute (scroll is applied at draw time, not stored), and a
 // VISIBLE axis is never scrolled, so the stored positions are the right ones to measure on that axis.
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void UI_SkinCanvas_ContentExtent(UI_ELEMENT* element, bool vx, bool vy, double margin, double& minx, double& maxx, double& miny, double& maxy)
+* @brief      Skin canvas content extent
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : Pointer to element.
+* @param[in]  vx : Vx value.
+* @param[in]  vy : Vy value.
+* @param[in]  margin : Margin value.
+* @param[in]  minx : Minx value.
+* @param[in]  maxx : Maxx value.
+* @param[in]  miny : Miny value.
+* @param[in]  maxy : Maxy value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_ContentExtent(UI_ELEMENT* element, bool vx, bool vy, double margin,
                                         double& minx, double& maxx, double& miny, double& maxy)
 {
@@ -4904,13 +4912,31 @@ double UI_SKINCANVAS::TextBox_SizeLine(UI_ELEMENT_TEXTBOX* element_textbox, GRP2
 * @param[in]  aheadleft : Aheadleft value.
 * @param[in]  aheadright : Aheadright value.
 * 
-* 
 * --------------------------------------------------------------------------------------------------------------------*/
 // Inline-image obstacle resolver for the text box. Active images are rectangles the running text must flow around.
 // For a line whose vertical band [ltop,lbot] overlaps an image, this advances the cursor past any image it currently
 // sits inside (jumpx), and reports the nearest image edge still ahead on that line (aheadleft/aheadright) so a word is
 // never laid down on top of the picture. With no active images the outputs leave the cursor untouched (aheadleft < 0),
 // so the layout is byte-for-byte the original behaviour.
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void UI_SkinCanvas_TextObstacle(double x, double ltop, double lbot, const double* ol, const double* orr, const double* ot, const double* ob, int n, double& jumpx, double& aheadleft, double& aheadright)
+* @brief      Skin canvas text obstacle
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  x : X value.
+* @param[in]  ltop : Ltop value.
+* @param[in]  lbot : Lbot value.
+* @param[in]  ol : Pointer to ol.
+* @param[in]  orr : Pointer to orr.
+* @param[in]  ot : Pointer to ot.
+* @param[in]  ob : Pointer to ob.
+* @param[in]  n : N value.
+* @param[in]  jumpx : Jumpx value.
+* @param[in]  aheadleft : Aheadleft value.
+* @param[in]  aheadright : Aheadright value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void UI_SkinCanvas_TextObstacle(double x, double ltop, double lbot,
                                        const double* ol, const double* orr, const double* ot, const double* ob, int n,
                                        double& jumpx, double& aheadleft, double& aheadright)

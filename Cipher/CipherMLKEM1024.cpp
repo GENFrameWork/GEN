@@ -15,6 +15,16 @@
 
 namespace
 {
+  /**-------------------------------------------------------------------------------------------------------------------
+  * 
+  * @fn         static void CIPHERMLKEM1024_SecureErase(void* data, XDWORD size)
+  * @brief      Secure erase
+  * @ingroup    CIPHER
+  * 
+  * @param[in]  data : Pointer to data.
+  * @param[in]  size : Size value.
+  * 
+  * --------------------------------------------------------------------------------------------------------------------*/
   static void CIPHERMLKEM1024_SecureErase(void* data, XDWORD size)
   {
     volatile XBYTE* bytes = (volatile XBYTE*)data;
@@ -22,16 +32,42 @@ namespace
   }
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERMLKEM1024::CIPHERMLKEM1024()
+* @brief      Constructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERMLKEM1024::CIPHERMLKEM1024()
 {
   Clean();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERMLKEM1024::~CIPHERMLKEM1024()
+* @brief      Destructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERMLKEM1024::~CIPHERMLKEM1024()
 {
   Clean();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM1024::Random(XBYTE* data, XDWORD size)
+* @brief      Random
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM1024::Random(XBYTE* data, XDWORD size)
 {
   if(!data || !size) return false;
@@ -45,6 +81,18 @@ bool CIPHERMLKEM1024::Random(XBYTE* data, XDWORD size)
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM1024::KeyPair_Create(XBUFFER& publickey, XBUFFER& privatekey)
+* @brief      Key pair create
+* @ingroup    CIPHER
+* 
+* @param[in]  publickey : Publickey value.
+* @param[in]  privatekey : Privatekey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM1024::KeyPair_Create(XBUFFER& publickey, XBUFFER& privatekey)
 {
   XBYTE d[32];
@@ -72,6 +120,19 @@ bool CIPHERMLKEM1024::KeyPair_Create(XBUFFER& publickey, XBUFFER& privatekey)
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM1024::Encapsulate(XBUFFER& publickey, XBUFFER& ciphertext, XBUFFER& sharedsecret)
+* @brief      Encapsulate
+* @ingroup    CIPHER
+* 
+* @param[in]  publickey : Publickey value.
+* @param[in]  ciphertext : Ciphertext value.
+* @param[in]  sharedsecret : Sharedsecret value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM1024::Encapsulate(XBUFFER& publickey, XBUFFER& ciphertext, XBUFFER& sharedsecret)
 {
   XBYTE randomness[32];
@@ -99,6 +160,19 @@ bool CIPHERMLKEM1024::Encapsulate(XBUFFER& publickey, XBUFFER& ciphertext, XBUFF
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM1024::Decapsulate(XBUFFER& privatekey, XBUFFER& ciphertext, XBUFFER& sharedsecret)
+* @brief      Decapsulate
+* @ingroup    CIPHER
+* 
+* @param[in]  privatekey : Privatekey value.
+* @param[in]  ciphertext : Ciphertext value.
+* @param[in]  sharedsecret : Sharedsecret value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM1024::Decapsulate(XBUFFER& privatekey, XBUFFER& ciphertext, XBUFFER& sharedsecret)
 {
   XBYTE ss[CIPHERMLKEM1024_SHAREDSECRETSIZE];
@@ -117,11 +191,29 @@ bool CIPHERMLKEM1024::Decapsulate(XBUFFER& privatekey, XBUFFER& ciphertext, XBUF
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERMLKEM1024::PublicKey_Check(XBUFFER& publickey)
+* @brief      Public key check
+* @ingroup    CIPHER
+* 
+* @param[in]  publickey : Publickey value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERMLKEM1024::PublicKey_Check(XBUFFER& publickey)
 {
   return publickey.GetSize() == CIPHERMLKEM1024_PUBLICKEYSIZE && CIPHERMLKEM1024CORE::PublicKey_Check(publickey.Get());
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERMLKEM1024::Clean()
+* @brief      Clean
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERMLKEM1024::Clean()
 {
 }

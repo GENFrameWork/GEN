@@ -623,6 +623,18 @@ DIOWEBSERVER* APPFLOWWEBSERVER::GetWebServer()
 
 #ifdef DIO_STREAMTLS_ACTIVE
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool APPFLOWWEBSERVER::SetTLSCredentialsProvider(CIPHERCREDENTIALSPROVIDER* provider, bool owner)
+* @brief      Set tls credentials provider
+* @ingroup    APPFLOW
+* 
+* @param[in]  provider : Pointer to provider.
+* @param[in]  owner : Owner value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::SetTLSCredentialsProvider(CIPHERCREDENTIALSPROVIDER* provider, bool owner)
 {
   if(provider == tlscredentialsprovider)
@@ -643,12 +655,33 @@ bool APPFLOWWEBSERVER::SetTLSCredentialsProvider(CIPHERCREDENTIALSPROVIDER* prov
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCREDENTIALSPROVIDER* APPFLOWWEBSERVER::GetTLSCredentialsProvider()
+* @brief      Get tls credentials provider
+* @ingroup    APPFLOW
+* 
+* @return     CIPHERCREDENTIALSPROVIDER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCREDENTIALSPROVIDER* APPFLOWWEBSERVER::GetTLSCredentialsProvider()
 {
   return tlscredentialsprovider;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool APPFLOWWEBSERVER::SetTLSSecretProvider(CIPHERSECRETPROVIDER* provider, bool owner)
+* @brief      Set tls secret provider
+* @ingroup    APPFLOW
+* 
+* @param[in]  provider : Pointer to provider.
+* @param[in]  owner : Owner value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool APPFLOWWEBSERVER::SetTLSSecretProvider(CIPHERSECRETPROVIDER* provider, bool owner)
 {
   if(provider == tlssecretprovider)
@@ -669,6 +702,15 @@ bool APPFLOWWEBSERVER::SetTLSSecretProvider(CIPHERSECRETPROVIDER* provider, bool
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERSECRETPROVIDER* APPFLOWWEBSERVER::GetTLSSecretProvider()
+* @brief      Get tls secret provider
+* @ingroup    APPFLOW
+* 
+* @return     CIPHERSECRETPROVIDER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERSECRETPROVIDER* APPFLOWWEBSERVER::GetTLSSecretProvider()
 {
   return tlssecretprovider;

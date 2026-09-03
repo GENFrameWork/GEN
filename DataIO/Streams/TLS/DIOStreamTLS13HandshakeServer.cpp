@@ -73,6 +73,18 @@ static const XWORD DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_PADDING    = 0x0015;
 static const XWORD DIOSTREAMTLS13_HANDSHAKESERVER_EXTENSION_EARLYDATA  = 0x002A;
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKESERVER_ServerNameMatch(XSTRING& pattern, XCHAR* servername)
+* @brief      Server name match
+* @ingroup    DATAIO
+* 
+* @param[in]  pattern : Pattern value.
+* @param[in]  servername : Pointer to servername.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKESERVER_ServerNameMatch(XSTRING& pattern, XCHAR* servername)
 {
   XSTRING hostname;
@@ -99,6 +111,18 @@ static bool DIOSTREAMTLS13_HANDSHAKESERVER_ServerNameMatch(XSTRING& pattern, XCH
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(XVECTOR<XWORD>& offered, XWORD scheme)
+* @brief      Signature scheme offered
+* @ingroup    DATAIO
+* 
+* @param[in]  offered : Offered value.
+* @param[in]  scheme : Scheme value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(XVECTOR<XWORD>& offered, XWORD scheme)
 {
   for(XDWORD c=0; c<offered.GetSize(); c++)
@@ -110,6 +134,17 @@ static bool DIOSTREAMTLS13_HANDSHAKESERVER_SignatureSchemeOffered(XVECTOR<XWORD>
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static XWORD DIOSTREAMTLS13_HANDSHAKESERVER_CertificateSignatureScheme(CIPHERCERTIFICATEX509& certificate)
+* @brief      Certificate signature scheme
+* @ingroup    DATAIO
+* 
+* @param[in]  certificate : Certificate value.
+* 
+* @return     XWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static XWORD DIOSTREAMTLS13_HANDSHAKESERVER_CertificateSignatureScheme(CIPHERCERTIFICATEX509& certificate)
 {
   switch(certificate.GetAlgorithmType())
@@ -140,6 +175,18 @@ static XWORD DIOSTREAMTLS13_HANDSHAKESERVER_CertificateSignatureScheme(CIPHERCER
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKESERVER_CertificateChainCompatible(XVECTOR<XBUFFER*>* chain, XVECTOR<XWORD>& offered)
+* @brief      Certificate chain compatible
+* @ingroup    DATAIO
+* 
+* @param[in]  chain : Pointer to chain.
+* @param[in]  offered : Offered value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKESERVER_CertificateChainCompatible(XVECTOR<XBUFFER*>* chain, XVECTOR<XWORD>& offered)
 {
   if(!chain || chain->IsEmpty() || offered.IsEmpty()) return false;
@@ -178,6 +225,18 @@ static bool DIOSTREAMTLS13_HANDSHAKESERVER_CertificateChainCompatible(XVECTOR<XB
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKESERVER_OCSPRequest_Parse(XBUFFER* data, bool& requested)
+* @brief      Ocsp request parse
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  requested : Requested value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKESERVER_OCSPRequest_Parse(XBUFFER* data, bool& requested)
 {
   requested = false;
@@ -212,6 +271,17 @@ static bool DIOSTREAMTLS13_HANDSHAKESERVER_OCSPRequest_Parse(XBUFFER* data, bool
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS13_HANDSHAKESERVER_CertificateAlert(CIPHERCERTIFICATEX509VALIDATOR_ERROR error)
+* @brief      Certificate alert
+* @ingroup    DATAIO
+* 
+* @param[in]  error : Error value.
+* 
+* @return     DIOSTREAMTLS_ALERT_DESCRIPTION : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS13_HANDSHAKESERVER_CertificateAlert(CIPHERCERTIFICATEX509VALIDATOR_ERROR error)
 {
   switch(error)
@@ -229,6 +299,18 @@ static DIOSTREAMTLS_ALERT_DESCRIPTION DIOSTREAMTLS13_HANDSHAKESERVER_Certificate
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOSTREAMTLS13_HANDSHAKESERVER_ExtensionIsEqual(DIOSTREAMTLS_MSG_EXTENSION* first, DIOSTREAMTLS_MSG_EXTENSION* second)
+* @brief      Extension is equal
+* @ingroup    DATAIO
+* 
+* @param[in]  first : Pointer to first.
+* @param[in]  second : Pointer to second.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOSTREAMTLS13_HANDSHAKESERVER_ExtensionIsEqual(DIOSTREAMTLS_MSG_EXTENSION* first,
                                                              DIOSTREAMTLS_MSG_EXTENSION* second)
 {
@@ -385,23 +467,89 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::IsWaitingClientHelloRetry()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::IsClientAuthenticated()
+* @brief      Is client authenticated
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::IsClientAuthenticated()
 {
   return clientcertificateprovided && clientcertificatevalidator.GetLeafCertificate();
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::IsSessionResumed()
+* @brief      Is session resumed
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::IsSessionResumed()
 {
   return resumptionaccepted;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataOffered()
+* @brief      Is early data offered
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataOffered() { return earlydataoffered; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataAccepted()
+* @brief      Is early data accepted
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::IsEarlyDataAccepted() { return earlydataaccepted; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13HANDSHAKESERVER::GetEarlyDataSize()
+* @brief      Get early data size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13HANDSHAKESERVER::GetEarlyDataSize() { return session?session->GetEarlyDataSize():0; }
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS13HANDSHAKESERVER::EarlyData_Read(XBYTE* data, XDWORD size)
+* @brief      Early data read
+* @ingroup    DATAIO
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS13HANDSHAKESERVER::EarlyData_Read(XBYTE* data, XDWORD size) { return session?session->EarlyData_Read(data,size):0; }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCERTIFICATEX509* DIOSTREAMTLS13HANDSHAKESERVER::GetClientCertificate()
+* @brief      Get client certificate
+* @ingroup    DATAIO
+* 
+* @return     CIPHERCERTIFICATEX509* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509* DIOSTREAMTLS13HANDSHAKESERVER::GetClientCertificate()
 {
   return IsClientAuthenticated()?clientcertificatevalidator.GetLeafCertificate():NULL;
@@ -437,6 +585,15 @@ DIOSTREAMTLS_ALPN_TYPE DIOSTREAMTLS13HANDSHAKESERVER::GetApplicationProtocol()
   return applicationprotocol;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS13HANDSHAKESERVER::GetApplicationProtocolRaw()
+* @brief      Get application protocol raw
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS13HANDSHAKESERVER::GetApplicationProtocolRaw()
 {
   return &applicationprotocolraw;
@@ -518,6 +675,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::CipherSuite_Select(XVECTOR<XWORD>& offered, 
 * @param[out] selectedgroup : Selected group.
 * @param[out] peerpublickey : Client key_share public key when already available.
 * @param[out] helloretryrequestrequired : true when the selected group needs a retried key_share.
+* @param[in]  invalidkeyshare : Invalidkeyshare value.
 *
 * @return     bool : true if a mutually supported group was selected; otherwise false.
 *
@@ -635,6 +793,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::Group_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIE
 * @param[in]  offered : Signature schemes offered by the client (signature_algorithms extension).
 * @param[in]  leafpublickey : Public cipher key decoded from the local leaf certificate.
 * @param[out] selected : Selected signature scheme.
+* @param[in]  leafcertificate : Pointer to leafcertificate.
 *
 * @return     bool : true if the operation is successful; otherwise false.
 *
@@ -661,6 +820,24 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::SignatureScheme_Select(XVECTOR<XWORD>& offer
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13HANDSHAKESERVER::ServerCredentials_Select(XCHAR* servername, XVECTOR<XWORD>& offeredsignatures, XVECTOR<XWORD>& offeredcertificatesignatures, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey, XBUFFER*& OCSPstapledresponse, CIPHERCERTIFICATEX509& leafcertificate, XWORD& signaturescheme)
+* @brief      Server credentials select
+* @ingroup    DATAIO
+* 
+* @param[in]  servername : Pointer to servername.
+* @param[in]  offeredsignatures : Offeredsignatures value.
+* @param[in]  offeredcertificatesignatures : Offeredcertificatesignatures value.
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  privatekey : Pointer to privatekey.
+* @param[in]  OCSPstapledresponse : Pointer to OCSPstapledresponse.
+* @param[in]  leafcertificate : Leafcertificate value.
+* @param[in]  signaturescheme : Signaturescheme value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::ServerCredentials_Select(XCHAR* servername, XVECTOR<XWORD>& offeredsignatures,
                                                               XVECTOR<XWORD>& offeredcertificatesignatures,
                                                               XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey,
@@ -1037,7 +1214,15 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::HelloRetryRequest_Create(DIOSTREAMTLS_MSG_HA
 * @brief      Validate one stateless resumption ticket and its PSK binder
 * @note       INTERNAL. GEN accepts only psk_dhe_ke, preserving forward secrecy. Early data, when offered, is bound to identity 0.
 * @ingroup    DATAIO
+* 
+* @param[in]  clienthello : Pointer to clienthello.
+* @param[in]  clienthellobuffer : Clienthellobuffer value.
+* @param[in]  servername : Pointer to servername.
+* @param[in]  applicationprotocol : Pointer to applicationprotocol.
+* @param[in]  ciphersuite : Ciphersuite value.
+* @param[in]  PSK : PSK value.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSHAKE_CLIENTHELLO* clienthello,
                                                           XBUFFER& clienthellobuffer, XCHAR* servername,
@@ -1237,6 +1422,7 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ResumptionPSK_Select(DIOSTREAMTLS_MSG_HANDSH
 * @note       INTERNAL. early_data is advertised only when explicitly enabled and an anti-replay callback is installed.
 * @ingroup    DATAIO
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::NewSessionTicket_Create()
 {
@@ -2105,7 +2291,10 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientHello_Process(XBUFFER& clienthello, XB
 * @brief      Decode and validate the client Certificate message requested for mTLS
 * @note       INTERNAL
 * @ingroup    DATAIO
+* 
+* @param[in]  message : Message value.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificate_Process(XBUFFER& message)
 {
@@ -2261,7 +2450,10 @@ bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificate_Process(XBUFFER& message)
 * @brief      Verify the TLS 1.3 client CertificateVerify message
 * @note       INTERNAL
 * @ingroup    DATAIO
+* 
+* @param[in]  message : Message value.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13HANDSHAKESERVER::ClientCertificateVerify_Process(XBUFFER& message)
 {

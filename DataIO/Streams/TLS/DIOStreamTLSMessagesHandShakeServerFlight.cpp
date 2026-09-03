@@ -1351,52 +1351,136 @@ DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::~DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESS
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketLifetime()
+* @brief      Get ticket lifetime
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketLifetime()
 {
   return ticketlifetime;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetTicketLifetime(XDWORD lifetime)
+* @brief      Set ticket lifetime
+* @ingroup    DATAIO
+* 
+* @param[in]  lifetime : Lifetime value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetTicketLifetime(XDWORD lifetime)
 {
   ticketlifetime = lifetime;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketAgeAdd()
+* @brief      Get ticket age add
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketAgeAdd()
 {
   return ticketageadd;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetTicketAgeAdd(XDWORD ageadd)
+* @brief      Set ticket age add
+* @ingroup    DATAIO
+* 
+* @param[in]  ageadd : Ageadd value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetTicketAgeAdd(XDWORD ageadd)
 {
   ticketageadd = ageadd;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketNonce()
+* @brief      Get ticket nonce
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicketNonce()
 {
   return &ticketnonce;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicket()
+* @brief      Get ticket
+* @ingroup    DATAIO
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetTicket()
 {
   return &ticket;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetMaximumEarlyDataSize()
+* @brief      Get maximum early data size
+* @ingroup    DATAIO
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetMaximumEarlyDataSize()
 {
   return maximumearlydatasize;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetMaximumEarlyDataSize(XDWORD size)
+* @brief      Set maximum early data size
+* @ingroup    DATAIO
+* 
+* @param[in]  size : Size value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetMaximumEarlyDataSize(XDWORD size)
 {
   maximumearlydatasize = size;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetToBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Set to buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  showdebug : Showdebug value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetToBuffer(XBUFFER& buffer, bool showdebug)
 {
   (void)showdebug;
@@ -1425,6 +1509,18 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::SetToBuffer(XBUFFER& buffer, b
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetFromBuffer(XBUFFER& buffer, bool showdebug)
+* @brief      Get from buffer
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* @param[in]  showdebug : Showdebug value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetFromBuffer(XBUFFER& buffer, bool showdebug)
 {
   (void)showdebug;
@@ -1480,6 +1576,13 @@ bool DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::GetFromBuffer(XBUFFER& buffer,
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::Clean()
+* @brief      Clean
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOSTREAMTLS_MSG_HANDSHAKE_NEWSESSIONTICKET::Clean()
 {
   ticketlifetime = 0;

@@ -91,6 +91,17 @@ class CIPHERCERTIFICATEX509_DERREADER
                       position   = 0;
                     }
 
+    /**-------------------------------------------------------------------------------------------------------------------
+    * 
+    * @fn         bool Read (CIPHERCERTIFICATEX509_DERITEM& item)
+    * @brief      Read
+    * @ingroup    CIPHER
+    * 
+    * @param[in]  item : Item value.
+    * 
+    * @return     bool : true if the operation is successful; otherwise false.
+    * 
+    * --------------------------------------------------------------------------------------------------------------------*/
     bool            Read                              (CIPHERCERTIFICATEX509_DERITEM& item)
                     {
                       XDWORD length;
@@ -150,6 +161,15 @@ class CIPHERCERTIFICATEX509_DERREADER
                       return true;
                     }
 
+    /**-------------------------------------------------------------------------------------------------------------------
+    * 
+    * @fn         bool IsEnd ()
+    * @brief      Is end
+    * @ingroup    CIPHER
+    * 
+    * @return     bool : true if the condition is met; otherwise false.
+    * 
+    * --------------------------------------------------------------------------------------------------------------------*/
     bool            IsEnd                             ()
                     {
                       return (position == size);
@@ -163,6 +183,19 @@ class CIPHERCERTIFICATEX509_DERREADER
 };
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_OIDCompare(CIPHERCERTIFICATEX509_DERITEM& item, const XBYTE* OID, XDWORD OIDsize)
+* @brief      Oid compare
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  OID : Pointer to OID.
+* @param[in]  OIDsize : OIDsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_OIDCompare(CIPHERCERTIFICATEX509_DERITEM& item, const XBYTE* OID, XDWORD OIDsize)
 {
   if((item.tag != 0x06) || !OID || (item.size != OIDsize))
@@ -174,6 +207,18 @@ static bool CIPHERCERTIFICATEX509_DER_OIDCompare(CIPHERCERTIFICATEX509_DERITEM& 
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_OIDToString(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID)
+* @brief      Oid to string
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  OID : OID value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_OIDToString(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID)
 {
   XQWORD value;
@@ -250,6 +295,19 @@ static bool CIPHERCERTIFICATEX509_DER_OIDToString(CIPHERCERTIFICATEX509_DERITEM&
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_Algorithm(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID, CIPHERCERTIFICATEX509_DERITEM* algorithmparameters = NULL)
+* @brief      Algorithm
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  OID : OID value.
+* @param[in]  algorithmparameters : Pointer to algorithmparameters.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_Algorithm(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& OID,
                                                 CIPHERCERTIFICATEX509_DERITEM* algorithmparameters = NULL)
 {
@@ -288,6 +346,18 @@ static bool CIPHERCERTIFICATEX509_DER_Algorithm(CIPHERCERTIFICATEX509_DERITEM& i
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_PositiveInteger(CIPHERCERTIFICATEX509_DERITEM& item, XDWORD& value)
+* @brief      Positive integer
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  value : Value value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_PositiveInteger(CIPHERCERTIFICATEX509_DERITEM& item, XDWORD& value)
 {
   XDWORD index = 0;
@@ -313,6 +383,18 @@ static bool CIPHERCERTIFICATEX509_DER_PositiveInteger(CIPHERCERTIFICATEX509_DERI
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSHash(CIPHERCERTIFICATEX509_DERITEM& item, CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE& hashtype)
+* @brief      Rsassapss hash
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  hashtype : Hashtype value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSHash(CIPHERCERTIFICATEX509_DERITEM& item,
                                                      CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE& hashtype)
 {
@@ -344,6 +426,19 @@ static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSHash(CIPHERCERTIFICATEX509_DERITE
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSParameters(CIPHERCERTIFICATEX509_DERITEM& parameters, CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE& hashtype, XDWORD& saltsize)
+* @brief      Rsassapss parameters
+* @ingroup    CIPHER
+* 
+* @param[in]  parameters : Parameters value.
+* @param[in]  hashtype : Hashtype value.
+* @param[in]  saltsize : Saltsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSParameters(CIPHERCERTIFICATEX509_DERITEM& parameters,
                                                            CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE& hashtype,
                                                            XDWORD& saltsize)
@@ -424,6 +519,18 @@ static bool CIPHERCERTIFICATEX509_DER_RSASSAPSSParameters(CIPHERCERTIFICATEX509_
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_String(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& string)
+* @brief      String
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  string : String value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_String(CIPHERCERTIFICATEX509_DERITEM& item, XSTRING& string)
 {
   string.Empty();
@@ -463,6 +570,18 @@ static bool CIPHERCERTIFICATEX509_DER_String(CIPHERCERTIFICATEX509_DERITEM& item
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_Name(CIPHERCERTIFICATEX509_DERITEM& item, CIPHERCERTIFICATEX509_ID* ID)
+* @brief      Name
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  ID : Pointer to ID.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_Name(CIPHERCERTIFICATEX509_DERITEM& item, CIPHERCERTIFICATEX509_ID* ID)
 {
   static const XBYTE OIDcountry[]          = { 0x55, 0x04, 0x06 };
@@ -541,6 +660,18 @@ static bool CIPHERCERTIFICATEX509_DER_Name(CIPHERCERTIFICATEX509_DERITEM& item, 
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DER_Time(CIPHERCERTIFICATEX509_DERITEM& item, XDATETIME& datetime)
+* @brief      Time
+* @ingroup    CIPHER
+* 
+* @param[in]  item : Item value.
+* @param[in]  datetime : Datetime value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DER_Time(CIPHERCERTIFICATEX509_DERITEM& item, XDATETIME& datetime)
 {
   int     year;
@@ -592,6 +723,17 @@ static bool CIPHERCERTIFICATEX509_DER_Time(CIPHERCERTIFICATEX509_DERITEM& item, 
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static int CIPHERCERTIFICATEX509_HexValue(XCHAR character)
+* @brief      Hex value
+* @ingroup    CIPHER
+* 
+* @param[in]  character : Character value.
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static int CIPHERCERTIFICATEX509_HexValue(XCHAR character)
 {
   if((character >= __C('0')) && (character <= __C('9'))) return character - __C('0');
@@ -602,6 +744,18 @@ static int CIPHERCERTIFICATEX509_HexValue(XCHAR character)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_IPAddress(XCHAR* address, XBUFFER& binary)
+* @brief      Ip address
+* @ingroup    CIPHER
+* 
+* @param[in]  address : Pointer to address.
+* @param[in]  binary : Binary value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_IPAddress(XCHAR* address, XBUFFER& binary)
 {
   XSTRING string;
@@ -752,6 +906,18 @@ static bool CIPHERCERTIFICATEX509_IPAddress(XCHAR* address, XBUFFER& binary)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DNSName(XSTRING& pattern, XCHAR* servername)
+* @brief      Dns name
+* @ingroup    CIPHER
+* 
+* @param[in]  pattern : Pattern value.
+* @param[in]  servername : Pointer to servername.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DNSName(XSTRING& pattern, XCHAR* servername)
 {
   XSTRING hostname;
@@ -1371,12 +1537,30 @@ XDWORD CIPHERCERTIFICATEX509::GetRSASSAPSSSaltSize()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE CIPHERCERTIFICATEX509::GetPublicKeyRSASSAPSSHashType()
+* @brief      Get public key rsassapss hash type
+* @ingroup    CIPHER
+* 
+* @return     CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERCERTIFICATEX509_RSASSAPSS_HASH_TYPE CIPHERCERTIFICATEX509::GetPublicKeyRSASSAPSSHashType()
 {
   return publickeyRSASSAPSShashtype;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERCERTIFICATEX509::GetPublicKeyRSASSAPSSSaltSize()
+* @brief      Get public key rsassapss salt size
+* @ingroup    CIPHER
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERCERTIFICATEX509::GetPublicKeyRSASSAPSSSaltSize()
 {
   return publickeyRSASSAPSSsaltsize;
@@ -2636,30 +2820,75 @@ XBUFFER* CIPHERCERTIFICATEX509::GetSubjectData()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetSubjectPublicKeyData()
+* @brief      Get subject public key data
+* @ingroup    CIPHER
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* CIPHERCERTIFICATEX509::GetSubjectPublicKeyData()
 {
   return &subjectpublickeydata;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::HasSubjectKeyIdentifier()
+* @brief      Has subject key identifier
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::HasSubjectKeyIdentifier()
 {
   return hassubjectkeyidentifier;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetSubjectKeyIdentifier()
+* @brief      Get subject key identifier
+* @ingroup    CIPHER
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* CIPHERCERTIFICATEX509::GetSubjectKeyIdentifier()
 {
   return &subjectkeyidentifier;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::HasAuthorityKeyIdentifier()
+* @brief      Has authority key identifier
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::HasAuthorityKeyIdentifier()
 {
   return hasauthoritykeyidentifier && !authoritykeyidentifier.IsEmpty();
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XBUFFER* CIPHERCERTIFICATEX509::GetAuthorityKeyIdentifier()
+* @brief      Get authority key identifier
+* @ingroup    CIPHER
+* 
+* @return     XBUFFER* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XBUFFER* CIPHERCERTIFICATEX509::GetAuthorityKeyIdentifier()
 {
   return &authoritykeyidentifier;
@@ -2756,6 +2985,15 @@ bool CIPHERCERTIFICATEX509::IsKeyUsageCertificateSign()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::IsKeyUsageCRLSign()
+* @brief      Is key usage crl sign
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsKeyUsageCRLSign()
 {
   return keyusageCRLsign;
@@ -2807,6 +3045,15 @@ bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageClientAuthentication()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageOCSPSigning()
+* @brief      Is extended key usage ocsp signing
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::IsExtendedKeyUsageOCSPSigning()
 {
   return extendedkeyusageOCSPsigning;
@@ -2828,6 +3075,18 @@ bool CIPHERCERTIFICATEX509::HasUnknownCriticalExtension()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_DNSConstraintMatch(XSTRING* name, XSTRING* constraint)
+* @brief      Dns constraint match
+* @ingroup    CIPHER
+* 
+* @param[in]  name : Pointer to name.
+* @param[in]  constraint : Pointer to constraint.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_DNSConstraintMatch(XSTRING* name, XSTRING* constraint)
 {
   if(!name || !constraint || name->IsEmpty() || constraint->IsEmpty()) return false;
@@ -2847,6 +3106,18 @@ static bool CIPHERCERTIFICATEX509_DNSConstraintMatch(XSTRING* name, XSTRING* con
   return (namelen == constraintlen) || (normalizedname.Get()[namelen - constraintlen - 1] == '.');
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCERTIFICATEX509_IPConstraintMatch(XBUFFER* address, XBUFFER* constraint)
+* @brief      Ip constraint match
+* @ingroup    CIPHER
+* 
+* @param[in]  address : Pointer to address.
+* @param[in]  constraint : Pointer to constraint.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCERTIFICATEX509_IPConstraintMatch(XBUFFER* address, XBUFFER* constraint)
 {
   if(!address || !constraint) return false;
@@ -2858,11 +3129,31 @@ static bool CIPHERCERTIFICATEX509_IPConstraintMatch(XBUFFER* address, XBUFFER* c
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::HasNameConstraints()
+* @brief      Has name constraints
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::HasNameConstraints()
 {
   return hasnameconstraints;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::AreNamesPermitted(CIPHERCERTIFICATEX509* certificate)
+* @brief      Are names permitted
+* @ingroup    CIPHER
+* 
+* @param[in]  certificate : Pointer to certificate.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::AreNamesPermitted(CIPHERCERTIFICATEX509* certificate)
 {
   if(!certificate || !hasnameconstraints) return certificate?true:false;
@@ -2958,11 +3249,29 @@ XSTRING* CIPHERCERTIFICATEX509::GetCAIssuersURL()
   return &caissuersurl;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::HasOCSPURL()
+* @brief      Has ocspurl
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the condition is met; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::HasOCSPURL()
 {
   return hasocspurl;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* CIPHERCERTIFICATEX509::GetOCSPURL()
+* @brief      Get ocspurl
+* @ingroup    CIPHER
+* 
+* @return     XSTRING* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XSTRING* CIPHERCERTIFICATEX509::GetOCSPURL()
 {
   return &ocspurl;
@@ -3058,6 +3367,20 @@ bool CIPHERCERTIFICATEX509::VerifySignature(CIPHERKEY* issuerpublickey)
   return VerifyDataSignature(issuerpublickey, algorithmtype, tbsdata, signature);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCERTIFICATEX509::VerifyDataSignature(CIPHERKEY* issuerpublickey, CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm, XBUFFER& data, XBUFFER& signature)
+* @brief      Verify data signature
+* @ingroup    CIPHER
+* 
+* @param[in]  issuerpublickey : Pointer to issuerpublickey.
+* @param[in]  algorithm : Algorithm value.
+* @param[in]  data : Data value.
+* @param[in]  signature : Signature value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCERTIFICATEX509::VerifyDataSignature(CIPHERKEY* issuerpublickey,
                                                  CIPHERCERTIFICATEX509_ALGORITHM_TYPE algorithm,
                                                  XBUFFER& data, XBUFFER& signature)

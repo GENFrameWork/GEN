@@ -10,18 +10,45 @@
 
 #include "GEN_Control.h"
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERSECP256R1MLKEM768::CIPHERSECP256R1MLKEM768() : secp256r1(CIPHERTYPE_ECDSA_SECP256R1)
+* @brief      Constructor of class
+* @ingroup    CIPHER
+* 
+* @param[in]  Value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERSECP256R1MLKEM768::CIPHERSECP256R1MLKEM768()
   : secp256r1(CIPHERTYPE_ECDSA_SECP256R1)
 {
   Clean();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         CIPHERSECP256R1MLKEM768::~CIPHERSECP256R1MLKEM768()
+* @brief      Destructor of class
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 CIPHERSECP256R1MLKEM768::~CIPHERSECP256R1MLKEM768()
 {
   Delete();
   Clean();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERSECP256R1MLKEM768::ClientKeyShare_Create(XBUFFER& clientshare)
+* @brief      Client key share create
+* @ingroup    CIPHER
+* 
+* @param[in]  clientshare : Clientshare value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERSECP256R1MLKEM768::ClientKeyShare_Create(XBUFFER& clientshare)
 {
   XBUFFER mlkempublic;
@@ -43,6 +70,19 @@ bool CIPHERSECP256R1MLKEM768::ClientKeyShare_Create(XBUFFER& clientshare)
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERSECP256R1MLKEM768::ClientSharedSecret_Create(XBUFFER& servershare, XBUFFER& sharedsecret, bool* invalidpeershare)
+* @brief      Client shared secret create
+* @ingroup    CIPHER
+* 
+* @param[in]  servershare : Servershare value.
+* @param[in]  sharedsecret : Sharedsecret value.
+* @param[in]  invalidpeershare : Pointer to invalidpeershare.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERSECP256R1MLKEM768::ClientSharedSecret_Create(XBUFFER& servershare, XBUFFER& sharedsecret,
                                                          bool* invalidpeershare)
 {
@@ -88,6 +128,20 @@ bool CIPHERSECP256R1MLKEM768::ClientSharedSecret_Create(XBUFFER& servershare, XB
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERSECP256R1MLKEM768::ServerKeyShare_Create(XBUFFER& clientshare, XBUFFER& servershare, XBUFFER& sharedsecret, bool* invalidpeershare)
+* @brief      Server key share create
+* @ingroup    CIPHER
+* 
+* @param[in]  clientshare : Clientshare value.
+* @param[in]  servershare : Servershare value.
+* @param[in]  sharedsecret : Sharedsecret value.
+* @param[in]  invalidpeershare : Pointer to invalidpeershare.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERSECP256R1MLKEM768::ServerKeyShare_Create(XBUFFER& clientshare, XBUFFER& servershare,
                                                      XBUFFER& sharedsecret, bool* invalidpeershare)
 {
@@ -150,6 +204,13 @@ bool CIPHERSECP256R1MLKEM768::ServerKeyShare_Create(XBUFFER& clientshare, XBUFFE
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERSECP256R1MLKEM768::Delete()
+* @brief      Delete
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERSECP256R1MLKEM768::Delete()
 {
   secp256r1private.SecureDelete();
@@ -157,6 +218,13 @@ void CIPHERSECP256R1MLKEM768::Delete()
   mlkemprivate.SecureDelete();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERSECP256R1MLKEM768::Clean()
+* @brief      Clean
+* @ingroup    CIPHER
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERSECP256R1MLKEM768::Clean()
 {
 }

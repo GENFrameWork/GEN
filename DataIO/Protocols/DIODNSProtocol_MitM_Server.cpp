@@ -297,6 +297,15 @@ bool DIODNSPROTOCOL_MITM_SERVER::Update()
 */
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIODNSPROTOCOL_MITM_SERVER::Update()
+* @brief      Update
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIODNSPROTOCOL_MITM_SERVER::Update()
 { 
   XBUFFER                   receivedbuffer[2]; 

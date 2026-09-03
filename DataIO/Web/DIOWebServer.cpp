@@ -2018,6 +2018,15 @@ bool DIOWEBSERVER_CONNECTION::End()
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER_CONNECTION::TryAcquireReference()
+* @brief      Try acquire reference
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::TryAcquireReference()
 {
   if(!isactive) return false;
@@ -2026,11 +2035,27 @@ bool DIOWEBSERVER_CONNECTION::TryAcquireReference()
   return true;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void DIOWEBSERVER_CONNECTION::ReleaseReference()
+* @brief      Release reference
+* @ingroup    DATAIO
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void DIOWEBSERVER_CONNECTION::ReleaseReference()
 {
   websocketreferences.fetch_sub(1, std::memory_order_release);
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         int DIOWEBSERVER_CONNECTION::GetReferenceCount() const
+* @brief      Get reference count
+* @ingroup    DATAIO
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 int DIOWEBSERVER_CONNECTION::GetReferenceCount() const
 {
   return websocketreferences.load(std::memory_order_acquire);
@@ -2042,6 +2067,10 @@ int DIOWEBSERVER_CONNECTION::GetReferenceCount() const
 * @fn         bool DIOWEBSERVER_CONNECTION::ReadRequest()
 * @brief      Read request
 * @ingroup    DATAIO
+* 
+* @param[in]  line : Line value.
+* @param[in]  colon : Colon value.
+* @param[in]  name : Pointer to name.
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
@@ -2061,6 +2090,17 @@ static bool DIOWEBSERVER_HeaderNameIs(XSTRING& line, XDWORD colon, const XCHAR* 
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOWEBSERVER_HeaderNameCharacterIsValid(XCHAR character)
+* @brief      Header name character is valid
+* @ingroup    DATAIO
+* 
+* @param[in]  character : Character value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOWEBSERVER_HeaderNameCharacterIsValid(XCHAR character)
 {
   if((character >= __C('a') && character <= __C('z')) ||
@@ -2077,6 +2117,19 @@ static bool DIOWEBSERVER_HeaderNameCharacterIsValid(XCHAR character)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool DIOWEBSERVER_RequestFraming_Get(DIOWEBHEADER& header, XDWORD maximumbodysize, XDWORD& contentlength)
+* @brief      Request framing get
+* @ingroup    DATAIO
+* 
+* @param[in]  header : Header value.
+* @param[in]  maximumbodysize : Maximumbodysize value.
+* @param[in]  contentlength : Contentlength value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool DIOWEBSERVER_RequestFraming_Get(DIOWEBHEADER& header, XDWORD maximumbodysize, XDWORD& contentlength)
 {
   XVECTOR<XSTRING*>* lines = header.GetLines();
@@ -2136,6 +2189,15 @@ static bool DIOWEBSERVER_RequestFraming_Get(DIOWEBHEADER& header, XDWORD maximum
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER_CONNECTION::ReadRequest()
+* @brief      Read request
+* @ingroup    DATAIO
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER_CONNECTION::ReadRequest()
 {
   if(!diostream) return false;
@@ -3167,11 +3229,31 @@ bool DIOWEBSERVER::SetMaxPageConnections(XDWORD maxpageconnections)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBSERVER_TIMEOUTS* DIOWEBSERVER::GetTimeouts()
+* @brief      Get timeouts
+* @ingroup    DATAIO
+* 
+* @return     DIOWEBSERVER_TIMEOUTS* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_TIMEOUTS* DIOWEBSERVER::GetTimeouts()
 {
   return &timeouts;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER::SetTimeouts(DIOWEBSERVER_TIMEOUTS& timeouts)
+* @brief      Set timeouts
+* @ingroup    DATAIO
+* 
+* @param[out] timeouts : Timeouts value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::SetTimeouts(DIOWEBSERVER_TIMEOUTS& timeouts)
 {
   if(isactive) return false;
@@ -3194,12 +3276,32 @@ bool DIOWEBSERVER::SetTimeouts(DIOWEBSERVER_TIMEOUTS& timeouts)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         DIOWEBSERVER_LIMITS* DIOWEBSERVER::GetLimits()
+* @brief      Get limits
+* @ingroup    DATAIO
+* 
+* @return     DIOWEBSERVER_LIMITS* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 DIOWEBSERVER_LIMITS* DIOWEBSERVER::GetLimits()
 {
   return &limits;
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOWEBSERVER::SetLimits(DIOWEBSERVER_LIMITS& limits)
+* @brief      Set limits
+* @ingroup    DATAIO
+* 
+* @param[in]  limits : Limits value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOWEBSERVER::SetLimits(DIOWEBSERVER_LIMITS& limits)
 {
   if(isactive || !limits.maximumheadersize || !limits.maximumbodysize ||

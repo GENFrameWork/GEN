@@ -52,6 +52,15 @@
 
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void DIOStreamTLS_BufferErase(XBUFFER& buffer)
+* @brief      Dio stream tls buffer erase
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void DIOStreamTLS_BufferErase(XBUFFER& buffer)
 {
   volatile XBYTE* data = buffer.Get();
@@ -185,7 +194,10 @@ bool DIOSTREAMTLSRECORD::IsIni()
 * @fn         bool DIOSTREAMTLSRECORD::ClearKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 * @brief      Remove the traffic keys for one direction and return it to clear records
 * @ingroup    DATAIO
+* 
+* @param[in]  direction : Direction value.
 *
+* @return     bool : true if the operation is successful; otherwise false.
 * --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLSRECORD::ClearKeys(DIOSTREAMTLSKEYSCHEDULE_DIRECTION direction)
 {

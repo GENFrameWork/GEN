@@ -156,6 +156,17 @@ bool CIPHERTRUSTPROVIDERX509::Root_Add(XBUFFER& root)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERTRUSTPROVIDERX509::Root_Remove(XBUFFER& root)
+* @brief      Root remove
+* @ingroup    CIPHER
+* 
+* @param[in]  root : Root value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTPROVIDERX509::Root_Remove(XBUFFER& root)
 {
   if(root.IsEmpty()) return false;
@@ -174,6 +185,19 @@ bool CIPHERTRUSTPROVIDERX509::Root_Remove(XBUFFER& root)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERTRUSTPROVIDERX509::SetLimits(XDWORD maximumroots, XDWORD maximumcertificatesize, XDWORD maximumtotalsize)
+* @brief      Set limits
+* @ingroup    CIPHER
+* 
+* @param[in]  maximumroots : Maximumroots value.
+* @param[in]  maximumcertificatesize : Maximumcertificatesize value.
+* @param[in]  maximumtotalsize : Maximumtotalsize value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTPROVIDERX509::SetLimits(XDWORD maximumroots, XDWORD maximumcertificatesize, XDWORD maximumtotalsize)
 {
   if(!maximumroots || !maximumcertificatesize || !maximumtotalsize || !roots.IsEmpty()) return false;
@@ -185,6 +209,15 @@ bool CIPHERTRUSTPROVIDERX509::SetLimits(XDWORD maximumroots, XDWORD maximumcerti
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XDWORD CIPHERTRUSTPROVIDERX509::GetTotalSize()
+* @brief      Get total size
+* @ingroup    CIPHER
+* 
+* @return     XDWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 XDWORD CIPHERTRUSTPROVIDERX509::GetTotalSize()
 {
   return totalsize;
@@ -282,6 +315,19 @@ bool CIPHERTRUSTPROVIDERX509GEN::Load()
   return !GetRoots()->IsEmpty();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERTRUSTPROVIDERX509_LoadFile(CIPHERTRUSTPROVIDERX509* provider, const char* path, bool remove = false)
+* @brief      Load file
+* @ingroup    CIPHER
+* 
+* @param[in]  provider : Pointer to provider.
+* @param[in]  path : Pointer to path.
+* @param[in]  remove : Remove value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERTRUSTPROVIDERX509_LoadFile(CIPHERTRUSTPROVIDERX509* provider, const char* path, bool remove = false)
 {
   if(!provider || !path) return false;
@@ -308,6 +354,19 @@ static bool CIPHERTRUSTPROVIDERX509_LoadFile(CIPHERTRUSTPROVIDERX509* provider, 
 }
 
 #if defined(LINUX) || defined(ANDROID)
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERTRUSTPROVIDERX509_LoadDirectory(CIPHERTRUSTPROVIDERX509* provider, const char* directorypath, bool remove = false)
+* @brief      Load directory
+* @ingroup    CIPHER
+* 
+* @param[in]  provider : Pointer to provider.
+* @param[in]  directorypath : Pointer to directorypath.
+* @param[in]  remove : Remove value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERTRUSTPROVIDERX509_LoadDirectory(CIPHERTRUSTPROVIDERX509* provider, const char* directorypath,
                                                    bool remove = false)
 {
@@ -333,6 +392,18 @@ static bool CIPHERTRUSTPROVIDERX509_LoadDirectory(CIPHERTRUSTPROVIDERX509* provi
   return loaded;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERTRUSTPROVIDERX509_LoadDirectoryList(CIPHERTRUSTPROVIDERX509* provider, const char* paths)
+* @brief      Load directory list
+* @ingroup    CIPHER
+* 
+* @param[in]  provider : Pointer to provider.
+* @param[in]  paths : Pointer to paths.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERTRUSTPROVIDERX509_LoadDirectoryList(CIPHERTRUSTPROVIDERX509* provider, const char* paths)
 {
   if(!provider || !paths || !paths[0]) return false;
@@ -355,6 +426,15 @@ static bool CIPHERTRUSTPROVIDERX509_LoadDirectoryList(CIPHERTRUSTPROVIDERX509* p
 }
 #endif
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERTRUSTPROVIDERX509WINDOWS::Load()
+* @brief      Load
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTPROVIDERX509WINDOWS::Load()
 {
   Roots_Delete();
@@ -375,6 +455,15 @@ bool CIPHERTRUSTPROVIDERX509WINDOWS::Load()
 #endif
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERTRUSTPROVIDERX509LINUX::Load()
+* @brief      Load
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTPROVIDERX509LINUX::Load()
 {
   Roots_Delete();
@@ -400,6 +489,15 @@ bool CIPHERTRUSTPROVIDERX509LINUX::Load()
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERTRUSTPROVIDERX509ANDROID::Load()
+* @brief      Load
+* @ingroup    CIPHER
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERTRUSTPROVIDERX509ANDROID::Load()
 {
   Roots_Delete();

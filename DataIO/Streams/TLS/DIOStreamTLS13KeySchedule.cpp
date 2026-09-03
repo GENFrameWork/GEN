@@ -55,6 +55,15 @@
 
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void DIOStreamTLS_BufferErase(XBUFFER& buffer)
+* @brief      Dio stream tls buffer erase
+* @ingroup    DATAIO
+* 
+* @param[in]  buffer : Buffer value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void DIOStreamTLS_BufferErase(XBUFFER& buffer)
 {
   volatile XBYTE* data = buffer.Get();
@@ -540,6 +549,17 @@ bool DIOSTREAMTLS13KEYSCHEDULE::EarlyTrafficSecret_Calculate(XBUFFER& transcript
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
+* @brief      Handshake traffic secrets calculate
+* @ingroup    DATAIO
+* 
+* @param[in]  transcripthash : Transcripthash value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool DIOSTREAMTLS13KEYSCHEDULE::HandshakeTrafficSecrets_Calculate(XBUFFER& transcripthash)
 {
   if(!isini || !HKDF)

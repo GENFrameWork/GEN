@@ -25,17 +25,44 @@
 #include <stdio.h>
 #include "GEN_Control.h"
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCREDENTIALSLOADER::Certificates_Delete(XVECTOR<XBUFFER*>& certificatechain)
+* @brief      Certificates delete
+* @ingroup    CIPHER
+* 
+* @param[in]  certificatechain : Pointer to certificatechain.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCREDENTIALSLOADER::Certificates_Delete(XVECTOR<XBUFFER*>& certificatechain)
 {
   certificatechain.DeleteContents(); certificatechain.DeleteAll();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void CIPHERCREDENTIALSLOADER::PrivateKey_Delete(CIPHERKEY*& privatekey)
+* @brief      Private key delete
+* @ingroup    CIPHER
+* 
+* @param[in]  privatekey : Pointer to privatekey.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 void CIPHERCREDENTIALSLOADER::PrivateKey_Delete(CIPHERKEY*& privatekey)
 {
   if(privatekey) GEN_DELETE privatekey;
   privatekey=NULL;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static void CIPHERCREDENTIALSLOADER_StringWipe(XSTRING& string)
+* @brief      String wipe
+* @ingroup    CIPHER
+* 
+* @param[in]  string : String value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static void CIPHERCREDENTIALSLOADER_StringWipe(XSTRING& string)
 {
   if(string.Get())
@@ -46,6 +73,19 @@ static void CIPHERCREDENTIALSLOADER_StringWipe(XSTRING& string)
   string.Empty();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCREDENTIALSLOADER_LegacyHexLine(XBUFFER& filedata, XDWORD requested, XSTRING& line)
+* @brief      Legacy hex line
+* @ingroup    CIPHER
+* 
+* @param[in]  filedata : Filedata value.
+* @param[in]  requested : Requested value.
+* @param[in]  line : Line value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCREDENTIALSLOADER_LegacyHexLine(XBUFFER& filedata, XDWORD requested, XSTRING& line)
 {
   line.Empty();
@@ -89,6 +129,19 @@ static bool CIPHERCREDENTIALSLOADER_LegacyHexLine(XBUFFER& filedata, XDWORD requ
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCREDENTIALSLOADER_LegacyPrivateKey(XBUFFER& filedata, CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
+* @brief      Legacy private key
+* @ingroup    CIPHER
+* 
+* @param[in]  filedata : Filedata value.
+* @param[in]  expectedpublickeytype : Expectedpublickeytype value.
+* @param[in]  privatekey : Pointer to privatekey.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCREDENTIALSLOADER_LegacyPrivateKey(XBUFFER& filedata, CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
 {
   XSTRING first,second,third,extra;
@@ -154,6 +207,20 @@ static bool CIPHERCREDENTIALSLOADER_LegacyPrivateKey(XBUFFER& filedata, CIPHERKE
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static int CIPHERCREDENTIALSLOADER_Find(XBYTE* data, XDWORD size, const char* marker, XDWORD from)
+* @brief      Find
+* @ingroup    CIPHER
+* 
+* @param[in]  data : Pointer to data.
+* @param[in]  size : Size value.
+* @param[in]  marker : Pointer to marker.
+* @param[in]  from : From value.
+* 
+* @return     int : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static int CIPHERCREDENTIALSLOADER_Find(XBYTE* data, XDWORD size, const char* marker, XDWORD from)
 {
   XDWORD markersize=(XDWORD)strlen(marker);
@@ -162,6 +229,19 @@ static int CIPHERCREDENTIALSLOADER_Find(XBYTE* data, XDWORD size, const char* ma
   return -1;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCREDENTIALSLOADER::PEMBlocks_Decode(XBUFFER& filedata, const char* label, XVECTOR<XBUFFER*>& blocks)
+* @brief      Pem blocks decode
+* @ingroup    CIPHER
+* 
+* @param[in]  filedata : Filedata value.
+* @param[in]  label : Pointer to label.
+* @param[in]  blocks : Pointer to blocks.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCREDENTIALSLOADER::PEMBlocks_Decode(XBUFFER& filedata, const char* label, XVECTOR<XBUFFER*>& blocks)
 {
   blocks.DeleteContents(); blocks.DeleteAll();
@@ -193,6 +273,18 @@ bool CIPHERCREDENTIALSLOADER::PEMBlocks_Decode(XBUFFER& filedata, const char* la
   return !blocks.IsEmpty();
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCREDENTIALSLOADER::Certificates_Load(XBUFFER& filedata, XVECTOR<XBUFFER*>& certificatechain)
+* @brief      Certificates load
+* @ingroup    CIPHER
+* 
+* @param[in]  filedata : Filedata value.
+* @param[in]  certificatechain : Pointer to certificatechain.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCREDENTIALSLOADER::Certificates_Load(XBUFFER& filedata, XVECTOR<XBUFFER*>& certificatechain)
 {
   Certificates_Delete(certificatechain);
@@ -248,6 +340,19 @@ bool CIPHERCREDENTIALSLOADER::Certificates_Load(XBUFFER& filedata, XVECTOR<XBUFF
   Certificates_Delete(certificatechain); return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
+* @brief      Private key der decode
+* @ingroup    CIPHER
+* 
+* @param[in]  DER : DER value.
+* @param[in]  expectedpublickeytype : Expectedpublickeytype value.
+* @param[in]  privatekey : Pointer to privatekey.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
 {
   PrivateKey_Delete(privatekey);
@@ -320,6 +425,18 @@ bool CIPHERCREDENTIALSLOADER::PrivateKeyDER_Decode(XBUFFER& DER, CIPHERKEYTYPE e
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         static bool CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(CIPHERKEY* privatekey,CIPHERKEY* publickey)
+* @brief      Private key matches public
+* @ingroup    CIPHER
+* 
+* @param[in]  privatekey : Pointer to privatekey.
+* @param[in]  publickey : Pointer to publickey.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 static bool CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(CIPHERKEY* privatekey,CIPHERKEY* publickey)
 {
   if(!privatekey || !publickey) return false;
@@ -380,6 +497,20 @@ static bool CIPHERCREDENTIALSLOADER_PrivateKeyMatchesPublic(CIPHERKEY* privateke
   return false;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCREDENTIALSLOADER::PrivateKey_Load(XBUFFER& filedata, XCHAR* password, CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
+* @brief      Private key load
+* @ingroup    CIPHER
+* 
+* @param[in]  filedata : Filedata value.
+* @param[in]  password : Pointer to password.
+* @param[in]  expectedpublickeytype : Expectedpublickeytype value.
+* @param[in]  privatekey : Pointer to privatekey.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCREDENTIALSLOADER::PrivateKey_Load(XBUFFER& filedata, XCHAR* password,
                                                CIPHERKEYTYPE expectedpublickeytype, CIPHERKEY*& privatekey)
 {
@@ -422,6 +553,21 @@ bool CIPHERCREDENTIALSLOADER::PrivateKey_Load(XBUFFER& filedata, XCHAR* password
   return status;
 }
 
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool CIPHERCREDENTIALSLOADER::Credentials_Load(XBUFFER& certificatedata, XBUFFER& privatekeydata, XCHAR* password, XVECTOR<XBUFFER*>& certificatechain, CIPHERKEY*& privatekey)
+* @brief      Credentials load
+* @ingroup    CIPHER
+* 
+* @param[in]  certificatedata : Certificatedata value.
+* @param[in]  privatekeydata : Privatekeydata value.
+* @param[in]  password : Pointer to password.
+* @param[in]  certificatechain : Pointer to certificatechain.
+* @param[in]  privatekey : Pointer to privatekey.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
 bool CIPHERCREDENTIALSLOADER::Credentials_Load(XBUFFER& certificatedata, XBUFFER& privatekeydata, XCHAR* password,
                                                 XVECTOR<XBUFFER*>& certificatechain, CIPHERKEY*& privatekey)
 {

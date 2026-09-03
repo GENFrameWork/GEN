@@ -66,10 +66,11 @@ jmethodID ANDROIDJNI::FindClassMethod;
 /**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         static void JavaEnvDestructor(void*)
-* @brief      oid JavaEnvDestructor
+* @brief      Thread-local key destructor: detaches the calling thread's JNIEnv when the thread ends
 * @ingroup    PLATFORM_ANDROID
-* 
-* 
+*
+* @param[in]  (unnamed) : Unused, required by the pthread_key_create() destructor signature.
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 static void JavaEnvDestructor(void*)
 {
