@@ -537,7 +537,11 @@ DIOSTREAMTLSCONFIG* APPFLOWWEBSERVER::Ini_BuildTLSConfig(APPFLOWCFG* cfg)
   if(!tlsconfig) return NULL;
 
   tlsconfig->SetMode(DIOSTREAMMODE_SERVER);
-  tlsconfig->CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+
+  // Register every RFC 8446 AEAD suite (AES-128-GCM, ChaCha20-Poly1305, AES-256-GCM) rather than a single one,
+  // so interoperability is not needlessly limited to peers that happen to prefer the first suite offered.
+  tlsconfig->CipherSuites_AddRecommendedProfile();
+
   tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519MLKEM768);
   tlsconfig->SupportedGroup_Add(DIOSTREAMTLS_MSG_CURVEID_X25519);
 

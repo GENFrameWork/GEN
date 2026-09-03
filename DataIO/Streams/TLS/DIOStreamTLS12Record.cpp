@@ -612,6 +612,17 @@ bool DIOSTREAMTLS12RECORD::Unprotect(XBUFFER& record, DIOSTREAMTLS_CONTENTTYPE& 
   bool   isAESGCM = (fixedIV[direction].GetSize() == DIOSTREAMTLS12KEYSCHEDULE_AESGCM_FIXEDIVSIZE);
   XDWORD explicitnoncesize = isAESGCM?DIOSTREAMTLS12RECORD_EXPLICITNONCESIZE:DIOSTREAMTLS12RECORD_CHACHA20_EXPLICITNONCESIZE;
 
+  // RFC 8446 5.5 / RFC 5116: past this many records under the same AES-GCM key, the probability of a forgery
+  // (or, for a repeated nonce, a confidentiality break) is no longer negligible. TLS 1.2 as implemented here
+  // has no KeyUpdate and renegotiation is rejected (see ApplicationData_Process), so the only safe response
+  // once the peer keeps sending under the same key past this threshold is to stop trusting it and close the
+  // connection - mirrored from the equivalent guard already enforced when writing in Protect_OneRecord().
+  if(isAESGCM && sequence[direction] >= DIOSTREAMTLS_AESGCM_MAXKEYUSAGERECORDS)
+    {
+      lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
+      return false;
+    }
+
   if((XDWORD)length < (explicitnoncesize + tagsize))
     {
       lastalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_BAD_RECORD_MAC;

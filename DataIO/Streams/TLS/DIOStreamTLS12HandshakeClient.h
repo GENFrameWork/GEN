@@ -94,7 +94,7 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     
     
     
-    bool                                    Ini                                              (bool allowunauthenticatedserver, bool checkdowngradesentinel = false);
+    bool                                    Ini                                              (bool checkdowngradesentinel = false);
     bool                                    Capabilities_Set                                 (DIOSTREAMTLSCONFIG* config);
     void                                    End                                              ();
     bool                                    IsIni                                            ();
@@ -103,7 +103,6 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
 
     DIOSTREAMTLS12HANDSHAKECLIENT_STATE     GetState                                         ();
     bool                                    IsHandshakeCompleted                             ();
-    bool                                    IsUnauthenticatedServerAllowed                   ();
     bool                                    IsServerAuthenticated                            ();
 
     bool                                    Authentication_Set                               (XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime = NULL);
@@ -164,7 +163,6 @@ class DIOSTREAMTLS12HANDSHAKECLIENT
     DIOSTREAMTLSCONFIG*                     config;
     DIOSTREAMTLS12HANDSHAKECLIENT_STATE     state;
     bool                                    isini;
-    bool                                    allowunauthenticatedserver;
     bool                                    authenticationconfigured;
     bool                                    serverauthenticated;
     bool                                    checkdowngradesentinel;

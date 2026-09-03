@@ -442,6 +442,8 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
 
     int                                         GetPort                                 ();
     int                                         GetTimeoutServerPage                    ();
+    XDWORD                                      GetMaxPageConnections                   ();
+    bool                                        SetMaxPageConnections                   (XDWORD maxpageconnections);
     DIOWEBSERVER_TIMEOUTS*                      GetTimeouts                             ();
     bool                                        SetTimeouts                             (DIOWEBSERVER_TIMEOUTS& timeouts);
     DIOWEBSERVER_LIMITS*                        GetLimits                               ();
@@ -500,6 +502,7 @@ class DIOWEBSERVER :  public XOBSERVER, public XSUBJECT
     int                                         timeoutserverpage;
     DIOWEBSERVER_TIMEOUTS                       timeouts;
     DIOWEBSERVER_LIMITS                         limits;
+    XDWORD                                      maxpageconnections;
     XSTRING                                     addrlocal;
     XMUTEX*                                     xmutexconnections;
     XVECTOR<DIOWEBSERVER_CONNECTION*>           connections;

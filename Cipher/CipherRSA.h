@@ -49,6 +49,12 @@ enum CIPHERRSAPKCS1VERSION
 #define CIPHERRSA_SINGDATA        1
 #define CIPHERRSA_CIPHERDATA      2
 
+// Minimum RSA modulus size accepted by GenerateKeys(). 2048 bits matches the minimum this framework already
+// enforces on *received* certificates (CIPHERCERTIFICATEX509VALIDATOR's default minimumRSAKeyBits), so a key
+// generated here can never be weaker than what the validator itself would accept from a peer. Smaller sizes
+// (e.g. 512/1024 bits) are practically factorable today and must never be produced for real use.
+#define CIPHERRSA_MINKEYBITS      2048
+
 //#define CIPHERRSA_RSANOCRT
 
 

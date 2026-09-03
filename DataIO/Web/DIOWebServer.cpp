@@ -2735,6 +2735,17 @@ void DIOWEBSERVER_CONNECTION::ThreadRunFunction(void* param)
 
       if(!openstatus)
         {
+          // The TCP accept() already succeeded by this point (Open() failed during/after the TLS handshake),
+          // so the client IP is still available even though the connection never became usable. Logging this
+          // is the only visibility the server has into port scans, malformed handshakes and failed handshake
+          // attempts against the TLS listener; the success path below already logs symmetrically.
+          if(wsconn->diostream)
+            {
+              XSTRING IPstring;
+              wsconn->diostream->GetClientIP()->GetXString(IPstring);
+              GEN_XLOG.AddEntry(XLOGLEVEL_WARNING, DIOWEBSERVER_LOGSECTIONID_VERBOSE, false, __L("[%08X] Connection handshake failed [%s] error=%d"), wsconn, IPstring.Get(), (int)wsconn->diostream->PeekLastDIOError());
+            }
+
           wsconn->isactive = false;
           if(wsconn->threadconnection) wsconn->threadconnection->Run(false);
           return;
@@ -3115,6 +3126,46 @@ int DIOWEBSERVER::GetTimeoutServerPage()
 {
   return timeoutserverpage;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD DIOWEBSERVER::GetMaxPageConnections()
+* @brief      Get the maximum number of connections that may be simultaneously waiting for a page (handshake /
+*             request in progress). Also acts as an anti-slowloris limit.
+* @ingroup    DATAIO
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD DIOWEBSERVER::GetMaxPageConnections()
+{
+  return maxpageconnections;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOWEBSERVER::SetMaxPageConnections(XDWORD maxpageconnections)
+* @brief      Set the maximum number of connections that may be simultaneously waiting for a page, so a deployment
+*             can size the anti-slowloris limit to its own capacity instead of the DIOWEBSERVER_MAXPAGECONNECTIONS
+*             compile-time default.
+* @ingroup    DATAIO
+*
+* @param[in]  maxpageconnections : new limit to apply. Must be greater than zero.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOWEBSERVER::SetMaxPageConnections(XDWORD maxpageconnections)
+{
+  if(!maxpageconnections) return false;
+
+  this->maxpageconnections = maxpageconnections;
+
+  return true;
+}
+
 
 DIOWEBSERVER_TIMEOUTS* DIOWEBSERVER::GetTimeouts()
 {
@@ -4189,7 +4240,7 @@ int DIOWEBSERVER::Connections_GetNConnectionsSendingPage()
 bool DIOWEBSERVER::Connections_CreateNew()
 {
   XDWORD nwaiting = Connections_GetNWaiting();
-  if(nwaiting >= DIOWEBSERVER_MAXPAGECONNECTIONS)  return false;
+  if(nwaiting >= maxpageconnections)  return false;
 
   DIOWEBSERVER_CONNECTION* connection = GEN_NEW DIOWEBSERVER_CONNECTION();
   if(!connection) return false;
@@ -4484,6 +4535,7 @@ void DIOWEBSERVER::Clean()
   diostreamcfg                      = NULL;
   port                              = DIOWEBSERVER_DEFAULTPORT;
   timeoutserverpage                 = 0;
+  maxpageconnections                = DIOWEBSERVER_MAXPAGECONNECTIONS;
   xmutexconnections                 = NULL;
 
   isactive                          = false;

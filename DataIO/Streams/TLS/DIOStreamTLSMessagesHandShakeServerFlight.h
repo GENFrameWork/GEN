@@ -40,6 +40,9 @@
 
 #define DIOSTREAMTLS_MSG_FINISHED_MAXSIZE                                   64
 
+// Size in bytes of a TLS handshake 24-bit ("uint24") length field (e.g. Certificate.certificate_list entry length).
+#define DIOSTREAMTLS_MSG_LENGTH24_SIZE                                      (sizeof(XBYTE) * 3)
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/

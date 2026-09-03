@@ -1537,7 +1537,7 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Create(bool requestpeer, XBUFFER& records)
 
   if(!isini || iserror || closenotifysent || closenotifyreceived ||
      (epoch[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] != DIOSTREAMTLS13SESSION_EPOCH_APPLICATION) ||
-     (keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES) ||
+     (keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLS13SESSION_MAXKEYUPDATES) ||
      (requestpeer && keyupdaterequestpending))
     {
       return false;
@@ -1600,7 +1600,7 @@ bool DIOSTREAMTLS13SESSION::PostHandshakeOutput_Extract(XBUFFER& records)
     {
       XBUFFER keyupdaterecords;
 
-      if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES)
+      if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] >= DIOSTREAMTLS13SESSION_MAXKEYUPDATES)
         {
           lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_INTERNAL_ERROR;
           iserror                    = true;
@@ -1662,7 +1662,7 @@ bool DIOSTREAMTLS13SESSION::KeyUpdate_Process(DIOSTREAMTLS_MSG_HANDSHAKE& handsh
       return false;
     }
 
-  if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] >= DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES)
+  if(keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] >= DIOSTREAMTLS13SESSION_MAXKEYUPDATES)
     {
       lastrecordalertdescription = DIOSTREAMTLS_ALERT_DESCRIPTION_UNEXPECTED_MESSAGE;
       return false;

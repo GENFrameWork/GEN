@@ -263,6 +263,7 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XVECTOR<XWORD>*         GetCipherSuites                   ();
     bool                    CipherSuite_Add                   (XWORD ciphersuite);
     bool                    CipherSuites_Delete               ();
+    bool                    CipherSuites_AddRecommendedProfile();
 
     XVECTOR<XWORD>*         GetTLS12CipherSuites              ();
     bool                    TLS12CipherSuite_Add              (XWORD ciphersuite);
@@ -325,9 +326,6 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     bool                    ServerCredentials_Select           (XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey);
     bool                    ServerCredentials_Select           (XCHAR* servername, XVECTOR<XBUFFER*>*& certificatechain, CIPHERKEY*& privatekey, XBUFFER*& OCSPstapledresponse);
     bool                    ServerCredentials_Delete           ();
-
-    bool                    IsAllowUnauthenticatedServer      ();
-    void                    SetAllowUnauthenticatedServer     (bool allowunauthenticatedserver);
 
     DIOSTREAMTLS_REVOCATIONPOLICY GetRevocationPolicy         ();
     bool                    SetRevocationPolicy               (DIOSTREAMTLS_REVOCATIONPOLICY policy);
@@ -419,7 +417,6 @@ class DIOSTREAMTLSCONFIG  : public DIOSTREAMTCPIPCONFIG
     XBUFFER                 localOCSPstapledresponse;
     XVECTOR<DIOSTREAMTLSSERVERCREDENTIALS*> servercredentials;
     DIOSTREAMTLS_LOCALCREDENTIALSERROR localcredentialserror;
-    bool                    allowunauthenticatedserver;
     DIOSTREAMTLS_REVOCATIONPOLICY revocationpolicy;
 
     bool                    aiafetchactive;

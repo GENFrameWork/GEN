@@ -96,11 +96,10 @@ DIOSTREAMTLS12HANDSHAKECLIENT::~DIOSTREAMTLS12HANDSHAKECLIENT()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool allowunauthenticatedserver)
+* @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool checkdowngradesentinel)
 * @brief      Initialize the client handshake
 * @ingroup    DATAIO
 *
-* @param[in]  allowunauthenticatedserver : Explicit test-only permission to skip certificate/signature authentication.
 * @param[in]  checkdowngradesentinel : Reject the RFC 8446 4.1.3 downgrade sentinel in ServerHello.random. Pass
 *             true only for a dual-version TLS 1.3-to-1.2 fallback attempt; leave false for a deliberately
 *             configured TLS-1.2-only connection (see the declaration in the header for why).
@@ -108,11 +107,10 @@ DIOSTREAMTLS12HANDSHAKECLIENT::~DIOSTREAMTLS12HANDSHAKECLIENT()
 * @return     bool : true if the operation is successful; otherwise false.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool allowunauthenticatedserver, bool checkdowngradesentinel)
+bool DIOSTREAMTLS12HANDSHAKECLIENT::Ini(bool checkdowngradesentinel)
 {
   End();
 
-  this->allowunauthenticatedserver = allowunauthenticatedserver;
   this->checkdowngradesentinel     = checkdowngradesentinel;
   state                            = DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE;
   isini                            = true;
@@ -372,21 +370,6 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::IsHandshakeCompleted()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
-* @brief      Check whether the explicit test-only unauthenticated mode is enabled
-* @ingroup    DATAIO
-*
-* @return     bool : true if the condition is met; otherwise false.
-*
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLS12HANDSHAKECLIENT::IsUnauthenticatedServerAllowed()
-{
-  return allowunauthenticatedserver;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-*
 * @fn         bool DIOSTREAMTLS12HANDSHAKECLIENT::IsServerAuthenticated()
 * @brief      Check whether X.509 and the ServerKeyExchange signature authenticated the server
 * @ingroup    DATAIO
@@ -416,7 +399,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::IsServerAuthenticated()
 bool DIOSTREAMTLS12HANDSHAKECLIENT::Authentication_Set(XCHAR* servername, XVECTOR<XBUFFER*>* trustedroots, XDATETIME* datetime)
 {
   if(!isini || (state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE) ||
-     allowunauthenticatedserver || !servername || !servername[0] ||
+     !servername || !servername[0] ||
      !trustedroots || trustedroots->IsEmpty())
     {
       return SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
@@ -585,8 +568,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ClientHello_Create(XCHAR* servername, XBUFFE
       return SetError();
     }
 
-  if(!allowunauthenticatedserver &&
-     (!authenticationconfigured || expectedservername.IsEmpty()))
+  if(!authenticationconfigured || expectedservername.IsEmpty())
     {
       SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
       return SetError();
@@ -1223,86 +1205,83 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::Certificate_Process(XBUFFER& message)
       return SetError();
     }
 
-  if(!allowunauthenticatedserver)
+  if(!authenticationconfigured)
     {
-      if(!authenticationconfigured)
+      SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
+      return SetError();
+    }
+
+  for(XDWORD c=0; c<certificate.GetBody()->CertificateList_GetAll()->GetSize(); c++)
+    {
+      XBUFFER* der = certificate.GetBody()->CertificateList_GetAll()->Get(c);
+      if(!der || !certificatechain.Add(der))
         {
-          SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CONFIGURATION);
-          return SetError();
-        }
-
-      for(XDWORD c=0; c<certificate.GetBody()->CertificateList_GetAll()->GetSize(); c++)
-        {
-          XBUFFER* der = certificate.GetBody()->CertificateList_GetAll()->Get(c);
-          if(!der || !certificatechain.Add(der))
-            {
-              SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
-              return SetError();
-            }
-        }
-
-      if(!certificatevalidator.ValidateAllPaths(&certificatechain, &trustedroots, expectedservername.Get(),
-                                                 hasvalidationdatetime?&validationdatetime:NULL) &&
-         !CertificateChain_CompleteViaAIA(certificatechain))
-        {
-          certificatevalidationerror = certificatevalidator.GetError();
-
-
           SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
           return SetError();
         }
+    }
 
-      certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
+  if(!certificatevalidator.ValidateAllPaths(&certificatechain, &trustedroots, expectedservername.Get(),
+                                             hasvalidationdatetime?&validationdatetime:NULL) &&
+     !CertificateChain_CompleteViaAIA(certificatechain))
+    {
+      certificatevalidationerror = certificatevalidator.GetError();
 
-      const bool revocationenabled = !config || config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_OFF;
-      if(revocationenabled && revocationlists && !revocationlists->IsEmpty())
+
+      SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
+      return SetError();
+    }
+
+  certificatevalidationerror = CIPHERCERTIFICATEX509VALIDATOR_ERROR_NONE;
+
+  const bool revocationenabled = !config || config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_OFF;
+  if(revocationenabled && revocationlists && !revocationlists->IsEmpty())
+    {
+      XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
+      if(!chain || chain->GetSize()<2) return SetError();
+      for(XDWORD certindex=0; certindex+1<chain->GetSize(); certindex++)
         {
-          XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
-          if(!chain || chain->GetSize()<2) return SetError();
-          for(XDWORD certindex=0; certindex+1<chain->GetSize(); certindex++)
+          bool valid=false;
+          for(XDWORD c=0;c<revocationlists->GetSize();c++)
             {
-              bool valid=false;
-              for(XDWORD c=0;c<revocationlists->GetSize();c++)
-                {
-                  XBUFFER* CRL=revocationlists->Get(c);
-                  if(!CRL || (config && CRL->GetSize() > config->GetMemoryPolicy()->GetMaximumCRLSize())) continue;
-                  CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*chain->Get(certindex)),(*chain->Get(certindex+1)));
-                  if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)
-                    { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
-                  if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) valid=true;
-                }
-              if(!valid && (!config || config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL))
-                { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
+              XBUFFER* CRL=revocationlists->Get(c);
+              if(!CRL || (config && CRL->GetSize() > config->GetMemoryPolicy()->GetMaximumCRLSize())) continue;
+              CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION::ValidateCRL((*CRL),(*chain->Get(certindex)),(*chain->Get(certindex+1)));
+              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)
+                { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
+              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD) valid=true;
             }
+          if(!valid && (!config || config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL))
+            { certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN; SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
         }
+    }
 
 
-      if(revocationenabled && ocspdirectfetcher)
+  if(revocationenabled && ocspdirectfetcher)
+    {
+      XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
+      if(!chain || chain->GetSize()<2) return SetError();
+      for(XDWORD certindex=0; certindex+1<chain->GetSize(); certindex++)
         {
-          XVECTOR<CIPHERCERTIFICATEX509*>* chain=certificatevalidator.GetCertificateChain();
-          if(!chain || chain->GetSize()<2) return SetError();
-          for(XDWORD certindex=0; certindex+1<chain->GetSize(); certindex++)
-            {
-              XBUFFER response;
-              CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
-              if(chain->Get(certindex)->HasOCSPURL() &&
-                 ocspdirectfetcher((*chain->Get(certindex)->GetOCSPURL()),(*chain->Get(certindex)),(*chain->Get(certindex+1)),response,ocspdirectcontext) &&
-                 (!config || response.GetSize() <= config->GetMemoryPolicy()->GetMaximumOCSPResponseSize()))
-                result=CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(certindex)),(*chain->Get(certindex+1)));
-              if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED ||
-                 (!config || config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL) &&
-                 result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
-                { certificatevalidationerror=(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)?
-                    CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED:CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
-                  SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
-            }
+          XBUFFER response;
+          CIPHERCERTIFICATEX509REVOCATION_RESULT result=CIPHERCERTIFICATEX509REVOCATION_RESULT_INVALID;
+          if(chain->Get(certindex)->HasOCSPURL() &&
+             ocspdirectfetcher((*chain->Get(certindex)->GetOCSPURL()),(*chain->Get(certindex)),(*chain->Get(certindex+1)),response,ocspdirectcontext) &&
+             (!config || response.GetSize() <= config->GetMemoryPolicy()->GetMaximumOCSPResponseSize()))
+            result=CIPHERCERTIFICATEX509REVOCATION::ValidateOCSP(response,(*chain->Get(certindex)),(*chain->Get(certindex+1)));
+          if(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED ||
+             (!config || config->GetRevocationPolicy()!=DIOSTREAMTLS_REVOCATIONPOLICY_SOFT_FAIL) &&
+             result!=CIPHERCERTIFICATEX509REVOCATION_RESULT_GOOD)
+            { certificatevalidationerror=(result==CIPHERCERTIFICATEX509REVOCATION_RESULT_REVOKED)?
+                CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOKED:CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
+              SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE); return SetError(); }
         }
-      if(config && config->GetRevocationPolicy()==DIOSTREAMTLS_REVOCATIONPOLICY_MUST_STAPLE && !ocspdirectfetcher)
-        {
-          certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
-          SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
-          return SetError();
-        }
+    }
+  if(config && config->GetRevocationPolicy()==DIOSTREAMTLS_REVOCATIONPOLICY_MUST_STAPLE && !ocspdirectfetcher)
+    {
+      certificatevalidationerror=CIPHERCERTIFICATEX509VALIDATOR_ERROR_REVOCATIONUNKNOWN;
+      SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_CERTIFICATE);
+      return SetError();
     }
 
   DIOSTREAMTLS12_MSG_CERTIFICATE* decodedcertificate = GEN_NEW DIOSTREAMTLS12_MSG_CERTIFICATE();
@@ -1370,31 +1349,28 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerKeyExchange_Process(XBUFFER& message)
       return SetError();
     }
 
-  if(!allowunauthenticatedserver)
+  CIPHERCERTIFICATEX509* leaf = certificatevalidator.GetLeafCertificate();
+
+  if(!authenticationconfigured || !leaf || !leaf->GetPublicCipherKey() ||
+     !DIOSTREAMTLSSIGNATURE::IsSupported(ske.GetBody()->GetSignatureAlgorithm(), leaf))
     {
-      CIPHERCERTIFICATEX509* leaf = certificatevalidator.GetLeafCertificate();
+      SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
+      return SetError();
+    }
 
-      if(!authenticationconfigured || !leaf || !leaf->GetPublicCipherKey() ||
-         !DIOSTREAMTLSSIGNATURE::IsSupported(ske.GetBody()->GetSignatureAlgorithm(), leaf))
-        {
-          SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
-          return SetError();
-        }
+  // RFC 5246 section 7.4.3: signed_params = client_random + server_random + ServerECDHParams.
+  if(!signedcontent.Add(clientrandom) || !signedcontent.Add(serverrandom) || !signedcontent.Add(params))
+    {
+      SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
+      return SetError();
+    }
 
-      // RFC 5246 section 7.4.3: signed_params = client_random + server_random + ServerECDHParams.
-      if(!signedcontent.Add(clientrandom) || !signedcontent.Add(serverrandom) || !signedcontent.Add(params))
-        {
-          SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
-          return SetError();
-        }
+  if(!DIOSTREAMTLSSIGNATURE::Verify(ske.GetBody()->GetSignatureAlgorithm(), leaf->GetPublicCipherKey(),
+                                    signedcontent, *ske.GetBody()->GetSignature()))
+    {
 
-      if(!DIOSTREAMTLSSIGNATURE::Verify(ske.GetBody()->GetSignatureAlgorithm(), leaf->GetPublicCipherKey(),
-                                        signedcontent, *ske.GetBody()->GetSignature()))
-        {
-
-          SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
-          return SetError();
-        }
+      SetAuthenticationError(DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_SERVERKEYEXCHANGE);
+      return SetError();
     }
 
   servergroup = ske.GetBody()->GetNamedCurve();
@@ -1427,11 +1403,8 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerKeyExchange_Process(XBUFFER& message)
   if(serverkeyexchange) GEN_DELETE serverkeyexchange;
   serverkeyexchange = decoded;
 
-  if(!allowunauthenticatedserver)
-    {
-      serverauthenticated = true;
-      authenticationerror = DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
-    }
+  serverauthenticated = true;
+  authenticationerror = DIOSTREAMTLS12HANDSHAKECLIENT_AUTHENTICATIONERROR_NONE;
 
   state = DIOSTREAMTLS12HANDSHAKECLIENT_STATE_WAIT_SERVERHELLODONE;
 
@@ -1457,7 +1430,7 @@ bool DIOSTREAMTLS12HANDSHAKECLIENT::ServerHelloDone_Process(XBUFFER& message)
   XBUFFER                                                       workbuffer;
 
   if((state != DIOSTREAMTLS12HANDSHAKECLIENT_STATE_WAIT_SERVERHELLODONE) ||
-     (!allowunauthenticatedserver && !serverauthenticated))
+     !serverauthenticated)
     {
       return SetError();
     }
@@ -1735,7 +1708,6 @@ void DIOSTREAMTLS12HANDSHAKECLIENT::Clean()
   config                           = NULL;
   state                       = DIOSTREAMTLS12HANDSHAKECLIENT_STATE_NONE;
   isini                       = false;
-  allowunauthenticatedserver  = false;
   checkdowngradesentinel      = false;
   algorithmrejected           = false;
   authenticationconfigured    = false;

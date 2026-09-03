@@ -77,7 +77,7 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
                                             DIOSTREAMTLS13HANDSHAKECLIENT                      ();
     virtual                                ~DIOSTREAMTLS13HANDSHAKECLIENT                      ();
 
-    bool                                    Ini                                              (DIOSTREAMTLS13SESSION* session, bool allowunauthenticatedserver);
+    bool                                    Ini                                              (DIOSTREAMTLS13SESSION* session);
     void                                    End                                              ();
     bool                                    IsIni                                            ();
 
@@ -85,7 +85,6 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     bool                                    IsServerFinishedVerified                         ();
     bool                                    IsHandshakeCompleted                             ();
     bool                                    IsCertificateRequested                           ();
-    bool                                    IsUnauthenticatedServerAllowed                   ();
     bool                                    IsServerAuthenticated                            ();
 
     bool                                    Capabilities_Set                                 (DIOSTREAMTLSCONFIG* config);
@@ -155,7 +154,6 @@ class DIOSTREAMTLS13HANDSHAKECLIENT
     DIOSTREAMTLSCONFIG*                       config;
     DIOSTREAMTLS13HANDSHAKECLIENT_STATE       state;
     bool                                    isini;
-    bool                                    allowunauthenticatedserver;
     bool                                    certificaterequested;
     bool                                    clientOCSPstaplingrequested;
     bool                                    authenticationconfigured;

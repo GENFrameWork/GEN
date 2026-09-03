@@ -884,6 +884,31 @@ bool DIOSTREAMTLSCONFIG::CipherSuites_Delete()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool DIOSTREAMTLSCONFIG::CipherSuites_AddRecommendedProfile()
+* @brief      Register the recommended TLS 1.3 cipher suite profile: every AEAD suite mandated/recommended by
+*             RFC 8446 (AES-128-GCM, ChaCha20-Poly1305, AES-256-GCM), in preference order. Registering all three,
+*             rather than a single suite, avoids limiting interoperability with peers that only implement a subset
+*             (e.g. hardware without AES-NI prefers ChaCha20-Poly1305) while keeping every option equally strong.
+*             Suites already present (added earlier via CipherSuite_Add()) are silently skipped.
+* @ingroup    DATAIO
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool DIOSTREAMTLSCONFIG::CipherSuites_AddRecommendedProfile()
+{
+  if(IsFrozen()) return false;
+
+  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
+  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
+  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+
+  return true;
+}
+
+
 XVECTOR<XWORD>* DIOSTREAMTLSCONFIG::GetTLS12CipherSuites()
 {
   return &TLS12ciphersuites;
@@ -2156,36 +2181,6 @@ bool DIOSTREAMTLSCONFIG::ServerCredentials_Delete()
 }
 
 
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool DIOSTREAMTLSCONFIG::IsAllowUnauthenticatedServer()
-* @brief      Check whether the explicit test-only unauthenticated mode is enabled
-* @ingroup    DATAIO
-* 
-* @return     bool : true if the condition is met; otherwise false.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool DIOSTREAMTLSCONFIG::IsAllowUnauthenticatedServer()
-{
-  return allowunauthenticatedserver;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         void DIOSTREAMTLSCONFIG::SetAllowUnauthenticatedServer(bool allowunauthenticatedserver)
-* @brief      Set the explicit test-only unauthenticated mode
-* @ingroup    DATAIO
-* 
-* @param[in]  allowunauthenticatedserver : Test-only permission value.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-void DIOSTREAMTLSCONFIG::SetAllowUnauthenticatedServer(bool allowunauthenticatedserver)
-{
-  if(IsFrozen()) return;
-  this->allowunauthenticatedserver = allowunauthenticatedserver;
-}
-
 DIOSTREAMTLS_REVOCATIONPOLICY DIOSTREAMTLSCONFIG::GetRevocationPolicy()
 {
   return revocationpolicy;
@@ -3343,9 +3338,7 @@ void DIOSTREAMTLSCONFIG::Clean()
   maxversion = DIOSTREAMTLS_MSG_VERSION_TLS_1_3;
 
   CipherSuites_Delete();
-  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_128_GCM_SHA256);
-  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_CHACHA20_POLY1305_SHA256);
-  CipherSuite_Add(DIOSTREAMTLS_MSG_CIPHER_AES_256_GCM_SHA384);
+  CipherSuites_AddRecommendedProfile();
 
   TLS12CipherSuites_Delete();
   TLS12CipherSuite_Add(DIOSTREAMTLS12_CIPHER_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
@@ -3410,7 +3403,6 @@ void DIOSTREAMTLSCONFIG::Clean()
   LocalCredentials_Delete();
   ServerCredentials_Delete();
   localcredentialserror       = DIOSTREAMTLS_LOCALCREDENTIALSERROR_NONE;
-  allowunauthenticatedserver  = false;
   revocationpolicy            = DIOSTREAMTLS_REVOCATIONPOLICY_HARD_FAIL;
 
   aiafetchactive    = true;

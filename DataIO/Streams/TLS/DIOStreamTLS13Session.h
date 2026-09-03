@@ -57,7 +57,11 @@
 
 #define DIOSTREAMTLS13SESSION_MAXHANDSHAKESIZE                    DIOSTREAMTLS_MSG_MAXHANDSHAKESIZE
 #define DIOSTREAMTLS13SESSION_MAXRECORDINPUTSIZE                  (4*1024*1024)
-#define DIOSTREAMTLS13SESSION_MAXLOCALKEYUPDATES                  ((((XQWORD)1) << 48) - 1)
+// Applies to both directions: it bounds keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_LOCAL] (local KeyUpdate count,
+// see KeyUpdate_Send()) and keyupdates[DIOSTREAMTLSKEYSCHEDULE_DIRECTION_REMOTE] (remote KeyUpdate count, see
+// KeyUpdate_Process()) alike -- the same 2^48-1 ceiling is correct for either direction, only the name used to imply
+// local-only.
+#define DIOSTREAMTLS13SESSION_MAXKEYUPDATES                       ((((XQWORD)1) << 48) - 1)
 
 
 enum DIOSTREAMTLS13SESSION_RESULT

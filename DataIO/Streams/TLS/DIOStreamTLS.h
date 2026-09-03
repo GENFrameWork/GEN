@@ -288,11 +288,10 @@ class DIOSTREAMTLS : public T
                                               retrycause = DIOSTREAMTLS_HANDSHAKERETRYCAUSE_NONE;
 
                                               if(usingtls12)
-                                                {                               
-                                                  if(!handshakeclient12.Ini(config->IsAllowUnauthenticatedServer(), dualversionmode) ||
+                                                {
+                                                  if(!handshakeclient12.Ini(dualversionmode) ||
                                                      !handshakeclient12.Capabilities_Set(config) ||
-                                                     (!config->IsAllowUnauthenticatedServer() &&
-                                                      !handshakeclient12.Authentication_Set(servername, config->GetTrustedRoots())))
+                                                     !handshakeclient12.Authentication_Set(servername, config->GetTrustedRoots()))
                                                     {
                                                       TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                       return false;
@@ -302,10 +301,9 @@ class DIOSTREAMTLS : public T
                                                 {
                                                   if(!session.Ini(config->GetCipherSuite(), DIOSTREAMTLSKEYSCHEDULE_ROLE_CLIENT) ||
                                                      !session.MemoryPolicy_Set((*config->GetMemoryPolicy())) ||
-                                                     !handshakeclient.Ini(&session, config->IsAllowUnauthenticatedServer()) ||
+                                                     !handshakeclient.Ini(&session) ||
                                                      !handshakeclient.Capabilities_Set(config) ||
-                                                     (!config->IsAllowUnauthenticatedServer() &&
-                                                      !handshakeclient.Authentication_Set(servername, config->GetTrustedRoots())))
+                                                     !handshakeclient.Authentication_Set(servername, config->GetTrustedRoots()))
                                                     {
                                                       TLSError_Set(DIOSTREAMTLS_ERROR_CONFIGURATION);
                                                       return false;
@@ -914,10 +912,6 @@ class DIOSTREAMTLS : public T
 
                                               GEN_XFACTORY.DeleteTimer(xtimer);
 
-                                              if(!status)
-                                                {
-                                                }
-
                                               return status;
                                             }
 
@@ -977,12 +971,6 @@ class DIOSTREAMTLS : public T
                                                         }
 
                                                       return false;
-                                                    }
-
-                                                  if(contenttype == DIOSTREAMTLS_MSG_CONTENTTYPE_APPLICATION_DATA &&
-                                                     handshakeserver.IsWaitingClientHelloRetry() && handshakeserver.IsEarlyDataOffered())
-                                                    {
-                                                      continue;
                                                     }
 
                                                   if(contenttype != DIOSTREAMTLS_MSG_CONTENTTYPE_HANDSHAKE ||

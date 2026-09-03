@@ -549,7 +549,7 @@ bool DIOSTREAMTLS_MSG_CERTIFICATEENTRY::GetFromBuffer(XBUFFER& buffer, bool show
   certificatedata.Delete();
   if(!certificatedata.Add(newcertificatedata)) return false;
   extensionslength = newextensionslength;
-  sizeconsumed      = sizeof(XBYTE) * 3 + certificatelength + sizeof(XWORD) + newextensionslength;
+  sizeconsumed      = DIOSTREAMTLS_MSG_LENGTH24_SIZE + certificatelength + sizeof(XWORD) + newextensionslength;
 
   return (buffer.Extract(NULL, 0, sizeconsumed) == sizeconsumed);
 }
