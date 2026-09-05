@@ -52,38 +52,8 @@
 #include "GEN_Control.h"
 
 
-
-
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
-* @brief      onsole  get symbols used
-* @ingroup    XUTILS
-* 
-* @return     XCONSOLE_SYMBOLSUSED : Requested value.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XCONSOLE_SYMBOLSUSED Console_GetSymbolsUsed()
-{
-  XCONSOLE_SYMBOLSUSED consolesymbolused  = XCONSOLE_SYMBOLSUSED_NOTCONSOLE;
-
-  #ifndef BUILDER
-  XCONSOLE*            console            = GEN_XFACTORY.CreateConsole();
-
-  if(console)
-    {
-      consolesymbolused = console->GetSymbolsUsed();
-
-      GEN_XFACTORY.DeleteConsole(console);
-    }
-  #endif
-  
-  return consolesymbolused;
-}
 
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/

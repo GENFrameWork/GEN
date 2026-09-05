@@ -403,7 +403,35 @@ bool APPFLOWEXTENDED_APPLICATIONSTATUS::Show(XCONSOLE* console)
   // APPFLOW_EXTENDED.ShowLine(console, string, string2);
   
   string  = __L("CPU Memory");
-  string2.Format(__L("%d Kb, free %d Kb (%d%%)"), GetMemoryTotal(), GetMemoryFree(), GetMemoryFreePercent());
+
+  XDWORD      memorytotal       = GetMemoryTotal();
+  XDWORD      memoryfree        = GetMemoryFree();
+  double      memorydivisor     = 1.0;
+  const XCHAR* memoryunit       = __L("KB");
+
+  if(memorytotal >= (1024U * 1024U * 1024U))
+    {
+      memorydivisor = 1024.0 * 1024.0 * 1024.0;
+      memoryunit    = __L("TB");
+    }
+  else if(memorytotal >= (1024U * 1024U))
+    {
+      memorydivisor = 1024.0 * 1024.0;
+      memoryunit    = __L("GB");
+    }
+  else if(memorytotal >= 1024U)
+    {
+      memorydivisor = 1024.0;
+      memoryunit    = __L("MB");
+    }
+
+  string2.Format(__L("%.1f %s, free %.1f %s (%d%%)"),
+                 (double)memorytotal / memorydivisor,
+                 memoryunit,
+                 (double)memoryfree / memorydivisor,
+                 memoryunit,
+                 GetMemoryFreePercent());
+
   APPFLOW_EXTENDED.GetConsole()->Show_Line(string, string2);
 
   string  = __L("Averange");

@@ -233,7 +233,7 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
   SECURITY_ATTRIBUTES saattr; 
   XBYTE*              outbuftmp           = NULL;
   DWORD               bytes_read;
-  DWORD               exitcode;
+  DWORD               exitcode            = (DWORD)-1; // sentinel: GetExitCodeProcess() failing must not read as a successful (0) exit
   HANDLE              stdhandle_out_read  = NULL;
   HANDLE              stdhandle_out_write = NULL;
   HANDLE              stdhandle_in_read   = NULL;
@@ -315,20 +315,26 @@ bool XWINDOWSPROCESSMANAGER::Application_Execute(XCHAR* applicationpath, XCHAR* 
 
           if(WaitForSingleObject(processinfo.hProcess, (out?INFINITE:500)) == WAIT_OBJECT_0)
             {
-              if(out)
+              // FIXED: exit code retrieval and handle cleanup must happen whenever the wait itself
+              // succeeds, not only when the caller also asked to capture stdout (out != NULL) --
+              // otherwise returncode was left at its initial 0 and the process/thread handles leaked
+              // whenever out was NULL. Mirrors XLINUXPROCESSMANAGER::Application_Execute(), which
+              // always retrieves the child's real exit status from waitpid() regardless of whether
+              // stdout is being captured.
+              if(GetExitCodeProcess(processinfo.hProcess, &exitcode))
                 {
-                  if(GetExitCodeProcess(processinfo.hProcess, &exitcode))
-                    {
-                      if(returncode) (*returncode) = exitcode;
-                    }
-
-                  CloseHandle(processinfo.hProcess);
-                  CloseHandle(processinfo.hThread);
-
+                  if(returncode) (*returncode) = exitcode;
                 }
 
-              status = true;
-            }            
+              CloseHandle(processinfo.hProcess);
+              CloseHandle(processinfo.hThread);
+
+              // FIXED: status must reflect whether the child actually exited successfully (exit
+              // code 0), exactly like XLINUXPROCESSMANAGER::Application_Execute() does
+              // ("WIFEXITED(returnstatus) && !WEXITSTATUS(returnstatus)") -- not just whether the
+              // wait for its termination succeeded.
+              status = (exitcode == 0);
+            }
         }
     }
 

@@ -570,8 +570,8 @@ float XWINDOWSSYSTEM::GetCPUTemperature()
 * @brief      Get memory info
 * @ingroup    PLATFORM_WINDOWS
 * 
-* @param[in]  total : total memory in bytes.
-* @param[in]  free : free memory in bytes.
+* @param[in]  total : total memory in KB.
+* @param[in]  free : free memory in KB.
 * 
 * @return     bool : true if the operation is successful; otherwise false.
 * 
@@ -609,9 +609,6 @@ bool XWINDOWSSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
       wmiinterface.End();
     } 
   #endif
-
-  total /= 1024;
-  free  /= 1024;
 
   return true;
 }

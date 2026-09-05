@@ -38,32 +38,33 @@
 
 
 
-
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
 
 
 class XLINUXCONSOLE : public XCONSOLE
 {
   public:
-                        XLINUXCONSOLE         ();
-    virtual            ~XLINUXCONSOLE         ();
+                          XLINUXCONSOLE         ();
+    virtual              ~XLINUXCONSOLE         ();
 
-    bool                GetSizeText           (int& columns, int& rows);
+    bool                  GetSizeText           (int& columns, int& rows);
 
-    bool                Maximize              ();
-    bool                Minimize              ();
-    bool                Hide                  ();
-    bool                IsHide                ();
-    bool                Print                 (XCHAR* string);
-    bool                Clear                 (bool fill = true);
+    XCONSOLE_SYMBOLSUSED  GetSymbolsUsed        ();
 
-    bool                KBHit                 (void);
-    int                 GetChar               ();
+    bool                  Maximize              ();
+    bool                  Minimize              ();
+    bool                  Hide                  ();
+    bool                  IsHide                ();
+    bool                  Print                 (XCHAR* string);
+    bool                  Clear                 (bool fill = true);
+
+    bool                  KBHit                 (void);
+    int                   GetChar               ();
 
   private:
 
-    void                RawModeEnable         ();
-    void                RawModeDisable        ();
+    void                  RawModeEnable         ();
+    void                  RawModeDisable        ();
 };
 
 

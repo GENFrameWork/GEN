@@ -42,6 +42,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <locale.h>
+#include <langinfo.h>
+#include <string.h>
+#include <strings.h>
 
 #include "XTrace.h"
 
@@ -119,13 +123,96 @@ bool XLINUXCONSOLE::GetSizeText(int& columns, int& rows)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         XCONSOLE_SYMBOLSUSED XLINUXCONSOLE::GetSymbolsUsed()
+* @brief      Get symbols used
+* @ingroup    PLATFORM_LINUX
+*
+* @note       LINUX has no per-handle "console code page" the way Windows does (GetConsoleCP() /
+*             GetConsoleOutputCP()). The nearest equivalents are: (1) whether stdin/stdout are
+*             really attached to a TTY at all -- isatty() -- which mirrors Windows reporting
+*             in_cp == 0 when there is no console attached, and (2) which character set the
+*             terminal is actually rendering, which on LINUX is not a property of the terminal
+*             itself but of the process' locale -- nl_langinfo(CODESET) after setlocale(LC_CTYPE, "").
+*
+* @return     XCONSOLE_SYMBOLSUSED : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XCONSOLE_SYMBOLSUSED XLINUXCONSOLE::GetSymbolsUsed()
+{
+  XCONSOLE_SYMBOLSUSED symbol_cp = XCONSOLE_SYMBOLSUSED_UNKNWON;
+
+  #ifndef APPFLOW_GRAPHICS_NOTCONSOLE_ACTIVE
+
+  bool isinputtty  = (isatty(STDIN_FILENO)  != 0);
+  bool isoutputtty = (isatty(STDOUT_FILENO) != 0);
+
+  // Mirrors XWINDOWSCONSOLE::GetSymbolsUsed()'s "if(in_cp != out_cp) return symbol_cp;": input and
+  // output are attached in an inconsistent way (e.g. redirected stdin but a real stdout terminal,
+  // or the reverse), so there is no single, reliable answer.
+  if(isinputtty != isoutputtty)
+    {
+      return symbol_cp; // XCONSOLE_SYMBOLSUSED_UNKNWON
+    }
+
+  // Neither side is a real terminal (stdout/stdin redirected to a file or a pipe, or the process
+  // has no controlling terminal at all) -- equivalent to Windows' in_cp == 0 case.
+  if(!isinputtty)
+    {
+      return XCONSOLE_SYMBOLSUSED_NOTCONSOLE;
+    }
+
+  // We are attached to a real TTY on both ends: ask the current locale which charset it renders.
+  // setlocale(LC_CTYPE, NULL) returns a pointer into internal static storage, so copy it out before
+  // calling setlocale() again to change it.
+  char        previouslocale[256] = { 0 };
+  const char* currentlocale       = setlocale(LC_CTYPE, NULL);
+
+  if(currentlocale) strncpy(previouslocale, currentlocale, sizeof(previouslocale) - 1);
+
+  setlocale(LC_CTYPE, "");
+
+  const char* codeset = nl_langinfo(CODESET);
+
+  if(codeset)
+    {
+      if     (!strcasecmp(codeset, "UTF-8"))      symbol_cp = XCONSOLE_SYMBOLSUSED_UNICODE_UTF8;
+
+      else if(!strcasecmp(codeset, "ISO-8859-1")) symbol_cp = XCONSOLE_SYMBOLSUSED_ISO_8859_1;
+      else if(!strcasecmp(codeset, "ISO-8859-2")) symbol_cp = XCONSOLE_SYMBOLSUSED_ISO_8859_2;
+      else if(!strcasecmp(codeset, "ISO-8859-3")) symbol_cp = XCONSOLE_SYMBOLSUSED_ISO_8859_3;
+      else if(!strcasecmp(codeset, "ISO-8859-4")) symbol_cp = XCONSOLE_SYMBOLSUSED_ISO_8859_4;
+
+      else if(!strcasecmp(codeset, "CP1250"))     symbol_cp = XCONSOLE_SYMBOLSUSED_WINDOWS_1250;
+      else if(!strcasecmp(codeset, "CP1251"))     symbol_cp = XCONSOLE_SYMBOLSUSED_WINDOWS_1251;
+      else if(!strcasecmp(codeset, "CP1252"))     symbol_cp = XCONSOLE_SYMBOLSUSED_WINDOWS_1252;
+      else if(!strcasecmp(codeset, "CP1253"))     symbol_cp = XCONSOLE_SYMBOLSUSED_WINDOWS_1253;
+      else if(!strcasecmp(codeset, "CP1254"))     symbol_cp = XCONSOLE_SYMBOLSUSED_WINDOWS_1254;
+
+      else if(!strcasecmp(codeset, "CP437"))      symbol_cp = XCONSOLE_SYMBOLSUSED_CODEPAGE_437;
+      else if(!strcasecmp(codeset, "CP850"))      symbol_cp = XCONSOLE_SYMBOLSUSED_CODEPAGE_850;
+      else if(!strcasecmp(codeset, "CP852"))      symbol_cp = XCONSOLE_SYMBOLSUSED_CODEPAGE_852;
+      else if(!strcasecmp(codeset, "CP866"))      symbol_cp = XCONSOLE_SYMBOLSUSED_CODEPAGE_866;
+
+      else                                         symbol_cp = XCONSOLE_SYMBOLSUSED_NOTSUPPORTED;
+    }
+
+  setlocale(LC_CTYPE, previouslocale[0] ? previouslocale : "C");
+
+  #endif
+
+  return symbol_cp;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool XLINUXCONSOLE::Maximize()
 * @brief      Maximize
 * @ingroup    PLATFORM_LINUX
-* 
+*
 * @return     bool : true if the operation is successful; otherwise false.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XLINUXCONSOLE::Maximize()
 {

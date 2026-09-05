@@ -756,13 +756,21 @@ bool XPROCESSMANAGER::Application_ExecuteElevated(XCHAR* applicationpath, XCHAR*
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::AdjustStringToConsolaSymbolsUsed(XSTRING& string, XBUFFER& target_buffer)
 {
-  XCONSOLE_SYMBOLSUSED symbolused       = Console_GetSymbolsUsed();
+  XCONSOLE*            console          = GEN_XFACTORY.CreateConsole();
+
+  if(!console)
+    {
+      return false;
+    }
+
+  XCONSOLE_SYMBOLSUSED symbolused       = console->GetSymbolsUsed();
   XSTRINGASCIICODE     stringasccicode  = string.ConsoleCodePageToConvertASCII(symbolused);
 
   target_buffer.Empty();
 
   if(string.IsEmpty())
     {
+      GEN_XFACTORY.DeleteConsole(console);  
       return false;  
     }
 
@@ -778,12 +786,16 @@ bool XPROCESSMANAGER::AdjustStringToConsolaSymbolsUsed(XSTRING& string, XBUFFER&
         }      
     }
 
+  bool status = true;
+
   if(target_buffer.IsEmpty())
     {
-      return false;
+      status = false;
     }
 
-  return true;
+  GEN_XFACTORY.DeleteConsole(console);  
+
+  return status;
 }
 
 
@@ -801,13 +813,21 @@ bool XPROCESSMANAGER::AdjustStringToConsolaSymbolsUsed(XSTRING& string, XBUFFER&
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XPROCESSMANAGER::AdjustConsolaSymbolsUsedToString(XBUFFER& origin_buffer, XSTRING& string)
 {
-  XCONSOLE_SYMBOLSUSED symbolused       = Console_GetSymbolsUsed();
+  XCONSOLE*            console          = GEN_XFACTORY.CreateConsole();
+
+  if(!console)
+    {
+      return false;
+    }
+
+  XCONSOLE_SYMBOLSUSED symbolused       = console->GetSymbolsUsed();
   XSTRINGASCIICODE     stringasccicode  = string.ConsoleCodePageToConvertASCII(symbolused);
 
   string.Empty();
 
   if(origin_buffer.IsEmpty())
     {
+      GEN_XFACTORY.DeleteConsole(console);
       return false;  
     }
 
@@ -823,12 +843,16 @@ bool XPROCESSMANAGER::AdjustConsolaSymbolsUsedToString(XBUFFER& origin_buffer, X
         }      
     }
 
+  bool status = true;
+
   if(string.IsEmpty())
     {
-      return false;
+      status = false;
     }
 
-  return true;
+  GEN_XFACTORY.DeleteConsole(console);  
+
+  return status;
 }
 
 

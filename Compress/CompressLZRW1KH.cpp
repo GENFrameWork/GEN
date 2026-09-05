@@ -299,9 +299,18 @@ XDWORD COMPRESS_LZRW1KH::CompressionBuffer(XBYTE* source, XBYTE* target, XDWORD 
 
   if(y > sourcesize)
     {
-      for(y=0; y<sourcesize; CMPTARGET(true, y+1, source[y++]) ) // #Imanol order of execution not guaranteed, y could have weird values
+      // FIXED: the original loop invoked CMPTARGET(true, y+1, source[y++]) as the for-loop's own
+      // increment expression, i.e. target[y+1] = source[y++]. Both the index (y+1) and the data
+      // (source[y++], which side-effects y) referenced the same variable with no sequence point
+      // between them (the original "#Imanol order of execution not guaranteed, y could have weird
+      // values" comment already flagged this), which is unsequenced modification/access UB and, on
+      // this toolchain, a confirmed live data-corruption bug (see UnitTests_Compress' findings for
+      // COMPRESS_LZRW1KH). Moving the increment of 'y' into the for-loop's own increment clause
+      // keeps the exact same target[y+1] = source[y] assignment for y=0..sourcesize-1, now fully
+      // sequenced.
+      for(y=0; y<sourcesize; y++)
         {
-
+          CMPTARGET(true, y+1, source[y]);
         }
 
       CMPTARGET(true,0,CMPFLAG_COPIED);
@@ -338,9 +347,13 @@ XDWORD COMPRESS_LZRW1KH::DecompressionBuffer(XBYTE *source,XBYTE *target,XDWORD 
 
   if(source[0]==CMPFLAG_COPIED)
     {
-      for(y=1; y<sourcesize; CMPTARGET(false, y-1, source[y++]) )
+      // FIXED: same unsequenced-modification hazard as CompressionBuffer()'s mirroring copy-fallback
+      // loop above (target[y-1] = source[y++] as the for-loop's increment expression). Moving the
+      // increment of 'y' into the for-loop's own increment clause keeps the exact same
+      // target[y-1] = source[y] assignment for y=1..sourcesize-1, now fully sequenced.
+      for(y=1; y<sourcesize; y++)
         {
-
+          CMPTARGET(false, y-1, source[y]);
         }
 
       return (sourcesize-1);
