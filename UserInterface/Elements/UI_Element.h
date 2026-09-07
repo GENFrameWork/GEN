@@ -127,6 +127,7 @@ enum UI_ELEMENT_BORDER_CORNER
 
 class XTIMER;
 class UI_ELEMENT_SCROLL;
+class UI_LAYOUT;
 
 
 class UI_ELEMENT : public XSUBJECT 
@@ -176,8 +177,16 @@ class UI_ELEMENT : public XSUBJECT
 		UI_ELEMENT_CHROMEROLE									GetChromeRole								();
 		void																	SetChromeRole								(UI_ELEMENT_CHROMEROLE chromerole);
 
-		UI_ELEMENT*														GetFather										();	
-		void																	SetFather										(UI_ELEMENT* father);	
+		UI_ELEMENT*														GetFather										();
+		void																	SetFather										(UI_ELEMENT* father);
+
+		// Phase 1 ("estilo calculado tipado", ownership step): the UI_LAYOUT this element was built into, set
+		// once by UI_MANAGER::GetLayoutElement_Base() -- every widget builder routes through it, top-level AND
+		// nested/child elements alike -- so ReapplyStyleVisual() can resolve THIS element's own layout's
+		// stylesheet (UI_LAYOUT::GetStyleSheet()) instead of a single UI_MANAGER-wide one shared by every
+		// currently-loaded layout regardless of which screen/XML it came from.
+		UI_LAYOUT*														GetLayout										();
+		void																	SetLayout										(UI_LAYOUT* layout);
 
 		bool																	IsDetached									();	
 		void																	SetIsDetached								(bool isdetached);	
@@ -351,8 +360,10 @@ class UI_ELEMENT : public XSUBJECT
 		XVECTOR<XSTRING*>											class_names;
 		UI_ELEMENT_CHROMEROLE									chromerole;
 		
-		UI_ELEMENT*														father;	
+		UI_ELEMENT*														father;
 		bool																	isdetached;
+
+		UI_LAYOUT*														element_layout;
 		
 		UI_COLOR															color;
 		UI_COLOR															backgroundcolor;
@@ -424,6 +435,22 @@ class UI_ELEMENT : public XSUBJECT
 		UI_COLOR															snapshot_color;
 		UI_COLOR															snapshot_backgroundcolor;
 		XDWORD																snapshot_roundrect;
+
+		// Step 8 ("reaplicar todas las propiedades"): the remaining base-level VISUAL properties that
+		// UI_MANAGER::GetLayoutElement_Base() applies and that do not affect layout/reflow (unlike xpos/ypos/
+		// width/height/margin/padding/direction, which stay load-time-only -- see ReapplyStyleVisual()'s
+		// comment). Snapshotted the same way as color/backgroundcolor/roundrect above, so a pseudo-class rule
+		// that does NOT touch one of these still falls back to the authored (XML + stateless CSS) value.
+		double																snapshot_border_width;
+		UI_COLOR															snapshot_border_color;
+		bool																	snapshot_border_color_set;
+		double																snapshot_border_radius[UI_ELEMENT_BORDER_CORNER_MAX];
+		bool																	snapshot_box_shadow_set;
+		double																snapshot_shadow_offset_x;
+		double																snapshot_shadow_offset_y;
+		double																snapshot_shadow_blur;
+		UI_COLOR															snapshot_shadow_color;
+
 		bool																	snapshot_taken;
 		bool																	style_has_state_rules;
 };

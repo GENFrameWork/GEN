@@ -41,6 +41,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 
+class UI_STYLESHEET;
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -58,6 +59,15 @@ class UI_LAYOUT
     void                            SetSkin                       (UI_SKIN* ui_skin);
 
     UI_BACKGROUND*                  GetBackground                 ();
+
+    // Phase 1 ("estilo calculado tipado", ownership step): the CSS stylesheet declared by this layout's own
+    // <stylesheet> XML node (see UI_MANAGER::CreateLayouts()). Owned by this UI_LAYOUT -- deleted in its
+    // destructor -- instead of living as a single UI_MANAGER-wide pointer that every currently-loaded layout
+    // shared and that got silently replaced (and the previous one freed) every time ANY new layout's XML was
+    // loaded, even one belonging to a different, still-visible screen. SetStyleSheet() deletes any previously
+    // owned instance before taking the new one, same replace-and-free discipline UI_MANAGER used to apply.
+    UI_STYLESHEET*                  GetStyleSheet                 ();
+    void                            SetStyleSheet                 (UI_STYLESHEET* sheet);
 
     bool                            Elements_Add                  (UI_ELEMENT* element);
     XVECTOR<UI_ELEMENT*>*           Elements_Get                  ();
@@ -85,6 +95,8 @@ class UI_LAYOUT
     UI_BACKGROUND                   background;
 
     XVECTOR<UI_ELEMENT*>            elements;
+
+    UI_STYLESHEET*                  stylesheet;
 };
 
 
