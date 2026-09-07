@@ -38,13 +38,16 @@
 *     Compound      := TypeSelector? ("#" Id)? ("." Class)* (":" Pseudo)*    // at least one of the parts
 *     TypeSelector  := IdentifierMatchingUI_ELEMENT_TYPE_STRING
 *
-*   No descendant/child combinators, no attribute selectors, no @media, no @import. Pseudo-classes are
-*   syntactically accepted (parsed into UI_CSSSELECTOR::pseudos); ":root" is intercepted at parse time as the
-*   anchor for CSS custom properties (theme variables, see below) and never reaches the matcher as a regular
-*   rule. Live STATE pseudo-classes are resolved against UI_ELEMENT::GetActivePseudos() every time the
-*   element's state changes (see UI_ELEMENT::ReapplyStyleVisual()): ":preselect" (mouse-over a selectable
-*   element; ":hover" is accepted as its exact synonym), ":selected", ":active" and ":disabled" (the
-*   complement of ":active"). Any OTHER pseudo-class parses cleanly, adds 10 to the selector's specificity
+*   No descendant/child combinators, no attribute selectors, no @media. @import IS supported (see
+*   UI_CSSPARSER::ReadImportStatement()/ResolveAndParseImport()), with cycle detection against the in-progress
+*   import stack. Pseudo-classes are syntactically accepted (parsed into UI_CSSSELECTOR::pseudos); ":root" is
+*   intercepted at parse time as the anchor for CSS custom properties (theme variables, see below) and never
+*   reaches the matcher as a regular rule. Live STATE pseudo-classes are resolved against
+*   UI_ELEMENT::GetActivePseudos() every time the element's state changes (see UI_ELEMENT::ReapplyStyleVisual()):
+*   ":preselect" (mouse-over a selectable element; ":hover" is accepted as its exact synonym), ":selected",
+*   ":active" and ":disabled" (the complement of ":active"). ":active" here means GEN's own "enabled" state, NOT
+*   CSS's pointer-press state -- see the @note on UI_ELEMENT::GetActivePseudos() for the full rationale. Any
+*   OTHER pseudo-class parses cleanly, adds 10 to the selector's specificity
 *   (parity with regular classes), and renders the selector unmatchable at Resolve() time -- e.g. structural
 *   pseudo-classes like ":first-child"/":nth-child" are silently inert; there is no DOM-style child list to
 *   evaluate them against. Specificity: id=100, class/pseudo=10, type=1.

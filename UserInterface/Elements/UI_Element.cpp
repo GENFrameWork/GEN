@@ -44,6 +44,7 @@
 #include "UI_Manager.h"
 #include "UI_Style.h"
 #include "UI_StyleSheet.h"
+#include "UI_PropertyRegistry.h"
 
 
 
@@ -373,6 +374,36 @@ UI_ELEMENT* UI_ELEMENT::GetFather()
 void UI_ELEMENT::SetFather(UI_ELEMENT* father)
 {
   this->father = father;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_LAYOUT* UI_ELEMENT::GetLayout()
+* @brief      Get layout
+* @ingroup    USERINTERFACE
+*
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_LAYOUT* UI_ELEMENT::GetLayout()
+{
+  return element_layout;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetLayout(UI_LAYOUT* layout)
+* @brief      Set layout
+* @ingroup    USERINTERFACE
+*
+* @param[in]  layout : Layout pointer to use.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetLayout(UI_LAYOUT* layout)
+{
+  element_layout = layout;
 }
 
 
@@ -1746,6 +1777,12 @@ bool UI_ELEMENT::DeleteAllComposeElements()
 *             box), so ":hover" and ":preselect" match exactly the same live state and either spelling can be
 *             used in a stylesheet -- authors coming from CSS can write the familiar ":hover", existing rules
 *             written against ":preselect" keep working unchanged.
+* @note       ":active" is a DELIBERATE, PERMANENT divergence from CSS. Here it mirrors GEN's own `isactive`
+*             ("this element is enabled / not disabled"), not CSS's `:active` ("the pointer is currently
+*             pressed on this element"). GEN has no press/pointer-down state to expose today, so ":active" /
+*             ":disabled" are kept as the enabled/disabled pair authors already use in existing stylesheets,
+*             and a real CSS-style pointer-press pseudo (":pressed", scoped to GEN's own semantics rather than
+*             reusing ":active" for it) is left for a later phase instead of overloading this name further.
 * @ingroup    USERINTERFACE
 *
 * @param[out] out : Vector to append pseudo names into.
@@ -1788,6 +1825,19 @@ void UI_ELEMENT::SnapshotStyleVisual()
   color          .CopyTo(&snapshot_color);
   backgroundcolor.CopyTo(&snapshot_backgroundcolor);
   snapshot_roundrect = roundrect;
+
+  snapshot_border_width     = border_width;
+  border_color.CopyTo(&snapshot_border_color);
+  snapshot_border_color_set = border_color_set;
+
+  for(int c=0; c<UI_ELEMENT_BORDER_CORNER_MAX; c++) snapshot_border_radius[c] = border_radius[c];
+
+  snapshot_box_shadow_set  = box_shadow_set;
+  snapshot_shadow_offset_x = shadow_offset_x;
+  snapshot_shadow_offset_y = shadow_offset_y;
+  snapshot_shadow_blur     = shadow_blur;
+  shadow_color.CopyTo(&snapshot_shadow_color);
+
   snapshot_taken     = true;
 }
 
@@ -1806,11 +1856,11 @@ void UI_ELEMENT::ReapplyStyleVisual()
   if(!style_has_state_rules) return;
   if(!snapshot_taken)        return;
 
-  UI_STYLESHEET* sheet = NULL;
-  if(UI_MANAGER::GetIsInstanced())
-    {
-      sheet = UI_MANAGER::GetInstance().GetStyleSheet();
-    }
+  // Phase 1 ownership step: the stylesheet belongs to THIS element's own UI_LAYOUT (set once at build time by
+  // UI_MANAGER::GetLayoutElement_Base(), see SetLayout()), not to a single UI_MANAGER-wide pointer shared by
+  // every currently-loaded layout -- otherwise loading a second, unrelated layout's XML would silently swap
+  // (and free) the stylesheet every pre-existing element on screen resolves against.
+  UI_STYLESHEET* sheet = element_layout ? element_layout->GetStyleSheet() : NULL;
 
   if(!sheet) return;
 
@@ -1822,23 +1872,107 @@ void UI_ELEMENT::ReapplyStyleVisual()
   UI_COLOR targetbackgroundcolor; snapshot_backgroundcolor.CopyTo(&targetbackgroundcolor);
   XDWORD   targetroundrect = snapshot_roundrect;
 
+  double   targetborderwidth = snapshot_border_width;
+  UI_COLOR targetbordercolor;    snapshot_border_color.CopyTo(&targetbordercolor);
+  bool     targetbordercolorset = snapshot_border_color_set;
+
+  double   targetborderradius[UI_ELEMENT_BORDER_CORNER_MAX];
+  for(int c=0; c<UI_ELEMENT_BORDER_CORNER_MAX; c++) targetborderradius[c] = snapshot_border_radius[c];
+
+  bool     targetboxshadowset = snapshot_box_shadow_set;
+  double   targetshadowoffsetx = snapshot_shadow_offset_x;
+  double   targetshadowoffsety = snapshot_shadow_offset_y;
+  double   targetshadowblur    = snapshot_shadow_blur;
+  UI_COLOR targetshadowcolor;    snapshot_shadow_color.CopyTo(&targetshadowcolor);
+
   // Re-resolve. FillFromCSSDeclarations internally builds the active-pseudo list from the element's live state.
   UI_STYLE bag;
   bag.FillFromCSSDeclarations(sheet, this);
 
-  // Apply the three baseline visual keys. Per-type keys (linecolor, gradientcolor, thickness, ...) are out of
-  // scope for this step; they remain frozen at load-time values.
+  // Apply the base-level visual keys that a pseudo-class rule can legitimately restyle without triggering a
+  // re-layout (color/background-color/roundrect, already handled since Step 6/"transiciones"; border-width/
+  // -color/-radius and box-shadow, added here). Per-type keys (linecolor, gradientcolor, thickness, ...) stay
+  // out of scope -- they live on subclasses this base-class method has no knowledge of, and would need virtual
+  // dispatch to reach; box-model/geometry keys (xpos/ypos/width/height/margin/padding/direction) stay out of
+  // scope too -- swapping those per pseudo-class state would require a full re-layout pass, not just a redraw,
+  // which is a materially bigger change than this step.
   XSTRING v;
   double  d;
 
   if(bag.Get(__L("color")      , v))  targetcolor          .SetFromString(v);
-  if(bag.Get(__L("bckgrdcolor"), v))  targetbackgroundcolor.SetFromString(v);
+
+  // "bckgrdcolor" or "background-color": same shared first-hit alias lookup as GetLayoutElement_Base() at load
+  // time (UI_Manager.cpp) -- both now go through UI_PROPERTYREGISTRY::GetAliased(), so a rule written with the
+  // CSS-natural name (e.g. ":hover { background-color: ... }") is honored here too instead of freezing at the
+  // stateless baseline, and the two call sites cannot silently drift onto different precedence.
+  XSTRING bckgrdcolor;
+  UI_PROPERTYREGISTRY::GetAliased(bag, __L("bckgrdcolor"), __L("background-color"), bckgrdcolor);
+  if(!bckgrdcolor.IsEmpty()) targetbackgroundcolor.SetFromString(bckgrdcolor);
+
   if(bag.Get(__L("roundrect")  , d))  targetroundrect = (XDWORD)d;
 
-  // roundrect is a discrete corner-shape flag, not a value that can be usefully interpolated, so it always
-  // jumps immediately regardless of "transition". Only color/background-color -- the two keys this method has
-  // ever managed -- are eligible to tween.
+  if(bag.Get(__L("border-width"), d)) targetborderwidth = d;
+
+  XSTRING bordercolorstr;
+  if(bag.Get(__L("border-color"), bordercolorstr) && !bordercolorstr.IsEmpty())
+    {
+      targetbordercolor.SetFromString(bordercolorstr);
+      targetbordercolorset = true;
+    }
+
+  // border-radius shorthand (1-4 values, same CSS positional rule as load time) then per-corner longhands,
+  // which override the shorthand -- identical precedence to GetLayoutElement_Base().
+  XSTRING borderradiusstr;
+  if(bag.Get(__L("border-radius"), borderradiusstr))
+    {
+      double out[4] = { 0.0, 0.0, 0.0, 0.0 };
+      UI_PROPERTYREGISTRY::ExpandCSSShorthand4(borderradiusstr, out);            // out = TL, TR, BR, BL
+
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_TL] = out[0];
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_TR] = out[1];
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_BR] = out[2];
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_BL] = out[3];
+    }
+
+  if(bag.Get(__L("border-top-left-radius")     , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_TL] = d;
+  if(bag.Get(__L("border-top-right-radius")    , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_TR] = d;
+  if(bag.Get(__L("border-bottom-right-radius") , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_BR] = d;
+  if(bag.Get(__L("border-bottom-left-radius")  , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_BL] = d;
+
+  XSTRING boxshadowstr;
+  if(bag.Get(__L("box-shadow"), boxshadowstr) && !boxshadowstr.IsEmpty())
+    {
+      double  sh_x    = 0.0;
+      double  sh_y    = 0.0;
+      double  sh_blur = 0.0;
+      XSTRING sh_color;
+
+      if(UI_PROPERTYREGISTRY::ParseBoxShadow(boxshadowstr, sh_x, sh_y, sh_blur, sh_color))
+        {
+          targetshadowoffsetx = sh_x;
+          targetshadowoffsety = sh_y;
+          targetshadowblur    = sh_blur;
+          targetshadowcolor.SetFromString(sh_color);
+          targetboxshadowset  = true;
+        }
+    }
+
+  // roundrect/border-width/border-color/border-radius/box-shadow are discrete/structural values, not ones that
+  // can be usefully interpolated the way a colour can, so they always jump immediately regardless of
+  // "transition". Only color/background-color -- the two keys this method has ever tweened -- are eligible.
   roundrect = targetroundrect;
+
+  border_width     = targetborderwidth;
+  targetbordercolor.CopyTo(&border_color);
+  border_color_set = targetbordercolorset;
+
+  for(int c=0; c<UI_ELEMENT_BORDER_CORNER_MAX; c++) border_radius[c] = targetborderradius[c];
+
+  box_shadow_set  = targetboxshadowset;
+  shadow_offset_x = targetshadowoffsetx;
+  shadow_offset_y = targetshadowoffsety;
+  shadow_blur     = targetshadowblur;
+  targetshadowcolor.CopyTo(&shadow_color);
 
   if(style_transition_duration)
     {
@@ -1910,6 +2044,7 @@ void UI_ELEMENT::Clean()
 
   father                  = NULL;
   isdetached              = false;
+  element_layout          = NULL;
 
   x_position              = 0.0f;
 	y_position              = 0.0f;

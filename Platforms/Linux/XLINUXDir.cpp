@@ -325,7 +325,12 @@ bool XLINUXDIR::GetActual(XPATH& path)
 
   if(!getcwd(buffer, PATH_MAX)) return false;
 
-  path.ConvertFromUTF8((XBYTE*)buffer, PATH_MAX);
+  // ConvertFromUTF8() walks exactly the byte count given it, with no NUL-termination check of its own, so passing
+  // the full PATH_MAX capacity here (instead of the actual cwd length) fed it whatever uninitialized stack bytes
+  // followed the string: XSTRING's cached size ended up covering that garbage tail, so every later Add()/+=
+  // (which appends at the cached size, not at the first NUL) landed past an embedded NUL byte and was invisible
+  // to any consumer that reads the string as a C string (fopen(), ConvertToUTF8() for logging, etc.).
+  path.ConvertFromUTF8((XBYTE*)buffer, (XDWORD)strlen(buffer));
 
   return true;
 }
