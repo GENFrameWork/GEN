@@ -45,6 +45,7 @@
 
 #include "XPath.h"
 #include "XString.h"
+#include "XVector.h"
 
 #include "UI_StyleSheet.h"
 
@@ -70,19 +71,33 @@ class UI_CSSPARSER
     bool                            ParseText                   (XSTRING& text, UI_STYLESHEET& out);
 
 
+    // Step 6 ("sin overrides puntuales por elemento"): parse a BARE declaration list -- the body a stylesheet
+    // rule would have between '{' and '}', with no selector of its own -- straight into a UI_STYLE bag. This is
+    // exactly what an XML "style=" attribute's value looks like, and reusing ReadDeclarationBlock() means it
+    // accepts the same grammar (comments, "prop: value; ...", trimming) as any class rule in a .css file.
+    bool                            ParseInlineDeclarations     (XSTRING& text, UI_STYLE& out);
+
+
   private:
 
 
     void                            SkipWhitespaceAndComments   (XSTRING& text, int& pos);
     bool                            ReadSelectorList            (XSTRING& text, int& pos, UI_CSSRULE* rule);
-    bool                            ReadDeclarationBlock        (XSTRING& text, int& pos, UI_CSSRULE* rule);
+    bool                            ReadDeclarationBlock        (XSTRING& text, int& pos, UI_STYLE& decls);
     void                            SkipToNextRule              (XSTRING& text, int& pos);
 
-
+    // Step 5 ("una sola hoja por layout"): minimal "@import "file.css";" support, so a theme (":root"
+    // variables plus shared rules) can live in one file and be pulled into several stylesheets instead of
+    // being copy-pasted into each. See UI_CSSParser.cpp for the full design note.
+    bool                            ReadImportStatement         (XSTRING& text, int& pos, XSTRING& outurl);
+    bool                            ResolveAndParseImport       (XSTRING& importurl, UI_STYLESHEET& out);
 
     UI_CSSSELECTOR*                 ParseCompoundSelector       (XSTRING& text, int start, int end);
 
     void                            Clean                       ();
+
+    XPATH                           currentfiledir;   // directory of the file ParseText() is currently inside of (ParseFile()-driven parses only); base for resolving a relative @import URL.
+    XVECTOR<XPATH*>                 importstack;      // files currently open along this ParseFile() call's @import chain; cycle guard, see ParseFile().
 };
 
 

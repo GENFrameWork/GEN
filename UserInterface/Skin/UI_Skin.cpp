@@ -1014,7 +1014,16 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
           Elements_SetToRedraw(element);
         }
        
-      if(!element->GetStateBlink()) return false;        
+      if(!element->GetStateBlink()) return false;
+    }
+
+  // Step 7 ("transiciones"): same polling idiom as the blink check just above. While a color/background-color
+  // tween started by ReapplyStyleVisual() is still in flight, advance it by the elapsed time and keep asking
+  // for a redraw every frame until it reaches its target.
+  if(element->IsTransitioning())
+    {
+      element->UpdateTransition();
+      Elements_SetToRedraw(element);
     }
 
   bool status = false;

@@ -76,9 +76,11 @@ UI_ELEMENT::UI_ELEMENT()
   isactive       = true;
 
   blink_xtimer=GEN_XFACTORY.CreateTimer();
-  blink_state    = true; 
-  
-  z_level        = 1; 
+  blink_state    = true;
+
+  style_transition_xtimer = GEN_XFACTORY.CreateTimer();
+
+  z_level        = 1;
 }
 
 
@@ -96,6 +98,12 @@ UI_ELEMENT::~UI_ELEMENT()
     {
       GEN_XFACTORY.DeleteTimer(blink_xtimer);
       blink_xtimer = NULL;
+    }
+
+  if(style_transition_xtimer)
+    {
+      GEN_XFACTORY.DeleteTimer(style_transition_xtimer);
+      style_transition_xtimer = NULL;
     }
 
   // Owned per-class split view. SetClassNames() also clears this vector, but the destructor may be reached
@@ -761,6 +769,40 @@ UI_ELEMENT_TYPE_DIRECTION UI_ELEMENT::GetDirection()
 bool UI_ELEMENT::SetDirection(UI_ELEMENT_TYPE_DIRECTION direction)
 {
   this->direction = direction;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ELEMENT_TYPE_ALIGN UI_ELEMENT::GetTextAlign()
+* @brief      Get text align
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ELEMENT_TYPE_ALIGN : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT_TYPE_ALIGN UI_ELEMENT::GetTextAlign()
+{
+  return textalign;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT::SetTextAlign(UI_ELEMENT_TYPE_ALIGN textalign)
+* @brief      Set text align
+* @ingroup    USERINTERFACE
+*
+* @param[in]  textalign : Textalign value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::SetTextAlign(UI_ELEMENT_TYPE_ALIGN textalign)
+{
+  this->textalign = textalign;
 
   return true;
 }
@@ -1464,6 +1506,97 @@ XTIMER* UI_ELEMENT::GetTimerBlink()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD UI_ELEMENT::GetTransitionDuration()
+* @brief      Get the "transition" duration in milliseconds (Step 7). 0 means disabled: ReapplyStyleVisual()
+*             jumps color/bckgrdcolor instantly on a state change, exactly as before this feature existed.
+* @ingroup    USERINTERFACE
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD UI_ELEMENT::GetTransitionDuration()
+{
+  return style_transition_duration;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT::SetTransitionDuration(XDWORD milliseconds)
+* @brief      Set the "transition" duration in milliseconds (Step 7).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  milliseconds : Duration value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::SetTransitionDuration(XDWORD milliseconds)
+{
+  style_transition_duration = milliseconds;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT::IsTransitioning()
+* @brief      True while a color/background-color tween started by ReapplyStyleVisual() is still in flight.
+*             Polled by UI_SKIN::Draw() every frame, exactly like IsBlinking()/GetStateBlink() above.
+* @ingroup    USERINTERFACE
+*
+* @return     bool : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::IsTransitioning()
+{
+  return style_transition_active;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::UpdateTransition()
+* @brief      Advance the in-flight color/background-color tween by however much time has elapsed since
+*             ReapplyStyleVisual() started it, and write the interpolated values into the live color/
+*             backgroundcolor members that Draw_Form/Draw_Text already read every frame. Ends the transition
+*             (snapping exactly to the target, so it never gets stuck short of it due to frame timing) once
+*             the configured duration has elapsed.
+* @note       Called only while IsTransitioning() is true; no-op guards are still kept defensively.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::UpdateTransition()
+{
+  if(!style_transition_active) return;
+  if(!style_transition_xtimer) { style_transition_active = false; return; }
+
+  double elapsedms = (double)style_transition_xtimer->GetMeasureMilliSeconds();
+  double t         = style_transition_duration ? (elapsedms / (double)style_transition_duration) : 1.0;
+
+  if(t >= 1.0)
+    {
+      t = 1.0;
+      style_transition_active = false;
+    }
+
+  color.SetRed  (style_transition_color_from.GetRed()   + (int)((style_transition_color_to.GetRed()   - style_transition_color_from.GetRed())   * t));
+  color.SetGreen(style_transition_color_from.GetGreen() + (int)((style_transition_color_to.GetGreen() - style_transition_color_from.GetGreen()) * t));
+  color.SetBlue (style_transition_color_from.GetBlue()  + (int)((style_transition_color_to.GetBlue()  - style_transition_color_from.GetBlue())  * t));
+  color.SetAlpha(style_transition_color_from.GetAlpha() + (int)((style_transition_color_to.GetAlpha() - style_transition_color_from.GetAlpha()) * t));
+
+  backgroundcolor.SetRed  (style_transition_backgroundcolor_from.GetRed()   + (int)((style_transition_backgroundcolor_to.GetRed()   - style_transition_backgroundcolor_from.GetRed())   * t));
+  backgroundcolor.SetGreen(style_transition_backgroundcolor_from.GetGreen() + (int)((style_transition_backgroundcolor_to.GetGreen() - style_transition_backgroundcolor_from.GetGreen()) * t));
+  backgroundcolor.SetBlue (style_transition_backgroundcolor_from.GetBlue()  + (int)((style_transition_backgroundcolor_to.GetBlue()  - style_transition_backgroundcolor_from.GetBlue())  * t));
+  backgroundcolor.SetAlpha(style_transition_backgroundcolor_from.GetAlpha() + (int)((style_transition_backgroundcolor_to.GetAlpha() - style_transition_backgroundcolor_from.GetAlpha()) * t));
+
+  mustredraw = true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         UI_ELEMENT_TRANSITION_STATE_SHOW UI_ELEMENT::GetTransitionStateShow()
 * @brief      Get transition state show
@@ -1608,6 +1741,11 @@ bool UI_ELEMENT::DeleteAllComposeElements()
 * @fn         void UI_ELEMENT::GetActivePseudos(XVECTOR<XSTRING*>& out)
 * @brief      Populates `out` with the pseudo-class names implied by the element's current live state.
 *             Strings are heap-allocated with GEN_NEW; the caller owns them and must delete them.
+* @note       "hover" is emitted as a synonym of "preselect": GEN's preselect state IS mouse-over (it is set
+*             from UI_MANAGER::PreSelectElement(), which tests the live cursor position against the element's
+*             box), so ":hover" and ":preselect" match exactly the same live state and either spelling can be
+*             used in a stylesheet -- authors coming from CSS can write the familiar ":hover", existing rules
+*             written against ":preselect" keep working unchanged.
 * @ingroup    USERINTERFACE
 *
 * @param[out] out : Vector to append pseudo names into.
@@ -1617,7 +1755,8 @@ void UI_ELEMENT::GetActivePseudos(XVECTOR<XSTRING*>& out)
 {
   if(ispreselect)
     {
-      XSTRING* p = GEN_NEW XSTRING(); if(p) { p->Set(__L("preselect")); out.Add(p); }
+      XSTRING* p1 = GEN_NEW XSTRING(); if(p1) { p1->Set(__L("preselect")); out.Add(p1); }
+      XSTRING* p2 = GEN_NEW XSTRING(); if(p2) { p2->Set(__L("hover"));     out.Add(p2); }
     }
 
   if(isselected)
@@ -1675,11 +1814,13 @@ void UI_ELEMENT::ReapplyStyleVisual()
 
   if(!sheet) return;
 
-  // Restore baseline BEFORE re-resolving, so keys the current cascade does not touch fall back to the authored
-  // (XML + stateless CSS) value rather than remaining stuck at whatever the previous state left them.
-  snapshot_color          .CopyTo(&color);
-  snapshot_backgroundcolor.CopyTo(&backgroundcolor);
-  roundrect = snapshot_roundrect;
+  // Resolve the TARGET values into local copies, starting from the stateless baseline so a key the current
+  // cascade does not touch still falls back to the authored (XML + stateless CSS) value instead of whatever
+  // the previous state left on screen. This used to be applied straight into color/backgroundcolor; now it is
+  // kept separate so a "transition" duration (Step 7) can animate towards it instead of jumping to it.
+  UI_COLOR targetcolor;           snapshot_color          .CopyTo(&targetcolor);
+  UI_COLOR targetbackgroundcolor; snapshot_backgroundcolor.CopyTo(&targetbackgroundcolor);
+  XDWORD   targetroundrect = snapshot_roundrect;
 
   // Re-resolve. FillFromCSSDeclarations internally builds the active-pseudo list from the element's live state.
   UI_STYLE bag;
@@ -1690,9 +1831,35 @@ void UI_ELEMENT::ReapplyStyleVisual()
   XSTRING v;
   double  d;
 
-  if(bag.Get(__L("color")      , v))  color          .SetFromString(v);
-  if(bag.Get(__L("bckgrdcolor"), v))  backgroundcolor.SetFromString(v);
-  if(bag.Get(__L("roundrect")  , d))  roundrect = (XDWORD)d;
+  if(bag.Get(__L("color")      , v))  targetcolor          .SetFromString(v);
+  if(bag.Get(__L("bckgrdcolor"), v))  targetbackgroundcolor.SetFromString(v);
+  if(bag.Get(__L("roundrect")  , d))  targetroundrect = (XDWORD)d;
+
+  // roundrect is a discrete corner-shape flag, not a value that can be usefully interpolated, so it always
+  // jumps immediately regardless of "transition". Only color/background-color -- the two keys this method has
+  // ever managed -- are eligible to tween.
+  roundrect = targetroundrect;
+
+  if(style_transition_duration)
+    {
+      // Animate FROM whatever is currently on screen (which may itself still be mid-transition, e.g. a fast
+      // hover-in immediately followed by a hover-out) TO the newly resolved target, over style_transition_
+      // duration ms. UpdateTransition(), polled every frame from UI_SKIN::Draw() exactly like the blink timer
+      // above, does the actual interpolation.
+      style_transition_color_from = color;
+      style_transition_color_to   = targetcolor;
+
+      style_transition_backgroundcolor_from = backgroundcolor;
+      style_transition_backgroundcolor_to   = targetbackgroundcolor;
+
+      style_transition_xtimer->Reset();
+      style_transition_active = true;
+    }
+   else
+    {
+      color           = targetcolor;
+      backgroundcolor = targetbackgroundcolor;
+    }
 
   mustredraw = true;
 }
@@ -1750,6 +1917,7 @@ void UI_ELEMENT::Clean()
   z_level                 = 0;
 
   direction               = UI_ELEMENT_TYPE_DIRECTION_UNKWOWN;
+  textalign               = UI_ELEMENT_TYPE_ALIGN_LEFT;
 
 	x_positionwithscroll    = 0.0f;
   y_positionwithscroll    = 0.0f;
@@ -1789,9 +1957,13 @@ void UI_ELEMENT::Clean()
 
   blink_time              = 0;
   blink_state             = false;
-	blink_xtimer            = NULL;	
-  blink_nchanges          = 0;	
-  
+	blink_xtimer            = NULL;
+  blink_nchanges          = 0;
+
+  style_transition_duration = 0;
+  style_transition_active   = false;
+  style_transition_xtimer   = NULL;
+
   transitionstateshow     = UI_ELEMENT_TRANSITION_STATE_SHOW_NONE;
 
   hasscroll               = false;

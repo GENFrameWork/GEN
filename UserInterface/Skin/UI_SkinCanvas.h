@@ -66,6 +66,7 @@ enum UI_SKINCANVAS_TYPE
 class GRPSCREEN;
 class GRPVIEWPORT;
 class GRP2DCANVAS;
+class GRP2DPATH;
 class UI_LAYOUT;
 class UI_ELEMENT_TEXTBOX;
 class UI_PROPERTY_SCROLLEABLE;
@@ -163,6 +164,13 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		bool															SetFontSize															(XDWORD size);
 
 		bool															DrawBackgroundColor											(UI_ELEMENT* element, GRP2DCANVAS* canvas, double x_position, double y_position);
+
+		// Shared box-model drawing helpers: generic across widget types (built against base UI_ELEMENT accessors
+		// only), so any subclass' Draw_X can reuse them instead of duplicating per-corner-radius / box-shadow math.
+		// Moved here (were file-local static helpers) so UI_SKINCANVAS_FLAT can reach box-model parity with the
+		// default skin without a second copy of this logic.
+		static void												AppendRoundRectPathPerCorner						(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double rTL, double rTR, double rBR, double rBL);
+		static void												DrawElementBoxShadow										(GRP2DCANVAS* canvas, UI_ELEMENT* element, double x_position, double y_position);
 
 		bool															PreDrawFunction													(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double& x_position, double& y_position, XDWORD edge = 5);
 		bool															PostDrawFunction												(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double  x_position, double  y_position);

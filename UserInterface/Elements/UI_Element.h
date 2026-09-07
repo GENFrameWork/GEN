@@ -209,7 +209,14 @@ class UI_ELEMENT : public XSUBJECT
 		UI_ELEMENT_TYPE_DIRECTION							GetDirection								();
 		bool																	SetDirection								(UI_ELEMENT_TYPE_DIRECTION direction);
 
-		double																GetXPositionWithScroll			();		
+		// "text-align" (see UI_MANAGER::GetLayoutElement_Base): LEFT/RIGHT/CENTER, universal on the base class
+		// exactly like "direction"/"role"/"blink" above even though today only UI_ELEMENT_TEXT's Draw_Text reads
+		// it. Default is LEFT, which every widget type already renders as (no offset), so this is a no-op for
+		// every element type and every layout authored before it existed.
+		UI_ELEMENT_TYPE_ALIGN									GetTextAlign								();
+		bool																	SetTextAlign								(UI_ELEMENT_TYPE_ALIGN textalign);
+
+		double																GetXPositionWithScroll			();
 		bool																	SetXPositionWithScroll			(double x_positionwithscroll);		
 
 		double																GetYPositionWithScroll			();		
@@ -304,7 +311,18 @@ class UI_ELEMENT : public XSUBJECT
 		bool																	SetBlink										(XDWORD timeblink);
 		bool																	GetStateBlink								();
 		bool																	SwitchStateBlink					  ();
-		XTIMER*																GetTimerBlink								();	
+		XTIMER*																GetTimerBlink								();
+
+		// "transition" (Step 7, "transiciones"): a plain millisecond duration, read once at load time exactly
+		// like "blink" above (see UI_MANAGER::GetLayoutElement_Base). 0 (default, every layout authored before
+		// this existed) means ReapplyStyleVisual() keeps jumping color/bckgrdcolor instantly on a state change,
+		// same as always; a positive value makes it tween instead. IsTransitioning()/UpdateTransition() follow
+		// the exact polling idiom IsBlinking()/SwitchStateBlink() already use, driven from the same per-frame
+		// UI_SKIN::Draw() call.
+		XDWORD																GetTransitionDuration				();
+		bool																	SetTransitionDuration				(XDWORD milliseconds);
+		bool																	IsTransitioning							();
+		void																	UpdateTransition						();
 
 		UI_ELEMENT_TRANSITION_STATE_SHOW			GetTransitionStateShow			();
 		void																	SetTransitionStateShow			(UI_ELEMENT_TRANSITION_STATE_SHOW	 transitionstateshow);
@@ -355,6 +373,7 @@ class UI_ELEMENT : public XSUBJECT
 		XDWORD																z_level;
 
 		UI_ELEMENT_TYPE_DIRECTION							direction;
+		UI_ELEMENT_TYPE_ALIGN									textalign;
 
 		double																x_positionwithscroll;
 		double																y_positionwithscroll;
@@ -378,8 +397,16 @@ class UI_ELEMENT : public XSUBJECT
 
 		XDWORD																blink_time;
 		bool																	blink_state;
-		XTIMER*																blink_xtimer;	
-		XDWORD																blink_nchanges;		
+		XTIMER*																blink_xtimer;
+		XDWORD																blink_nchanges;
+
+		XDWORD																style_transition_duration;
+		bool																	style_transition_active;
+		XTIMER*																style_transition_xtimer;
+		UI_COLOR															style_transition_color_from;
+		UI_COLOR															style_transition_color_to;
+		UI_COLOR															style_transition_backgroundcolor_from;
+		UI_COLOR															style_transition_backgroundcolor_to;
 
 		UI_ELEMENT_TRANSITION_STATE_SHOW			transitionstateshow;
 

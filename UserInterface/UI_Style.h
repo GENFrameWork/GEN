@@ -102,6 +102,14 @@ class UI_STYLE
 
     bool                            FillFromCSSDeclarations     (UI_STYLESHEET* sheet, UI_ELEMENT* element);
 
+
+    // Step 6 ("sin overrides puntuales por elemento"): inline "style=" front-end. Parses a bare CSS declaration
+    // list -- no selector needed, just "prop: value; prop: value" -- and layers it on top of the current bag.
+    // Called LAST by GetLayoutElement_Base(), after both the plain XML attributes and the stylesheet cascade,
+    // so it wins over both -- an exact match of HTML's own inline-style precedence -- without requiring a
+    // one-off class in the .css just to tweak a single element.
+    bool                            FillFromInlineStyle         (XSTRING& styletext);
+
   private:
 
     UI_STYLEPROPERTY*               Find                        (XCHAR* key);

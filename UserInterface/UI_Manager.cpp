@@ -2528,15 +2528,27 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
                                                                                         {
                                                                                           width  =  ui_skincanvas->GetCanvas()->GetWidth();
                                                                                           height =  ui_skincanvas->GetCanvas()->GetHeight();
-                                                                                        }                                 
+                                                                                        }
 
-                                                                                      element->GetBoundaryLine()->height  = 0;
-                                                                                      element->GetBoundaryLine()->width   = 0;
-                                                                                         
-                                                                                      if(element_text->GetText()->Compare(resolve.Get(), true))  
-                                                                                        { 
-                                                                                          element_text->GetText()->Set(resolve);   
-                                                                                              
+                                                                                      // NOTE: the boundary line must be zeroed (to force CalculeBoundaryLine_AllElements to
+                                                                                      // re-measure an AUTO-sized box, e.g. a centered "37%" caption) ONLY when the resolved
+                                                                                      // value actually changed. This used to run unconditionally on every single tick this
+                                                                                      // function was called (i.e. every frame there is a live mask on the element, changed
+                                                                                      // or not): on every tick where the value happened to stay the SAME, the width/height
+                                                                                      // were zeroed but never rebuilt (the rebuild below only runs on an actual change), so
+                                                                                      // Draw_Text's text-align:center offset -- (boundarywidth - textwidth)/2 -- was computed
+                                                                                      // against a bogus width of 0 for as long as the value stayed put, permanently shifting
+                                                                                      // the text left by half its own width. The ONE frame where the value DID change was the
+                                                                                      // only frame with a correctly rebuilt (and therefore correctly centered) box, which is
+                                                                                      // exactly why a live value looked both permanently off-center AND "flashed" wider/
+                                                                                      // narrower every time it changed, most visibly on the CPU/RAM usage ring captions.
+                                                                                      if(element_text->GetText()->Compare(resolve.Get(), true))
+                                                                                        {
+                                                                                          element_text->GetText()->Set(resolve);
+
+                                                                                          element->GetBoundaryLine()->height  = 0;
+                                                                                          element->GetBoundaryLine()->width   = 0;
+
                                                                                           ui_skincanvas->CalculeBoundaryLine_AllElements(element, false);
                                                                                           ui_skincanvas->CalculePosition(element, width, height);
 
@@ -3002,7 +3014,7 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
   if(!node) return false;
 
   sizefont = 0;
-    
+
   if(!GetLayoutElementValue(node, __L("sizefont"), sizefont))
     {
       return GetParentSizeFont(node->GetFather(), sizefont);
@@ -3013,7 +3025,44 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool UI_MANAGER::ResolvePercentValue(XSTRING& valuestr, double basis, double& out)
+* @brief      Step 4 (relative units): resolve a "N%" token against `basis` (the father element's own width or
+*             height, whichever axis `valuestr` was authored for). Returns false -- leaving `out` untouched --
+*             for anything that is not a trailing '%': callers keep using their existing raw-pixel path in that
+*             case, so this never changes behaviour for values that were never a percentage to begin with.
+* @note       Only "%" is added here; "em" is deliberately left out. Unlike a container's width/height (already
+*             resolved on `element->GetFather()` by the time GetLayoutElement_Base() runs its children), an
+*             element's own font size is not known at this point in the pipeline -- "sizefont" is read later,
+*             per widget type, by builders such as GetLayoutElement_Text() -- so "em" cannot be resolved here
+*             without reordering that pipeline. Flagged instead of worked around; see GEN_FrameWork chat log.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  valuestr : Raw attribute/declaration value, e.g. "50%" or "120".
+* @param[in]  basis : The dimension (in pixels) that 100% maps to. Callers pass 0.0 when there is no father to
+*             measure (a top-level layout element): the percentage then resolves to 0, same as any other
+*             not-yet-supported case, rather than reading garbage.
+* @param[out] out : Resolved pixel value. Untouched when `valuestr` is not a percentage.
+*
+* @return     bool : true if `valuestr` was a percentage and `out` was set; false otherwise.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ResolvePercentValue(XSTRING& valuestr, double basis, double& out)
+{
+  if(valuestr.IsEmpty()) return false;
+  if(valuestr.Find(__L("%"), true) == XSTRING_NOTFOUND) return false;
+
+  XSTRING number = valuestr;
+  number.DeleteNoCharacters(__L("% \t\r\n"));   // strip the '%' plus any stray whitespace, e.g. "50 %"
+
+  out = basis * (number.ConvertToDouble() / 100.0);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
 * @brief      Get layout element base
 * @ingroup    USERINTERFACE
@@ -3047,6 +3096,18 @@ bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout,
   if(stylesheet && element)
     {
       style.FillFromCSSDeclarations(stylesheet, element);
+    }
+
+  // Step 6 ("sin overrides puntuales por elemento"): a "style=" XML attribute is the highest-priority layer,
+  // exactly like HTML's own inline style -- it wins over both the plain XML attributes and any stylesheet rule
+  // (class, id, or :root) applied above, without needing a one-off class in the .css for a single element's
+  // tweak. FillFromXMLElement() already copied "style" into the bag like any other attribute; read it back out
+  // and, if present, layer its declarations on top. Absent/empty "style" (the overwhelming majority of
+  // elements, and every layout authored before this existed) costs one bag lookup and nothing else.
+  XSTRING inlinestyle;
+  if(style.Get(__L("style"), inlinestyle) && !inlinestyle.IsEmpty())
+    {
+      style.FillFromInlineStyle(inlinestyle);
     }
 
   XSTRING fathertagname;
@@ -3088,13 +3149,21 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   style.Get(__L("name"), name);
   element->GetName()->Set(name);
 
+  // Step 4 (relative units): "%" on xpos/ypos/width/height resolves against the father's own already-resolved
+  // box -- safe because GEN builds a layout top-down (a father's UI_ELEMENT is always fully resolved before
+  // GetLayoutElement_Base() ever runs for one of its children). A top-level element (no father) has no defined
+  // basis, so its percentage resolves to 0 exactly like today's "missing attribute" case, rather than guessing
+  // against the canvas -- see ResolvePercentValue()'s note on why "em" is not attempted here at all.
+  double fatherwidth  = element->GetFather() ? element->GetFather()->GetBoundaryLine()->width  : 0.0;
+  double fatherheight = element->GetFather() ? element->GetFather()->GetBoundaryLine()->height : 0.0;
+
   XSTRING position;
   if(style.Get(__L("xpos"), position))
     {
       if(!position.Compare(__L("left"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_LEFT;
         else if(!position.Compare(__L("right"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_RIGHT;
           else if(!position.Compare(__L("center"), true)) xpos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else style.Get(__L("xpos"), xpos);
+            else if(!ResolvePercentValue(position, fatherwidth, xpos)) style.Get(__L("xpos"), xpos);
     }
 
   if(style.Get(__L("ypos"), position))
@@ -3102,7 +3171,7 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
       if(!position.Compare(__L("up"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_UP;
         else if(!position.Compare(__L("down"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_DOWN;
           else if(!position.Compare(__L("center"), true)) ypos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else style.Get(__L("ypos"), ypos);
+            else if(!ResolvePercentValue(position, fatherheight, ypos)) style.Get(__L("ypos"), ypos);
     }
 
 
@@ -3111,13 +3180,13 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  width = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  width = UI_ELEMENT_TYPE_ALIGN_AUTO;
-            else style.Get(__L("width"), width);
+          else if(!ResolvePercentValue(size, fatherwidth, width)) style.Get(__L("width"), width);
     }
    else
     {
       if(element->GetFather() && adjusttoparent)
         {
-          width = element->GetFather()->GetBoundaryLine()->width;
+          width = fatherwidth;
         }
     }
 
@@ -3125,13 +3194,13 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  height = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  height = UI_ELEMENT_TYPE_ALIGN_AUTO;
-            else style.Get(__L("height"), height);
+          else if(!ResolvePercentValue(size, fatherheight, height)) style.Get(__L("height"), height);
     }
    else
     {
       if(element->GetFather() && adjusttoparent)
         {
-          height = element->GetFather()->GetBoundaryLine()->height;
+          height = fatherheight;
         }
     }
 
@@ -3145,6 +3214,22 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!directionstr.Compare(__L("horizontal"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_HORIZONTAL);
         else if(!directionstr.Compare(__L("vertical"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_VERTICAL);
+    }
+
+  // "text-align" (Step 10): "textalignment" is the historical GEN attribute name (already used, XML-only, by
+  // UI_ELEMENT_TEXTBOX's own builder); "text-align" is accepted as the CSS-natural alias, first-hit-wins same
+  // as "bckgrdcolor"/"background-color" above. Absent/unrecognized leaves the element's constructor default
+  // (LEFT) untouched, so this is a no-op for every layout authored before it existed.
+  XSTRING textalignstr;
+  if(!style.Get(__L("textalignment"), textalignstr) || textalignstr.IsEmpty())
+    {
+      style.Get(__L("text-align"), textalignstr);
+    }
+  if(!textalignstr.IsEmpty())
+    {
+      if(!textalignstr.Compare(__L("left"), true))  element->SetTextAlign(UI_ELEMENT_TYPE_ALIGN_LEFT);
+        else if(!textalignstr.Compare(__L("right"), true))  element->SetTextAlign(UI_ELEMENT_TYPE_ALIGN_RIGHT);
+          else if(!textalignstr.Compare(__L("center"), true)) element->SetTextAlign(UI_ELEMENT_TYPE_ALIGN_CENTER);
     }
 
   // NOTE: "role" is reserved for GEN custom Chromes (window caption) layouts: it lets GRPSCREEN find "the close
@@ -3223,6 +3308,15 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
 
   double blinktime;
   if(style.Get(__L("blink"), blinktime)) element->SetBlink((XDWORD)blinktime);
+
+  // Step 7 ("transiciones"): a plain "transition: <milliseconds>" duration -- GEN's minimal CSS subset stays
+  // minimal here too (no property list, no easing keyword). Read once at load time exactly like "blink" above;
+  // UI_ELEMENT::ReapplyStyleVisual() consults it whenever a pseudo-class state change re-resolves color/
+  // bckgrdcolor, tweening between the old and new value over that many milliseconds instead of jumping
+  // instantly. 0 (the default -- every layout authored before this existed) preserves the original instant
+  // jump exactly.
+  double transitionms;
+  if(style.Get(__L("transition"), transitionms)) element->SetTransitionDuration((XDWORD)transitionms);
 
   XSTRING extra;
   style.Get(__L("extra"), extra);

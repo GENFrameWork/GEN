@@ -181,6 +181,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
 
     bool                            GetLayoutElement_CalculateBoundaryLine    (UI_LAYOUT* layout, UI_ELEMENT* element, bool adjustsizemargin = false);
     bool                            GetParentSizeFont                         (XFILEXMLELEMENT* node, double& sizefont);
+    bool                            ResolvePercentValue                       (XSTRING& valuestr, double basis, double& out);
 
     bool                            GetLayoutElement_Base                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);
     bool                            GetLayoutElement_Base                     (UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);

@@ -39,6 +39,7 @@
 
 #include "UI_Element.h"
 #include "UI_StyleSheet.h"
+#include "UI_CSSParser.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -301,7 +302,42 @@ bool UI_STYLE::FillFromCSSDeclarations(UI_STYLESHEET* sheet, UI_ELEMENT* element
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool UI_STYLE::FillFromInlineStyle(XSTRING& styletext)
+* @brief      Inline "style=" front-end (Step 6). Parses `styletext` as a bare CSS declaration list (reusing
+*             UI_CSSPARSER::ParseInlineDeclarations(), the same grammar a stylesheet rule's body uses) and
+*             layers every declaration on top of the current bag, overwriting matching keys.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  styletext : Raw "prop: value; prop: value" text, e.g. from a "style=\"...\"" XML attribute.
+*
+* @return     bool : true if at least one declaration was parsed and applied; false otherwise.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_STYLE::FillFromInlineStyle(XSTRING& styletext)
+{
+  if(styletext.IsEmpty()) return false;
+
+  UI_STYLE     inlinedeclarations;
+  UI_CSSPARSER parser;
+
+  if(!parser.ParseInlineDeclarations(styletext, inlinedeclarations)) return false;
+
+  XVECTOR<UI_STYLEPROPERTY*>* properties = inlinedeclarations.GetProperties();
+  if(!properties) return false;
+
+  for(XDWORD c=0; c<properties->GetSize(); c++)
+    {
+      UI_STYLEPROPERTY* property = properties->Get(c);
+      if(property) Set(property->GetKey().Get(), property->GetValue());
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         UI_STYLEPROPERTY* UI_STYLE::Find(XCHAR* key)
 * @brief      Find a property by key (case-insensitive, matching XML attribute lookup semantics).
 * @note       INTERNAL
