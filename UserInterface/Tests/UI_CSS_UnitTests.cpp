@@ -198,6 +198,73 @@ static XSTRING* UI_CSS_UnitTests_NewStr(XCHAR* text)
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @class      UI_CSS_UnitTests_FakeAncestors
+* @brief      Phase 2 ("combinadores descendiente/hijo") test double: a fixed ancestor chain (index 0 = closest
+*             ancestor, appended outward) with its own type/id/single-class per level, standing in for a real
+*             UI_ELEMENT father chain -- so descendant/child combinator matching can be tested the same
+*             pure-logic way as the rest of this file, no UI_ELEMENT/UI_MANAGER/GRPSCREEN graphics stack
+*             required. See UI_CSSANCESTORPROVIDER's doc comment in UI_StyleSheet.h for the interface itself.
+* @note       INTERNAL
+* @ingroup    UNIT_TESTS
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+class UI_CSS_UnitTests_FakeAncestors : public UI_CSSANCESTORPROVIDER
+{
+  public:
+    virtual ~UI_CSS_UnitTests_FakeAncestors()
+    {
+      types.DeleteContents();
+      types.DeleteAll();
+
+      ids.DeleteContents();
+      ids.DeleteAll();
+
+      for(XDWORD c=0; c<classlists.GetSize(); c++)
+        {
+          XVECTOR<XSTRING*>* classlist = classlists.Get(c);
+          if(classlist)
+            {
+              classlist->DeleteContents();
+              classlist->DeleteAll();
+              GEN_DELETE classlist;
+            }
+        }
+
+      classlists.DeleteAll();
+    }
+
+    // Appends one more ancestor, one level further out than whatever was added before.
+    void AddAncestor(XCHAR* type, XCHAR* singleclass = NULL)
+    {
+      types.Add(UI_CSS_UnitTests_NewStr(type));
+      ids.Add(UI_CSS_UnitTests_NewStr(__L("")));
+
+      XVECTOR<XSTRING*>* classlist = GEN_NEW XVECTOR<XSTRING*>();
+      if(classlist && singleclass) classlist->Add(UI_CSS_UnitTests_NewStr(singleclass));
+      classlists.Add(classlist);
+    }
+
+    virtual bool GetAncestor(int depth, XSTRING** outtype, XSTRING** outid, XVECTOR<XSTRING*>** outclasses)
+    {
+      if(depth < 0 || (XDWORD)depth >= types.GetSize()) return false;
+
+      if(outtype)    *outtype    = types.Get(depth);
+      if(outid)      *outid      = ids.Get(depth);
+      if(outclasses) *outclasses = classlists.Get(depth);
+
+      return true;
+    }
+
+  private:
+
+    XVECTOR<XSTRING*>            types;
+    XVECTOR<XSTRING*>            ids;
+    XVECTOR<XVECTOR<XSTRING*>*>  classlists;
+};
+
+
 //-----------------------------------------------------------------------------------------
 // UI_CSSPARSER : selector parsing
 
@@ -239,6 +306,79 @@ TEST(UI_CSSParser, ParsesCommaSeparatedSelectorGroup)
   EXPECT_TRUE(parser.ParseText(text, sheet));
   ASSERT_EQ(sheet.Rules_Count(), 1);
   EXPECT_EQ((int)sheet.Rules_GetAll()->Get(0)->GetSelectors().GetSize(), 2);
+}
+
+
+//-----------------------------------------------------------------------------------------
+// UI_CSSPARSER::ResolveLineColumn (Phase 2, "diagnóstico con línea real de fichero")
+
+TEST(UI_CSSParser, ResolveLineColumnOnFirstLineReturnsLineOneAndOffsetPlusOneAsColumn)
+{
+  XSTRING text(__L("button { color: red; }"));
+  int     line = -1, col = -1;
+
+  UI_CSSPARSER::ResolveLineColumn(text, 7, line, col);
+
+  EXPECT_EQ(line, 1);
+  EXPECT_EQ(col, 8);   // 1-based: offset 7 is the 8th character
+}
+
+TEST(UI_CSSParser, ResolveLineColumnCountsEmbeddedNewlines)
+{
+  // Offsets: "button {" = 0..7, '\n' at 8, line 2 starts at 9: ' '(9) ' '(10) 'c'(11) 'o'(12) ...
+  XSTRING text(__L("button {\n  color: red;\n}"));
+  int     line = -1, col = -1;
+
+  UI_CSSPARSER::ResolveLineColumn(text, 12, line, col);   // 'o' inside "color" on line 2
+
+  EXPECT_EQ(line, 2);
+  EXPECT_EQ(col, 4);   // 1-based column within line 2: linestart=9, offset=12 -> (12-9)+1
+}
+
+TEST(UI_CSSParser, ResolveLineColumnClampsAnOffsetPastTheEndOfText)
+{
+  XSTRING text(__L("a\nb"));
+  int     line = -1, col = -1;
+
+  UI_CSSPARSER::ResolveLineColumn(text, 999, line, col);
+
+  EXPECT_EQ(line, 2);   // clamped to text length (3), which is on line 2 ("b")
+  EXPECT_EQ(col, 2);
+}
+
+TEST(UI_CSSParser, ResolveLineColumnOnEmptyTextIsLineOneColumnOne)
+{
+  XSTRING text(__L(""));
+  int     line = -1, col = -1;
+
+  UI_CSSPARSER::ResolveLineColumn(text, 0, line, col);
+
+  EXPECT_EQ(line, 1);
+  EXPECT_EQ(col, 1);
+}
+
+
+//-----------------------------------------------------------------------------------------
+// UI_CSSPARSER : error recovery across real multi-line source (Phase 2 regression guard -- the line-preserving
+// flatten in ParseFile() must not change WHAT parses, only what a diagnostic reports)
+
+TEST(UI_CSSParser, RecoversFromAMalformedRuleAcrossEmbeddedNewlinesJustLikeOnOneLine)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // ".broken" has no ':' before ';' -- ReadDeclarationBlock() discards the declaration and keeps parsing the
+  // block; ".ok" is a separate, well-formed rule that must still come through untouched.
+  text.Set(__L(".broken {\n  colorred;\n}\n.ok {\n  color: red;\n}"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  UI_CSSSELECTOR* selector = sheet.Rules_GetAll()->Get(0)->GetSelectors().Get(0);
+  ASSERT_TRUE(selector != NULL);
+  EXPECT_EQ((int)selector->GetClasses().GetSize(), 1);
+  EXPECT_EQ(selector->GetClasses().Get(0)->Compare(__L("ok"), true), 0);
 }
 
 
@@ -288,6 +428,405 @@ TEST(UI_CSSParser, LastIdWinsWhenACompoundSelectorRepeatsHash)
   EXPECT_TRUE(parser.ParseText(text, sheet));
   ASSERT_EQ(sheet.Rules_Count(), 1);
   EXPECT_EQ(sheet.Rules_GetAll()->Get(0)->GetSelectors().Get(0)->GetID().Compare(__L("second"), true), 0);
+}
+
+
+//-----------------------------------------------------------------------------------------
+// Phase 2 ("lexer con tokens/strings/escapes reales"): quoted values/URLs and escaped selector fragments.
+
+TEST(UI_CSSParser, DeclarationValueKeepsASemicolonEmbeddedInsideAQuotedString)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+  XSTRING        value;
+
+  // Before this increment, the value scan stopped at the FIRST ';' it saw, quoted or not -- truncating this to
+  // '"A' and leaving '; B"' to be misread as a second (malformed) declaration. The lexer's string-aware scan
+  // must treat the whole quoted span as one atomic unit and keep the value intact.
+  text.Set(__L(".a { font-family: \"A; B\"; color: red; }"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  ASSERT_TRUE(sheet.Rules_GetAll()->Get(0)->GetDeclarations().Get(__L("font-family"), value));
+  EXPECT_EQ(value.Compare(__L("\"A; B\""), true), 0);
+
+  // The following declaration in the same block must still parse normally.
+  ASSERT_TRUE(sheet.Rules_GetAll()->Get(0)->GetDeclarations().Get(__L("color"), value));
+  EXPECT_EQ(value.Compare(__L("red"), true), 0);
+}
+
+
+TEST(UI_CSSParser, DeclarationValueKeepsAClosingBraceEmbeddedInsideAQuotedString)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+  XSTRING        value;
+
+  // Same gap as above but with '}' instead of ';': without string-awareness this would end the whole
+  // declaration BLOCK early, at the quoted '}', discarding "color" below and corrupting the rest of the parse.
+  text.Set(__L(".a { content: \"x}y\"; color: blue; }"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  ASSERT_TRUE(sheet.Rules_GetAll()->Get(0)->GetDeclarations().Get(__L("content"), value));
+  EXPECT_EQ(value.Compare(__L("\"x}y\""), true), 0);
+
+  ASSERT_TRUE(sheet.Rules_GetAll()->Get(0)->GetDeclarations().Get(__L("color"), value));
+  EXPECT_EQ(value.Compare(__L("blue"), true), 0);
+}
+
+
+TEST(UI_CSSParser, SkipToNextRuleResyncsPastAClosingBraceEmbeddedInsideAnUnsupportedAtRulesQuotedString)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // "@media" is outside GEN's CSS subset, so ParseText() discards it via SkipToNextRule() -- called starting
+  // right at the '@', not at end-of-text (unlike the malformed-rule path, which already has its own quote-aware
+  // scan by the time it would ever reach SkipToNextRule()). The at-rule's quoted argument contains a '}': a
+  // non-quote-aware scan stops right there -- INSIDE the string, before the at-rule's own block even starts --
+  // and resumes mid-string ('y" { color: red; } .ok { color: blue; }'), which then gets misread as a spurious
+  // EXTRA rule (garbage selector text "y\" ", but a syntactically valid "{ color: red; }" body) ahead of ".ok",
+  // so the sheet ends up with 2 rules instead of 1. SkipToNextRule() must skip the quoted span atomically and
+  // resync on the at-rule's OWN (real, unquoted) closing brace instead.
+  text.Set(__L("@media \"x}y\" { color: red; } .ok { color: blue; }"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  UI_CSSSELECTOR* selector = sheet.Rules_GetAll()->Get(0)->GetSelectors().Get(0);
+  ASSERT_TRUE(selector != NULL);
+  EXPECT_EQ((int)selector->GetClasses().GetSize(), 1);
+  EXPECT_EQ(selector->GetClasses().Get(0)->Compare(__L("ok"), true), 0);
+}
+
+
+TEST(UI_CSSParser, BackslashEscapeInAClassNameEmbedsALiteralDelimiterCharacter)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // ".foo\.bar" names a class literally containing a dot -- the escaped '.' must NOT be read as the start of a
+  // second class fragment.
+  text.Set(__L(".foo\\.bar { color: red; }"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  UI_CSSSELECTOR* selector = sheet.Rules_GetAll()->Get(0)->GetSelectors().Get(0);
+  ASSERT_TRUE(selector != NULL);
+  ASSERT_EQ((int)selector->GetClasses().GetSize(), 1);
+  EXPECT_EQ(selector->GetClasses().Get(0)->Compare(__L("foo.bar"), true), 0);
+}
+
+
+TEST(UI_CSSParser, ImportURLDecodesABackslashEscapeInsideTheQuotedString)
+{
+  // The imported FILE is a normal "lexer_escape_theme.css" on disk; the @import line names it as
+  // "lexer_escape_th\eme.css" -- an escaped 'e' decodes to a literal 'e' (escaping a character that has no
+  // special meaning is a no-op other than dropping the backslash), so this exercises ReadStringLiteral()'s
+  // escape decoding on a real, filesystem-portable path: if the backslash were NOT decoded away, the importer
+  // would look for a file literally named "lexer_escape_th\eme.css" and fail to find it.
+  XPATH themepath;
+  UI_CSS_UnitTests_WriteFile(__L("lexer_escape_theme.css"), __L(".imported { color: 8,8,8,255; }"), themepath);
+
+  XSTRING basecontent = __L("@import \"lexer_escape_th\\eme.css\";");
+
+  XPATH basepath;
+  UI_CSS_UnitTests_WriteFile(__L("lexer_escape_base.css"), basecontent.Get(), basepath);
+
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  ASSERT_TRUE(parser.ParseFile(basepath, sheet));
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  XSTRING              elementtype; elementtype.Set(__L("form"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("imported")));
+
+  EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+  XSTRING color;
+  ASSERT_TRUE(out.Get(__L("color"), color));
+  EXPECT_EQ(color.Compare(__L("8,8,8,255"), true), 0);
+
+  elementclasses.DeleteContents();
+}
+
+
+//-----------------------------------------------------------------------------------------
+// Phase 2 ("combinadores descendiente/hijo"): descendant (" ") / child (">") combinator matching.
+
+TEST(UI_CSSParser, DescendantCombinatorMatchesAnAncestorAtAnyDepthNotJustTheImmediateParent)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  text.Set(__L("form .a { color: red; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  UI_CSS_UnitTests_FakeAncestors ancestors;
+  ancestors.AddAncestor(__L("div"));    // depth 0: immediate parent, does NOT match "form"
+  ancestors.AddAncestor(__L("form"));   // depth 1: grandparent, DOES match "form"
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("a")));
+
+  EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out, &ancestors));
+
+  XSTRING color;
+  ASSERT_TRUE(out.Get(__L("color"), color));
+  EXPECT_EQ(color.Compare(__L("red"), true), 0);
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_CSSParser, DescendantCombinatorFailsWhenNoAncestorMatchesAtAll)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  text.Set(__L("form .a { color: red; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  UI_CSS_UnitTests_FakeAncestors ancestors;
+  ancestors.AddAncestor(__L("div"));   // the only ancestor, and it is not "form"
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("a")));
+
+  EXPECT_FALSE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out, &ancestors));
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_CSSParser, ChildCombinatorMatchesWhenTheImmediateParentIsExactlyRight)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  text.Set(__L("form > .a { color: green; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  UI_CSS_UnitTests_FakeAncestors ancestors;
+  ancestors.AddAncestor(__L("form"));   // depth 0: immediate parent, matches
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("a")));
+
+  EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out, &ancestors));
+
+  XSTRING color;
+  ASSERT_TRUE(out.Get(__L("color"), color));
+  EXPECT_EQ(color.Compare(__L("green"), true), 0);
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_CSSParser, ChildCombinatorDoesNotMatchAGrandparentEvenThoughDescendantWould)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // Same ancestor shape as DescendantCombinatorMatchesAnAncestorAtAnyDepthNotJustTheImmediateParent, but with
+  // '>' instead of a plain space: the child combinator must reject it, since "form" is the GRANDPARENT here,
+  // not the immediate parent ("div" is).
+  text.Set(__L("form > .a { color: red; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  UI_CSS_UnitTests_FakeAncestors ancestors;
+  ancestors.AddAncestor(__L("div"));
+  ancestors.AddAncestor(__L("form"));
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("a")));
+
+  EXPECT_FALSE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out, &ancestors));
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_CSSParser, ACombinatorSelectorNeverMatchesWhenNoAncestorProviderIsGiven)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // The target element's OWN identity (class "a") matches the subject compound fine; without an ancestor
+  // provider (the default, NULL) the ancestor requirement can never be verified, so the whole selector must be
+  // treated as non-matching -- conservative failure, never a false positive.
+  text.Set(__L("form .a { color: red; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("a")));
+
+  EXPECT_FALSE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_CSSParser, TwoHopCombinatorChainMatchesWhenEachStepMatchesItsOwnAncestor)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // "form .a > .b": subject is ".b"; its IMMEDIATE parent must match ".a" (child combinator); some ancestor
+  // ABOVE that must match "form" (descendant combinator, any depth).
+  text.Set(__L("form .a > .b { color: purple; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  UI_CSS_UnitTests_FakeAncestors ancestors;
+  ancestors.AddAncestor(__L("div"), __L("a"));   // depth 0: immediate parent, matches ".a" (child step)
+  ancestors.AddAncestor(__L("section"));         // depth 1: does not match "form" yet
+  ancestors.AddAncestor(__L("form"));            // depth 2: matches "form" (descendant step)
+
+  XSTRING              elementtype; elementtype.Set(__L("span"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("b")));
+
+  EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out, &ancestors));
+
+  XSTRING color;
+  ASSERT_TRUE(out.Get(__L("color"), color));
+  EXPECT_EQ(color.Compare(__L("purple"), true), 0);
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_CSSParser, TwoHopCombinatorChainFailsWhenTheChildStepAloneDoesNotMatch)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // Same as the success case above, EXCEPT the immediate parent (depth 0) does not carry class "a" -- the
+  // child combinator does not backtrack/search further out, so this must fail even though "form" IS present
+  // higher up the chain.
+  text.Set(__L("form .a > .b { color: purple; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  UI_CSS_UnitTests_FakeAncestors ancestors;
+  ancestors.AddAncestor(__L("div"));      // depth 0: immediate parent, does NOT carry class "a"
+  ancestors.AddAncestor(__L("section"));
+  ancestors.AddAncestor(__L("form"));
+
+  XSTRING              elementtype; elementtype.Set(__L("span"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("b")));
+
+  EXPECT_FALSE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out, &ancestors));
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_CSSSelector, CombinatorSequenceSpecificityIsTheSumOfEveryCompoundsOwnSpecificity)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // "form"=type(1) + ".a"=class(10) + ".b"=class(10) -- real CSS sums specificity across the whole sequence,
+  // not just the subject.
+  text.Set(__L("form .a > .b { color: red; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  UI_CSSSELECTOR* selector = sheet.Rules_GetAll()->Get(0)->GetSelectors().Get(0);
+  ASSERT_TRUE(selector != NULL);
+  EXPECT_EQ(selector->GetSpecificity(), 21);
+}
+
+
+TEST(UI_CSSParser, CombinatorFreeSelectorIsUnaffectedByCombinatorSupport)
+{
+  // Regression guard: a plain, single-compound selector must still parse and match EXACTLY as before -- no
+  // ancestor steps attached, no ancestor provider needed at all.
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  text.Set(__L(".a { color: red; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  ASSERT_EQ(sheet.Rules_Count(), 1);
+
+  UI_CSSSELECTOR* selector = sheet.Rules_GetAll()->Get(0)->GetSelectors().Get(0);
+  ASSERT_TRUE(selector != NULL);
+  EXPECT_FALSE(selector->HasAncestorSteps());
+  EXPECT_EQ((int)selector->GetAncestorSteps().GetSize(), 0);
+
+  XSTRING              elementtype;
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("a")));
+
+  EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+  XSTRING color;
+  ASSERT_TRUE(out.Get(__L("color"), color));
+  EXPECT_EQ(color.Compare(__L("red"), true), 0);
+
+  elementclasses.DeleteContents();
 }
 
 
@@ -408,6 +947,156 @@ TEST(UI_StyleSheet, PseudoRuleOnlyMatchesWhenThePseudoIsActive)
 
   elementclasses.DeleteContents();
   activepseudos.DeleteContents();
+}
+
+
+//-----------------------------------------------------------------------------------------
+// Phase 2 ("índice de reglas por id/tipo/clase"): CollectCandidateRules() must be a pure performance change --
+// every combination below exercises one axis of the type/id/class index (plus the "unrestricted" bucket for
+// selectors that constrain none of them) and asserts Resolve()/HasPseudoRulesFor() still behave exactly as the
+// pre-index full scan did.
+
+TEST(UI_StyleSheet, UniversalSelectorRuleMatchesAnyElementViaTheUnrestrictedBucket)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  text.Set(__L("* { color: 3,3,3,255; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;   elementid.Set(__L("whatever"));
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("some-class")));
+
+  EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+  XSTRING color;
+  ASSERT_TRUE(out.Get(__L("color"), color));
+  EXPECT_EQ(color.Compare(__L("3,3,3,255"), true), 0);
+
+  elementclasses.DeleteContents();
+}
+
+
+TEST(UI_StyleSheet, TypeOnlySelectorMatchesAnElementWithNoIdOrClasses)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  text.Set(__L("button { color: 4,4,4,255; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+  XSTRING color;
+  ASSERT_TRUE(out.Get(__L("color"), color));
+  EXPECT_EQ(color.Compare(__L("4,4,4,255"), true), 0);
+
+  // A DIFFERENT type must not pick up the type-bucket hit.
+  XSTRING otherfromtype; otherfromtype.Set(__L("label"));
+  UI_STYLE outother;
+  EXPECT_FALSE(sheet.Resolve(otherfromtype, elementid, elementclasses, activepseudos, outother));
+}
+
+
+TEST(UI_StyleSheet, OneRuleWithSelectorsOnDifferentAxesMatchesEachAxisIndependently)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // Single rule, comma-separated compound selectors landing in different index buckets (id vs class): the id
+  // bucket and the class bucket must each independently surface this same UI_CSSRULE as a candidate.
+  text.Set(__L("#only-id, .only-class { color: 5,5,5,255; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  XSTRING              elementtype; elementtype.Set(__L("form"));
+  XVECTOR<XSTRING*>    activepseudos;
+
+  // Match via the id axis only.
+  {
+    XSTRING            elementid; elementid.Set(__L("only-id"));
+    XVECTOR<XSTRING*>  elementclasses;
+    UI_STYLE           out;
+
+    EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+    XSTRING color;
+    ASSERT_TRUE(out.Get(__L("color"), color));
+    EXPECT_EQ(color.Compare(__L("5,5,5,255"), true), 0);
+  }
+
+  // Match via the class axis only.
+  {
+    XSTRING            elementid;
+    XVECTOR<XSTRING*>  elementclasses;
+    elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("only-class")));
+    UI_STYLE           out;
+
+    EXPECT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+    XSTRING color;
+    ASSERT_TRUE(out.Get(__L("color"), color));
+    EXPECT_EQ(color.Compare(__L("5,5,5,255"), true), 0);
+
+    elementclasses.DeleteContents();
+  }
+
+  // Neither axis: no match.
+  {
+    XSTRING            elementid; elementid.Set(__L("someone-else"));
+    XVECTOR<XSTRING*>  elementclasses;
+    UI_STYLE           out;
+
+    EXPECT_FALSE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+  }
+}
+
+
+TEST(UI_StyleSheet, HasPseudoRulesForFindsABarePseudoSelectorViaTheUnrestrictedBucket)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  // ":hover" alone has no type/id/class, so it can only be found through index_unrestricted.
+  text.Set(__L(":hover { color: 6,6,6,255; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+
+  EXPECT_TRUE(sheet.HasPseudoRulesFor(elementtype, elementid, elementclasses));
+}
+
+
+TEST(UI_StyleSheet, HasPseudoRulesForReturnsFalseWhenNoPseudoRuleExistsAtAll)
+{
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+  XSTRING        text;
+
+  text.Set(__L("button { color: 7,7,7,255; }"));
+  ASSERT_TRUE(parser.ParseText(text, sheet));
+
+  XSTRING              elementtype; elementtype.Set(__L("button"));
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+
+  EXPECT_FALSE(sheet.HasPseudoRulesFor(elementtype, elementid, elementclasses));
 }
 
 
@@ -543,6 +1232,43 @@ TEST(UI_CSSParser, CyclicImportTerminatesInsteadOfRecursingForever)
 
   // Both rules that do NOT depend on completing the cycle must still be present.
   EXPECT_GE(sheet.Rules_Count(), 1);
+}
+
+
+TEST(UI_CSSParser, ImporterOverridingAVariableAfterTheImportLineWinsOverTheImportedFilesOwnUse)
+{
+  // Phase 2 residual-variable-merge-order fix: the IMPORTED file (theme.css) uses "--brand-color" with a
+  // sentinel fallback; the IMPORTING file (base.css) declares "@import" FIRST and only overrides
+  // "--brand-color" in its OWN ":root" AFTER that line -- the exact ordering the report flagged as broken.
+  // Before the fix, theme.css's own nested ParseText() call expanded var() immediately (against a variable
+  // table that did not yet contain base.css's override) and permanently consumed the var() token, so
+  // ".imported"'s background-color froze on the fallback forever, no matter what base.css declared later.
+  XPATH themepath;
+  UI_CSS_UnitTests_WriteFile(__L("varorder_theme.css"), __L(".imported { background-color: var(--brand-color, 1,1,1,255); }"), themepath);
+
+  XPATH basepath;
+  UI_CSS_UnitTests_WriteFile(__L("varorder_base.css"), __L("@import \"varorder_theme.css\"; :root { --brand-color: 9,9,9,255; }"), basepath);
+
+  UI_CSSPARSER   parser;
+  UI_STYLESHEET  sheet;
+
+  ASSERT_TRUE(parser.ParseFile(basepath, sheet));
+
+  XSTRING              elementtype;
+  XSTRING              elementid;
+  XVECTOR<XSTRING*>    elementclasses;
+  XVECTOR<XSTRING*>    activepseudos;
+  UI_STYLE             out;
+
+  elementclasses.Add(UI_CSS_UnitTests_NewStr(__L("imported")));
+
+  ASSERT_TRUE(sheet.Resolve(elementtype, elementid, elementclasses, activepseudos, out));
+
+  XSTRING bckgrdcolor;
+  ASSERT_TRUE(out.Get(__L("background-color"), bckgrdcolor));
+  EXPECT_EQ(bckgrdcolor.Compare(__L("9,9,9,255"), true), 0);   // the importer's override, not the fallback
+
+  elementclasses.DeleteContents();
 }
 
 

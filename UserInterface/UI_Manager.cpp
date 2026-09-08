@@ -6455,6 +6455,50 @@ void UI_MANAGER::HandleEvent(XEVENT* xevent)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @class      UI_MANAGER_ELEMENTANCESTORPROVIDER
+* @brief      Phase 2 ("combinadores descendiente/hijo"): concrete UI_CSSANCESTORPROVIDER for a real element
+*             tree, walking UI_ELEMENT::GetFather(). File-local counterpart of UI_STYLE_ELEMENTANCESTORPROVIDER
+*             (UI_Style.cpp) -- see that class's doc comment for why this stays a small file-local duplicate
+*             rather than a shared header type.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+class UI_MANAGER_ELEMENTANCESTORPROVIDER : public UI_CSSANCESTORPROVIDER
+{
+  public:
+    UI_MANAGER_ELEMENTANCESTORPROVIDER(UI_ELEMENT* _startelement) { startelement = _startelement; }
+    virtual ~UI_MANAGER_ELEMENTANCESTORPROVIDER() {}
+
+    virtual bool GetAncestor(int depth, XSTRING** outtype, XSTRING** outid, XVECTOR<XSTRING*>** outclasses)
+    {
+      if(!startelement) return false;
+
+      UI_ELEMENT* current = startelement->GetFather();
+
+      for(int d=0; d<depth; d++)
+        {
+          if(!current) return false;
+          current = current->GetFather();
+        }
+
+      if(!current) return false;
+
+      if(outtype)    *outtype    = current->GetTypeString();
+      if(outid)      *outid      = current->GetName();
+      if(outclasses) *outclasses = current->GetClassNames();
+
+      return true;
+    }
+
+  private:
+
+    UI_ELEMENT* startelement;
+};
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
 * @brief      Walk a freshly-built subtree, snapshot every element's visual baseline and mark those the active
 *             stylesheet can restyle via pseudo-class rules. Called once per top-level element right after
@@ -6488,7 +6532,11 @@ void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
       XSTRING&           elem_id      = name        ? *name         : emptystr;
       XVECTOR<XSTRING*>& elem_classes = element->GetClassNames() ? *element->GetClassNames() : emptyclasses;
 
-      if(sheet->HasPseudoRulesFor(elem_type, elem_id, elem_classes))
+      // Phase 2 ("combinadores descendiente/hijo"): see UI_MANAGER_ELEMENTANCESTORPROVIDER above -- without it,
+      // a rule using a descendant/child combinator could never be found by this probe.
+      UI_MANAGER_ELEMENTANCESTORPROVIDER ancestorprovider(element);
+
+      if(sheet->HasPseudoRulesFor(elem_type, elem_id, elem_classes, &ancestorprovider))
         {
           element->SetStyleHasStateRules(true);
         }

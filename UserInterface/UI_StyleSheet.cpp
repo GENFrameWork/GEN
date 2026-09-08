@@ -86,6 +86,14 @@ UI_CSSSELECTOR::~UI_CSSSELECTOR()
 
   pseudos.DeleteAll();
 
+  for(XDWORD c=0; c<ancestorsteps.GetSize(); c++)
+    {
+      UI_CSSANCESTORSTEP* step = ancestorsteps.Get(c);
+      if(step) GEN_DELETE step;
+    }
+
+  ancestorsteps.DeleteAll();
+
   Clean();
 }
 
@@ -134,8 +142,42 @@ void UI_CSSSELECTOR::AddPseudo(XCHAR* pseudoname)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         void UI_CSSSELECTOR::AddAncestorStep(UI_CSSSELECTOR* compound, UI_CSSCOMBINATORTYPE combinator)
+* @brief      Phase 2 ("combinadores descendiente/hijo"): append one ancestor requirement (takes ownership of
+*             `compound`). Callers must append CLOSEST-ancestor-first -- see UI_CSSSELECTOR's own doc comment.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  compound : Owned compound selector this ancestor step must match.
+* @param[in]  combinator : Combinator tying `compound` to whatever sits immediately to its right.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_CSSSELECTOR::AddAncestorStep(UI_CSSSELECTOR* compound, UI_CSSCOMBINATORTYPE combinator)
+{
+  if(!compound) return;
+
+  UI_CSSANCESTORSTEP* step = GEN_NEW UI_CSSANCESTORSTEP();
+  if(!step)
+    {
+      GEN_DELETE compound;
+      return;
+    }
+
+  step->compound   = compound;
+  step->combinator = combinator;
+
+  ancestorsteps.Add(step);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_CSSSELECTOR::RecomputeSpecificity()
 * @brief      Recompute cached CSS-style specificity. Pseudo-classes count the same as regular classes (=10).
+*             Phase 2 ("combinadores descendiente/hijo"): a combinator sequence's specificity is the SUM of
+*             every compound's own specificity, matching real CSS ("form .a > .b" is more specific than ".b"
+*             alone) -- each ancestor compound already has its own specificity computed (ParseCompoundSelector()
+*             calls RecomputeSpecificity() on every compound it builds, subject and ancestors alike), so this
+*             just adds them in.
 * @ingroup    USERINTERFACE
 *
 * --------------------------------------------------------------------------------------------------------------------*/
@@ -148,6 +190,12 @@ void UI_CSSSELECTOR::RecomputeSpecificity()
 
   spec += (int)classes.GetSize() * 10;
   spec += (int)pseudos.GetSize() * 10;
+
+  for(XDWORD c=0; c<ancestorsteps.GetSize(); c++)
+    {
+      UI_CSSANCESTORSTEP* step = ancestorsteps.Get(c);
+      if(step && step->compound) spec += step->compound->GetSpecificity();
+    }
 
   specificity = spec;
 }
@@ -178,19 +226,24 @@ bool UI_CSSSELECTOR::IsRootOnly()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos)
+* @fn         bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos, UI_CSSANCESTORPROVIDER* ancestors)
 * @brief      Test if this selector matches an element. Empty selector components are treated as wildcards.
+*             Phase 2 ("combinadores descendiente/hijo"): if this selector has ancestor steps (see
+*             GetAncestorSteps()), they are checked AFTER the subject's own type/id/class/pseudo checks below,
+*             walking `ancestors` outward -- see the class banner in UI_StyleSheet.h for the full model.
 * @ingroup    USERINTERFACE
 *
 * @param[in]  elementtype : Element type string (as reported by UI_ELEMENT::GetTypeString()).
 * @param[in]  elementid : Element id (name).
 * @param[in]  elementclasses : Element class list (may be empty).
 * @param[in]  activepseudos : Pointer to activepseudos.
+* @param[in]  ancestors : Ancestor-identity accessor for combinator matching; NULL if unavailable (any selector
+*             with ancestor steps then cannot match -- see UI_CSSANCESTORPROVIDER's doc comment).
 *
 * @return     bool : true if the selector matches; false otherwise.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos)
+bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos, UI_CSSANCESTORPROVIDER* ancestors)
 {
   // Type component: if set, must match element type string (case-insensitive).
   if(!type.IsEmpty())
@@ -254,6 +307,77 @@ bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XST
       if(!found) return false;
     }
 
+  // Phase 2 ("combinadores descendiente/hijo"): the subject itself matched above; now walk `ancestors` to
+  // satisfy every ancestor step, CLOSEST-ancestor-first. `referencedepth` tracks the depth (per
+  // UI_CSSANCESTORPROVIDER's own numbering, relative to the ORIGINAL target element) of the entity the
+  // PREVIOUS step matched against; -1 means "the target element itself" (so the first step's CHILD combinator
+  // looks at depth 0 = the target's own immediate parent, and its DESCENDANT combinator starts searching from
+  // that same depth 0 upward).
+  if(ancestorsteps.GetSize() > 0)
+    {
+      if(!ancestors) return false;
+
+      int referencedepth = -1;
+
+      XSTRING            emptystr;
+      XVECTOR<XSTRING*>  emptyclasses;
+      XVECTOR<XSTRING*>  emptypseudos;   // ancestor compounds never see live pseudo state -- see the class banner
+
+      for(XDWORD c=0; c<ancestorsteps.GetSize(); c++)
+        {
+          UI_CSSANCESTORSTEP* step = ancestorsteps.Get(c);
+          if(!step || !step->compound) return false;
+
+          if(step->combinator == UI_CSSCOMBINATOR_CHILD)
+            {
+              int trydepth = referencedepth + 1;
+
+              XSTRING*            atype     = NULL;
+              XSTRING*            aid       = NULL;
+              XVECTOR<XSTRING*>*  aclasses  = NULL;
+
+              if(!ancestors->GetAncestor(trydepth, &atype, &aid, &aclasses)) return false;
+
+              XSTRING&            at = atype    ? *atype    : emptystr;
+              XSTRING&            ai = aid      ? *aid      : emptystr;
+              XVECTOR<XSTRING*>&  ac = aclasses ? *aclasses : emptyclasses;
+
+              if(!step->compound->Match(at, ai, ac, emptypseudos)) return false;
+
+              referencedepth = trydepth;
+            }
+           else   // UI_CSSCOMBINATOR_DESCENDANT: some ancestor at ANY depth from referencedepth+1 upward
+            {
+              bool found    = false;
+              int  trydepth = referencedepth + 1;
+
+              while(true)
+                {
+                  XSTRING*            atype     = NULL;
+                  XSTRING*            aid       = NULL;
+                  XVECTOR<XSTRING*>*  aclasses  = NULL;
+
+                  if(!ancestors->GetAncestor(trydepth, &atype, &aid, &aclasses)) break;
+
+                  XSTRING&            at = atype    ? *atype    : emptystr;
+                  XSTRING&            ai = aid      ? *aid      : emptystr;
+                  XVECTOR<XSTRING*>&  ac = aclasses ? *aclasses : emptyclasses;
+
+                  if(step->compound->Match(at, ai, ac, emptypseudos))
+                    {
+                      found          = true;
+                      referencedepth = trydepth;
+                      break;
+                    }
+
+                  trydepth++;
+                }
+
+              if(!found) return false;
+            }
+        }
+    }
+
   return true;
 }
 
@@ -272,6 +396,38 @@ void UI_CSSSELECTOR::Clean()
 }
 
 
+
+
+/*---- CLASS MEMBERS (UI_CSSANCESTORSTEP) ----------------------------------------------------------------------------*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_CSSANCESTORSTEP::UI_CSSANCESTORSTEP()
+* @brief      Constructor of class
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_CSSANCESTORSTEP::UI_CSSANCESTORSTEP()
+{
+  compound   = NULL;
+  combinator = UI_CSSCOMBINATOR_DESCENDANT;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_CSSANCESTORSTEP::~UI_CSSANCESTORSTEP()
+* @brief      Destructor of class
+* @note       VIRTUAL. Owns `compound`.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_CSSANCESTORSTEP::~UI_CSSANCESTORSTEP()
+{
+  if(compound) GEN_DELETE compound;
+  compound = NULL;
+}
 
 
 /*---- CLASS MEMBERS (UI_CSSRULE) ------------------------------------------------------------------------------------*/
@@ -328,6 +484,37 @@ void UI_CSSRULE::Clean()
 
 
 
+/*---- CLASS MEMBERS (UI_CSSINDEXBUCKET) -----------------------------------------------------------------------------*/
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_CSSINDEXBUCKET::UI_CSSINDEXBUCKET()
+* @brief      Constructor of class
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_CSSINDEXBUCKET::UI_CSSINDEXBUCKET()
+{
+
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_CSSINDEXBUCKET::~UI_CSSINDEXBUCKET()
+* @brief      Destructor of class
+* @note       VIRTUAL. `rules` is a borrowed list (UI_CSSRULE ownership stays with UI_STYLESHEET::rules): only
+*             the vector storage is released here, never the pointed-to rules.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_CSSINDEXBUCKET::~UI_CSSINDEXBUCKET()
+{
+  rules.DeleteAll();
+}
+
+
 /*---- CLASS MEMBERS (UI_STYLESHEET) ---------------------------------------------------------------------------------*/
 
 
@@ -378,6 +565,8 @@ bool UI_STYLESHEET::Rules_Add(UI_CSSRULE* rule)
   rule->SetSourceIndex((int)rules.GetSize());
   rules.Add(rule);
 
+  IndexRule(rule);
+
   return true;
 }
 
@@ -391,6 +580,10 @@ bool UI_STYLESHEET::Rules_Add(UI_CSSRULE* rule)
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_STYLESHEET::Rules_DeleteAll()
 {
+  // Index buckets/`index_unrestricted` only borrow these UI_CSSRULE pointers: drop them BEFORE the rules
+  // themselves are freed below, so nothing is left dangling even momentarily.
+  Index_DeleteAll();
+
   for(XDWORD c=0; c<rules.GetSize(); c++)
     {
       UI_CSSRULE* rule = rules.Get(c);
@@ -403,7 +596,240 @@ void UI_STYLESHEET::Rules_DeleteAll()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_STYLESHEET::Resolve(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos, UI_STYLE& out)
+* @fn         UI_CSSINDEXBUCKET* UI_STYLESHEET::IndexFindBucket(XVECTOR<UI_CSSINDEXBUCKET*>& index, XSTRING& key)
+* @brief      Find the bucket for `key` inside one of the three axis indices (case-insensitive).
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]  index : Index to search (index_bytype / index_byid / index_byclass).
+* @param[in]  key : Bucket key to look up.
+*
+* @return     UI_CSSINDEXBUCKET* : the matching bucket, or NULL if none exists yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_CSSINDEXBUCKET* UI_STYLESHEET::IndexFindBucket(XVECTOR<UI_CSSINDEXBUCKET*>& index, XSTRING& key)
+{
+  for(XDWORD c=0; c<index.GetSize(); c++)
+    {
+      UI_CSSINDEXBUCKET* bucket = index.Get(c);
+      if(!bucket) continue;
+
+      if(bucket->key.Compare(key, true) == 0) return bucket;
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_STYLESHEET::IndexAddRule(XVECTOR<UI_CSSINDEXBUCKET*>& index, XSTRING& key, UI_CSSRULE* rule)
+* @brief      File `rule` (borrowed pointer) under `key` inside one of the three axis indices, creating the
+*             bucket on first use. De-duplicates: a rule with two selectors sharing the same class name is only
+*             stored once per bucket.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]  index : Index to update (index_bytype / index_byid / index_byclass).
+* @param[in]  key : Bucket key.
+* @param[in]  rule : Rule pointer to file (not owned by the bucket).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_STYLESHEET::IndexAddRule(XVECTOR<UI_CSSINDEXBUCKET*>& index, XSTRING& key, UI_CSSRULE* rule)
+{
+  if(!rule) return;
+
+  UI_CSSINDEXBUCKET* bucket = IndexFindBucket(index, key);
+
+  if(!bucket)
+    {
+      bucket = GEN_NEW UI_CSSINDEXBUCKET();
+      if(!bucket) return;
+
+      bucket->key.Set(key);
+      index.Add(bucket);
+    }
+
+  if(bucket->rules.Find(rule) == NOTFOUND) bucket->rules.Add(rule);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_STYLESHEET::IndexRule(UI_CSSRULE* rule)
+* @brief      File a just-added rule into the type/id/class indices (one filing per selector-axis-value present
+*             across all of the rule's compound selectors). A selector with none of type/id/class set (the
+*             universal selector, or a bare pseudo-only selector like ":hover") cannot be restricted to any
+*             bucket, so the whole rule is also added to `index_unrestricted`, which every element considers
+*             regardless of its own type/id/class. Pseudos are deliberately NOT indexed on their own axis: both
+*             Resolve() and HasPseudoRulesFor() only ever need a candidate set keyed by type/id/class (pseudo
+*             matching still happens inside UI_CSSSELECTOR::Match(), unchanged), so a dedicated pseudo index
+*             would add bookkeeping without shrinking any candidate set that matters.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]  rule : Just-appended rule (already present in `rules`) to index.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_STYLESHEET::IndexRule(UI_CSSRULE* rule)
+{
+  if(!rule) return;
+
+  XVECTOR<UI_CSSSELECTOR*>& sels = rule->GetSelectors();
+
+  for(XDWORD d=0; d<sels.GetSize(); d++)
+    {
+      UI_CSSSELECTOR* sel = sels.Get(d);
+      if(!sel) continue;
+
+      bool restricted = false;
+
+      if(!sel->GetType().IsEmpty())
+        {
+          IndexAddRule(index_bytype, sel->GetType(), rule);
+          restricted = true;
+        }
+
+      if(!sel->GetID().IsEmpty())
+        {
+          IndexAddRule(index_byid, sel->GetID(), rule);
+          restricted = true;
+        }
+
+      XVECTOR<XSTRING*>& classes = sel->GetClasses();
+
+      for(XDWORD e=0; e<classes.GetSize(); e++)
+        {
+          XSTRING* classname = classes.Get(e);
+          if(!classname) continue;
+
+          IndexAddRule(index_byclass, *classname, rule);
+          restricted = true;
+        }
+
+      if(!restricted)
+        {
+          if(index_unrestricted.Find(rule) == NOTFOUND) index_unrestricted.Add(rule);
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_STYLESHEET::CollectCandidateRules(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<UI_CSSRULE*>& outcandidates)
+* @brief      Build the candidate rule set for one element: `index_unrestricted` plus every bucket hit on the
+*             element's own type, id and each of its classes, de-duplicated. This is a SUPERSET of every rule
+*             that UI_CSSSELECTOR::Match() could accept for the element -- never a subset -- so callers can
+*             iterate `outcandidates` exactly as they used to iterate the full `rules` list, with identical
+*             results and no behavior change; see the index fields' doc comment in UI_StyleSheet.h for the
+*             correctness argument in full.
+* @note       INTERNAL. Shared by Resolve() and HasPseudoRulesFor().
+* @ingroup    USERINTERFACE
+*
+* @param[in]  elementtype : Element type string.
+* @param[in]  elementid : Element id (name).
+* @param[in]  elementclasses : Element class list.
+* @param[out] outcandidates : Emptied and filled with borrowed rule pointers (still owned by `rules`).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_STYLESHEET::CollectCandidateRules(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<UI_CSSRULE*>& outcandidates)
+{
+  outcandidates.DeleteAll();
+
+  for(XDWORD c=0; c<index_unrestricted.GetSize(); c++)
+    {
+      UI_CSSRULE* rule = index_unrestricted.Get(c);
+      if(rule && outcandidates.Find(rule) == NOTFOUND) outcandidates.Add(rule);
+    }
+
+  if(!elementtype.IsEmpty())
+    {
+      UI_CSSINDEXBUCKET* bucket = IndexFindBucket(index_bytype, elementtype);
+
+      if(bucket)
+        {
+          for(XDWORD c=0; c<bucket->rules.GetSize(); c++)
+            {
+              UI_CSSRULE* rule = bucket->rules.Get(c);
+              if(rule && outcandidates.Find(rule) == NOTFOUND) outcandidates.Add(rule);
+            }
+        }
+    }
+
+  if(!elementid.IsEmpty())
+    {
+      UI_CSSINDEXBUCKET* bucket = IndexFindBucket(index_byid, elementid);
+
+      if(bucket)
+        {
+          for(XDWORD c=0; c<bucket->rules.GetSize(); c++)
+            {
+              UI_CSSRULE* rule = bucket->rules.Get(c);
+              if(rule && outcandidates.Find(rule) == NOTFOUND) outcandidates.Add(rule);
+            }
+        }
+    }
+
+  for(XDWORD c=0; c<elementclasses.GetSize(); c++)
+    {
+      XSTRING* classname = elementclasses.Get(c);
+      if(!classname) continue;
+
+      UI_CSSINDEXBUCKET* bucket = IndexFindBucket(index_byclass, *classname);
+      if(!bucket) continue;
+
+      for(XDWORD d=0; d<bucket->rules.GetSize(); d++)
+        {
+          UI_CSSRULE* rule = bucket->rules.Get(d);
+          if(rule && outcandidates.Find(rule) == NOTFOUND) outcandidates.Add(rule);
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_STYLESHEET::Index_DeleteAll()
+* @brief      Delete all owned index buckets and clear index_unrestricted. Called from Rules_DeleteAll(), which
+*             discards `rules` right after -- the index must not outlive the rules it points into.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_STYLESHEET::Index_DeleteAll()
+{
+  for(XDWORD c=0; c<index_bytype.GetSize(); c++)
+    {
+      UI_CSSINDEXBUCKET* bucket = index_bytype.Get(c);
+      if(bucket) GEN_DELETE bucket;
+    }
+
+  index_bytype.DeleteAll();
+
+  for(XDWORD c=0; c<index_byid.GetSize(); c++)
+    {
+      UI_CSSINDEXBUCKET* bucket = index_byid.Get(c);
+      if(bucket) GEN_DELETE bucket;
+    }
+
+  index_byid.DeleteAll();
+
+  for(XDWORD c=0; c<index_byclass.GetSize(); c++)
+    {
+      UI_CSSINDEXBUCKET* bucket = index_byclass.Get(c);
+      if(bucket) GEN_DELETE bucket;
+    }
+
+  index_byclass.DeleteAll();
+
+  index_unrestricted.DeleteAll();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_STYLESHEET::Resolve(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos, UI_STYLE& out, UI_CSSANCESTORPROVIDER* ancestors)
 * @brief      Apply the cascade for one element into `out`. Existing keys in `out` are overwritten by matches
 *             (CSS-wins semantics). Rules are applied in ascending (specificity, source-index) order, so on
 *             return each key holds the value from the winning rule.
@@ -414,11 +840,13 @@ void UI_STYLESHEET::Rules_DeleteAll()
 * @param[in]  elementclasses : Element class list.
 * @param[in,out] out : Style bag to accumulate declarations into.
 * @param[in]  activepseudos : Pointer to activepseudos.
+* @param[in]  ancestors : Phase 2 ("combinadores descendiente/hijo"): optional ancestor-identity accessor,
+*             NULL by default -- see UI_CSSANCESTORPROVIDER's doc comment in UI_StyleSheet.h.
 *
 * @return     bool : true if at least one rule matched; false otherwise.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_STYLESHEET::Resolve(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos, UI_STYLE& out)
+bool UI_STYLESHEET::Resolve(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, XVECTOR<XSTRING*>& activepseudos, UI_STYLE& out, UI_CSSANCESTORPROVIDER* ancestors)
 {
   // Two-pass to avoid depending on std::sort or an XVECTOR sort: collect matched (specificity, sourceindex,
   // rule*) tuples, then apply in ascending order. The tuple count is bounded by the number of rules in the
@@ -427,9 +855,16 @@ bool UI_STYLESHEET::Resolve(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XS
   XVECTOR<int>          match_index;
   XVECTOR<UI_CSSRULE*>  match_rule;
 
-  for(XDWORD c=0; c<rules.GetSize(); c++)
+  // Phase 2 ("índice de reglas por id/tipo/clase"): candidates is a superset of every rule that could possibly
+  // match (see CollectCandidateRules()'s doc comment), so scanning it instead of the full `rules` list is a
+  // pure performance change -- the Match() call below still makes every accept/reject decision exactly as
+  // before.
+  XVECTOR<UI_CSSRULE*>  candidates;
+  CollectCandidateRules(elementtype, elementid, elementclasses, candidates);
+
+  for(XDWORD c=0; c<candidates.GetSize(); c++)
     {
-      UI_CSSRULE* rule = rules.Get(c);
+      UI_CSSRULE* rule = candidates.Get(c);
       if(!rule) continue;
 
       XVECTOR<UI_CSSSELECTOR*>& sels = rule->GetSelectors();
@@ -441,7 +876,7 @@ bool UI_STYLESHEET::Resolve(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XS
           UI_CSSSELECTOR* sel = sels.Get(d);
           if(!sel) continue;
 
-          if(sel->Match(elementtype, elementid, elementclasses, activepseudos))
+          if(sel->Match(elementtype, elementid, elementclasses, activepseudos, ancestors))
             {
               int s = sel->GetSpecificity();
               if(s > best_spec) best_spec = s;
@@ -708,7 +1143,7 @@ bool UI_STYLESHEET::SubstituteVars(XSTRING& in, XSTRING& out)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses)
+* @fn         bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, UI_CSSANCESTORPROVIDER* ancestors)
 * @brief      Cheap probe: does the stylesheet contain any pseudo-carrying rule whose type/id/class part could
 *             match this element? Used at load time to skip snapshotting and state hooks for elements that no
 *             pseudo rule will ever restyle.
@@ -717,11 +1152,13 @@ bool UI_STYLESHEET::SubstituteVars(XSTRING& in, XSTRING& out)
 * @param[in]  elementtype : Element type string.
 * @param[in]  elementid : Element id (name).
 * @param[in]  elementclasses : Element class list.
+* @param[in]  ancestors : Phase 2 ("combinadores descendiente/hijo"): optional ancestor-identity accessor,
+*             NULL by default -- see UI_CSSANCESTORPROVIDER's doc comment in UI_StyleSheet.h.
 *
 * @return     bool : true if the element must subscribe to state re-resolution.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses)
+bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XSTRING*>& elementclasses, UI_CSSANCESTORPROVIDER* ancestors)
 {
   // Simulate "every possible pseudo active" so any pseudo-carrying selector matches its structural constraints.
   // The heuristic accepts a false positive when the sheet has pseudo rules for a different element with the
@@ -742,9 +1179,14 @@ bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, 
   allpseudos.Add(&s_disabled);
   allpseudos.Add(&s_hover);
 
-  for(XDWORD c=0; c<rules.GetSize(); c++)
+  // Phase 2 ("índice de reglas por id/tipo/clase"): same superset-candidate optimization as Resolve(), see
+  // CollectCandidateRules()'s doc comment.
+  XVECTOR<UI_CSSRULE*> candidates;
+  CollectCandidateRules(elementtype, elementid, elementclasses, candidates);
+
+  for(XDWORD c=0; c<candidates.GetSize(); c++)
     {
-      UI_CSSRULE* rule = rules.Get(c);
+      UI_CSSRULE* rule = candidates.Get(c);
       if(!rule) continue;
 
       XVECTOR<UI_CSSSELECTOR*>& sels = rule->GetSelectors();
@@ -755,7 +1197,7 @@ bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, 
           if(!sel) continue;
           if(!sel->HasPseudos()) continue;
 
-          if(sel->Match(elementtype, elementid, elementclasses, allpseudos))
+          if(sel->Match(elementtype, elementid, elementclasses, allpseudos, ancestors))
             {
               // Detach borrowed pointers before returning: XVECTOR::DeleteAll would not free them (we didn't
               // allocate the XSTRINGs on the heap), but leaving them attached is harmless -- allpseudos is a

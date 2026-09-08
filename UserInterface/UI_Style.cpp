@@ -254,6 +254,54 @@ bool UI_STYLE::FillFromXMLElement(XFILEXMLELEMENT* node)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @class      UI_STYLE_ELEMENTANCESTORPROVIDER
+* @brief      Phase 2 ("combinadores descendiente/hijo"): the concrete UI_CSSANCESTORPROVIDER implementation for
+*             a real element tree -- walks UI_ELEMENT::GetFather() one step per depth requested. Local to this
+*             file (not declared in UI_Style.h): UI_STYLESHEET/UI_CSSSELECTOR only ever see it through the
+*             abstract interface, and the ONLY thing FillFromCSSDeclarations() below needs from it is
+*             "construct one, pass it to Resolve()". UI_Manager.cpp's PrepareElementStyleState() has its own,
+*             identical in shape but kept file-local there too rather than shared -- see UI_CSSANCESTORPROVIDER's
+*             doc comment in UI_StyleSheet.h for why this stays out of any header UI_ELEMENT itself would need
+*             to include.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+class UI_STYLE_ELEMENTANCESTORPROVIDER : public UI_CSSANCESTORPROVIDER
+{
+  public:
+    UI_STYLE_ELEMENTANCESTORPROVIDER(UI_ELEMENT* _startelement) { startelement = _startelement; }
+    virtual ~UI_STYLE_ELEMENTANCESTORPROVIDER() {}
+
+    virtual bool GetAncestor(int depth, XSTRING** outtype, XSTRING** outid, XVECTOR<XSTRING*>** outclasses)
+    {
+      if(!startelement) return false;
+
+      UI_ELEMENT* current = startelement->GetFather();
+
+      for(int d=0; d<depth; d++)
+        {
+          if(!current) return false;
+          current = current->GetFather();
+        }
+
+      if(!current) return false;
+
+      if(outtype)    *outtype    = current->GetTypeString();
+      if(outid)      *outid      = current->GetName();
+      if(outclasses) *outclasses = current->GetClassNames();
+
+      return true;
+    }
+
+  private:
+
+    UI_ELEMENT* startelement;
+};
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_STYLE::FillFromCSSDeclarations(UI_STYLESHEET* sheet, UI_ELEMENT* element)
 * @brief      CSS front-end. Layers all matching stylesheet rules on top of the current bag using the element's
 *             identity (type / id / class list). Existing keys are overwritten by matches (CSS-wins semantics).
@@ -287,7 +335,12 @@ bool UI_STYLE::FillFromCSSDeclarations(UI_STYLESHEET* sheet, UI_ELEMENT* element
   XVECTOR<XSTRING*> activepseudos;
   element->GetActivePseudos(activepseudos);
 
-  bool ok = sheet->Resolve(elem_type, elem_id, elem_classes, activepseudos, *this);
+  // Phase 2 ("combinadores descendiente/hijo"): give Resolve() a way to walk `element`'s ancestors, so any
+  // rule using a descendant/child combinator ("form .a > .b") can actually be evaluated -- see
+  // UI_STYLE_ELEMENTANCESTORPROVIDER above.
+  UI_STYLE_ELEMENTANCESTORPROVIDER ancestorprovider(element);
+
+  bool ok = sheet->Resolve(elem_type, elem_id, elem_classes, activepseudos, *this, &ancestorprovider);
 
   // Owned strings produced by GetActivePseudos().
   for(XDWORD c=0; c<activepseudos.GetSize(); c++)
