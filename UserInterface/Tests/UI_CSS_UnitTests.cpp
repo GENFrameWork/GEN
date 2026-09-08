@@ -2689,4 +2689,1756 @@ TEST(UI_LayoutEngine, RunLayoutWithCssStrategyRoundTripsAPurelyStaticTreeUnchang
 }
 
 
+// -- UI_LAYOUTBOX: flex container properties (Phase 4, first increment, first sub-step) -----------------------------
+
+TEST(UI_LayoutBox, DefaultsToNotAFlexContainerWithRowDirectionFlexStartJustifyAndZeroGap)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  EXPECT_FALSE(box->IsFlexContainer());
+  EXPECT_EQ(box->GetFlexDirection(), UI_FLEX_DIRECTION_ROW);
+  EXPECT_EQ(box->GetJustifyContent(), UI_JUSTIFY_CONTENT_FLEX_START);
+  EXPECT_EQ(box->GetRowGap(), 0.0);
+  EXPECT_EQ(box->GetColumnGap(), 0.0);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetFlexContainerRoundTrips)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetFlexContainer(true);
+  EXPECT_TRUE(box->IsFlexContainer());
+
+  box->SetFlexContainer(false);
+  EXPECT_FALSE(box->IsFlexContainer());
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetFlexDirectionRoundTrips)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN_REVERSE);
+  EXPECT_EQ(box->GetFlexDirection(), UI_FLEX_DIRECTION_COLUMN_REVERSE);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetJustifyContentRoundTrips)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_EVENLY);
+  EXPECT_EQ(box->GetJustifyContent(), UI_JUSTIFY_CONTENT_SPACE_EVENLY);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetGapRoundTripsRowAndColumnIndependently)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetGap(7.0, 3.0);
+  EXPECT_EQ(box->GetRowGap(), 7.0);
+  EXPECT_EQ(box->GetColumnGap(), 3.0);
+
+  GEN_DELETE box;
+}
+
+
+// -- UI_LAYOUTENGINE::ApplyFlexLayout (Phase 4, first increment, first sub-step) -------------------------------------
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutIgnoresANullRoot)
+{
+  UI_LAYOUTENGINE::ApplyFlexLayout(NULL);   // must not crash
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutLeavesANonFlexContainersChildrenUntouched)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);   // NOT a flex container (default)
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(123.0, 45.0, 50.0, 40.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(child->GetContentLeft(), 123.0);
+  EXPECT_EQ(child->GetContentTop(), 45.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutPacksRowChildrenLeftToRightWithFlexStartAndColumnGap)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetGap(0.0, 10.0);   // column-gap = 10, is the MAIN-axis gap for a ROW container
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(999.0, 999.0, 50.0, 40.0);
+  second->SetContentBox(999.0, 999.0, 50.0, 40.0);
+  third->SetContentBox(999.0, 999.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(first->GetContentLeft(), 0.0);
+  EXPECT_EQ(second->GetContentLeft(), 60.0);    // 0 + 50 + gap(10)
+  EXPECT_EQ(third->GetContentLeft(), 120.0);    // 60 + 50 + gap(10)
+  EXPECT_EQ(first->GetContentTop(), 0.0);       // cross axis: container's content top (flex-start)
+  EXPECT_EQ(first->GetContentWidth(), 50.0);    // sizes never touched
+  EXPECT_EQ(first->GetContentHeight(), 40.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutPacksRowChildrenRightAlignedWithFlexEnd)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetJustifyContent(UI_JUSTIFY_CONTENT_FLEX_END);
+  container->SetGap(0.0, 10.0);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // total children main = 150 + 2*10 = 170; free = 130 -> starts at 130
+  EXPECT_EQ(first->GetContentLeft(), 130.0);
+  EXPECT_EQ(second->GetContentLeft(), 190.0);
+  EXPECT_EQ(third->GetContentLeft(), 250.0);
+  EXPECT_EQ(third->GetContentLeft() + third->GetContentWidth(), 300.0);   // last child flush with container's right edge
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutCentersRowChildrenWithCenterJustify)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetJustifyContent(UI_JUSTIFY_CONTENT_CENTER);
+  container->SetGap(0.0, 10.0);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // free = 130 -> half = 65
+  EXPECT_EQ(first->GetContentLeft(), 65.0);
+  EXPECT_EQ(second->GetContentLeft(), 125.0);
+  EXPECT_EQ(third->GetContentLeft(), 185.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutDistributesFreeSpaceBetweenChildrenWithSpaceBetween)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_BETWEEN);
+  container->SetGap(0.0, 10.0);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // free = 130, spacing = gap(10) + 130/2 = 75
+  EXPECT_EQ(first->GetContentLeft(), 0.0);
+  EXPECT_EQ(second->GetContentLeft(), 125.0);
+  EXPECT_EQ(third->GetContentLeft(), 250.0);
+  EXPECT_EQ(third->GetContentLeft() + third->GetContentWidth(), 300.0);   // last child flush with the far edge too
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutDistributesFreeSpaceAroundChildrenWithSpaceAround)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_AROUND);
+  container->SetGap(0.0, 10.0);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // total = 50+50+10 = 110; free = 90; spacing = 10 + 90/2 = 55; leading = spacing/2 = 27.5
+  EXPECT_EQ(first->GetContentLeft(), 27.5);
+  EXPECT_EQ(second->GetContentLeft(), 132.5);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutDistributesFreeSpaceEvenlyWithSpaceEvenly)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 190.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_EVENLY);
+  // no gap -- isolates the SPACE_EVENLY distribution itself from gap addition
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // total = 150; free = 40; spacing = 40/4 = 10 (four equal gaps: before/between/between/after)
+  EXPECT_EQ(first->GetContentLeft(), 10.0);
+  EXPECT_EQ(second->GetContentLeft(), 70.0);
+  EXPECT_EQ(third->GetContentLeft(), 130.0);
+  EXPECT_EQ(third->GetContentLeft() + third->GetContentWidth() + 10.0, 190.0);   // trailing gap too
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutPacksColumnChildrenTopToBottomUsingRowGap)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 50.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+  container->SetGap(5.0, 0.0);   // row-gap = 5, is the MAIN-axis gap for a COLUMN container
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(first->GetContentTop(), 0.0);
+  EXPECT_EQ(second->GetContentTop(), 45.0);    // 0 + 40 + gap(5)
+  EXPECT_EQ(first->GetContentLeft(), 0.0);     // cross axis: container's content left (flex-start)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutReversesVisualOrderForRowReverse)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetFlexDirection(UI_FLEX_DIRECTION_ROW_REVERSE);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();   // compose-order first, width 50
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();   // compose-order second, width 70
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 70.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // ROW_REVERSE packs from the main-axis start but visits children in REVERSE compose order: "second" (the
+  // LAST compose child) is placed FIRST, flush with the container's left edge.
+  EXPECT_EQ(second->GetContentLeft(), 0.0);
+  EXPECT_EQ(first->GetContentLeft(), 70.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutAlignsChildrenToTheContainersCrossStartAccountingForTheirOwnMarginBorderPadding)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  child->SetMargin(5.0, 0.0, 0.0, 0.0);
+  child->SetBorder(2.0, 0.0, 0.0, 0.0);
+  child->SetPadding(3.0, 0.0, 0.0, 0.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // cross axis (top, ROW direction) = container content top (0) + child's own leading margin+border+padding
+  EXPECT_EQ(child->GetContentTop(), 10.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutIncludesMarginBorderPaddingInEachChildsOuterMainSize)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  first->SetMargin(0.0, 3.0, 0.0, 3.0);     // +6 outer width
+  first->SetBorder(0.0, 1.0, 0.0, 1.0);     // +2 outer width
+  first->SetPadding(0.0, 2.0, 0.0, 2.0);    // +4 outer width -- outer width = 50+6+2+4 = 62
+
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(first->GetContentLeft(), 6.0);      // leading margin(3)+border(1)+padding(2) on the left
+  EXPECT_EQ(second->GetContentLeft(), 62.0);    // first's full outer width (62), no gap set
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutRecursesIntoNestedFlexContainers)
+{
+  UI_LAYOUTBOX* outer = GEN_NEW UI_LAYOUTBOX();
+  outer->SetContentBox(0.0, 0.0, 300.0, 200.0);
+  outer->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* inner = GEN_NEW UI_LAYOUTBOX();   // itself a flex item of "outer" AND a flex container for its own children
+  inner->SetContentBox(0.0, 0.0, 100.0, 150.0);
+  inner->SetFlexContainer(true);
+  inner->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+  outer->AddChild(inner);
+
+  UI_LAYOUTBOX* grandchildfirst  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* grandchildsecond = GEN_NEW UI_LAYOUTBOX();
+  grandchildfirst->SetContentBox(0.0, 0.0, 40.0, 30.0);
+  grandchildsecond->SetContentBox(0.0, 0.0, 40.0, 30.0);
+  inner->AddChild(grandchildfirst);
+  inner->AddChild(grandchildsecond);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(outer);
+
+  // outer has a single flex item ("inner"): flex-start -> stays at outer's content origin
+  EXPECT_EQ(inner->GetContentLeft(), 0.0);
+  EXPECT_EQ(inner->GetContentTop(), 0.0);
+
+  // inner is itself a COLUMN flex container: its two children stack top to bottom, no gap
+  EXPECT_EQ(grandchildfirst->GetContentTop(), 0.0);
+  EXPECT_EQ(grandchildsecond->GetContentTop(), 30.0);
+
+  GEN_DELETE outer;
+}
+
+
+// -- UI_LAYOUTBOX: flex ITEM properties (Phase 4, first increment, second sub-step) -----------------------------------
+
+TEST(UI_LayoutBox, DefaultsToZeroFlexGrowOneFlexShrinkAndAutoFlexBasis)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  EXPECT_EQ(box->GetFlexGrow(), 0.0);
+  EXPECT_EQ(box->GetFlexShrink(), 1.0);
+  EXPECT_FALSE(box->GetFlexBasis().specified);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetFlexGrowRoundTrips)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetFlexGrow(2.5);
+  EXPECT_EQ(box->GetFlexGrow(), 2.5);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetFlexShrinkRoundTrips)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetFlexShrink(0.0);
+  EXPECT_EQ(box->GetFlexShrink(), 0.0);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetFlexBasisRoundTripsAndSetFlexBasisAutoClearsIt)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetFlexBasis(75.0);
+  EXPECT_TRUE(box->GetFlexBasis().specified);
+  EXPECT_EQ(box->GetFlexBasis().value, 75.0);
+
+  box->SetFlexBasisAuto();
+  EXPECT_FALSE(box->GetFlexBasis().specified);
+
+  GEN_DELETE box;
+}
+
+
+// -- UI_LAYOUTENGINE::ApplyFlexLayout: flex-grow/flex-shrink/flex-basis (Phase 4, first increment, second sub-step) --
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutGrowsASingleChildToFillAllFreeSpaceWhenItIsTheOnlyGrowItem)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  child->SetFlexGrow(1.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(child->GetContentWidth(), 300.0);   // grows to fill the whole container
+  EXPECT_EQ(child->GetContentLeft(), 0.0);
+  EXPECT_EQ(child->GetContentHeight(), 40.0);   // cross size untouched
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutDistributesGrowthProportionallyAmongMultipleGrowItems)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  first->SetFlexGrow(1.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetFlexGrow(3.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // total base = 100; free = 200; split 1:3 -> first gets 50, second gets 150
+  EXPECT_EQ(first->GetContentWidth(), 100.0);
+  EXPECT_EQ(second->GetContentWidth(), 200.0);
+  EXPECT_EQ(first->GetContentLeft(), 0.0);
+  EXPECT_EQ(second->GetContentLeft(), 100.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutLeavesSizesUnchangedWhenNoChildHasFlexGrow)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);    // flex-grow defaults to 0
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 50.0);     // untouched: leftover space is justify-content's job, not growth
+  EXPECT_EQ(second->GetContentWidth(), 50.0);
+  EXPECT_EQ(first->GetContentLeft(), 0.0);       // flex-start default: packed at the start, free space trails
+  EXPECT_EQ(second->GetContentLeft(), 50.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutShrinksChildrenByScaledShrinkFactorOnOverflow)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 150.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 100.0, 40.0);    // flex-shrink defaults to 1
+  second->SetContentBox(0.0, 0.0, 100.0, 40.0);
+  second->SetFlexShrink(3.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // base total = 200, overflow = 50; scaled factors: first = 1*100=100, second = 3*100=300, total = 400
+  // first loses 50*(100/400)=12.5 -> 87.5; second loses 50*(300/400)=37.5 -> 62.5
+  EXPECT_EQ(first->GetContentWidth(), 87.5);
+  EXPECT_EQ(second->GetContentWidth(), 62.5);
+  EXPECT_EQ(first->GetContentLeft() , 0.0);
+  EXPECT_EQ(second->GetContentLeft(), 87.5);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutFlexShrinkZeroKeepsAnItemAtItsBaseSizeWhileSiblingAbsorbsAllOverflow)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 150.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 100.0, 40.0);
+  first->SetFlexShrink(0.0);
+  second->SetContentBox(0.0, 0.0, 100.0, 40.0);   // flex-shrink defaults to 1
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 100.0);     // shrink 0 -> completely unaffected by overflow
+  EXPECT_EQ(second->GetContentWidth(), 50.0);     // absorbs the whole 50 of overflow alone
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutNeverShrinksAnItemsSizeBelowZero)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 0.0, 100.0);   // extreme overflow: no room at all
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 40.0);
+  first->SetFlexShrink(10.0);     // much bigger scaled-shrink share than "second"
+  second->SetContentBox(0.0, 0.0, 100.0, 40.0);
+  second->SetFlexShrink(1.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 0.0);    // its computed share would go negative -> clamped to 0
+  EXPECT_GE(second->GetContentWidth(), 0.0);   // never negative either, whatever the (undersized) remaining total is
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutFlexBasisOverridesContentWidthAsTheStartingSize)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 20.0, 40.0);   // content width 20, but...
+  child->SetFlexBasis(80.0);                    // ...flex-basis says the starting size is 80, not 20
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // no flex-grow set (defaults to 0) -> final size is exactly the basis, proving 20 (content width) was ignored
+  EXPECT_EQ(child->GetContentWidth(), 80.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutAppliesGrowAlongTheMainAxisWhenDirectionIsColumn)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 80.0, 200.0);
+  container->SetFlexContainer(true);
+  container->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 60.0, 50.0);
+  child->SetFlexGrow(1.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(child->GetContentHeight(), 200.0);   // grows along the COLUMN main axis (height)
+  EXPECT_EQ(child->GetContentWidth(), 60.0);     // cross size (width) untouched
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutOnlyGrowsTheItemThatHasAPositiveFlexGrow)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetFlexContainer(true);
+
+  UI_LAYOUTBOX* fixed  = GEN_NEW UI_LAYOUTBOX();
+  fixed->SetFlexBasis(60.0);        // explicit, fixed size -- flex-grow stays 0 (default)
+
+  UI_LAYOUTBOX* growing = GEN_NEW UI_LAYOUTBOX();
+  growing->SetContentBox(0.0, 0.0, 40.0, 40.0);   // auto basis -> 40
+  growing->SetFlexGrow(1.0);
+
+  container->AddChild(fixed);
+  container->AddChild(growing);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(fixed->GetContentWidth(), 60.0);        // exactly its basis, untouched
+  EXPECT_EQ(growing->GetContentWidth(), 240.0);     // 40 base + the full 200 of free space
+  EXPECT_EQ(fixed->GetContentLeft(), 0.0);
+  EXPECT_EQ(growing->GetContentLeft(), 60.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutBox, FlexWrapAndAlignContentDefaultToNowrapAndFlexStart)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  EXPECT_EQ(box->GetFlexWrap(), UI_FLEX_WRAP_NOWRAP);
+  EXPECT_EQ(box->GetAlignContent(), UI_ALIGN_CONTENT_FLEX_START);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, FlexWrapAndAlignContentRoundTripThroughSettersAndGetters)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetFlexWrap(UI_FLEX_WRAP_WRAP_REVERSE);
+  box->SetAlignContent(UI_ALIGN_CONTENT_SPACE_EVENLY);
+
+  EXPECT_EQ(box->GetFlexWrap(), UI_FLEX_WRAP_WRAP_REVERSE);
+  EXPECT_EQ(box->GetAlignContent(), UI_ALIGN_CONTENT_SPACE_EVENLY);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutWithNowrapNeverSplitsIntoMultipleLinesEvenOnOverflow)
+{
+  // Regression guard: the WRAP-branch line-splitting code must never run when flex-wrap is NOWRAP,
+  // no matter how much the children overflow the container's main size.
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 50.0);
+  container->SetFlexContainer(true);   // flex-wrap defaults to NOWRAP
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 80.0, 20.0);
+  first->SetFlexShrink(0.0);    // keep its outer main size fixed so the overflow is real, not shrunk away
+  second->SetContentBox(0.0, 0.0, 80.0, 20.0);
+  second->SetFlexShrink(0.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // Both children stay on the single line: same content-top (cross position), placed one after another on X.
+  EXPECT_EQ(first->GetContentTop(), 0.0);
+  EXPECT_EQ(second->GetContentTop(), 0.0);
+  EXPECT_EQ(first->GetContentLeft(), 0.0);
+  EXPECT_EQ(second->GetContentLeft(), 80.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutWithWrapSplitsChildrenOntoANewLineWhenTheyOverflowTheMainSize)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 200.0);
+  container->SetFlexContainer(true);
+  container->SetFlexWrap(UI_FLEX_WRAP_WRAP);
+
+  // Three 60-wide children in a 100-wide container: only one fits per line -> three lines.
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 60.0, 30.0);
+  first->SetFlexShrink(0.0);    // keep outer main sizes fixed so 3x60=180 truly overflows the 100-wide container
+  second->SetContentBox(0.0, 0.0, 60.0, 40.0);
+  second->SetFlexShrink(0.0);
+  third->SetContentBox(0.0, 0.0, 60.0, 20.0);
+  third->SetFlexShrink(0.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // Each on its own line, all starting at main-axis 0 (only one item per line fits).
+  EXPECT_EQ(first->GetContentLeft(), 0.0);
+  EXPECT_EQ(second->GetContentLeft(), 0.0);
+  EXPECT_EQ(third->GetContentLeft(), 0.0);
+
+  // Lines stack down the cross axis: line cross-size = tallest item on that line (each line has one item here).
+  EXPECT_EQ(first->GetContentTop(), 0.0);
+  EXPECT_EQ(second->GetContentTop(), 30.0);    // after first line's cross size (30)
+  EXPECT_EQ(third->GetContentTop(), 70.0);     // after first (30) + second (40)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutWithWrapAndAlignContentCenterCentersLinesOnTheCrossAxis)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 300.0);   // plenty of extra cross space (height)
+  container->SetFlexContainer(true);
+  container->SetFlexWrap(UI_FLEX_WRAP_WRAP);
+  container->SetAlignContent(UI_ALIGN_CONTENT_CENTER);
+
+  // Two 60-wide children -> two lines, each 50 tall -> total lines cross size = 100, free space = 200.
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 60.0, 50.0);
+  first->SetFlexShrink(0.0);    // keep both items at outer main size 60 so 60+60=120 overflows the 100-wide line
+  second->SetContentBox(0.0, 0.0, 60.0, 50.0);
+  second->SetFlexShrink(0.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // Centered: leading offset = free space / 2 = 100.
+  EXPECT_EQ(first->GetContentTop(), 100.0);
+  EXPECT_EQ(second->GetContentTop(), 150.0);   // first line's top (100) + its cross size (50)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutWithWrapAndAlignContentSpaceBetweenPushesFirstAndLastLinesToTheEdges)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 300.0);
+  container->SetFlexContainer(true);
+  container->SetFlexWrap(UI_FLEX_WRAP_WRAP);
+  container->SetAlignContent(UI_ALIGN_CONTENT_SPACE_BETWEEN);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 60.0, 50.0);
+  first->SetFlexShrink(0.0);    // keep both items at outer main size 60 so 60+60=120 overflows the 100-wide line
+  second->SetContentBox(0.0, 0.0, 60.0, 50.0);
+  second->SetFlexShrink(0.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // First line at the cross-start, last line pushed all the way to the cross-end (300 - 50 = 250).
+  EXPECT_EQ(first->GetContentTop(), 0.0);
+  EXPECT_EQ(second->GetContentTop(), 250.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutWithWrapReverseStacksLinesInReverseCrossOrder)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 200.0);
+  container->SetFlexContainer(true);
+  container->SetFlexWrap(UI_FLEX_WRAP_WRAP_REVERSE);
+
+  // Three 60-wide children -> one per line, same as the earlier WRAP test, but stacking order reverses.
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 60.0, 30.0);
+  first->SetFlexShrink(0.0);    // keep outer main sizes fixed so 3x60=180 truly overflows the 100-wide container
+  second->SetContentBox(0.0, 0.0, 60.0, 40.0);
+  second->SetFlexShrink(0.0);
+  third->SetContentBox(0.0, 0.0, 60.0, 20.0);
+  third->SetFlexShrink(0.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // Compose order is unchanged (first/second/third stay in that order along the main axis within their own line),
+  // but the THIRD line (per compose order) is packed first at the cross-start, then second, then first last.
+  EXPECT_EQ(third->GetContentTop(), 0.0);
+  EXPECT_EQ(second->GetContentTop(), 20.0);    // after third's line cross size (20)
+  EXPECT_EQ(first->GetContentTop(), 60.0);     // after third (20) + second (40)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutBox, AlignItemsAndAlignSelfDefaultToFlexStartAndAuto)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  EXPECT_EQ(box->GetAlignItems(), UI_ALIGN_ITEMS_FLEX_START);
+  EXPECT_EQ(box->GetAlignSelf(), UI_ALIGN_SELF_AUTO);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, AlignItemsAndAlignSelfRoundTripThroughSettersAndGetters)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetAlignItems(UI_ALIGN_ITEMS_STRETCH);
+  box->SetAlignSelf(UI_ALIGN_SELF_CENTER);
+
+  EXPECT_EQ(box->GetAlignItems(), UI_ALIGN_ITEMS_STRETCH);
+  EXPECT_EQ(box->GetAlignSelf(), UI_ALIGN_SELF_CENTER);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutAlignItemsFlexEndPushesTheChildToTheLinesCrossEnd)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetAlignItems(UI_ALIGN_ITEMS_FLEX_END);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // NOWRAP: the (only) line spans the container's full cross size (100) -- pushed to its end: 100 - 40 = 60.
+  EXPECT_EQ(child->GetContentTop(), 60.0);
+  EXPECT_EQ(child->GetContentHeight(), 40.0);   // FLEX_END only repositions, never resizes
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutAlignItemsCenterCentersTheChildOnTheCrossAxis)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(child->GetContentTop(), 30.0);   // (100 - 40) / 2
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutAlignItemsStretchGrowsTheChildsCrossSizeToFillTheLineMinusItsOwnMarginBorderPadding)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetAlignItems(UI_ALIGN_ITEMS_STRETCH);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 50.0, 40.0);    // content height 40, but STRETCH overrides it
+  child->SetMargin(5.0, 0.0, 5.0, 0.0);          // top=5, bottom=5
+  child->SetBorder(2.0, 0.0, 2.0, 0.0);          // top=2, bottom=2
+  child->SetPadding(3.0, 0.0, 3.0, 0.0);         // top=3, bottom=3
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  // line cross size (100) - leading MBP (5+2+3=10) - trailing MBP (5+2+3=10) = 80.
+  EXPECT_EQ(child->GetContentHeight(), 80.0);
+  EXPECT_EQ(child->GetContentTop(), 10.0);       // leading MBP only -- stretch still starts at the cross-start
+  EXPECT_EQ(child->GetContentWidth(), 50.0);     // main-axis (width) size is untouched by cross-axis stretch
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutAlignSelfOverridesTheContainersAlignItemsForOneChildOnly)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetFlexContainer(true);
+  container->SetAlignItems(UI_ALIGN_ITEMS_FLEX_START);   // container default: stay at the cross-start
+
+  UI_LAYOUTBOX* deferring = GEN_NEW UI_LAYOUTBOX();      // align-self left at AUTO -> follows the container
+  UI_LAYOUTBOX* overriding = GEN_NEW UI_LAYOUTBOX();     // explicit align-self -> ignores the container
+  deferring->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  overriding->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  overriding->SetAlignSelf(UI_ALIGN_SELF_CENTER);
+  container->AddChild(deferring);
+  container->AddChild(overriding);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(deferring->GetContentTop(), 0.0);     // follows the container's FLEX_START
+  EXPECT_EQ(overriding->GetContentTop(), 30.0);   // its own CENTER wins: (100 - 40) / 2
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyFlexLayoutWithWrapAlignItemsCentersAShorterItemWithinItsLinesCrossSize)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 200.0);   // wide enough that both children share one line
+  container->SetFlexContainer(true);
+  container->SetFlexWrap(UI_FLEX_WRAP_WRAP);          // still goes through the line-based path, just as 1 line
+  container->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+
+  UI_LAYOUTBOX* tall   = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* shorter = GEN_NEW UI_LAYOUTBOX();
+  tall->SetContentBox(0.0, 0.0, 60.0, 60.0);          // sets this line's cross size (tallest item) to 60
+  shorter->SetContentBox(0.0, 0.0, 60.0, 20.0);
+  container->AddChild(tall);
+  container->AddChild(shorter);
+
+  UI_LAYOUTENGINE::ApplyFlexLayout(container);
+
+  EXPECT_EQ(tall->GetContentTop(), 0.0);       // fills the line's cross size exactly -- centering is a no-op
+  EXPECT_EQ(shorter->GetContentTop(), 20.0);   // (60 - 20) / 2, centered within the SAME line's cross size
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutBox, GridContainerAndTracksDefaultToNotAGridWithNoTracks)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  EXPECT_FALSE(box->IsGridContainer());
+  EXPECT_EQ(box->GetGridColumnTracks().GetSize(), (XDWORD)0);
+  EXPECT_EQ(box->GetGridRowTracks().GetSize(), (XDWORD)0);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, GridColumnAndRowTracksRoundTripThroughAddAndClear)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+  box->SetGridContainer(true);
+
+  UI_GRIDTRACK pxtrack;
+  pxtrack.unit  = UI_GRID_TRACK_UNIT_PX;
+  pxtrack.value = 120.0;
+
+  UI_GRIDTRACK percenttrack;
+  percenttrack.unit  = UI_GRID_TRACK_UNIT_PERCENT;
+  percenttrack.value = 50.0;
+
+  box->AddGridColumnTrack(pxtrack);
+  box->AddGridColumnTrack(percenttrack);
+  box->AddGridRowTrack(pxtrack);
+
+  EXPECT_TRUE(box->IsGridContainer());
+  EXPECT_EQ(box->GetGridColumnTracks().GetSize(), (XDWORD)2);
+  EXPECT_EQ(box->GetGridColumnTracks().Get(0).unit, UI_GRID_TRACK_UNIT_PX);
+  EXPECT_EQ(box->GetGridColumnTracks().Get(1).unit, UI_GRID_TRACK_UNIT_PERCENT);
+  EXPECT_EQ(box->GetGridRowTracks().GetSize(), (XDWORD)1);
+
+  box->ClearGridColumnTracks();
+  EXPECT_EQ(box->GetGridColumnTracks().GetSize(), (XDWORD)0);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutPlacesChildrenInRowMajorOrderAcrossFixedPxColumns)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 50.0, 50.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 50.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 50.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(first->GetContentLeft(), 0.0);
+  EXPECT_EQ(second->GetContentLeft(), 100.0);
+  EXPECT_EQ(third->GetContentLeft(), 200.0);
+  EXPECT_EQ(first->GetContentTop(), 0.0);
+  EXPECT_EQ(second->GetContentTop(), 0.0);
+  EXPECT_EQ(third->GetContentTop(), 0.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutResolvesPercentTracksRelativeToTheContainersContentSize)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PERCENT;
+  column.value = 50.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 150.0);    // 50% of 300
+  EXPECT_EQ(second->GetContentWidth(), 150.0);
+  EXPECT_EQ(second->GetContentLeft(), 150.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutWrapsToANewRowWhenChildrenExceedTheColumnCount)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 200.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();     // 3rd child -> wraps to row 1, column 0
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(third->GetContentLeft(), 0.0);
+  EXPECT_EQ(third->GetContentTop(), 40.0);   // after row 0's implicit height (tallest item there: 40)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutSizesImplicitRowsToTheTallestItemInThatRow)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 300.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();     // row 0
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();     // row 0 -- taller, sets the row's implicit height
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();     // row 1, alone
+  first->SetContentBox(0.0, 0.0, 50.0, 30.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 70.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 20.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(third->GetContentTop(), 70.0);   // row 0's height is its TALLEST item (70), not the first child's (30)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutUsesExplicitRowTracksInsteadOfContentSizingWhenProvided)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 300.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_GRIDTRACK explicitrow;
+  explicitrow.unit  = UI_GRID_TRACK_UNIT_PX;
+  explicitrow.value = 40.0;
+  container->AddGridRowTrack(explicitrow);           // row 0 is explicit: 40, regardless of its items' content
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();     // row 1: no explicit track -> implicit, sized to content (20)
+  first->SetContentBox(0.0, 0.0, 50.0, 999.0);       // huge content height -- must NOT affect the explicit row
+  second->SetContentBox(0.0, 0.0, 50.0, 30.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 20.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(third->GetContentTop(), 40.0);   // row 0's explicit 40, ignoring "first"'s 999-tall content
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutStretchesEachChildToFillItsCellMinusItsOwnMarginBorderPadding)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+
+  UI_GRIDTRACK row;
+  row.unit  = UI_GRID_TRACK_UNIT_PX;
+  row.value = 100.0;
+  container->AddGridRowTrack(row);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 10.0, 10.0);    // small content -- STRETCH overrides it to fill the cell
+  child->SetMargin(5.0, 0.0, 5.0, 0.0);
+  child->SetBorder(2.0, 0.0, 2.0, 0.0);
+  child->SetPadding(3.0, 0.0, 3.0, 0.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  // cell is 100x100; only top/bottom MBP set (10 each side) -> content height = 80; left/right MBP all 0 -> width 100.
+  EXPECT_EQ(child->GetContentWidth(), 100.0);
+  EXPECT_EQ(child->GetContentHeight(), 80.0);
+  EXPECT_EQ(child->GetContentTop(), 10.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutAppliesColumnAndRowGapBetweenTracks)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 300.0);
+  container->SetGridContainer(true);
+  container->SetGap(5.0, 10.0);    // row-gap 5, column-gap 10
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();     // wraps to row 1
+  first->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  second->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  third->SetContentBox(0.0, 0.0, 50.0, 40.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(second->GetContentLeft(), 110.0);   // 100 (column 0 width) + 10 (column-gap)
+  EXPECT_EQ(third->GetContentTop(), 45.0);      // 40 (row 0 height) + 5 (row-gap)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutDoesNothingWhenNoColumnTracksAreDefined)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);   // no AddGridColumnTrack() calls -- zero columns defined
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(5.0, 5.0, 20.0, 20.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(child->GetContentLeft(), 5.0);    // untouched
+  EXPECT_EQ(child->GetContentTop(), 5.0);
+  EXPECT_EQ(child->GetContentWidth(), 20.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutDistributesFreeSpaceAmongFrColumnsProportionally)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 400.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK onefr;
+  onefr.unit  = UI_GRID_TRACK_UNIT_FR;
+  onefr.value = 1.0;
+
+  UI_GRIDTRACK threefr;
+  threefr.unit  = UI_GRID_TRACK_UNIT_FR;
+  threefr.value = 3.0;
+
+  container->AddGridColumnTrack(onefr);
+  container->AddGridColumnTrack(threefr);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 100.0);    // 1/4 of the 400 free space (no fixed tracks to subtract)
+  EXPECT_EQ(second->GetContentWidth(), 300.0);   // 3/4
+  EXPECT_EQ(second->GetContentLeft(), 100.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutFrColumnsShareLeftoverSpaceAfterFixedPxTracks)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK fixedcol;
+  fixedcol.unit  = UI_GRID_TRACK_UNIT_PX;
+  fixedcol.value = 100.0;
+
+  UI_GRIDTRACK frcol;
+  frcol.unit  = UI_GRID_TRACK_UNIT_FR;
+  frcol.value = 1.0;
+
+  container->AddGridColumnTrack(fixedcol);   // fixed: always 100
+  container->AddGridColumnTrack(frcol);      // shares whatever's left: 300 - 100 = 200
+  container->AddGridColumnTrack(frcol);      // ...split evenly between the two 1fr tracks: 100 each
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  third->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 100.0);
+  EXPECT_EQ(second->GetContentWidth(), 100.0);
+  EXPECT_EQ(third->GetContentWidth(), 100.0);
+  EXPECT_EQ(second->GetContentLeft(), 100.0);
+  EXPECT_EQ(third->GetContentLeft(), 200.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutFrColumnsAccountForColumnGapWhenComputingFreeSpace)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);
+  container->SetGap(0.0, 20.0);   // column-gap 20
+
+  UI_GRIDTRACK frcol;
+  frcol.unit  = UI_GRID_TRACK_UNIT_FR;
+  frcol.value = 1.0;
+  container->AddGridColumnTrack(frcol);
+  container->AddGridColumnTrack(frcol);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  // free space = 300 - 20 (the one gap between 2 columns) = 280, split evenly -> 140 each.
+  EXPECT_EQ(first->GetContentWidth(), 140.0);
+  EXPECT_EQ(second->GetContentWidth(), 140.0);
+  EXPECT_EQ(second->GetContentLeft(), 160.0);   // 140 + the 20 gap
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutFrRowsShareLeftoverSpaceAfterExplicitFixedRowsAndImplicitRows)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 200.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);   // 1 column -> each child gets its own row
+
+  UI_GRIDTRACK fixedrow;
+  fixedrow.unit  = UI_GRID_TRACK_UNIT_PX;
+  fixedrow.value = 50.0;
+
+  UI_GRIDTRACK frrow;
+  frrow.unit  = UI_GRID_TRACK_UNIT_FR;
+  frrow.value = 1.0;
+
+  container->AddGridRowTrack(fixedrow);    // row 0: fixed 50
+  container->AddGridRowTrack(frrow);       // row 1: fr -- shares whatever's left after row 0 AND row 2 (implicit)
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* third  = GEN_NEW UI_LAYOUTBOX();     // row 2: no explicit track -> implicit, sized to its content
+  first->SetContentBox(0.0, 0.0, 50.0, 999.0);       // row 0 is fixed -- this huge content height must not matter
+  second->SetContentBox(0.0, 0.0, 50.0, 999.0);      // row 1 is fr -- likewise unaffected by its own content
+  third->SetContentBox(0.0, 0.0, 50.0, 30.0);        // row 2: implicit, sized to exactly this (30)
+  container->AddChild(first);
+  container->AddChild(second);
+  container->AddChild(third);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  // container height 200; implicit row 2 = 30; row 0 fixed = 50; free space for row 1's 1fr = 200 - 30 - 50 = 120.
+  EXPECT_EQ(second->GetContentHeight(), 120.0);
+  EXPECT_EQ(second->GetContentTop(), 50.0);     // right after row 0's 50
+  EXPECT_EQ(third->GetContentTop(), 170.0);     // 50 + 120
+  EXPECT_EQ(third->GetContentHeight(), 30.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutGivesFrColumnsZeroWidthWhenNoFreeSpaceRemains)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 150.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK fixedcol;
+  fixedcol.unit  = UI_GRID_TRACK_UNIT_PX;
+  fixedcol.value = 200.0;   // already overflows the 150-wide container on its own
+
+  UI_GRIDTRACK frcol;
+  frcol.unit  = UI_GRID_TRACK_UNIT_FR;
+  frcol.value = 1.0;
+
+  container->AddGridColumnTrack(fixedcol);
+  container->AddGridColumnTrack(frcol);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 200.0);    // fixed tracks are never clamped, same as before fr existed
+  EXPECT_EQ(second->GetContentWidth(), 0.0);     // negative free space -> clamped to 0, never negative
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutBox, GridTrackDefaultsToASimpleNonMinmaxPxZeroTrack)
+{
+  UI_GRIDTRACK track;
+
+  EXPECT_FALSE(track.isminmax);
+  EXPECT_EQ(track.unit, UI_GRID_TRACK_UNIT_PX);
+  EXPECT_EQ(track.value, 0.0);
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutMinmaxWithAFixedMaxResolvesToTheMaxWhenItExceedsTheMin)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.isminmax = true;
+  column.minunit   = UI_GRID_TRACK_UNIT_PX;
+  column.minvalue  = 50.0;
+  column.maxunit   = UI_GRID_TRACK_UNIT_PX;
+  column.maxvalue  = 150.0;
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(child->GetContentWidth(), 150.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutMinmaxFloorsTheTrackWhenTheDeclaredMinExceedsTheMax)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.isminmax = true;
+  column.minunit   = UI_GRID_TRACK_UNIT_PX;
+  column.minvalue  = 200.0;   // deliberately larger than max -- an edge case this engine tolerates (see SCOPE)
+  column.maxunit   = UI_GRID_TRACK_UNIT_PX;
+  column.maxvalue  = 100.0;
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(child->GetContentWidth(), 200.0);   // the larger of the two wins, whichever bound it came from
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutMinmaxWithAnFrMaxGrowsBeyondItsFloorToShareFreeSpace)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 400.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK growing;
+  growing.isminmax = true;
+  growing.minunit   = UI_GRID_TRACK_UNIT_PX;
+  growing.minvalue  = 100.0;
+  growing.maxunit   = UI_GRID_TRACK_UNIT_FR;
+  growing.maxvalue  = 1.0;
+
+  UI_GRIDTRACK fixed;
+  fixed.unit  = UI_GRID_TRACK_UNIT_PX;
+  fixed.value = 100.0;
+
+  container->AddGridColumnTrack(growing);
+  container->AddGridColumnTrack(fixed);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  // free space = 400 - 100 (this track's own floor, reserved) - 100 (the fixed column) = 200, all to this 1fr.
+  EXPECT_EQ(first->GetContentWidth(), 300.0);    // 100 (floor) + 200 (its fr share)
+  EXPECT_EQ(second->GetContentWidth(), 100.0);
+  EXPECT_EQ(second->GetContentLeft(), 300.0);
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutMinmaxWithAnFrMaxNeverShrinksBelowItsFloorWhenNoFreeSpaceRemains)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK growing;
+  growing.isminmax = true;
+  growing.minunit   = UI_GRID_TRACK_UNIT_PX;
+  growing.minvalue  = 150.0;
+  growing.maxunit   = UI_GRID_TRACK_UNIT_FR;
+  growing.maxvalue  = 1.0;
+
+  UI_GRIDTRACK fixed;
+  fixed.unit  = UI_GRID_TRACK_UNIT_PX;
+  fixed.value = 100.0;   // 150 (this track's floor) + 100 already overflows the 200-wide container
+
+  container->AddGridColumnTrack(growing);
+  container->AddGridColumnTrack(fixed);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 150.0);    // its floor, exactly -- 0 free space to add on top
+  EXPECT_EQ(second->GetContentWidth(), 100.0);   // fixed tracks are never clamped, same as always
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutTwoMinmaxFrColumnsShareFreeSpaceProportionallyByWeight)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK onefr;
+  onefr.isminmax = true;
+  onefr.minunit   = UI_GRID_TRACK_UNIT_PX;
+  onefr.minvalue  = 0.0;
+  onefr.maxunit   = UI_GRID_TRACK_UNIT_FR;
+  onefr.maxvalue  = 1.0;
+
+  UI_GRIDTRACK threefr;
+  threefr.isminmax = true;
+  threefr.minunit   = UI_GRID_TRACK_UNIT_PX;
+  threefr.minvalue  = 0.0;
+  threefr.maxunit   = UI_GRID_TRACK_UNIT_FR;
+  threefr.maxvalue  = 3.0;
+
+  container->AddGridColumnTrack(onefr);
+  container->AddGridColumnTrack(threefr);
+
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+  first->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  second->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(first);
+  container->AddChild(second);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(first->GetContentWidth(), 75.0);     // 1/4 of the 300 free space (both floors are 0)
+  EXPECT_EQ(second->GetContentWidth(), 225.0);   // 3/4
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutBox, GridColumnAndRowSpanDefaultToOne)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  EXPECT_EQ(box->GetGridColumnSpan(), (XDWORD)1);
+  EXPECT_EQ(box->GetGridRowSpan(), (XDWORD)1);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, GridColumnAndRowSpanRoundTripThroughSettersAndGetters)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetGridColumnSpan(3);
+  box->SetGridRowSpan(2);
+
+  EXPECT_EQ(box->GetGridColumnSpan(), (XDWORD)3);
+  EXPECT_EQ(box->GetGridRowSpan(), (XDWORD)2);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutColumnSpanMakesAnItemOccupyMultipleColumnsAndPushesLaterItemsPastIt)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 300.0, 200.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* spanning = GEN_NEW UI_LAYOUTBOX();     // spans columns 0-1
+  UI_LAYOUTBOX* sibling  = GEN_NEW UI_LAYOUTBOX();     // pushed to column 2, same row
+  UI_LAYOUTBOX* wrapped  = GEN_NEW UI_LAYOUTBOX();     // no room left on row 0 -> wraps to row 1
+  spanning->SetContentBox(0.0, 0.0, 10.0, 30.0);
+  spanning->SetGridColumnSpan(2);
+  sibling->SetContentBox(0.0, 0.0, 10.0, 50.0);
+  wrapped->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  container->AddChild(spanning);
+  container->AddChild(sibling);
+  container->AddChild(wrapped);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(spanning->GetContentLeft(), 0.0);
+  EXPECT_EQ(spanning->GetContentWidth(), 200.0);   // columns 0 AND 1, no gap between them
+  EXPECT_EQ(sibling->GetContentLeft(), 200.0);      // pushed past the span, onto column 2
+  EXPECT_EQ(wrapped->GetContentLeft(), 0.0);        // row 0 is full (span 2 + 1 == all 3 columns) -> wraps
+  EXPECT_EQ(wrapped->GetContentTop(), 50.0);        // row 0's implicit height = tallest SINGLE-row item (50)
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutRowSpanMakesAnItemOccupyMultipleRowsAndLaterItemsSkipItsOccupiedCells)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 100.0, 300.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 50.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* tall   = GEN_NEW UI_LAYOUTBOX();   // (0,0), spans rows 0-1
+  UI_LAYOUTBOX* topright = GEN_NEW UI_LAYOUTBOX(); // (0,1)
+  UI_LAYOUTBOX* midright = GEN_NEW UI_LAYOUTBOX(); // wants (1,0) -- occupied by "tall" -> goes to (1,1) instead
+  UI_LAYOUTBOX* bottom    = GEN_NEW UI_LAYOUTBOX(); // (2,0) -- "tall"'s span has ended by row 2
+  tall->SetContentBox(0.0, 0.0, 10.0, 999.0);      // irrelevant -- rowspan items don't drive implicit row sizing
+  tall->SetGridRowSpan(2);
+  topright->SetContentBox(0.0, 0.0, 10.0, 20.0);
+  midright->SetContentBox(0.0, 0.0, 10.0, 30.0);
+  bottom->SetContentBox(0.0, 0.0, 10.0, 40.0);
+  container->AddChild(tall);
+  container->AddChild(topright);
+  container->AddChild(midright);
+  container->AddChild(bottom);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  // row 0 implicit height = "topright"'s 20 (the only rowspan==1 item on row 0 -- "tall" is excluded).
+  // row 1 implicit height = "midright"'s 30 (the only rowspan==1 item on row 1).
+  EXPECT_EQ(midright->GetContentLeft(), 50.0);     // pushed to column 1 -- column 0 row 1 is occupied by "tall"
+  EXPECT_EQ(midright->GetContentTop(), 20.0);      // row 1 starts right after row 0's height (20)
+  EXPECT_EQ(bottom->GetContentLeft(), 0.0);        // "tall"'s span is over -- column 0 is free again on row 2
+  EXPECT_EQ(bottom->GetContentTop(), 50.0);        // row 0 (20) + row 1 (30)
+  EXPECT_EQ(tall->GetContentHeight(), 50.0);       // spans rows 0+1: 20 + 30, stretched to fill both
+
+  GEN_DELETE container;
+}
+
+
+TEST(UI_LayoutEngine, ApplyGridLayoutClampsAColumnSpanWiderThanTheGridToTheFullColumnCount)
+{
+  UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
+  container->SetContentBox(0.0, 0.0, 200.0, 100.0);
+  container->SetGridContainer(true);
+
+  UI_GRIDTRACK column;
+  column.unit  = UI_GRID_TRACK_UNIT_PX;
+  column.value = 100.0;
+  container->AddGridColumnTrack(column);
+  container->AddGridColumnTrack(column);
+
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+  child->SetContentBox(0.0, 0.0, 10.0, 10.0);
+  child->SetGridColumnSpan(5);   // wider than the 2 defined columns
+  container->AddChild(child);
+
+  UI_LAYOUTENGINE::ApplyGridLayout(container);
+
+  EXPECT_EQ(child->GetContentWidth(), 200.0);   // clamped down to both columns, not left unplaced or crashing
+
+  GEN_DELETE container;
+}
+
+
 #endif // GOOGLETEST_ACTIVE

@@ -70,6 +70,28 @@ UI_LAYOUTBOX::UI_LAYOUTBOX()
   insets.top.specified = insets.right.specified = insets.bottom.specified = insets.left.specified = false;
   insets.top.value     = insets.right.value     = insets.bottom.value     = insets.left.value     = 0.0;
 
+  flexcontainer   = false;
+  flexdirection   = UI_FLEX_DIRECTION_ROW;
+  justifycontent  = UI_JUSTIFY_CONTENT_FLEX_START;
+  rowgap          = 0.0;
+  columngap       = 0.0;
+
+  flexgrow           = 0.0;    // CSS initial value
+  flexshrink          = 1.0;    // CSS initial value
+  flexbasis.specified = false;  // "auto"
+  flexbasis.value     = 0.0;
+
+  flexwrap     = UI_FLEX_WRAP_NOWRAP;
+  aligncontent = UI_ALIGN_CONTENT_FLEX_START;
+
+  alignitems = UI_ALIGN_ITEMS_FLEX_START;   // deliberately not CSS's real default (stretch) -- see SCOPE ADDENDUM
+  alignself  = UI_ALIGN_SELF_AUTO;          // CSS initial value: defer to the container's align-items
+
+  gridcontainer = false;
+
+  gridcolumnspan = 1;   // CSS initial value: occupy exactly one column
+  gridrowspan    = 1;   // CSS initial value: occupy exactly one row
+
   parent = NULL;
 }
 
@@ -458,6 +480,545 @@ void UI_LAYOUTBOX::SetInsets(UI_LAYOUTBOX_INSETS& _insets)
 UI_LAYOUTBOX_INSETS& UI_LAYOUTBOX::GetInsets()
 {
   return insets;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetFlexContainer(bool isflexcontainer)
+* @brief      Set flex container
+* @ingroup    USERINTERFACE
+*
+* @param[in]  isflexcontainer : Whether this box's DIRECT children should be arranged as flex items.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetFlexContainer(bool isflexcontainer)
+{
+  flexcontainer = isflexcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_LAYOUTBOX::IsFlexContainer()
+* @brief      Is flex container
+* @ingroup    USERINTERFACE
+*
+* @return     bool : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_LAYOUTBOX::IsFlexContainer()
+{
+  return flexcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetFlexDirection(UI_FLEX_DIRECTION direction)
+* @brief      Set flex direction
+* @ingroup    USERINTERFACE
+*
+* @param[in]  direction : Main axis and packing direction for this container's children.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetFlexDirection(UI_FLEX_DIRECTION direction)
+{
+  flexdirection = direction;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_FLEX_DIRECTION UI_LAYOUTBOX::GetFlexDirection()
+* @brief      Get flex direction
+* @ingroup    USERINTERFACE
+*
+* @return     UI_FLEX_DIRECTION : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_FLEX_DIRECTION UI_LAYOUTBOX::GetFlexDirection()
+{
+  return flexdirection;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetJustifyContent(UI_JUSTIFY_CONTENT justifycontent)
+* @brief      Set justify content
+* @ingroup    USERINTERFACE
+*
+* @param[in]  justifycontent : How free main-axis space is distributed among this container's children.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetJustifyContent(UI_JUSTIFY_CONTENT _justifycontent)
+{
+  justifycontent = _justifycontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_JUSTIFY_CONTENT UI_LAYOUTBOX::GetJustifyContent()
+* @brief      Get justify content
+* @ingroup    USERINTERFACE
+*
+* @return     UI_JUSTIFY_CONTENT : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_JUSTIFY_CONTENT UI_LAYOUTBOX::GetJustifyContent()
+{
+  return justifycontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetGap(double rowgap, double columngap)
+* @brief      Set gap
+* @ingroup    USERINTERFACE
+*
+* @param[in]  rowgap : CSS "row-gap" -- space between children along the VERTICAL axis (rows), whatever the
+*                      current flex-direction is.
+* @param[in]  columngap : CSS "column-gap" -- space between children along the HORIZONTAL axis (columns).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetGap(double _rowgap, double _columngap)
+{
+  rowgap    = _rowgap;
+  columngap = _columngap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_LAYOUTBOX::GetRowGap()
+* @brief      Get row gap
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_LAYOUTBOX::GetRowGap()
+{
+  return rowgap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_LAYOUTBOX::GetColumnGap()
+* @brief      Get column gap
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_LAYOUTBOX::GetColumnGap()
+{
+  return columngap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetFlexGrow(double grow)
+* @brief      Set flex grow
+* @ingroup    USERINTERFACE
+*
+* @param[in]  grow : CSS "flex-grow" factor for this box as a flex item.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetFlexGrow(double grow)
+{
+  flexgrow = grow;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_LAYOUTBOX::GetFlexGrow()
+* @brief      Get flex grow
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_LAYOUTBOX::GetFlexGrow()
+{
+  return flexgrow;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetFlexShrink(double shrink)
+* @brief      Set flex shrink
+* @ingroup    USERINTERFACE
+*
+* @param[in]  shrink : CSS "flex-shrink" factor for this box as a flex item.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetFlexShrink(double shrink)
+{
+  flexshrink = shrink;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_LAYOUTBOX::GetFlexShrink()
+* @brief      Get flex shrink
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_LAYOUTBOX::GetFlexShrink()
+{
+  return flexshrink;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetFlexBasisAuto()
+* @brief      Set flex basis auto
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetFlexBasisAuto()
+{
+  flexbasis.specified = false;
+  flexbasis.value     = 0.0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetFlexBasis(double value)
+* @brief      Set flex basis
+* @ingroup    USERINTERFACE
+*
+* @param[in]  value : Explicit CSS "flex-basis" (a resolved content-box main-axis size, replacing "auto").
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetFlexBasis(double value)
+{
+  flexbasis.specified = true;
+  flexbasis.value     = value;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_LAYOUTBOX_INSET& UI_LAYOUTBOX::GetFlexBasis()
+* @brief      Get flex basis
+* @ingroup    USERINTERFACE
+*
+* @return     UI_LAYOUTBOX_INSET& : Requested value ("specified" false means "auto").
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_LAYOUTBOX_INSET& UI_LAYOUTBOX::GetFlexBasis()
+{
+  return flexbasis;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetFlexWrap(UI_FLEX_WRAP wrap)
+* @brief      Set flex wrap
+* @ingroup    USERINTERFACE
+*
+* @param[in]  wrap : CSS "flex-wrap" for this container's children.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetFlexWrap(UI_FLEX_WRAP wrap)
+{
+  flexwrap = wrap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_FLEX_WRAP UI_LAYOUTBOX::GetFlexWrap()
+* @brief      Get flex wrap
+* @ingroup    USERINTERFACE
+*
+* @return     UI_FLEX_WRAP : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_FLEX_WRAP UI_LAYOUTBOX::GetFlexWrap()
+{
+  return flexwrap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetAlignContent(UI_ALIGN_CONTENT aligncontent)
+* @brief      Set align content
+* @ingroup    USERINTERFACE
+*
+* @param[in]  aligncontent : How free cross-axis space is distributed among this container's lines.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetAlignContent(UI_ALIGN_CONTENT _aligncontent)
+{
+  aligncontent = _aligncontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_CONTENT UI_LAYOUTBOX::GetAlignContent()
+* @brief      Get align content
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_CONTENT : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_CONTENT UI_LAYOUTBOX::GetAlignContent()
+{
+  return aligncontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetAlignItems(UI_ALIGN_ITEMS alignitems)
+* @brief      Set align items
+* @ingroup    USERINTERFACE
+*
+* @param[in]  alignitems : How this container aligns its DIRECT children on the cross axis, within their own line.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetAlignItems(UI_ALIGN_ITEMS _alignitems)
+{
+  alignitems = _alignitems;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_ITEMS UI_LAYOUTBOX::GetAlignItems()
+* @brief      Get align items
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_ITEMS : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_ITEMS UI_LAYOUTBOX::GetAlignItems()
+{
+  return alignitems;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetAlignSelf(UI_ALIGN_SELF alignself)
+* @brief      Set align self
+* @ingroup    USERINTERFACE
+*
+* @param[in]  alignself : This box's own cross-axis alignment override; AUTO defers to the parent's align-items.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetAlignSelf(UI_ALIGN_SELF _alignself)
+{
+  alignself = _alignself;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_SELF UI_LAYOUTBOX::GetAlignSelf()
+* @brief      Get align self
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_SELF : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_SELF UI_LAYOUTBOX::GetAlignSelf()
+{
+  return alignself;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetGridContainer(bool isgridcontainer)
+* @brief      Set grid container
+* @ingroup    USERINTERFACE
+*
+* @param[in]  isgridcontainer : Whether this box's DIRECT children are laid out as a CSS grid.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetGridContainer(bool isgridcontainer)
+{
+  gridcontainer = isgridcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_LAYOUTBOX::IsGridContainer()
+* @brief      Is grid container
+* @ingroup    USERINTERFACE
+*
+* @return     bool : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_LAYOUTBOX::IsGridContainer()
+{
+  return gridcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::AddGridColumnTrack(UI_GRIDTRACK track)
+* @brief      Add grid column track
+* @ingroup    USERINTERFACE
+*
+* @param[in]  track : Track appended to the end of grid-template-columns.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::AddGridColumnTrack(UI_GRIDTRACK track)
+{
+  gridcolumntracks.Add(track);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::ClearGridColumnTracks()
+* @brief      Clear grid column tracks
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::ClearGridColumnTracks()
+{
+  gridcolumntracks.DeleteAll();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<UI_GRIDTRACK>& UI_LAYOUTBOX::GetGridColumnTracks()
+* @brief      Get grid column tracks
+* @ingroup    USERINTERFACE
+*
+* @return     XVECTOR<UI_GRIDTRACK>& : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<UI_GRIDTRACK>& UI_LAYOUTBOX::GetGridColumnTracks()
+{
+  return gridcolumntracks;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::AddGridRowTrack(UI_GRIDTRACK track)
+* @brief      Add grid row track
+* @ingroup    USERINTERFACE
+*
+* @param[in]  track : Track appended to the end of grid-template-rows.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::AddGridRowTrack(UI_GRIDTRACK track)
+{
+  gridrowtracks.Add(track);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::ClearGridRowTracks()
+* @brief      Clear grid row tracks
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::ClearGridRowTracks()
+{
+  gridrowtracks.DeleteAll();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XVECTOR<UI_GRIDTRACK>& UI_LAYOUTBOX::GetGridRowTracks()
+* @brief      Get grid row tracks
+* @ingroup    USERINTERFACE
+*
+* @return     XVECTOR<UI_GRIDTRACK>& : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XVECTOR<UI_GRIDTRACK>& UI_LAYOUTBOX::GetGridRowTracks()
+{
+  return gridrowtracks;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetGridColumnSpan(XDWORD span)
+* @brief      Set grid column span
+* @ingroup    USERINTERFACE
+*
+* @param[in]  span : Number of columns this box occupies, starting from wherever auto-placement puts it.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetGridColumnSpan(XDWORD span)
+{
+  gridcolumnspan = span;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD UI_LAYOUTBOX::GetGridColumnSpan()
+* @brief      Get grid column span
+* @ingroup    USERINTERFACE
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD UI_LAYOUTBOX::GetGridColumnSpan()
+{
+  return gridcolumnspan;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTBOX::SetGridRowSpan(XDWORD span)
+* @brief      Set grid row span
+* @ingroup    USERINTERFACE
+*
+* @param[in]  span : Number of rows this box occupies, starting from wherever auto-placement puts it.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTBOX::SetGridRowSpan(XDWORD span)
+{
+  gridrowspan = span;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD UI_LAYOUTBOX::GetGridRowSpan()
+* @brief      Get grid row span
+* @ingroup    USERINTERFACE
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD UI_LAYOUTBOX::GetGridRowSpan()
+{
+  return gridrowspan;
 }
 
 
