@@ -37,6 +37,30 @@
 *   raw XFILEXMLELEMENT* and silently losing any CSS/inline override -- the exact P0 gap the UI/CSS analysis
 *   report identified as 50 direct-read call sites across UI_Manager.cpp's per-widget builders.
 *
+* SCOPE (Phase 3 -- "caja, unidades y posicionamiento", second increment: "pequeños primero")
+*   Adds "box-sizing" and min/max clamping as the same kind of typed, self-tested accessor GetLength()/GetColor()
+*   already are -- still deliberately NOT wired into UI_Manager.cpp or any builder (that lands with the layout
+*   box/engine increments later in Phase 3, once there is an actual containing block to size against):
+*
+*   - GetBoxSizing() classifies the "box-sizing" keyword into UI_BOXSIZING_CONTENTBOX (the CSS initial value --
+*     width/height apply to the content box only) or UI_BOXSIZING_BORDERBOX (width/height include padding and
+*     border). Same "false means absent/unrecognized, but 'value' is still left holding a usable default"
+*     contract already used by the rest of this class where that makes the caller's life easier.
+*
+*   - ClampToMinMax() reads an optional "min-*"/"max-*" pair (already-resolved UI_LENGTH, through the SAME
+*     UI_LENGTH_CONTEXT the caller resolved its own value with) and clamps a value between them, honouring the
+*     CSS rule that MIN always wins over MAX (so an author's own "max-width" smaller than their own "min-width"
+*     is not a contradiction the layout has to fail on -- max is applied first, then min, so min has the last
+*     word). A bound that is absent, or whose value is a non-numeric keyword ("none", "auto" -- CSS's own way
+*     of saying "unconstrained"), is simply not applied, rather than being coerced into 0.
+*
+*   - ResolveContentSize() is the box-sizing arithmetic itself: given the resolved value an author wrote for
+*     width/height and the box-sizing it should be interpreted under, returns the CONTENT-BOX size (what the
+*     rest of a box model needs to lay out children) -- pass-through for CONTENT-BOX, minus padding+border for
+*     BORDER-BOX, never negative (CSS clamps a box that would go negative to 0, it does not turn it negative).
+*     A static, pure-logic method (no bag lookup), grouped here rather than in UI_PROPERTYREGISTRY because it
+*     exists to consume the UI_BOXSIZING type this class just introduced.
+*
 * @author     Abraham J. Velez / EndoraSoft
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
@@ -51,6 +75,13 @@
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
+
+
+enum UI_BOXSIZING
+{
+  UI_BOXSIZING_CONTENTBOX = 0,      // CSS initial value: width/height size the content box only
+  UI_BOXSIZING_BORDERBOX,           // width/height include padding + border
+};
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -76,6 +107,23 @@ class UI_COMPUTEDSTYLE : public UI_STYLE
     // is absent or the string failed to parse into a valid colour.
     bool                            GetColor                     (XCHAR* key, UI_COLOR& color);
     bool                            GetColor                     (XCHAR* primarykey, XCHAR* secondarykey, UI_COLOR& color);
+
+    // Classifies "box-sizing" into UI_BOXSIZING_CONTENTBOX / UI_BOXSIZING_BORDERBOX. "value" is always left
+    // holding a usable result (CONTENTBOX, the CSS initial value, when absent or unrecognized); the return
+    // value only tells the caller whether the key was present AND held one of the two recognized keywords.
+    bool                            GetBoxSizing                 (UI_BOXSIZING& value);
+
+    // Clamps "value" (already resolved to pixels by the caller) between the lengths at "minkey"/"maxkey" (e.g.
+    // "min-width"/"max-width"), resolved through the SAME "context" the caller used for "value" itself. A bound
+    // that is absent, or resolves to a non-numeric keyword ("none", "auto"), is left unconstrained. MIN always
+    // wins over MAX on conflict, per CSS. Always succeeds -- returns "value" unchanged if neither bound applies.
+    double                          ClampToMinMax                (double value, XCHAR* minkey, XCHAR* maxkey, UI_LENGTH_CONTEXT& context);
+
+    // Converts "specifiedsize" (the resolved value of width/height as the author wrote it) into the CONTENT-BOX
+    // size the rest of the box model works with: BORDER-BOX subtracts "paddingandborder" (that axis's padding
+    // + border-width, both sides, already resolved); CONTENT-BOX passes "specifiedsize" through unchanged.
+    // Never returns a negative size.
+    static double                   ResolveContentSize           (double specifiedsize, UI_BOXSIZING boxsizing, double paddingandborder);
 };
 
 

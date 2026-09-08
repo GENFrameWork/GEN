@@ -66,6 +66,10 @@
 #include "UI_Length.h"
 #include "UI_ComputedStyle.h"
 #include "UI_Color.h"
+#include "UI_LayoutBox.h"
+#include "UI_LayoutEngine.h"
+#include "UI_Element.h"
+#include "UI_CSSAdapter.h"
 
 #include "XFileTXT.h"
 #include "XPath.h"
@@ -195,6 +199,70 @@ static XSTRING* UI_CSS_UnitTests_NewStr(XCHAR* text)
   if(str) str->Set(text);
 
   return str;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static void UI_CSS_UnitTests_SetElementBox(UI_ELEMENT* element, double left, double top, double width, double height)
+* @brief      Sets "element"'s resolved geometry so UI_CSSBox_Get(element) reports exactly (left,top,width,height)
+*             in CSS's own top-left convention -- see UI_CSSAdapter.h for why Y needs the +height translation
+*             (GEN's internal y_position stores the BOTTOM edge, not the top).
+* @ingroup    UNIT_TESTS
+*
+* @param[in]  element : Element to set up.
+* @param[in]  left : Content box left edge.
+* @param[in]  top : Content box top edge.
+* @param[in]  width : Content box width.
+* @param[in]  height : Content box height.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void UI_CSS_UnitTests_SetElementBox(UI_ELEMENT* element, double left, double top, double width, double height)
+{
+  UI_BOUNDARYLINE boundaryline;
+  boundaryline.width  = width;
+  boundaryline.height = height;
+  element->SetBoundaryLine(boundaryline);
+
+  element->SetXPosition(left);
+  element->SetYPosition(top + height);   // internal Y stores the BOTTOM edge
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static UI_LAYOUTBOX_INSETS UI_CSS_UnitTests_MakeInsets(bool hastop, double top, bool hasright, double right, bool hasbottom, double bottom, bool hasleft, double left)
+* @brief      Builds a UI_LAYOUTBOX_INSETS with each edge independently specified-or-not, so tests can spell out
+*             exactly the "auto" pattern they mean to exercise instead of relying on struct-literal field order.
+* @ingroup    UNIT_TESTS
+*
+* @param[in]  hastop : Whether the top edge is specified.
+* @param[in]  top : Top edge value (ignored if "hastop" is false).
+* @param[in]  hasright : Whether the right edge is specified.
+* @param[in]  right : Right edge value (ignored if "hasright" is false).
+* @param[in]  hasbottom : Whether the bottom edge is specified.
+* @param[in]  bottom : Bottom edge value (ignored if "hasbottom" is false).
+* @param[in]  hasleft : Whether the left edge is specified.
+* @param[in]  left : Left edge value (ignored if "hasleft" is false).
+*
+* @return     UI_LAYOUTBOX_INSETS : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static UI_LAYOUTBOX_INSETS UI_CSS_UnitTests_MakeInsets(bool hastop, double top, bool hasright, double right,
+                                                         bool hasbottom, double bottom, bool hasleft, double left)
+{
+  UI_LAYOUTBOX_INSETS insets;
+
+  insets.top.specified    = hastop;
+  insets.top.value        = top;
+  insets.right.specified  = hasright;
+  insets.right.value      = right;
+  insets.bottom.specified = hasbottom;
+  insets.bottom.value     = bottom;
+  insets.left.specified   = hasleft;
+  insets.left.value       = left;
+
+  return insets;
 }
 
 
@@ -1577,6 +1645,194 @@ TEST(UI_Length, ResolveReturnsFalseForAKeyword)
 
 
 //-----------------------------------------------------------------------------------------
+// UI_LENGTH : em / rem / vw / vh units and calc() (Phase 3, first increment)
+
+TEST(UI_Length, ParsesAnEmSuffixAsEmType)
+{
+  XSTRING   raw(__L("1.5em"));
+  UI_LENGTH length;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_EQ(length.GetType(), UI_LENGTH_TYPE_EM);
+  EXPECT_EQ(length.GetValue(), 1.5);
+}
+
+
+TEST(UI_Length, ParsesARemSuffixAsRemTypeNotEm)
+{
+  XSTRING   raw(__L("2rem"));
+  UI_LENGTH length;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_EQ(length.GetType(), UI_LENGTH_TYPE_REM);   // "rem" must win over the shorter "em" suffix match
+  EXPECT_EQ(length.GetValue(), 2.0);
+}
+
+
+TEST(UI_Length, ParsesAVwSuffixAsVwType)
+{
+  XSTRING   raw(__L("50vw"));
+  UI_LENGTH length;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_EQ(length.GetType(), UI_LENGTH_TYPE_VW);
+  EXPECT_EQ(length.GetValue(), 50.0);
+}
+
+
+TEST(UI_Length, ParsesAVhSuffixAsVhType)
+{
+  XSTRING   raw(__L("25vh"));
+  UI_LENGTH length;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_EQ(length.GetType(), UI_LENGTH_TYPE_VH);
+  EXPECT_EQ(length.GetValue(), 25.0);
+}
+
+
+TEST(UI_Length, ResolveWithContextAppliesEmAgainstTheElementsOwnFontSize)
+{
+  XSTRING            raw(__L("2em"));
+  UI_LENGTH          length;
+  UI_LENGTH_CONTEXT  context = { 0.0, 16.0, 10.0, 1440.0, 900.0 };
+  double             out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  ASSERT_TRUE(length.Resolve(context, out));
+  EXPECT_EQ(out, 32.0);                        // 2 * 16
+}
+
+
+TEST(UI_Length, ResolveWithContextAppliesRemAgainstTheRootFontSizeNotTheElementsOwn)
+{
+  XSTRING            raw(__L("2rem"));
+  UI_LENGTH          length;
+  UI_LENGTH_CONTEXT  context = { 0.0, 30.0, 10.0, 1440.0, 900.0 };   // element font-size deliberately different
+  double             out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  ASSERT_TRUE(length.Resolve(context, out));
+  EXPECT_EQ(out, 20.0);                        // 2 * 10 (root), not 2 * 30 (element)
+}
+
+
+TEST(UI_Length, ResolveWithContextAppliesVwAndVhAgainstTheViewport)
+{
+  XSTRING            rawwidth(__L("50vw"));
+  XSTRING            rawheight(__L("10vh"));
+  UI_LENGTH          width, height;
+  UI_LENGTH_CONTEXT  context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  double             outwidth = -1.0, outheight = -1.0;
+
+  ASSERT_TRUE(width.Parse(rawwidth));
+  ASSERT_TRUE(height.Parse(rawheight));
+  ASSERT_TRUE(width.Resolve(context, outwidth));
+  ASSERT_TRUE(height.Resolve(context, outheight));
+  EXPECT_EQ(outwidth, 720.0);                  // 50% of 1440
+  EXPECT_EQ(outheight, 90.0);                  // 10% of 900
+}
+
+
+TEST(UI_Length, OldBasisOnlyResolveOverloadReturnsFalseForANewUnitType)
+{
+  XSTRING   raw(__L("2em"));
+  UI_LENGTH length;
+  double    out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_FALSE(length.Resolve(100.0, out));    // needs a font-size, a bare basis is not enough
+}
+
+
+TEST(UI_Length, CalcAddsAPercentAndAPixelLength)
+{
+  XSTRING            raw(__L("calc(100% - 20)"));
+  UI_LENGTH          length;
+  UI_LENGTH_CONTEXT  context = { 200.0, 16.0, 16.0, 1440.0, 900.0 };
+  double             out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_EQ(length.GetType(), UI_LENGTH_TYPE_CALC);
+  ASSERT_TRUE(length.Resolve(context, out));
+  EXPECT_EQ(out, 180.0);                       // 100% of 200 (=200) minus the bare number 20
+}
+
+
+TEST(UI_Length, CalcRespectsMultiplicationPrecedenceOverAddition)
+{
+  XSTRING            raw(__L("calc(10 + 2 * 3)"));
+  UI_LENGTH          length;
+  UI_LENGTH_CONTEXT  context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  double             out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  ASSERT_TRUE(length.Resolve(context, out));
+  EXPECT_EQ(out, 16.0);                        // 10 + (2*3), not (10+2)*3
+}
+
+
+TEST(UI_Length, CalcHonoursExplicitParentheses)
+{
+  XSTRING            raw(__L("calc((10 + 2) * 3)"));
+  UI_LENGTH          length;
+  UI_LENGTH_CONTEXT  context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  double             out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  ASSERT_TRUE(length.Resolve(context, out));
+  EXPECT_EQ(out, 36.0);                        // (10+2)*3
+}
+
+
+TEST(UI_Length, CalcCanMixEmAndVwOperands)
+{
+  XSTRING            raw(__L("calc(1em + 10vw)"));
+  UI_LENGTH          length;
+  UI_LENGTH_CONTEXT  context = { 0.0, 16.0, 16.0, 1000.0, 900.0 };
+  double             out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  ASSERT_TRUE(length.Resolve(context, out));
+  EXPECT_EQ(out, 116.0);                       // 1*16 (em) + 10% of 1000 (vw) = 16 + 100
+}
+
+
+TEST(UI_Length, CalcDivisionByZeroFailsResolveRatherThanReturningInfinity)
+{
+  XSTRING            raw(__L("calc(10 / 0)"));
+  UI_LENGTH          length;
+  UI_LENGTH_CONTEXT  context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  double             out = -1.0;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_FALSE(length.Resolve(context, out));
+}
+
+
+TEST(UI_Length, MalformedCalcFallsBackToKeywordInsteadOfFailingParse)
+{
+  XSTRING   raw(__L("calc(100% -)"));           // dangling operator, no right-hand operand
+  UI_LENGTH length;
+
+  ASSERT_TRUE(length.Parse(raw));               // Parse() itself never fails except for empty input
+  EXPECT_EQ(length.GetType(), UI_LENGTH_TYPE_KEYWORD);
+  EXPECT_TRUE(length.IsKeyword(__L("calc(100% -)")));
+}
+
+
+TEST(UI_Length, LeadingAndTrailingWhitespaceIsTrimmedBeforeClassification)
+{
+  XSTRING   raw(__L("  42  "));
+  UI_LENGTH length;
+
+  ASSERT_TRUE(length.Parse(raw));
+  EXPECT_EQ(length.GetType(), UI_LENGTH_TYPE_NUMBER);
+  EXPECT_EQ(length.GetValue(), 42.0);
+}
+
+
+//-----------------------------------------------------------------------------------------
 // UI_COMPUTEDSTYLE : typed accessors over the UI_STYLE bag (Phase 1)
 
 TEST(UI_ComputedStyle, GetLengthParsesTheRawStringAtTheGivenKey)
@@ -1646,6 +1902,790 @@ TEST(UI_ComputedStyle, InheritsTheUnderlyingBagUnchanged)
   double sizefont = 0.0;
   ASSERT_TRUE(style.Get(__L("sizefont"), sizefont));
   EXPECT_EQ(sizefont, 14.0);
+}
+
+
+//-----------------------------------------------------------------------------------------
+// UI_COMPUTEDSTYLE : box-sizing and min/max clamping (Phase 3, second increment)
+
+TEST(UI_ComputedStyle, GetBoxSizingReadsBorderBox)
+{
+  UI_COMPUTEDSTYLE style;
+  style.Set(__L("box-sizing"), __L("border-box"));
+
+  UI_BOXSIZING boxsizing = UI_BOXSIZING_CONTENTBOX;
+  ASSERT_TRUE(style.GetBoxSizing(boxsizing));
+  EXPECT_EQ(boxsizing, UI_BOXSIZING_BORDERBOX);
+}
+
+
+TEST(UI_ComputedStyle, GetBoxSizingReadsContentBoxExplicitly)
+{
+  UI_COMPUTEDSTYLE style;
+  style.Set(__L("box-sizing"), __L("content-box"));
+
+  UI_BOXSIZING boxsizing = UI_BOXSIZING_BORDERBOX;   // deliberately pre-set to the OTHER value
+  ASSERT_TRUE(style.GetBoxSizing(boxsizing));
+  EXPECT_EQ(boxsizing, UI_BOXSIZING_CONTENTBOX);
+}
+
+
+TEST(UI_ComputedStyle, GetBoxSizingDefaultsToContentBoxWhenAbsent)
+{
+  UI_COMPUTEDSTYLE style;
+
+  UI_BOXSIZING boxsizing = UI_BOXSIZING_BORDERBOX;   // deliberately pre-set to the OTHER value
+  EXPECT_FALSE(style.GetBoxSizing(boxsizing));       // key absent -- caller can tell, if it cares
+  EXPECT_EQ(boxsizing, UI_BOXSIZING_CONTENTBOX);     // but "boxsizing" is still left holding the CSS default
+}
+
+
+TEST(UI_ComputedStyle, GetBoxSizingDefaultsToContentBoxForAnUnrecognizedKeyword)
+{
+  UI_COMPUTEDSTYLE style;
+  style.Set(__L("box-sizing"), __L("padding-box"));  // real CSS, but not one GEN CSS Lite supports
+
+  UI_BOXSIZING boxsizing = UI_BOXSIZING_BORDERBOX;
+  EXPECT_FALSE(style.GetBoxSizing(boxsizing));
+  EXPECT_EQ(boxsizing, UI_BOXSIZING_CONTENTBOX);
+}
+
+
+TEST(UI_ComputedStyle, ClampToMinMaxLeavesValueUnchangedWhenNeitherBoundIsPresent)
+{
+  UI_COMPUTEDSTYLE  style;
+  UI_LENGTH_CONTEXT context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+
+  EXPECT_EQ(style.ClampToMinMax(150.0, __L("min-width"), __L("max-width"), context), 150.0);
+}
+
+
+TEST(UI_ComputedStyle, ClampToMinMaxPullsAValueUpToTheMinimum)
+{
+  UI_COMPUTEDSTYLE  style;
+  UI_LENGTH_CONTEXT context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  style.Set(__L("min-width"), __L("100"));
+
+  EXPECT_EQ(style.ClampToMinMax(40.0, __L("min-width"), __L("max-width"), context), 100.0);
+}
+
+
+TEST(UI_ComputedStyle, ClampToMinMaxPullsAValueDownToTheMaximum)
+{
+  UI_COMPUTEDSTYLE  style;
+  UI_LENGTH_CONTEXT context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  style.Set(__L("max-width"), __L("200"));
+
+  EXPECT_EQ(style.ClampToMinMax(500.0, __L("min-width"), __L("max-width"), context), 200.0);
+}
+
+
+TEST(UI_ComputedStyle, ClampToMinMaxResolvesBoundsThroughTheGivenContextIncludingPercent)
+{
+  UI_COMPUTEDSTYLE  style;
+  UI_LENGTH_CONTEXT context = { 400.0, 16.0, 16.0, 1440.0, 900.0 };
+  style.Set(__L("max-width"), __L("50%"));         // 50% of the 400 basis = 200
+
+  EXPECT_EQ(style.ClampToMinMax(500.0, __L("min-width"), __L("max-width"), context), 200.0);
+}
+
+
+TEST(UI_ComputedStyle, ClampToMinMaxMinWinsOverMaxWhenTheAuthorContradictsThemselves)
+{
+  UI_COMPUTEDSTYLE  style;
+  UI_LENGTH_CONTEXT context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  style.Set(__L("min-width"), __L("300"));
+  style.Set(__L("max-width"), __L("100"));         // max < min: CSS says MIN wins
+
+  EXPECT_EQ(style.ClampToMinMax(50.0, __L("min-width"), __L("max-width"), context), 300.0);
+}
+
+
+TEST(UI_ComputedStyle, ClampToMinMaxTreatsMaxNoneAsUnconstrained)
+{
+  UI_COMPUTEDSTYLE  style;
+  UI_LENGTH_CONTEXT context = { 0.0, 16.0, 16.0, 1440.0, 900.0 };
+  style.Set(__L("max-width"), __L("none"));        // real CSS keyword for "no maximum"
+
+  EXPECT_EQ(style.ClampToMinMax(5000.0, __L("min-width"), __L("max-width"), context), 5000.0);
+}
+
+
+TEST(UI_ComputedStyle, ResolveContentSizeIsAPassthroughForContentBox)
+{
+  EXPECT_EQ(UI_COMPUTEDSTYLE::ResolveContentSize(200.0, UI_BOXSIZING_CONTENTBOX, 30.0), 200.0);
+}
+
+
+TEST(UI_ComputedStyle, ResolveContentSizeSubtractsPaddingAndBorderForBorderBox)
+{
+  EXPECT_EQ(UI_COMPUTEDSTYLE::ResolveContentSize(200.0, UI_BOXSIZING_BORDERBOX, 30.0), 170.0);
+}
+
+
+TEST(UI_ComputedStyle, ResolveContentSizeNeverGoesNegative)
+{
+  EXPECT_EQ(UI_COMPUTEDSTYLE::ResolveContentSize(20.0, UI_BOXSIZING_BORDERBOX, 30.0), 0.0);
+}
+
+
+//-----------------------------------------------------------------------------------------
+// UI_LAYOUTBOX : pure top-left layout box geometry tree (Phase 3, third increment)
+
+TEST(UI_LayoutBox, DefaultsToAllZeroGeometry)
+{
+  UI_LAYOUTBOX box;
+
+  EXPECT_EQ(box.GetContentLeft(), 0.0);
+  EXPECT_EQ(box.GetContentTop(), 0.0);
+  EXPECT_EQ(box.GetContentWidth(), 0.0);
+  EXPECT_EQ(box.GetContentHeight(), 0.0);
+  EXPECT_EQ(box.GetParent(), (UI_LAYOUTBOX*)NULL);
+  EXPECT_EQ(box.GetChildren().GetSize(), (XDWORD)0);
+}
+
+
+TEST(UI_LayoutBox, SetContentBoxRoundTrips)
+{
+  UI_LAYOUTBOX box;
+  box.SetContentBox(10.0, 20.0, 300.0, 150.0);
+
+  EXPECT_EQ(box.GetContentLeft(), 10.0);
+  EXPECT_EQ(box.GetContentTop(), 20.0);
+  EXPECT_EQ(box.GetContentWidth(), 300.0);
+  EXPECT_EQ(box.GetContentHeight(), 150.0);
+}
+
+
+TEST(UI_LayoutBox, SetPaddingBorderMarginRoundTripThroughTheirGetters)
+{
+  UI_LAYOUTBOX box;
+  box.SetPadding(1.0, 2.0, 3.0, 4.0);
+  box.SetBorder(5.0, 6.0, 7.0, 8.0);
+  box.SetMargin(9.0, 10.0, 11.0, 12.0);
+
+  EXPECT_EQ(box.GetPadding().top, 1.0);
+  EXPECT_EQ(box.GetPadding().right, 2.0);
+  EXPECT_EQ(box.GetPadding().bottom, 3.0);
+  EXPECT_EQ(box.GetPadding().left, 4.0);
+
+  EXPECT_EQ(box.GetBorder().top, 5.0);
+  EXPECT_EQ(box.GetBorder().right, 6.0);
+  EXPECT_EQ(box.GetBorder().bottom, 7.0);
+  EXPECT_EQ(box.GetBorder().left, 8.0);
+
+  EXPECT_EQ(box.GetMargin().top, 9.0);
+  EXPECT_EQ(box.GetMargin().right, 10.0);
+  EXPECT_EQ(box.GetMargin().bottom, 11.0);
+  EXPECT_EQ(box.GetMargin().left, 12.0);
+}
+
+
+TEST(UI_LayoutBox, NegativePaddingBorderMarginAreClampedToZero)
+{
+  UI_LAYOUTBOX box;
+  box.SetPadding(-1.0, -2.0, -3.0, -4.0);
+  box.SetBorder(-5.0, 0.0, 5.0, -8.0);
+
+  EXPECT_EQ(box.GetPadding().top, 0.0);
+  EXPECT_EQ(box.GetPadding().right, 0.0);
+  EXPECT_EQ(box.GetPadding().bottom, 0.0);
+  EXPECT_EQ(box.GetPadding().left, 0.0);
+
+  EXPECT_EQ(box.GetBorder().top, 0.0);     // clamped
+  EXPECT_EQ(box.GetBorder().right, 0.0);   // was already 0
+  EXPECT_EQ(box.GetBorder().bottom, 5.0);  // positive, untouched
+  EXPECT_EQ(box.GetBorder().left, 0.0);    // clamped
+}
+
+
+TEST(UI_LayoutBox, GetPaddingBoxExpandsTheContentBoxOutwardByPaddingOnly)
+{
+  UI_LAYOUTBOX box;
+  box.SetContentBox(100.0, 50.0, 200.0, 80.0);
+  box.SetPadding(10.0, 20.0, 10.0, 20.0);
+  box.SetBorder(5.0, 5.0, 5.0, 5.0);         // must NOT leak into the padding box
+
+  double left = -1.0, top = -1.0, width = -1.0, height = -1.0;
+  box.GetPaddingBox(left, top, width, height);
+
+  EXPECT_EQ(left, 80.0);      // 100 - 20 (padding-left)
+  EXPECT_EQ(top, 40.0);       // 50 - 10 (padding-top)
+  EXPECT_EQ(width, 240.0);    // 200 + 20 + 20
+  EXPECT_EQ(height, 100.0);   // 80 + 10 + 10
+}
+
+
+TEST(UI_LayoutBox, GetBorderBoxExpandsTheContentBoxOutwardByPaddingAndBorder)
+{
+  UI_LAYOUTBOX box;
+  box.SetContentBox(100.0, 50.0, 200.0, 80.0);
+  box.SetPadding(10.0, 20.0, 10.0, 20.0);
+  box.SetBorder(5.0, 5.0, 5.0, 5.0);
+
+  double left = -1.0, top = -1.0, width = -1.0, height = -1.0;
+  box.GetBorderBox(left, top, width, height);
+
+  EXPECT_EQ(left, 75.0);      // 100 - 20 - 5
+  EXPECT_EQ(top, 35.0);       // 50 - 10 - 5
+  EXPECT_EQ(width, 250.0);    // 200 + 20+20 + 5+5
+  EXPECT_EQ(height, 110.0);   // 80 + 10+10 + 5+5
+}
+
+
+TEST(UI_LayoutBox, GetMarginBoxExpandsTheContentBoxOutwardByPaddingBorderAndMargin)
+{
+  UI_LAYOUTBOX box;
+  box.SetContentBox(100.0, 50.0, 200.0, 80.0);
+  box.SetPadding(10.0, 20.0, 10.0, 20.0);
+  box.SetBorder(5.0, 5.0, 5.0, 5.0);
+  box.SetMargin(15.0, 25.0, 15.0, 25.0);
+
+  double left = -1.0, top = -1.0, width = -1.0, height = -1.0;
+  box.GetMarginBox(left, top, width, height);
+
+  EXPECT_EQ(left, 50.0);      // 100 - 20 - 5 - 25
+  EXPECT_EQ(top, 20.0);       // 50 - 10 - 5 - 15
+  EXPECT_EQ(width, 300.0);    // 200 + 40 + 10 + 50
+  EXPECT_EQ(height, 140.0);   // 80 + 20 + 10 + 30
+}
+
+
+TEST(UI_LayoutBox, WithNoPaddingBorderOrMarginAllThreeDerivedBoxesEqualTheContentBox)
+{
+  UI_LAYOUTBOX box;
+  box.SetContentBox(5.0, 6.0, 70.0, 80.0);
+
+  double left, top, width, height;
+
+  box.GetPaddingBox(left, top, width, height);
+  EXPECT_EQ(left, 5.0); EXPECT_EQ(top, 6.0); EXPECT_EQ(width, 70.0); EXPECT_EQ(height, 80.0);
+
+  box.GetBorderBox(left, top, width, height);
+  EXPECT_EQ(left, 5.0); EXPECT_EQ(top, 6.0); EXPECT_EQ(width, 70.0); EXPECT_EQ(height, 80.0);
+
+  box.GetMarginBox(left, top, width, height);
+  EXPECT_EQ(left, 5.0); EXPECT_EQ(top, 6.0); EXPECT_EQ(width, 70.0); EXPECT_EQ(height, 80.0);
+}
+
+
+TEST(UI_LayoutBox, AddChildSetsTheChildsParentAndAppendsItToGetChildren)
+{
+  UI_LAYOUTBOX* root  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* child = GEN_NEW UI_LAYOUTBOX();
+
+  root->AddChild(child);
+
+  ASSERT_EQ(root->GetChildren().GetSize(), (XDWORD)1);
+  EXPECT_EQ(root->GetChildren().Get(0), child);
+  EXPECT_EQ(child->GetParent(), root);
+
+  GEN_DELETE root;   // must also delete "child" -- see UI_LayoutBox_DestructorDeletesOwnedChildrenRecursively below
+}
+
+
+TEST(UI_LayoutBox, AddChildAppendsInCallOrderForMultipleChildren)
+{
+  UI_LAYOUTBOX* root   = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* first  = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* second = GEN_NEW UI_LAYOUTBOX();
+
+  root->AddChild(first);
+  root->AddChild(second);
+
+  ASSERT_EQ(root->GetChildren().GetSize(), (XDWORD)2);
+  EXPECT_EQ(root->GetChildren().Get(0), first);
+  EXPECT_EQ(root->GetChildren().Get(1), second);
+
+  GEN_DELETE root;
+}
+
+
+TEST(UI_LayoutBox, AddChildIgnoresANullChildRatherThanCrashing)
+{
+  UI_LAYOUTBOX root;
+  root.AddChild(NULL);
+
+  EXPECT_EQ(root.GetChildren().GetSize(), (XDWORD)0);
+}
+
+
+TEST(UI_LayoutBox, DestructorDeletesOwnedChildrenRecursively)
+{
+  // Three-level tree (root -> mid -> leaf); relies on running under a memory-checked build/tool to actually
+  // CATCH a leak, but at minimum this exercises the recursive delete path without crashing or double-freeing.
+  UI_LAYOUTBOX* root = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* mid   = GEN_NEW UI_LAYOUTBOX();
+  UI_LAYOUTBOX* leaf  = GEN_NEW UI_LAYOUTBOX();
+
+  mid->AddChild(leaf);
+  root->AddChild(mid);
+
+  GEN_DELETE root;   // should delete mid, which should delete leaf; no crash == pass
+}
+
+
+//-----------------------------------------------------------------------------------------
+// UI_LAYOUTENGINE : builds a UI_LAYOUTBOX tree from a UI_ELEMENT tree (Phase 3, fourth increment, sub-step 1)
+
+TEST(UI_LayoutEngine, BuildTreeReturnsNullForANullRoot)
+{
+  EXPECT_EQ(UI_LAYOUTENGINE::BuildTree(NULL), (UI_LAYOUTBOX*)NULL);
+}
+
+
+TEST(UI_LayoutEngine, BuildTreeCopiesTheElementsAlreadyResolvedContentBox)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 100.0, 50.0, 200.0, 80.0);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+
+  ASSERT_TRUE(box != NULL);
+  EXPECT_EQ(box->GetContentLeft(), 100.0);
+  EXPECT_EQ(box->GetContentTop(), 50.0);
+  EXPECT_EQ(box->GetContentWidth(), 200.0);
+  EXPECT_EQ(box->GetContentHeight(), 80.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+
+TEST(UI_LayoutEngine, BuildTreeCopiesPaddingMarginAndAUniformBorderFromTheElement)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 0.0, 0.0, 100.0, 100.0);
+
+  element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP, 1.0);
+  element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, 2.0);
+  element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN, 3.0);
+  element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT, 4.0);
+
+  element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP, 5.0);
+  element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT, 6.0);
+  element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN, 7.0);
+  element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT, 8.0);
+
+  element->SetBorderWidth(3.0);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+
+  ASSERT_TRUE(box != NULL);
+  EXPECT_EQ(box->GetPadding().top, 1.0);
+  EXPECT_EQ(box->GetPadding().right, 2.0);
+  EXPECT_EQ(box->GetPadding().bottom, 3.0);
+  EXPECT_EQ(box->GetPadding().left, 4.0);
+
+  EXPECT_EQ(box->GetMargin().top, 5.0);
+  EXPECT_EQ(box->GetMargin().right, 6.0);
+  EXPECT_EQ(box->GetMargin().bottom, 7.0);
+  EXPECT_EQ(box->GetMargin().left, 8.0);
+
+  EXPECT_EQ(box->GetBorder().top, 3.0);
+  EXPECT_EQ(box->GetBorder().right, 3.0);
+  EXPECT_EQ(box->GetBorder().bottom, 3.0);
+  EXPECT_EQ(box->GetBorder().left, 3.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+
+TEST(UI_LayoutEngine, BuildTreeTreatsTheSkinDefaultBorderWidthAsZeroForLayoutPurposes)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 0.0, 0.0, 100.0, 100.0);
+  element->SetBorderWidth(-1.0);            // "use skin default" -- a painting concern, not layout
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+
+  ASSERT_TRUE(box != NULL);
+  EXPECT_EQ(box->GetBorder().top, 0.0);
+  EXPECT_EQ(box->GetBorder().right, 0.0);
+  EXPECT_EQ(box->GetBorder().bottom, 0.0);
+  EXPECT_EQ(box->GetBorder().left, 0.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+
+TEST(UI_LayoutEngine, BuildTreeMirrorsAParentWithTwoChildrenInComposeOrder)
+{
+  UI_ELEMENT* parent = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* first   = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* second  = GEN_NEW UI_ELEMENT();
+
+  UI_CSS_UnitTests_SetElementBox(parent, 0.0, 0.0, 300.0, 200.0);
+  UI_CSS_UnitTests_SetElementBox(first, 10.0, 10.0, 100.0, 50.0);
+  UI_CSS_UnitTests_SetElementBox(second, 10.0, 70.0, 100.0, 50.0);
+
+  first->SetFather(parent);
+  second->SetFather(parent);
+  parent->GetComposeElements()->Add(first);
+  parent->GetComposeElements()->Add(second);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(parent);
+
+  ASSERT_TRUE(box != NULL);
+  ASSERT_EQ(box->GetChildren().GetSize(), (XDWORD)2);
+
+  UI_LAYOUTBOX* firstbox  = box->GetChildren().Get(0);
+  UI_LAYOUTBOX* secondbox = box->GetChildren().Get(1);
+
+  ASSERT_TRUE(firstbox != NULL);
+  ASSERT_TRUE(secondbox != NULL);
+
+  EXPECT_EQ(firstbox->GetContentTop(), 10.0);
+  EXPECT_EQ(secondbox->GetContentTop(), 70.0);
+  EXPECT_EQ(firstbox->GetParent(), box);
+  EXPECT_EQ(secondbox->GetParent(), box);
+
+  GEN_DELETE box;      // must also delete firstbox/secondbox -- UI_LAYOUTBOX owns its children
+  GEN_DELETE parent;   // must also delete first/second -- UI_ELEMENT::DeleteAllComposeElements() owns its children
+}
+
+
+TEST(UI_LayoutEngine, BuildTreeIsAReadOnlySnapshotThatDoesNotTouchTheSourceElement)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 100.0, 50.0, 200.0, 80.0);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+  ASSERT_TRUE(box != NULL);
+
+  EXPECT_EQ(element->GetLeftX(), 100.0);
+  EXPECT_EQ(element->GetTopY(), 50.0);
+  EXPECT_EQ(element->GetBoundaryLine()->width, 200.0);
+  EXPECT_EQ(element->GetBoundaryLine()->height, 80.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+
+// -- UI_LAYOUTBOX: position tag + insets storage (fourth increment, second sub-step) -----------------------------
+
+TEST(UI_LayoutBox, DefaultsToStaticPositionWithNoInsetSpecified)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  EXPECT_EQ(box->GetPosition(), UI_POSITION_STATIC);
+
+  UI_LAYOUTBOX_INSETS& insets = box->GetInsets();
+  EXPECT_FALSE(insets.top.specified);
+  EXPECT_FALSE(insets.right.specified);
+  EXPECT_FALSE(insets.bottom.specified);
+  EXPECT_FALSE(insets.left.specified);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetPositionRoundTrips)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  box->SetPosition(UI_POSITION_ABSOLUTE);
+  EXPECT_EQ(box->GetPosition(), UI_POSITION_ABSOLUTE);
+
+  box->SetPosition(UI_POSITION_RELATIVE);
+  EXPECT_EQ(box->GetPosition(), UI_POSITION_RELATIVE);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutBox, SetInsetsRoundTripsEachEdgeIndependently)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(true, 5.0, false, 0.0, true, 15.0, false, 0.0);
+  box->SetInsets(insets);
+
+  UI_LAYOUTBOX_INSETS& stored = box->GetInsets();
+  EXPECT_TRUE(stored.top.specified);
+  EXPECT_EQ(stored.top.value, 5.0);
+  EXPECT_FALSE(stored.right.specified);
+  EXPECT_TRUE(stored.bottom.specified);
+  EXPECT_EQ(stored.bottom.value, 15.0);
+  EXPECT_FALSE(stored.left.specified);
+
+  GEN_DELETE box;
+}
+
+
+// -- UI_LAYOUTENGINE::ApplyPositioning (fourth increment, second sub-step) -----------------------------------------
+
+TEST(UI_LayoutEngine, ApplyPositioningIgnoresANullRoot)
+{
+  UI_LAYOUTENGINE::ApplyPositioning(NULL);   // must not crash
+}
+
+
+TEST(UI_LayoutEngine, ApplyPositioningLeavesAStaticBoxExactlyWhereItWas)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+  box->SetContentBox(10.0, 20.0, 100.0, 50.0);
+
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(true, 999.0, true, 999.0, true, 999.0, true, 999.0);
+  box->SetInsets(insets);   // insets on a STATIC box are simply not applied
+
+  UI_LAYOUTENGINE::ApplyPositioning(box);
+
+  EXPECT_EQ(box->GetContentLeft(), 10.0);
+  EXPECT_EQ(box->GetContentTop(), 20.0);
+  EXPECT_EQ(box->GetContentWidth(), 100.0);
+  EXPECT_EQ(box->GetContentHeight(), 50.0);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyPositioningOffsetsARelativeBoxByLeftAndTopWhenBothAreSpecified)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+  box->SetContentBox(10.0, 20.0, 100.0, 50.0);
+  box->SetPosition(UI_POSITION_RELATIVE);
+
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(true, 5.0, false, 0.0, false, 0.0, true, 8.0);
+  box->SetInsets(insets);
+
+  UI_LAYOUTENGINE::ApplyPositioning(box);
+
+  EXPECT_EQ(box->GetContentLeft(), 18.0);    // 10 + left(8)
+  EXPECT_EQ(box->GetContentTop(), 25.0);     // 20 + top(5)
+  EXPECT_EQ(box->GetContentWidth(), 100.0);  // size untouched
+  EXPECT_EQ(box->GetContentHeight(), 50.0);
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyPositioningOffsetsARelativeBoxByNegativeRightAndBottomWhenLeftAndTopAreAbsent)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+  box->SetContentBox(10.0, 20.0, 100.0, 50.0);
+  box->SetPosition(UI_POSITION_RELATIVE);
+
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(false, 0.0, true, 6.0, true, 9.0, false, 0.0);
+  box->SetInsets(insets);
+
+  UI_LAYOUTENGINE::ApplyPositioning(box);
+
+  EXPECT_EQ(box->GetContentLeft(), 4.0);     // 10 - right(6)
+  EXPECT_EQ(box->GetContentTop(), 11.0);     // 20 - bottom(9)
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyPositioningPrefersLeftOverRightForARelativeBoxWhenBothAreSpecified)
+{
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+  box->SetContentBox(0.0, 0.0, 100.0, 50.0);
+  box->SetPosition(UI_POSITION_RELATIVE);
+
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(false, 0.0, true, 40.0, false, 0.0, true, 12.0);
+  box->SetInsets(insets);
+
+  UI_LAYOUTENGINE::ApplyPositioning(box);
+
+  EXPECT_EQ(box->GetContentLeft(), 12.0);    // left wins over right, per CSS
+
+  GEN_DELETE box;
+}
+
+
+TEST(UI_LayoutEngine, ApplyPositioningPositionsAnAbsoluteBoxAgainstTheNearestPositionedAncestorsPaddingBox)
+{
+  UI_LAYOUTBOX* root = GEN_NEW UI_LAYOUTBOX();
+  root->SetContentBox(0.0, 0.0, 500.0, 500.0);
+
+  UI_LAYOUTBOX* relativeancestor = GEN_NEW UI_LAYOUTBOX();
+  relativeancestor->SetContentBox(50.0, 60.0, 300.0, 200.0);
+  relativeancestor->SetPadding(4.0, 4.0, 4.0, 4.0);
+  relativeancestor->SetPosition(UI_POSITION_RELATIVE);
+  root->AddChild(relativeancestor);
+
+  UI_LAYOUTBOX* absolutebox = GEN_NEW UI_LAYOUTBOX();
+  absolutebox->SetContentBox(0.0, 0.0, 20.0, 10.0);   // static placement, about to be overridden
+  absolutebox->SetPosition(UI_POSITION_ABSOLUTE);
+
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(true, 3.0, false, 0.0, false, 0.0, true, 7.0);
+  absolutebox->SetInsets(insets);
+  relativeancestor->AddChild(absolutebox);
+
+  UI_LAYOUTENGINE::ApplyPositioning(root);
+
+  // relativeancestor's padding box left/top = (50-4, 60-4) = (46, 56); absolutebox = that + (left 7, top 3)
+  EXPECT_EQ(absolutebox->GetContentLeft(), 53.0);
+  EXPECT_EQ(absolutebox->GetContentTop(), 59.0);
+  EXPECT_EQ(absolutebox->GetContentWidth(), 20.0);    // size untouched
+  EXPECT_EQ(absolutebox->GetContentHeight(), 10.0);
+
+  GEN_DELETE root;
+}
+
+
+TEST(UI_LayoutEngine, ApplyPositioningPositionsAnAbsoluteBoxAgainstTheRootWhenNoAncestorIsPositioned)
+{
+  UI_LAYOUTBOX* root = GEN_NEW UI_LAYOUTBOX();
+  root->SetContentBox(0.0, 0.0, 400.0, 300.0);
+  root->SetPadding(2.0, 2.0, 2.0, 2.0);
+
+  UI_LAYOUTBOX* staticparent = GEN_NEW UI_LAYOUTBOX();
+  staticparent->SetContentBox(10.0, 10.0, 200.0, 150.0);   // UI_POSITION_STATIC: not a containing block
+  root->AddChild(staticparent);
+
+  UI_LAYOUTBOX* absolutebox = GEN_NEW UI_LAYOUTBOX();
+  absolutebox->SetContentBox(0.0, 0.0, 30.0, 15.0);
+  absolutebox->SetPosition(UI_POSITION_ABSOLUTE);
+
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(false, 0.0, true, 5.0, false, 0.0, false, 0.0);
+  absolutebox->SetInsets(insets);
+  staticparent->AddChild(absolutebox);
+
+  UI_LAYOUTENGINE::ApplyPositioning(root);
+
+  // root's padding box left/width = (-2, 404); right-anchored: newleft = -2 + 404 - 5 - 30 = 367
+  EXPECT_EQ(absolutebox->GetContentLeft(), 367.0);
+  EXPECT_EQ(absolutebox->GetContentTop(), 0.0);   // no top/bottom specified -> static position kept
+
+  GEN_DELETE root;
+}
+
+
+// -- UI_LAYOUTENGINE::WriteBackTree / RunLayout (fourth increment, third and last sub-step) -------------------------
+
+TEST(UI_LayoutEngine, WriteBackTreeIgnoresANullRootOrANullTree)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 1.0, 2.0, 3.0, 4.0);
+
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+  box->SetContentBox(9.0, 9.0, 9.0, 9.0);
+
+  UI_LAYOUTENGINE::WriteBackTree(NULL, box);      // must not crash
+  UI_LAYOUTENGINE::WriteBackTree(element, NULL);  // must not crash
+
+  // neither call should have touched the element
+  UI_CSSBOX cssbox = UI_CSSBox_Get(element);
+  EXPECT_EQ(cssbox.left, 1.0);
+  EXPECT_EQ(cssbox.top, 2.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+
+TEST(UI_LayoutEngine, WriteBackTreeDrivesTheElementsGeometryFromTheBoxsContentBoxThroughUiCssBoxSet)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 0.0, 0.0, 10.0, 10.0);   // starting geometry, about to be overwritten
+
+  UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
+  box->SetContentBox(40.0, 25.0, 120.0, 60.0);
+
+  UI_LAYOUTENGINE::WriteBackTree(element, box);
+
+  UI_CSSBOX cssbox = UI_CSSBox_Get(element);
+  EXPECT_EQ(cssbox.left, 40.0);
+  EXPECT_EQ(cssbox.top, 25.0);
+  EXPECT_EQ(cssbox.width, 120.0);
+  EXPECT_EQ(cssbox.height, 60.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+
+TEST(UI_LayoutEngine, WriteBackTreeWritesBackToChildrenInComposeOrderEvenWithAPositionedOffset)
+{
+  UI_ELEMENT* parent = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* first   = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* second  = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(parent, 0.0, 0.0, 300.0, 200.0);
+  UI_CSS_UnitTests_SetElementBox(first,  10.0, 10.0, 100.0, 50.0);
+  UI_CSS_UnitTests_SetElementBox(second, 10.0, 70.0, 100.0, 50.0);
+  first->SetFather(parent);
+  second->SetFather(parent);
+  parent->GetComposeElements()->Add(first);
+  parent->GetComposeElements()->Add(second);
+
+  UI_LAYOUTBOX* tree = UI_LAYOUTENGINE::BuildTree(parent);
+  ASSERT_TRUE(tree != NULL);
+
+  // reposition just the SECOND child, by hand, to prove the pairing survives an actual ApplyPositioning() pass
+  UI_LAYOUTBOX* secondbox = tree->GetChildren().Get(1);
+  ASSERT_TRUE(secondbox != NULL);
+  secondbox->SetPosition(UI_POSITION_RELATIVE);
+  UI_LAYOUTBOX_INSETS insets = UI_CSS_UnitTests_MakeInsets(true, 5.0, false, 0.0, false, 0.0, true, 2.0);
+  secondbox->SetInsets(insets);
+
+  UI_LAYOUTENGINE::ApplyPositioning(tree);
+  UI_LAYOUTENGINE::WriteBackTree(parent, tree);
+
+  UI_CSSBOX firstcssbox  = UI_CSSBox_Get(first);
+  UI_CSSBOX secondcssbox = UI_CSSBox_Get(second);
+
+  EXPECT_EQ(firstcssbox.left, 10.0);    // untouched (STATIC): round-trips unchanged
+  EXPECT_EQ(firstcssbox.top, 10.0);
+  EXPECT_EQ(secondcssbox.left, 12.0);   // 10 + left(2)
+  EXPECT_EQ(secondcssbox.top, 75.0);    // 70 + top(5)
+
+  GEN_DELETE tree;
+  GEN_DELETE parent;
+}
+
+
+TEST(UI_LayoutEngine, RunLayoutIgnoresANullRoot)
+{
+  UI_LAYOUTENGINE::RunLayout(NULL, UI_LAYOUTSTRATEGY_CSS);      // must not crash
+  UI_LAYOUTENGINE::RunLayout(NULL, UI_LAYOUTSTRATEGY_LEGACY);   // must not crash
+}
+
+
+TEST(UI_LayoutEngine, RunLayoutWithLegacyStrategyLeavesTheElementsGeometryCompletelyUntouched)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 15.0, 25.0, 80.0, 40.0);
+
+  UI_LAYOUTENGINE::RunLayout(element, UI_LAYOUTSTRATEGY_LEGACY);
+
+  UI_CSSBOX cssbox = UI_CSSBox_Get(element);
+  EXPECT_EQ(cssbox.left, 15.0);
+  EXPECT_EQ(cssbox.top, 25.0);
+  EXPECT_EQ(cssbox.width, 80.0);
+  EXPECT_EQ(cssbox.height, 40.0);
+
+  GEN_DELETE element;
+}
+
+
+TEST(UI_LayoutEngine, RunLayoutWithCssStrategyRoundTripsAPurelyStaticTreeUnchangedThroughUiCssBoxSet)
+{
+  UI_ELEMENT* parent = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* child   = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(parent, 0.0, 0.0, 300.0, 200.0);
+  UI_CSS_UnitTests_SetElementBox(child, 20.0, 30.0, 100.0, 50.0);
+  child->SetFather(parent);
+  parent->GetComposeElements()->Add(child);
+
+  UI_LAYOUTENGINE::RunLayout(parent, UI_LAYOUTSTRATEGY_CSS);
+
+  // every box BuildTree() produces defaults to UI_POSITION_STATIC, so ApplyPositioning() is a no-op here --
+  // this proves the full BuildTree()->ApplyPositioning()->WriteBackTree() pipeline round-trips identity,
+  // i.e. UI_CSSBox_Set() really is being driven from the new engine's output now (not skipped/bypassed).
+  UI_CSSBOX parentcssbox = UI_CSSBox_Get(parent);
+  UI_CSSBOX childcssbox  = UI_CSSBox_Get(child);
+  EXPECT_EQ(parentcssbox.left, 0.0);
+  EXPECT_EQ(parentcssbox.width, 300.0);
+  EXPECT_EQ(childcssbox.left, 20.0);
+  EXPECT_EQ(childcssbox.top, 30.0);
+
+  GEN_DELETE parent;
 }
 
 
