@@ -1769,6 +1769,431 @@ bool UI_ELEMENT::DeleteAllComposeElements()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool UI_ELEMENT::IsFlexContainer()
+* @brief      Is flex container
+* @ingroup    USERINTERFACE
+*
+* @return     bool : true if this element is a flex container (CSS "display: flex"); otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::IsFlexContainer()
+{
+  return css_flexcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexContainer(bool isflexcontainer)
+* @brief      Set flex container
+* @ingroup    USERINTERFACE
+*
+* @param[in]  isflexcontainer : Flex container value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexContainer(bool isflexcontainer)
+{
+  css_flexcontainer = isflexcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_FLEX_DIRECTION UI_ELEMENT::GetFlexDirection()
+* @brief      Get flex direction
+* @ingroup    USERINTERFACE
+*
+* @return     UI_FLEX_DIRECTION : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_FLEX_DIRECTION UI_ELEMENT::GetFlexDirection()
+{
+  return css_flexdirection;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexDirection(UI_FLEX_DIRECTION flexdirection)
+* @brief      Set flex direction
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexdirection : Flex direction value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexDirection(UI_FLEX_DIRECTION flexdirection)
+{
+  css_flexdirection = flexdirection;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_JUSTIFY_CONTENT UI_ELEMENT::GetJustifyContent()
+* @brief      Get justify content
+* @ingroup    USERINTERFACE
+*
+* @return     UI_JUSTIFY_CONTENT : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_JUSTIFY_CONTENT UI_ELEMENT::GetJustifyContent()
+{
+  return css_justifycontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetJustifyContent(UI_JUSTIFY_CONTENT justifycontent)
+* @brief      Set justify content
+* @ingroup    USERINTERFACE
+*
+* @param[in]  justifycontent : Justify content value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetJustifyContent(UI_JUSTIFY_CONTENT justifycontent)
+{
+  css_justifycontent = justifycontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetRowGap()
+* @brief      Get row gap
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetRowGap()
+{
+  return css_rowgap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetColumnGap()
+* @brief      Get column gap
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetColumnGap()
+{
+  return css_columngap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetGap(double rowgap, double columngap)
+* @brief      Set row/column gap
+* @ingroup    USERINTERFACE
+*
+* @param[in]  rowgap : CSS "row-gap" value.
+* @param[in]  columngap : CSS "column-gap" value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetGap(double rowgap, double columngap)
+{
+  css_rowgap    = rowgap;
+  css_columngap = columngap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_FLEX_WRAP UI_ELEMENT::GetFlexWrap()
+* @brief      Get flex wrap
+* @ingroup    USERINTERFACE
+*
+* @return     UI_FLEX_WRAP : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_FLEX_WRAP UI_ELEMENT::GetFlexWrap()
+{
+  return css_flexwrap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexWrap(UI_FLEX_WRAP flexwrap)
+* @brief      Set flex wrap
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexwrap : Flex wrap value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexWrap(UI_FLEX_WRAP flexwrap)
+{
+  css_flexwrap = flexwrap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_CONTENT UI_ELEMENT::GetAlignContent()
+* @brief      Get align content
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_CONTENT : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_CONTENT UI_ELEMENT::GetAlignContent()
+{
+  return css_aligncontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetAlignContent(UI_ALIGN_CONTENT aligncontent)
+* @brief      Set align content
+* @ingroup    USERINTERFACE
+*
+* @param[in]  aligncontent : Align content value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetAlignContent(UI_ALIGN_CONTENT aligncontent)
+{
+  css_aligncontent = aligncontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_ITEMS UI_ELEMENT::GetAlignItems()
+* @brief      Get align items
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_ITEMS : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_ITEMS UI_ELEMENT::GetAlignItems()
+{
+  return css_alignitems;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetAlignItems(UI_ALIGN_ITEMS alignitems)
+* @brief      Set align items
+* @ingroup    USERINTERFACE
+*
+* @param[in]  alignitems : Align items value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetAlignItems(UI_ALIGN_ITEMS alignitems)
+{
+  css_alignitems = alignitems;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetFlexGrow()
+* @brief      Get flex grow
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetFlexGrow()
+{
+  return css_flexgrow;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexGrow(double flexgrow)
+* @brief      Set flex grow
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexgrow : Flex grow value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexGrow(double flexgrow)
+{
+  css_flexgrow = flexgrow;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetFlexShrink()
+* @brief      Get flex shrink
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetFlexShrink()
+{
+  return css_flexshrink;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexShrink(double flexshrink)
+* @brief      Set flex shrink
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexshrink : Flex shrink value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexShrink(double flexshrink)
+{
+  css_flexshrink = flexshrink;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_LAYOUTBOX_INSET UI_ELEMENT::GetFlexBasis()
+* @brief      Get flex basis
+* @ingroup    USERINTERFACE
+*
+* @return     UI_LAYOUTBOX_INSET : Requested value ("specified" false means "auto").
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_LAYOUTBOX_INSET UI_ELEMENT::GetFlexBasis()
+{
+  return css_flexbasis;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexBasisAuto()
+* @brief      Set flex basis to "auto"
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexBasisAuto()
+{
+  css_flexbasis.specified = false;
+  css_flexbasis.value     = 0.0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexBasis(double value)
+* @brief      Set flex basis to an explicit value
+* @ingroup    USERINTERFACE
+*
+* @param[in]  value : Flex basis value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexBasis(double value)
+{
+  css_flexbasis.specified = true;
+  css_flexbasis.value     = value;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_SELF UI_ELEMENT::GetAlignSelf()
+* @brief      Get align self
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_SELF : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_SELF UI_ELEMENT::GetAlignSelf()
+{
+  return css_alignself;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetAlignSelf(UI_ALIGN_SELF alignself)
+* @brief      Set align self
+* @ingroup    USERINTERFACE
+*
+* @param[in]  alignself : Align self value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetAlignSelf(UI_ALIGN_SELF alignself)
+{
+  css_alignself = alignself;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetIntrinsicWidth()
+* @brief      Get intrinsic width
+* @ingroup    USERINTERFACE
+*
+* @return     double : The width UI_SKIN::CalculateBoundaryLine() last measured/resolved for this element (its
+*                       authored size for a fixed-size widget, or its freshly-measured natural size for auto-sized
+*                       content such as text) -- -1.0 if CalculateBoundaryLine() has never run for it, in which case
+*                       the caller should fall back to GetBoundaryLine()->width. See UI_Element.h's own comment.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetIntrinsicWidth()
+{
+  return intrinsic_width;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetIntrinsicWidth(double intrinsicwidth)
+* @brief      Set intrinsic width
+* @ingroup    USERINTERFACE
+*
+* @param[in]  intrinsicwidth : Intrinsic width value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetIntrinsicWidth(double intrinsicwidth)
+{
+  intrinsic_width = intrinsicwidth;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetIntrinsicHeight()
+* @brief      Get intrinsic height
+* @ingroup    USERINTERFACE
+*
+* @return     double : Same rule as GetIntrinsicWidth(), for the vertical axis.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetIntrinsicHeight()
+{
+  return intrinsic_height;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetIntrinsicHeight(double intrinsicheight)
+* @brief      Set intrinsic height
+* @ingroup    USERINTERFACE
+*
+* @param[in]  intrinsicheight : Intrinsic height value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetIntrinsicHeight(double intrinsicheight)
+{
+  intrinsic_height = intrinsicheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_ELEMENT::GetActivePseudos(XVECTOR<XSTRING*>& out)
 * @brief      Populates `out` with the pseudo-class names implied by the element's current live state.
 *             Strings are heap-allocated with GEN_NEW; the caller owns them and must delete them.
@@ -2108,6 +2533,26 @@ void UI_ELEMENT::Clean()
   snapshot_roundrect      = 0;
   snapshot_taken          = false;
   style_has_state_rules   = false;
+
+  // --- Flexbox: CSS Lite wiring -- same defaults as the mirrored UI_LAYOUTBOX properties (UI_LayoutBox.cpp's own
+  //     constructor), so an element that never sets any of these behaves exactly like a freshly-built UI_LAYOUTBOX.
+  css_flexcontainer       = false;
+  css_flexdirection       = UI_FLEX_DIRECTION_ROW;
+  css_justifycontent      = UI_JUSTIFY_CONTENT_FLEX_START;
+  css_rowgap              = 0.0;
+  css_columngap           = 0.0;
+  css_flexwrap            = UI_FLEX_WRAP_NOWRAP;
+  css_aligncontent        = UI_ALIGN_CONTENT_FLEX_START;
+  css_alignitems          = UI_ALIGN_ITEMS_FLEX_START;
+
+  css_flexgrow            = 0.0;
+  css_flexshrink          = 1.0;
+  css_flexbasis.specified = false;
+  css_flexbasis.value     = 0.0;
+  css_alignself           = UI_ALIGN_SELF_AUTO;
+
+  intrinsic_width         = -1.0;    // unset -- see GetIntrinsicWidth()'s own comment
+  intrinsic_height        = -1.0;
 }
 
 

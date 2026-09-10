@@ -564,28 +564,60 @@ bool UI_SKIN::CalculateBoundaryLine(UI_ELEMENT* element, bool adjustsizemargin)
 {
   if(!element) return false;
 
+  bool status = false;
+
   switch(element->GetType())
     {
-      case UI_ELEMENT_TYPE_UNKNOWN				  : return false;                                                               break;	    
-	    case UI_ELEMENT_TYPE_SCROLL				    : return CalculateBoundaryLine_Scroll(element, adjustsizemargin);             break;
-	    case UI_ELEMENT_TYPE_TEXT					    : return CalculateBoundaryLine_Text(element, adjustsizemargin);               break; 	
-      case UI_ELEMENT_TYPE_TEXTBOX			    : return CalculateBoundaryLine_TextBox(element, adjustsizemargin);            break;    
-	    case UI_ELEMENT_TYPE_IMAGE     			  : return CalculateBoundaryLine_Image(element, adjustsizemargin);	            break;
-      case UI_ELEMENT_TYPE_ANIMATION 			  : return CalculateBoundaryLine_Animation(element, adjustsizemargin);	        break;
-      case UI_ELEMENT_TYPE_OPTION					  : return CalculateBoundaryLine_Option(element, adjustsizemargin);             break;
-      case UI_ELEMENT_TYPE_MULTIOPTION		  : return CalculateBoundaryLine_MultiOption(element, adjustsizemargin);        break;
-	    case UI_ELEMENT_TYPE_BUTTON					  : return CalculateBoundaryLine_Button(element, adjustsizemargin);             break;	    	    
-      case UI_ELEMENT_TYPE_CHECKBOX 			  : return CalculateBoundaryLine_CheckBox(element, adjustsizemargin);           break;	    	    
-      case UI_ELEMENT_TYPE_EDITTEXT   		  : return CalculateBoundaryLine_EditText(element, adjustsizemargin);           break;	      
-      case UI_ELEMENT_TYPE_FORM						  : return CalculateBoundaryLine_Form(element, adjustsizemargin);               break; 
-      case UI_ELEMENT_TYPE_MENU             : return CalculateBoundaryLine_Menu(element, adjustsizemargin);               break;                  
-      case UI_ELEMENT_TYPE_LISTBOX          : return CalculateBoundaryLine_ListBox(element, adjustsizemargin);            break;                  
-      case UI_ELEMENT_TYPE_PROGRESSBAR	    : return CalculateBoundaryLine_ProgressBar(element, adjustsizemargin);        break;  
-      case UI_ELEMENT_TYPE_PROGRESSRADIAL  : return CalculateBoundaryLine_ProgressRadial(element, adjustsizemargin);     break;
-      case UI_ELEMENT_TYPE_PROGRESSIMAGE   : return CalculateBoundaryLine_ProgressImage(element, adjustsizemargin);      break;
+      case UI_ELEMENT_TYPE_UNKNOWN				  : return false;                                                               break;
+	    case UI_ELEMENT_TYPE_SCROLL				    : status = CalculateBoundaryLine_Scroll(element, adjustsizemargin);             break;
+	    case UI_ELEMENT_TYPE_TEXT					    : status = CalculateBoundaryLine_Text(element, adjustsizemargin);               break;
+      case UI_ELEMENT_TYPE_TEXTBOX			    : status = CalculateBoundaryLine_TextBox(element, adjustsizemargin);            break;
+	    case UI_ELEMENT_TYPE_IMAGE     			  : status = CalculateBoundaryLine_Image(element, adjustsizemargin);	            break;
+      case UI_ELEMENT_TYPE_ANIMATION 			  : status = CalculateBoundaryLine_Animation(element, adjustsizemargin);	        break;
+      case UI_ELEMENT_TYPE_OPTION					  : status = CalculateBoundaryLine_Option(element, adjustsizemargin);             break;
+      case UI_ELEMENT_TYPE_MULTIOPTION		  : status = CalculateBoundaryLine_MultiOption(element, adjustsizemargin);        break;
+	    case UI_ELEMENT_TYPE_BUTTON					  : status = CalculateBoundaryLine_Button(element, adjustsizemargin);             break;
+      case UI_ELEMENT_TYPE_CHECKBOX 			  : status = CalculateBoundaryLine_CheckBox(element, adjustsizemargin);           break;
+      case UI_ELEMENT_TYPE_EDITTEXT   		  : status = CalculateBoundaryLine_EditText(element, adjustsizemargin);           break;
+      case UI_ELEMENT_TYPE_FORM						  : status = CalculateBoundaryLine_Form(element, adjustsizemargin);               break;
+      case UI_ELEMENT_TYPE_MENU             : status = CalculateBoundaryLine_Menu(element, adjustsizemargin);               break;
+      case UI_ELEMENT_TYPE_LISTBOX          : status = CalculateBoundaryLine_ListBox(element, adjustsizemargin);            break;
+      case UI_ELEMENT_TYPE_PROGRESSBAR	    : status = CalculateBoundaryLine_ProgressBar(element, adjustsizemargin);        break;
+      case UI_ELEMENT_TYPE_PROGRESSRADIAL  : status = CalculateBoundaryLine_ProgressRadial(element, adjustsizemargin);     break;
+      case UI_ELEMENT_TYPE_PROGRESSIMAGE   : status = CalculateBoundaryLine_ProgressImage(element, adjustsizemargin);      break;
     }
 
-  return false;
+  // Phase 4 ("migración del ejemplo" -- footer icon/text gap regression fix). SCOPE ADDENDUM: this is the ONE
+  // place every CalculateBoundaryLine_* builder funnels back through (element creation via UI_MANAGER::
+  // GetLayoutElement_CalculateBoundaryLine(), AND every live re-measurement via UI_SKIN::
+  // CalculeBoundaryLine_AllElements() -- see UI_MANAGER::ChangeTextElementValue()), so it is also the one place
+  // that can safely snapshot "the size this element's own content/authoring actually wants" into
+  // GetIntrinsicWidth()/Height(), independent of whatever UI_LAYOUTENGINE::WriteBackTree() may have written into
+  // GetBoundaryLine() on a PREVIOUS flex pass.
+  //
+  // Root cause this fixes: UI_LAYOUTENGINE::BuildTree() used to read a flex item's flex-basis:auto "content
+  // width/height" straight from GetBoundaryLine() -- fine the FIRST time RunLayout() ever ran, but WriteBackTree()
+  // then overwrites that same BoundaryLine with the RESOLVED (grow/shrink-adjusted) size. UI_MANAGER::
+  // ChangeTextElementValue() re-runs RunLayout() on every live text refresh (see its own Phase 4 comment), so a
+  // flex row that is even slightly overflowing (freespace < 0, e.g. dashboard.xml's footer -- see its own
+  // comment) re-shrinks EVERY item a little further on every single refresh, using the ALREADY-shrunk width as
+  // the new "natural" size instead of the item's true one. Over the hundreds of refreshes a running app performs,
+  // this geometrically converges every flex child (including fixed-width icons whose XML "width" never changed)
+  // down to a fraction of its authored size -- confirmed by instrumenting a real windowed build: footer_equipo_
+  // icon's BoundaryLine width decayed from 36 to ~12.7 over ~20s/~940 RunLayout() calls, dragging its sibling
+  // caption's margin-left-computed x_position down with it into the near-zero visual gap reported against the
+  // real app (unit tests never caught this because they call RunLayout() once, not repeatedly).
+  //
+  // Fix: UI_LAYOUTENGINE::BuildTree() (see its own SCOPE ADDENDUM) now prefers GetIntrinsicWidth()/Height() over
+  // the live BoundaryLine for a flex item's content size when set, so RunLayout() is idempotent no matter how
+  // many times it re-runs -- every pass starts, again, from this element's true authored/measured size.
+  if(status)
+    {
+      element->SetIntrinsicWidth(element->GetBoundaryLine()->width);
+      element->SetIntrinsicHeight(element->GetBoundaryLine()->height);
+    }
+
+  return status;
 }
 
 

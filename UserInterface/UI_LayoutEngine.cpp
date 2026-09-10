@@ -67,7 +67,24 @@ UI_LAYOUTBOX* UI_LAYOUTENGINE::BuildTree(UI_ELEMENT* root)
   UI_LAYOUTBOX* box = GEN_NEW UI_LAYOUTBOX();
 
   UI_CSSBOX cssbox = UI_CSSBox_Get(root);
-  box->SetContentBox(cssbox.left, cssbox.top, cssbox.width, cssbox.height);
+
+  // Phase 4 ("migración del ejemplo" -- footer icon/text gap regression fix, see UI_SKIN::CalculateBoundaryLine()'s
+  // own SCOPE ADDENDUM for the full root-cause story): "root"'s CONTENT SIZE -- what ResolveFlexItemSizes() below
+  // reads as a flex-basis:auto item's "hypothetical main size" -- must come from its INTRINSIC size (its authored
+  // width/height for a fixed-size widget, or its freshly-measured natural size for auto-sized content), NOT from
+  // GetBoundaryLine()/UI_CSSBox_Get(), which WriteBackTree() overwrites with whatever this same engine last
+  // RESOLVED it to. Falling back to cssbox.width/height (the pre-fix behaviour) only when GetIntrinsicWidth()/
+  // Height() is still unset (-1) keeps this a no-op for any element CalculateBoundaryLine() has never touched.
+  double contentwidth  = cssbox.width;
+  double contentheight = cssbox.height;
+
+  double intrinsicwidth = root->GetIntrinsicWidth();
+  if(intrinsicwidth >= 0.0) contentwidth = intrinsicwidth;
+
+  double intrinsicheight = root->GetIntrinsicHeight();
+  if(intrinsicheight >= 0.0) contentheight = intrinsicheight;
+
+  box->SetContentBox(cssbox.left, cssbox.top, contentwidth, contentheight);
 
   box->SetPadding(root->GetPadding(UI_ELEMENT_TYPE_ALIGN_UP),
                    root->GetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT),
@@ -83,6 +100,28 @@ UI_LAYOUTBOX* UI_LAYOUTENGINE::BuildTree(UI_ELEMENT* root)
                   root->GetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT),
                   root->GetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN),
                   root->GetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT));
+
+  // Flexbox: CSS Lite wiring (see this file's SCOPE ADDENDUM on RunLayout()) -- "root"'s own Flexbox properties
+  // are plain storage on UI_ELEMENT, one-for-one mirrors of UI_LAYOUTBOX's own (same enums/defaults), so this is
+  // a straight copy, both the container side (how "root" itself arranges ITS children) and the item side (how
+  // "root" is itself sized/aligned by ITS OWN father's flex layout, resolved one level up, exactly like every
+  // other UI_LAYOUTBOX field this function already copies from the element that owns it).
+  box->SetFlexContainer(root->IsFlexContainer());
+  box->SetFlexDirection(root->GetFlexDirection());
+  box->SetJustifyContent(root->GetJustifyContent());
+  box->SetGap(root->GetRowGap(), root->GetColumnGap());
+  box->SetFlexWrap(root->GetFlexWrap());
+  box->SetAlignContent(root->GetAlignContent());
+  box->SetAlignItems(root->GetAlignItems());
+
+  box->SetFlexGrow(root->GetFlexGrow());
+  box->SetFlexShrink(root->GetFlexShrink());
+
+  UI_LAYOUTBOX_INSET flexbasis = root->GetFlexBasis();
+  if(flexbasis.specified) box->SetFlexBasis(flexbasis.value);
+    else box->SetFlexBasisAuto();
+
+  box->SetAlignSelf(root->GetAlignSelf());
 
   XVECTOR<UI_ELEMENT*>* childelements = root->GetComposeElements();
   if(childelements)
@@ -303,6 +342,15 @@ void UI_LAYOUTENGINE::RunLayout(UI_ELEMENT* root, UI_LAYOUTSTRATEGY strategy)
 
   UI_LAYOUTBOX* tree = BuildTree(root);
   if(!tree) return;
+
+  // Flexbox: CSS Lite wiring -- runs BEFORE ApplyPositioning(), exactly CSS's own order: normal-flow placement
+  // (flex, here; grid is not wired into RunLayout() yet -- see this file's SCOPE ADDENDUM) settles every box's
+  // position first, and RELATIVE/ABSOLUTE positioning then applies its own offset on top of that already-placed
+  // box, not the other way round. ApplyFlexLayout() recurses through the whole tree by itself (see its own
+  // banner), so one call here is enough for arbitrarily nested flex containers; it is a no-op wherever
+  // IsFlexContainer() is false, which is every box until an element actually opts in via "display: flex", so
+  // this is behaviour-preserving for every layout authored before this wiring existed.
+  ApplyFlexLayout(tree);
 
   ApplyPositioning(tree);
   WriteBackTree(root, tree);

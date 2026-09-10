@@ -325,6 +325,62 @@
 *        tracks) -- if that is shorter than the item's own content, the item is stretched into whatever space
 *        exists exactly like any other item (see the first sub-step's SCOPE), it does not grow ITS rows to fit.
 *
+* SCOPE ADDENDUM (Phase 4 -- "migración del ejemplo", first sub-step: "conectar el motor Flexbox al pipeline
+*   real")
+*   Everything above (Flexbox básico, Grid básico) ran only from GoogleTest, on UI_LAYOUTBOX trees built either
+*   by hand or via BuildTree() from a stand-alone UI_ELEMENT tree -- nothing in the real widget-building pipeline
+*   (UI_MANAGER::CreateLayouts()/GetLayoutElement_Base(), the ~30 CalculePosition() call sites) ever called
+*   RunLayout(UI_LAYOUTSTRATEGY_CSS), so none of it had any effect on an actual loaded layout. This sub-step
+*   wires the FLEXBOX half of the engine into that real pipeline -- Grid is deliberately deferred to its own
+*   later sub-step (grid-template-columns/rows need real CSS track-list grammar -- fr, minmax(), several tokens
+*   per property -- substantial parsing work in its own right, not a small addition to this one):
+*
+*     1. UI_ELEMENT (UI_Element.h/.cpp) gains the Flexbox container/item properties as plain storage, reusing
+*        UI_LAYOUTBOX's OWN enums/structs (UI_FLEX_DIRECTION, UI_JUSTIFY_CONTENT, UI_FLEX_WRAP, UI_ALIGN_CONTENT,
+*        UI_ALIGN_ITEMS, UI_ALIGN_SELF, UI_LAYOUTBOX_INSET) instead of a parallel duplicate set, with the SAME
+*        defaults -- an element that never sets any of them behaves exactly like a freshly-built UI_LAYOUTBOX.
+*     2. BuildTree() copies those properties from "root" onto the UI_LAYOUTBOX it mirrors "root" into -- both the
+*        container side (how "root" arranges ITS OWN children) and the item side (how "root" is itself sized/
+*        aligned by ITS OWN father, resolved one level up when BuildTree() is later called on that father).
+*     3. RunLayout(UI_LAYOUTSTRATEGY_CSS) now calls ApplyFlexLayout(tree) BEFORE ApplyPositioning(tree) -- CSS's
+*        own order: normal-flow placement (flex) settles a box's position first, RELATIVE/ABSOLUTE positioning
+*        applies its own offset on top of that. ApplyFlexLayout() already recurses through the whole tree by
+*        itself, so nested flex containers keep working with this single extra call.
+*     4. UI_MANAGER::GetLayoutElement_Base() (UI_Manager.cpp) parses the corresponding CSS properties --
+*        "display: flex" (any other value, or absent, leaves IsFlexContainer() at its default "false"),
+*        "flex-direction", "justify-content", "gap"/"row-gap"/"column-gap", "flex-wrap", "align-content",
+*        "align-items" on a container; "flex-grow", "flex-shrink", "flex-basis" ("auto" or a number),
+*        "align-self" on an item -- into the new UI_ELEMENT setters, the exact same style.Get()+string-compare
+*        pattern the adjacent "direction"/"role" parsing already uses.
+*     5. UI_MANAGER::CreateLayouts() calls RunLayout(element, UI_LAYOUTSTRATEGY_CSS) once for every TOP-LEVEL
+*        element of a freshly-built <layout>, right after that element's own subtree (every nested <element>
+*        child, built recursively by CreatePartialLayout() before this point) is fully resolved by the existing
+*        legacy XML pipeline. Deliberately unconditional (not gated behind an opt-in flag on the <layout> or the
+*        element): BuildTree() reads a box's CURRENT already-resolved geometry, and ApplyFlexLayout()/
+*        ApplyPositioning() are no-ops wherever IsFlexContainer() is false / position is STATIC -- which is
+*        EVERY element of EVERY layout authored before this wiring existed, since there is today no XML/CSS
+*        syntax that could have set those properties before this sub-step added the parsing for it. So this is a
+*        behaviour-preserving, always-on second pass: existing layouts round-trip through
+*        BuildTree()->ApplyFlexLayout()->ApplyPositioning()->WriteBackTree() unchanged, and only a NEW layout
+*        that actually opts a container into "display: flex" sees any different geometry.
+*
+*   Still deliberately NOT covered:
+*
+*     - Grid (see above -- its own later sub-step).
+*     - dashboard.xml/dashboard.css do not use any of this yet: today's 109/111 root-sibling elements have no
+*       real XML nesting for a flex container to arrange in the first place. Restructuring the example into real
+*       nested containers is the NEXT sub-step of this same "migración del ejemplo" increment.
+*     - a live re-layout when a Flexbox property (display/flex-direction/justify-content/gap/etc.) itself
+*       changes after load (no ReapplyStyleVisual() hook for these properties, same limitation UI_Element.h's
+*       own SCOPE comment notes for "direction"/margin/padding). NARROWER than it used to be, though: a flex
+*       CHILD's own resolved CONTENT SIZE changing after load (a live text value ticking, e.g. dashboard.xml's
+*       "#[FOOTER_SO]"/"#[FOOTER_UPTIME]") IS now covered -- see UI_MANAGER::ChangeTextElementValue()'s own
+*       comment, added in this same increment's footer live-update follow-up: it re-runs RunLayout() on the
+*       flex father whenever the changed element's own father IsFlexContainer(), which reflows every sibling,
+*       not just the one that changed. What is still NOT covered is authored Flexbox PROPERTIES (not sizes)
+*       changing at runtime, e.g. toggling "display: flex" itself, or align-items, off an XML/CSS edit made
+*       after load -- there is simply no code path that edits those at runtime today to regress.
+*
 * @author     Abraham J. Velez / EndoraSoft
 *
 * ---------------------------------------------------------------------------------------------------------------------*/
@@ -344,7 +400,7 @@
 enum UI_LAYOUTSTRATEGY
 {
   UI_LAYOUTSTRATEGY_LEGACY = 0,      // no-op: whatever the existing XML layout (CalculePosition et al.) produced stands
-  UI_LAYOUTSTRATEGY_CSS               // BuildTree() + ApplyPositioning() + WriteBackTree(), driven through UI_CSSBox_Set()
+  UI_LAYOUTSTRATEGY_CSS               // BuildTree() + ApplyFlexLayout() + ApplyPositioning() + WriteBackTree(), via UI_CSSBox_Set()
 };
 
 

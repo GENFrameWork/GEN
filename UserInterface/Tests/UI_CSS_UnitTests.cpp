@@ -4441,4 +4441,602 @@ TEST(UI_LayoutEngine, ApplyGridLayoutClampsAColumnSpanWiderThanTheGridToTheFullC
 }
 
 
+// -- UI_ELEMENT: Flexbox CSS Lite wiring (Phase 4, "migración del ejemplo", first sub-step) --------------------------
+
+TEST(UI_Element, DefaultsToNotAFlexContainerWithTheSameDefaultsAsAFreshUiLayoutBox)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+
+  EXPECT_FALSE(element->IsFlexContainer());
+  EXPECT_EQ(element->GetFlexDirection(), UI_FLEX_DIRECTION_ROW);
+  EXPECT_EQ(element->GetJustifyContent(), UI_JUSTIFY_CONTENT_FLEX_START);
+  EXPECT_EQ(element->GetRowGap(), 0.0);
+  EXPECT_EQ(element->GetColumnGap(), 0.0);
+  EXPECT_EQ(element->GetFlexWrap(), UI_FLEX_WRAP_NOWRAP);
+  EXPECT_EQ(element->GetAlignContent(), UI_ALIGN_CONTENT_FLEX_START);
+  EXPECT_EQ(element->GetAlignItems(), UI_ALIGN_ITEMS_FLEX_START);
+
+  GEN_DELETE element;
+}
+
+TEST(UI_Element, DefaultsToTheCssInitialFlexItemValues)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+
+  EXPECT_EQ(element->GetFlexGrow(), 0.0);
+  EXPECT_EQ(element->GetFlexShrink(), 1.0);
+  EXPECT_FALSE(element->GetFlexBasis().specified);   // "auto"
+  EXPECT_EQ(element->GetAlignSelf(), UI_ALIGN_SELF_AUTO);
+
+  GEN_DELETE element;
+}
+
+TEST(UI_Element, FlexContainerPropertiesRoundTripThroughSettersAndGetters)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+
+  element->SetFlexContainer(true);
+  element->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN_REVERSE);
+  element->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_EVENLY);
+  element->SetGap(4.0, 8.0);
+  element->SetFlexWrap(UI_FLEX_WRAP_WRAP_REVERSE);
+  element->SetAlignContent(UI_ALIGN_CONTENT_SPACE_AROUND);
+  element->SetAlignItems(UI_ALIGN_ITEMS_STRETCH);
+
+  EXPECT_TRUE(element->IsFlexContainer());
+  EXPECT_EQ(element->GetFlexDirection(), UI_FLEX_DIRECTION_COLUMN_REVERSE);
+  EXPECT_EQ(element->GetJustifyContent(), UI_JUSTIFY_CONTENT_SPACE_EVENLY);
+  EXPECT_EQ(element->GetRowGap(), 4.0);
+  EXPECT_EQ(element->GetColumnGap(), 8.0);
+  EXPECT_EQ(element->GetFlexWrap(), UI_FLEX_WRAP_WRAP_REVERSE);
+  EXPECT_EQ(element->GetAlignContent(), UI_ALIGN_CONTENT_SPACE_AROUND);
+  EXPECT_EQ(element->GetAlignItems(), UI_ALIGN_ITEMS_STRETCH);
+
+  GEN_DELETE element;
+}
+
+TEST(UI_Element, FlexItemPropertiesRoundTripThroughSettersAndGetters)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+
+  element->SetFlexGrow(2.0);
+  element->SetFlexShrink(0.5);
+  element->SetFlexBasis(120.0);
+  element->SetAlignSelf(UI_ALIGN_SELF_CENTER);
+
+  EXPECT_EQ(element->GetFlexGrow(), 2.0);
+  EXPECT_EQ(element->GetFlexShrink(), 0.5);
+  EXPECT_TRUE(element->GetFlexBasis().specified);
+  EXPECT_EQ(element->GetFlexBasis().value, 120.0);
+  EXPECT_EQ(element->GetAlignSelf(), UI_ALIGN_SELF_CENTER);
+
+  element->SetFlexBasisAuto();
+  EXPECT_FALSE(element->GetFlexBasis().specified);
+
+  GEN_DELETE element;
+}
+
+
+// -- UI_LAYOUTENGINE::BuildTree copies Flexbox properties (Phase 4, "migración del ejemplo", first sub-step) ---------
+
+TEST(UI_LayoutEngine, BuildTreeCopiesAnElementsFlexContainerPropertiesOntoTheMirroredBox)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  element->SetFlexContainer(true);
+  element->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+  element->SetJustifyContent(UI_JUSTIFY_CONTENT_CENTER);
+  element->SetGap(3.0, 6.0);
+  element->SetFlexWrap(UI_FLEX_WRAP_WRAP);
+  element->SetAlignContent(UI_ALIGN_CONTENT_CENTER);
+  element->SetAlignItems(UI_ALIGN_ITEMS_STRETCH);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+  ASSERT_TRUE(box != NULL);
+
+  EXPECT_TRUE(box->IsFlexContainer());
+  EXPECT_EQ(box->GetFlexDirection(), UI_FLEX_DIRECTION_COLUMN);
+  EXPECT_EQ(box->GetJustifyContent(), UI_JUSTIFY_CONTENT_CENTER);
+  EXPECT_EQ(box->GetRowGap(), 3.0);
+  EXPECT_EQ(box->GetColumnGap(), 6.0);
+  EXPECT_EQ(box->GetFlexWrap(), UI_FLEX_WRAP_WRAP);
+  EXPECT_EQ(box->GetAlignContent(), UI_ALIGN_CONTENT_CENTER);
+  EXPECT_EQ(box->GetAlignItems(), UI_ALIGN_ITEMS_STRETCH);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+TEST(UI_LayoutEngine, BuildTreeCopiesAnElementsFlexItemPropertiesOntoTheMirroredBox)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  element->SetFlexGrow(2.0);
+  element->SetFlexShrink(0.0);
+  element->SetFlexBasis(75.0);
+  element->SetAlignSelf(UI_ALIGN_SELF_FLEX_END);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+  ASSERT_TRUE(box != NULL);
+
+  EXPECT_EQ(box->GetFlexGrow(), 2.0);
+  EXPECT_EQ(box->GetFlexShrink(), 0.0);
+  EXPECT_TRUE(box->GetFlexBasis().specified);
+  EXPECT_EQ(box->GetFlexBasis().value, 75.0);
+  EXPECT_EQ(box->GetAlignSelf(), UI_ALIGN_SELF_FLEX_END);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+TEST(UI_LayoutEngine, BuildTreeCopiesAnAutoFlexBasisAsUnspecified)
+{
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  element->SetFlexBasis(50.0);    // explicit first...
+  element->SetFlexBasisAuto();    // ...then back to "auto", must round-trip through BuildTree() as unspecified
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+  ASSERT_TRUE(box != NULL);
+
+  EXPECT_FALSE(box->GetFlexBasis().specified);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+TEST(UI_LayoutEngine, BuildTreeUsesAnElementsIntrinsicSizeAsItsContentBoxWhenSetInsteadOfItsLiveBoundaryLine)
+{
+  // Footer icon/text gap regression, round 3 (see UI_SKIN::CalculateBoundaryLine()'s and dashboard.xml's own
+  // SCOPE ADDENDUM comments for the full story): a flex item's flex-basis:auto "content size" must come from
+  // GetIntrinsicWidth()/Height() when set -- NOT from the live BoundaryLine/UI_CSSBox_Get(), which
+  // UI_LAYOUTENGINE::WriteBackTree() overwrites with whatever THIS SAME engine last resolved it to. Simulates
+  // exactly that: an element whose live box holds a bogus, already-shrunk-looking width (5.0), left over from
+  // a PRIOR flex pass this test never ran, while its intrinsic width still correctly says 40.0 (its true,
+  // authored/measured size, stamped once and never touched by the flex engine itself).
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_BOUNDARYLINE boundaryline;
+  boundaryline.width  = 5.0;    // bogus leftover -- must be ignored
+  boundaryline.height = 5.0;
+  element->SetBoundaryLine(boundaryline);
+  element->SetIntrinsicWidth(40.0);     // the element's true size
+  element->SetIntrinsicHeight(40.0);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+  ASSERT_TRUE(box != NULL);
+
+  EXPECT_EQ(box->GetContentWidth(), 40.0);
+  EXPECT_EQ(box->GetContentHeight(), 40.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+TEST(UI_LayoutEngine, BuildTreeFallsBackToTheLiveBoundaryLineWhenIntrinsicSizeWasNeverSet)
+{
+  // Zero behaviour change for every element that predates this fix (or is never routed through UI_SKIN::
+  // CalculateBoundaryLine() -- e.g. every OTHER existing test in this file, which hand-builds elements via
+  // UI_CSS_UnitTests_SetElementBox() alone): GetIntrinsicWidth()/Height() stay at their -1.0 "unset" sentinel,
+  // so BuildTree() must keep reading the live BoundaryLine exactly as it always did.
+  UI_ELEMENT* element = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(element, 0.0, 0.0, 40.0, 40.0);
+
+  UI_LAYOUTBOX* box = UI_LAYOUTENGINE::BuildTree(element);
+  ASSERT_TRUE(box != NULL);
+
+  EXPECT_EQ(box->GetContentWidth(), 40.0);
+  EXPECT_EQ(box->GetContentHeight(), 40.0);
+
+  GEN_DELETE box;
+  GEN_DELETE element;
+}
+
+
+// -- UI_LAYOUTENGINE::RunLayout wires Flexbox into the real pipeline (Phase 4, "migración del ejemplo", first
+//    sub-step) --------------------------------------------------------------------------------------------------
+
+TEST(UI_LayoutEngine, RunLayoutWithCssStrategyArrangesAFlexContainersChildrenWithJustifyContentSpaceBetween)
+{
+  UI_ELEMENT* parent = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* first   = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* second  = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(parent, 0.0, 0.0, 300.0, 100.0);
+  UI_CSS_UnitTests_SetElementBox(first,  0.0, 0.0, 50.0, 40.0);    // starting position, about to be overwritten
+  UI_CSS_UnitTests_SetElementBox(second, 0.0, 0.0, 50.0, 40.0);
+  first->SetFather(parent);
+  second->SetFather(parent);
+  parent->GetComposeElements()->Add(first);
+  parent->GetComposeElements()->Add(second);
+
+  parent->SetFlexContainer(true);
+  parent->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_BETWEEN);
+
+  UI_LAYOUTENGINE::RunLayout(parent, UI_LAYOUTSTRATEGY_CSS);
+
+  UI_CSSBOX firstcssbox  = UI_CSSBox_Get(first);
+  UI_CSSBOX secondcssbox = UI_CSSBox_Get(second);
+
+  EXPECT_EQ(firstcssbox.left, 0.0);       // packed at the container's own start
+  EXPECT_EQ(secondcssbox.left, 250.0);    // packed at the container's own end: 300 - 50
+
+  GEN_DELETE parent;
+}
+
+TEST(UI_LayoutEngine, RunLayoutWithCssStrategyLeavesANonFlexContainersChildrenAtTheirOriginalPositions)
+{
+  UI_ELEMENT* parent = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* child   = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(parent, 0.0, 0.0, 300.0, 100.0);
+  UI_CSS_UnitTests_SetElementBox(child,  123.0, 45.0, 50.0, 40.0);
+  child->SetFather(parent);
+  parent->GetComposeElements()->Add(child);
+
+  // "parent" is deliberately left as a plain (non-flex) container -- see this sub-step's SCOPE ADDENDUM in
+  // UI_LayoutEngine.h: ApplyFlexLayout() must be a no-op here, so RunLayout(CSS) stays behaviour-preserving for
+  // every layout that does not opt into "display: flex".
+  UI_LAYOUTENGINE::RunLayout(parent, UI_LAYOUTSTRATEGY_CSS);
+
+  UI_CSSBOX childcssbox = UI_CSSBox_Get(child);
+  EXPECT_EQ(childcssbox.left, 123.0);
+  EXPECT_EQ(childcssbox.top, 45.0);
+
+  GEN_DELETE parent;
+}
+
+TEST(UI_LayoutEngine, RunLayoutWithCssStrategyAppliesFlexGrowThroughTheRealPipeline)
+{
+  UI_ELEMENT* parent = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* fixed    = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* growing  = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(parent, 0.0, 0.0, 300.0, 100.0);
+  UI_CSS_UnitTests_SetElementBox(fixed,   0.0, 0.0, 50.0, 40.0);
+  UI_CSS_UnitTests_SetElementBox(growing, 0.0, 0.0, 50.0, 40.0);
+  fixed->SetFather(parent);
+  growing->SetFather(parent);
+  parent->GetComposeElements()->Add(fixed);
+  parent->GetComposeElements()->Add(growing);
+
+  parent->SetFlexContainer(true);
+  growing->SetFlexGrow(1.0);   // "fixed" keeps flex-grow's CSS initial value (0): all free space goes to "growing"
+
+  UI_LAYOUTENGINE::RunLayout(parent, UI_LAYOUTSTRATEGY_CSS);
+
+  UI_CSSBOX growingcssbox = UI_CSSBox_Get(growing);
+  EXPECT_EQ(growingcssbox.width, 250.0);   // 50 (base) + 200 (all the free space: 300 - 50 - 50)
+
+  GEN_DELETE parent;
+}
+
+TEST(UI_LayoutEngine, RunLayoutReproducesDashboardXmlsFooterOriginalAbsolutePositionsThroughMarginAlone)
+{
+  // Mirrors dashboard.xml's "footer_bg" flex container exactly -- same 9 children (8 real ones plus the
+  // invisible "footer_spacer"), same widths/heights, same "margin"/"flex-grow" values, same container-level
+  // "align-items: center" (see that element's and dashboard.css's own comments for the full derivation, and
+  // for the earlier per-item approaches this superseded: a 0-height assumption for text that clipped the
+  // captions off-screen, then a per-item "align-self: flex-end" fix that put the captions on a different
+  // cross-axis baseline than their own icons). A regression here means the shipped dashboard.xml no longer
+  // reproduces its intended pixel positions.
+  //
+  // The 3 text items use a nonzero, representative font-metric height (18.0) ON PURPOSE, instead of 0.0:
+  // UI_SKINCANVAS::CalculateBoundaryLine_Text() always auto-sizes a text element's real box to the font's own
+  // height, it is never actually 0. Every child here (icons, dividers, AND the 3 texts alike) is centered by
+  // the SAME container "align-items: center" -- none carries its own vertical margin or "align-self" any
+  // more -- which is what makes every expectedtop below independent of that height, proving the centering is
+  // robust regardless of the real font metrics, not just correct for one hardcoded value.
+  //
+  // "footer_spacer" (index 6) is the "margin: auto" substitute: "flex-grow: 1" makes it consume ALL of the
+  // row's free space, so the last group ("Uptime") lands flush against the right edge minus its OWN
+  // margin-right (24 -- the same number as "footer_equipo_icon"'s margin-LEFT, mirroring the left inset) --
+  // regardless of how wide the preceding "SO: ..." caption's real, auto-measured string happens to be. That is
+  // the point of expectedleft/expectedtop below being plain literals rather than a formula off the source
+  // widths: this proves the mirrored 24px inset holds even with a placeholder width, so it will keep holding
+  // whatever the real live caption widths turn out to be at runtime -- see UI_LAYOUTENGINE.cpp's flex-grow
+  // resolution pass (already exercised by "RunLayoutWithCssStrategyAppliesFlexGrowThroughTheRealPipeline").
+  UI_ELEMENT* footer = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(footer, 0.0, 856.0, 1440.0, 44.0);
+  footer->SetFlexContainer(true);
+  footer->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+
+  struct { double width, height, marginleft, marginright, flexgrow, expectedleft, expectedtop; } items[9] =
+  {
+    {  36.0, 36.0,  24.0, 0.0, 0.0,    24.0, 860.0 },   // footer_equipo_icon   -- (44-36)/2=4  -> 856+4=860
+    {   0.0, 18.0,  16.0, 0.0, 0.0,    76.0, 869.0 },   // footer_equipo_text   -- (44-18)/2=13 -> 856+13=869
+    {   1.0, 24.0, 232.0, 0.0, 0.0,   308.0, 866.0 },   // footer_divider_1     -- (44-24)/2=10 -> 856+10=866
+    {  36.0, 36.0, 219.0, 0.0, 0.0,   528.0, 860.0 },   // footer_so_icon
+    {   0.0, 18.0,  16.0, 0.0, 0.0,   580.0, 869.0 },   // footer_so_text
+    {   1.0, 24.0, 216.0, 0.0, 0.0,   796.0, 866.0 },   // footer_divider_2
+    {   0.0,  0.0,   0.0, 0.0, 1.0,   797.0, 878.0 },   // footer_spacer        -- grows to consume ALL freespace
+    {  36.0, 36.0, 219.0, 0.0, 0.0,  1364.0, 860.0 },   // footer_uptime_icon
+    {   0.0, 18.0,  16.0, 24.0, 0.0, 1416.0, 869.0 },   // footer_uptime_text   -- right edge (1416+0=1416) is
+  };                                                     // exactly 1440-24: the mirrored inset, via margin-right
+
+  UI_ELEMENT* children[9];
+
+  for(int i=0; i<9; i++)
+    {
+      children[i] = GEN_NEW UI_ELEMENT();
+      UI_CSS_UnitTests_SetElementBox(children[i], 0.0, 0.0, items[i].width, items[i].height);
+      children[i]->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT , items[i].marginleft);
+      children[i]->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT, items[i].marginright);
+      children[i]->SetFlexGrow(items[i].flexgrow);
+      children[i]->SetFather(footer);
+      footer->GetComposeElements()->Add(children[i]);
+    }
+
+  UI_LAYOUTENGINE::RunLayout(footer, UI_LAYOUTSTRATEGY_CSS);
+
+  for(int i=0; i<9; i++)
+    {
+      UI_CSSBOX box = UI_CSSBox_Get(children[i]);
+      EXPECT_EQ(box.left, items[i].expectedleft)  << "item " << i;
+      EXPECT_EQ(box.top, items[i].expectedtop)    << "item " << i;
+    }
+
+  GEN_DELETE footer;
+}
+
+TEST(UI_LayoutEngine, RunLayoutRepositionsEverySiblingAfterOneFlexChildsContentBoxChangesSize)
+{
+  // Reproduces the live-text-update regression the "footer" sub-step shipped: a flex row with three items,
+  // the middle one's content box changes size AFTER the first RunLayout() (exactly what UI_MANAGER::
+  // ChangeTextElementValue() does to a "#[FOOTER_SO]"/"#[FOOTER_UPTIME]"-style live text every time its
+  // resolved value changes -- see that function's own comment on why it now calls RunLayout() again on the
+  // flex father instead of leaving the element positioned by the old, flex-unaware CalculePosition() alone).
+  // A single re-run of RunLayout() on the FATHER must reflow ALL of its children with their current sizes --
+  // not just the one that changed -- proving the fix's mechanism: nothing here is UI_MANAGER-specific, this
+  // is the exact "father->IsFlexContainer() -> RunLayout(father, CSS) again" step that function now performs.
+  UI_ELEMENT* row = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* left  = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* middle = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* right = GEN_NEW UI_ELEMENT();
+
+  UI_CSS_UnitTests_SetElementBox(row,    0.0, 0.0, 400.0, 20.0);
+  UI_CSS_UnitTests_SetElementBox(left,   0.0, 0.0,  10.0, 10.0);
+  UI_CSS_UnitTests_SetElementBox(middle, 0.0, 0.0,  10.0, 10.0);   // starts narrow, like a live text before its first resolve
+  UI_CSS_UnitTests_SetElementBox(right,  0.0, 0.0,  10.0, 10.0);
+
+  row->SetFlexContainer(true);
+  left->SetFather(row);    row->GetComposeElements()->Add(left);
+  middle->SetFather(row);  row->GetComposeElements()->Add(middle);
+  right->SetFather(row);   row->GetComposeElements()->Add(right);
+
+  UI_LAYOUTENGINE::RunLayout(row, UI_LAYOUTSTRATEGY_CSS);
+
+  UI_CSSBOX rightfirstpass = UI_CSSBox_Get(right);
+  EXPECT_EQ(rightfirstpass.left, 20.0);   // packed right after "left" (10) + "middle" (10), flex-start, no gap
+
+  // Simulate the live-update: "middle"'s auto-sized content box grows (e.g. its resolved text got longer),
+  // exactly like UI_SKINCANVAS::CalculateBoundaryLine_Text() re-measuring it -- but nothing repositions its
+  // siblings yet, matching CalculePosition()'s own single-element, flex-unaware reach.
+  UI_CSSBOX middlebox = UI_CSSBox_Get(middle);
+  middlebox.width = 100.0;
+  UI_CSSBox_Set(middle, middlebox);
+
+  // The fix: re-running RunLayout() on the FATHER (not the changed child alone) reflows every sibling.
+  UI_LAYOUTENGINE::RunLayout(row, UI_LAYOUTSTRATEGY_CSS);
+
+  UI_CSSBOX leftsecondpass   = UI_CSSBox_Get(left);
+  UI_CSSBOX middlesecondpass = UI_CSSBox_Get(middle);
+  UI_CSSBOX rightsecondpass  = UI_CSSBox_Get(right);
+
+  EXPECT_EQ(leftsecondpass.left, 0.0);      // unmoved: still first in the row
+  EXPECT_EQ(middlesecondpass.left, 10.0);   // unmoved: still packed right after "left"
+  EXPECT_EQ(middlesecondpass.width, 100.0); // the grown size survives the re-run
+  EXPECT_EQ(rightsecondpass.left, 110.0);   // pushed from 20 to 110: 10 ("left") + 100 (middle's NEW width)
+
+  GEN_DELETE row;
+}
+
+TEST(UI_LayoutEngine, RunLayoutResolvesAFixedSizeSiblingsWidthIdenticallyNoMatterHowManyOverflowingPassesPrecededIt)
+{
+  // The real footer bug, reproduced at the engine level (see UI_SKIN::CalculateBoundaryLine()'s and
+  // dashboard.xml's own SCOPE ADDENDUM comments for the full root-cause story, confirmed against a real
+  // windowed build): UI_MANAGER::ChangeTextElementValue() re-runs RunLayout() on the flex father every time a
+  // live "#[FOOTER_*]" caption's resolved text changes -- so a two-item row where "icon" is fixed-size and
+  // "caption" is a live, auto-measured text whose width genuinely varies from refresh to refresh gets
+  // RunLayout() called on it repeatedly, with "icon"'s intrinsic size stamped ONCE (up front, like a real
+  // image's declared XML width) and "caption"'s intrinsic size RE-stamped before every pass (like
+  // UI_SKINCANVAS::CalculateBoundaryLine_Text() re-measuring the live string on every refresh).
+  //
+  // Before this fix, "icon"'s flex-basis was read from its own live BoundaryLine -- which WriteBackTree() had
+  // just overwritten with whatever the PREVIOUS pass shrank it to -- so a long "caption" pass left "icon"
+  // permanently smaller, and even a LATER pass with the exact same short "caption" width as pass 1 could not
+  // recover pass 1's result: "icon" only ever ratcheted down. With this fix, "icon"'s basis always comes from
+  // its own (unchanged) intrinsic width, so passes 1 and 3 below -- same row width, same "icon" intrinsic
+  // width, same "caption" width -- resolve "icon" to the EXACT same final width, regardless of pass 2's much
+  // larger, intervening overflow.
+  UI_ELEMENT* row     = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* icon    = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* caption = GEN_NEW UI_ELEMENT();
+
+  UI_CSS_UnitTests_SetElementBox(row, 0.0, 0.0, 60.0, 20.0);
+
+  UI_CSS_UnitTests_SetElementBox(icon, 0.0, 0.0, 40.0, 40.0);
+  icon->SetIntrinsicWidth(40.0);    // stamped once, like a real image's declared XML width -- never changes
+  icon->SetIntrinsicHeight(40.0);
+
+  UI_CSS_UnitTests_SetElementBox(caption, 0.0, 0.0, 40.0, 10.0);
+  caption->SetIntrinsicWidth(40.0);   // pass 1: "short" live caption, freshly (re)measured
+  caption->SetIntrinsicHeight(10.0);
+
+  row->SetFlexContainer(true);
+  icon->SetFather(row);     row->GetComposeElements()->Add(icon);
+  caption->SetFather(row);  row->GetComposeElements()->Add(caption);
+
+  // Pass 1: row (60) overflows icon(40) + caption(40) = 80 by 20 -- default flex-shrink (1.0 on both) splits
+  // the 20 deficit proportionally to each item's OWN basesize (40 vs 40 -- an even split): each loses 10.
+  UI_LAYOUTENGINE::RunLayout(row, UI_LAYOUTSTRATEGY_CSS);
+  double iconwidthpass1 = UI_CSSBox_Get(icon).width;
+  EXPECT_EQ(iconwidthpass1, 30.0);
+  EXPECT_EQ(UI_CSSBox_Get(caption).width, 30.0);
+
+  // Pass 2: "caption" resolves a MUCH longer live string -- re-stamp ITS intrinsic size only, exactly like
+  // UI_SKINCANVAS::CalculateBoundaryLine_Text() re-measuring it; "icon" is untouched, its intrinsic width is
+  // still 40.0 from before. Row (60) now overflows icon(40) + caption(120) = 160 by 100.
+  UI_CSSBOX captionbox = UI_CSSBox_Get(caption);
+  captionbox.width = 120.0;
+  UI_CSSBox_Set(caption, captionbox);
+  caption->SetIntrinsicWidth(120.0);
+
+  UI_LAYOUTENGINE::RunLayout(row, UI_LAYOUTSTRATEGY_CSS);
+  EXPECT_EQ(UI_CSSBox_Get(icon).width, 15.0);      // 40 - (100 * 40/160) = 15 -- correctly shrunk THIS pass...
+
+  // Pass 3: "caption" resolves back down to the SAME width as pass 1 (its intrinsic re-stamped to 40.0 again --
+  // a shorter live string, exactly as plausible as the longer one from pass 2). "icon"'s own intrinsic width
+  // was never touched by any of this.
+  captionbox = UI_CSSBox_Get(caption);
+  captionbox.width = 40.0;
+  UI_CSSBox_Set(caption, captionbox);
+  caption->SetIntrinsicWidth(40.0);
+
+  UI_LAYOUTENGINE::RunLayout(row, UI_LAYOUTSTRATEGY_CSS);
+
+  // ...and here is the actual regression: "icon" must resolve back to EXACTLY pass 1's result (30.0), not stay
+  // dragged down by pass 2's deeper, merely transient overflow.
+  EXPECT_EQ(UI_CSSBox_Get(icon).width, iconwidthpass1);
+  EXPECT_EQ(UI_CSSBox_Get(icon).width, 30.0);
+  EXPECT_EQ(UI_CSSBox_Get(caption).width, 30.0);
+
+  GEN_DELETE row;
+}
+
+TEST(UI_LayoutEngine, RunLayoutReproducesDashboardXmlsSidebarNavOriginalAbsolutePositionsThroughMarginAndRowGap)
+{
+  // Mirrors dashboard.xml's "sidebar_nav" -- the FIRST genuinely TWO-LEVEL nested flex tree in this example
+  // (the footer test above is a single flex container with 9 flat children; this one is a "flex-direction:
+  // column" outer container of 8 "flex-direction: row" containers, each with its own 2 children). Proves
+  // UI_LAYOUTENGINE::ApplyFlexLayoutRecursive()'s pre-order walk (arrange the OUTER container's children --
+  // fixing each row's own width/position -- BEFORE recursing into any of them as ITS OWN flex container) so a
+  // single UI_LAYOUTENGINE::RunLayout() call on "sidebar_nav" alone correctly resolves every icon/label pair
+  // without a separate call per row -- see dashboard.xml's own comment on "sidebar_nav" for the full
+  // derivation this reproduces.
+  //
+  // Like the footer test, each row's text item uses a nonzero, representative font-metric height (18.0) ON
+  // PURPOSE instead of 0.0, to prove "align-items: center" (set on EACH row, not on "sidebar_nav" itself --
+  // rows only need to center their OWN icon+label, not each other) is robust to whatever the real auto-
+  // measured caption height turns out to be, exactly as already proven for the footer's 3 captions.
+  UI_ELEMENT* sidebarnav = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(sidebarnav, 0.0, 46.0, 210.0, 810.0);
+  sidebarnav->SetFlexContainer(true);
+  sidebarnav->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+  sidebarnav->SetGap(8.0, 0.0);   // row-gap: 8 -- the constant gap BETWEEN rows (none before the first/after the last)
+
+  const char* labels[8] = { "Resumen", "CPU", "Memoria", "Red", "Disco", "Procesos", "Alertas", "Configuracion" };
+  double expectedrowtops[8];
+  expectedrowtops[0] = 70.0;   // 46 (container top) + 24 (first row's own margin-UP)
+  for(int i=1; i<8; i++) expectedrowtops[i] = expectedrowtops[i-1] + 48.0 + 8.0;   // + row height + row-gap
+
+  UI_ELEMENT* rows[8];
+  UI_ELEMENT* icons[8];
+  UI_ELEMENT* texts[8];
+
+  for(int i=0; i<8; i++)
+    {
+      rows[i] = GEN_NEW UI_ELEMENT();
+      UI_CSS_UnitTests_SetElementBox(rows[i], 0.0, 0.0, 210.0, 48.0);
+      if(i == 0) rows[i]->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP, 24.0);   // only the first row: offset from container top
+      rows[i]->SetFlexContainer(true);
+      rows[i]->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+      rows[i]->SetFather(sidebarnav);
+      sidebarnav->GetComposeElements()->Add(rows[i]);
+
+      icons[i] = GEN_NEW UI_ELEMENT();
+      UI_CSS_UnitTests_SetElementBox(icons[i], 0.0, 0.0, 44.0, 44.0);
+      icons[i]->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT, 26.0);
+      icons[i]->SetFather(rows[i]);
+      rows[i]->GetComposeElements()->Add(icons[i]);
+
+      texts[i] = GEN_NEW UI_ELEMENT();
+      UI_CSS_UnitTests_SetElementBox(texts[i], 0.0, 0.0, 0.0, 18.0);   // 0-width: auto-measured, like a real caption
+      texts[i]->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT, 14.0);
+      texts[i]->SetFather(rows[i]);
+      rows[i]->GetComposeElements()->Add(texts[i]);
+    }
+
+  UI_LAYOUTENGINE::RunLayout(sidebarnav, UI_LAYOUTSTRATEGY_CSS);
+
+  for(int i=0; i<8; i++)
+    {
+      UI_CSSBOX rowbox  = UI_CSSBox_Get(rows[i]);
+      UI_CSSBOX iconbox = UI_CSSBox_Get(icons[i]);
+      UI_CSSBOX textbox = UI_CSSBox_Get(texts[i]);
+
+      EXPECT_EQ(rowbox.left, 0.0)                << labels[i];
+      EXPECT_EQ(rowbox.top, expectedrowtops[i])   << labels[i];
+      EXPECT_EQ(rowbox.width, 210.0)              << labels[i];
+
+      EXPECT_EQ(iconbox.left, 26.0)                          << labels[i];   // unchanged from the mockup's xpos=26
+      EXPECT_EQ(iconbox.top, expectedrowtops[i] + 2.0)        << labels[i];   // centered: (48-44)/2 = 2
+
+      EXPECT_EQ(textbox.left, 84.0)                           << labels[i];   // 26 (icon) + 44 (icon width) + 14 (gap)
+      EXPECT_EQ(textbox.top, expectedrowtops[i] + 15.0)        << labels[i];   // centered: (48-18)/2 = 15
+    }
+
+  GEN_DELETE sidebarnav;
+}
+
+TEST(UI_LayoutEngine, RunLayoutReproducesDashboardXmlsCardHeaderOriginalAbsolutePositionsThroughFlexColumnCardAndChildMargin)
+{
+  // Mirrors dashboard.xml's card 1 ("card_cpu_temp" -> "card-header" -> "temp_hdr_icon"/"temp_hdr_text"), the
+  // fourth sub-step of this same Phase 4 increment.
+  //
+  // CORRECTION (caught against Abraham's real Windows build, see dashboard.css's "form.card" comment for the
+  // full story): the first version of this test made "card" a plain, non-flex father and pre-baked "header"'s
+  // box at its expected FINAL absolute position, to match what was (wrongly) assumed UI_SKINCANVAS::
+  // CalculePosition()'s legacy margin step would already have produced by the time RunLayout() runs. That
+  // assumption was never actually exercised end-to-end -- and it was wrong: CalculePosition()'s Y math is
+  // bottom-anchored (a child with no explicit "ypos" defaults to its father's BOTTOM edge, margin-UP offsetting
+  // a little further from THERE, not from the top), so the real header landed at the BOTTOM of every card
+  // instead of the top. The fix is "card" itself becoming a real (if functionally trivial, one-item) flex
+  // column, exactly like "sidebar-nav" above, so "header" is a genuine flex ITEM positioned by the CSS-native,
+  // top-anchored engine instead of falling through to the legacy one. This test now proves that end-to-end:
+  // nothing is pre-resolved by hand, "header"'s box starts at (0,0) like every other flex item in this suite,
+  // and RunLayout() alone must derive its correct on-screen position purely from "card"'s flex-column layout
+  // plus "header"'s own margin.
+  //
+  // Numbers below are card 1's real ones: card at (238, 100), icon originally at absolute xpos=262 (238+24),
+  // text at absolute xpos=320 (238+82, a 10px gap past the icon's right edge at 238+24+48=310).
+  UI_ELEMENT* card = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(card, 238.0, 100.0, 376.0, 390.0);
+  card->SetFlexContainer(true);
+  card->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+  // "card"'s padding is left at its default (0) -- SCOPE ADDENDUM in dashboard.css explains why it must stay 0
+  // rather than the stylesheet's old "padding: 18", now that "card" has a real child for the first time.
+
+  UI_ELEMENT* header = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(header, 0.0, 0.0, 328.0, 48.0);
+  header->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT, 24.0);
+  header->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP, 12.0);
+  header->SetFlexContainer(true);
+  header->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+  header->SetFather(card);
+  card->GetComposeElements()->Add(header);
+
+  UI_ELEMENT* icon = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(icon, 0.0, 0.0, 48.0, 48.0);
+  icon->SetFather(header);
+  header->GetComposeElements()->Add(icon);
+
+  UI_ELEMENT* text = GEN_NEW UI_ELEMENT();
+  UI_CSS_UnitTests_SetElementBox(text, 0.0, 0.0, 0.0, 19.0);   // 0-width: auto-measured, like a real title caption
+  text->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT, 10.0);
+  text->SetFather(header);
+  header->GetComposeElements()->Add(text);
+
+  UI_LAYOUTENGINE::RunLayout(card, UI_LAYOUTSTRATEGY_CSS);
+
+  UI_CSSBOX headerbox = UI_CSSBox_Get(header);
+  UI_CSSBOX iconbox    = UI_CSSBox_Get(icon);
+  UI_CSSBOX textbox    = UI_CSSBox_Get(text);
+
+  EXPECT_EQ(headerbox.left, 262.0);                    // 238 (card) + 24 (header's own margin-LEFT)
+  EXPECT_EQ(headerbox.top, 112.0);                     // 100 (card) + 12 (header's own margin-UP)
+
+  EXPECT_EQ(iconbox.left, 262.0);                      // flush with the header, no margin of its own
+  EXPECT_EQ(iconbox.top, 112.0);                       // centered: (48-48)/2 = 0
+
+  EXPECT_EQ(textbox.left, 320.0);                      // 262 (icon) + 48 (icon width) + 10 (gap) = original xpos=320
+  EXPECT_EQ(textbox.top, 126.5);                       // centered: 112 + (48-19)/2 = 126.5
+
+  GEN_DELETE card;
+}
+
+
 #endif // GOOGLETEST_ACTIVE

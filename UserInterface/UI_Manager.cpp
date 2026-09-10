@@ -76,6 +76,7 @@
 #include "UI_Animation.h"
 #include "UI_Animations.h"
 #include "UI_Element.h"
+#include "UI_LayoutEngine.h"
 #include "UI_Element_Text.h"
 #include "UI_Element_TextBox.h"
 #include "UI_Element_Image.h"
@@ -2557,16 +2558,30 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
                                                                                           if(father && ((father->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR) || (father->GetType() == UI_ELEMENT_TYPE_PROGRESSRADIAL) || (father->GetType() == UI_ELEMENT_TYPE_PROGRESSIMAGE)))
                                                                                             {
                                                                                               ui_skincanvas->CalculateBoundaryLine(father, false);   // re-apply progress allocationtext/boundary with the new text size (don't leave the text mis-placed by the plain CalculePosition above)
-                                                                                            }                                                                                              
+                                                                                            }
 
-                                                                                          Elements_SetToRedraw(element);    
+                                                                                          // Phase 4 ("migración del ejemplo", second sub-step, live-update follow-up): CalculePosition() just above is
+                                                                                          // the LEGACY (pre-Flexbox) positioning pass -- it knows nothing about "display: flex" and simply drops the
+                                                                                          // element back near its father's origin using xpos/margin alone, ignoring every sibling. That is harmless for
+                                                                                          // a non-flex father (its only caller before this sub-step), but for a flex father it silently undid
+                                                                                          // UI_LAYOUTENGINE::RunLayout()'s one-time, load-time positioning the moment this text's own auto-sized box
+                                                                                          // changed width/height (e.g. dashboard.xml's "#[FOOTER_SO]"/"#[FOOTER_UPTIME]" ticking every second) --
+                                                                                          // collapsing every live text in the row onto the same spot instead of leaving it where the flex engine put
+                                                                                          // it. Re-running the father's own flex layout repositions ALL of its children (not just this one) with
+                                                                                          // their current (possibly just-changed) sizes, so a still-static sibling is not left stale either.
+                                                                                          if(father && father->IsFlexContainer())
+                                                                                            {
+                                                                                              UI_LAYOUTENGINE::RunLayout(father, UI_LAYOUTSTRATEGY_CSS);
+                                                                                            }
+
+                                                                                          Elements_SetToRedraw(element);
                                                                                         }
                                                                                     }
                                                                                     break;
 
                                                   case UI_SKIN_DRAWMODE_CONTEXT   : break;
-                                                }                                                                                                             
-                                                                                             
+                                                }
+
                                             }
                                         }
                                         break;
@@ -3243,6 +3258,97 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!directionstr.Compare(__L("horizontal"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_HORIZONTAL);
         else if(!directionstr.Compare(__L("vertical"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_VERTICAL);
+    }
+
+  // Flexbox: CSS Lite wiring (Phase 4, "migración del ejemplo", first sub-step -- see UI_LayoutEngine.h's
+  // RunLayout()/BuildTree() SCOPE ADDENDUM). "display: flex" is the only recognized "display" value today;
+  // anything else, or its absence, leaves IsFlexContainer() at its default "false" -- so this whole block is a
+  // no-op, and every property below keeps its UI_ELEMENT default, for every layout authored before it existed.
+  XSTRING displaystr;
+  if(style.Get(__L("display"), displaystr))
+    {
+      element->SetFlexContainer(!displaystr.Compare(__L("flex"), true));
+    }
+
+  XSTRING flexdirectionstr;
+  if(style.Get(__L("flex-direction"), flexdirectionstr))
+    {
+      if(!flexdirectionstr.Compare(__L("row"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_ROW);
+        else if(!flexdirectionstr.Compare(__L("row-reverse"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_ROW_REVERSE);
+          else if(!flexdirectionstr.Compare(__L("column"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+            else if(!flexdirectionstr.Compare(__L("column-reverse"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN_REVERSE);
+    }
+
+  XSTRING justifycontentstr;
+  if(style.Get(__L("justify-content"), justifycontentstr))
+    {
+      if(!justifycontentstr.Compare(__L("flex-start"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_FLEX_START);
+        else if(!justifycontentstr.Compare(__L("flex-end"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_FLEX_END);
+          else if(!justifycontentstr.Compare(__L("center"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_CENTER);
+            else if(!justifycontentstr.Compare(__L("space-between"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_BETWEEN);
+              else if(!justifycontentstr.Compare(__L("space-around"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_AROUND);
+                else if(!justifycontentstr.Compare(__L("space-evenly"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_EVENLY);
+    }
+
+  // "gap" is the shorthand for both axes; "row-gap"/"column-gap" (read afterwards, so they win if present,
+  // exactly like the padding/margin longhands elsewhere in this function) override just their own axis.
+  double rowgap    = element->GetRowGap();
+  double columngap = element->GetColumnGap();
+  double gapvalue  = 0.0;
+  if(style.Get(__L("gap"), gapvalue)) { rowgap = gapvalue; columngap = gapvalue; }
+  if(style.Get(__L("row-gap"), gapvalue))    rowgap    = gapvalue;
+  if(style.Get(__L("column-gap"), gapvalue)) columngap = gapvalue;
+  element->SetGap(rowgap, columngap);
+
+  XSTRING flexwrapstr;
+  if(style.Get(__L("flex-wrap"), flexwrapstr))
+    {
+      if(!flexwrapstr.Compare(__L("nowrap"), true))  element->SetFlexWrap(UI_FLEX_WRAP_NOWRAP);
+        else if(!flexwrapstr.Compare(__L("wrap"), true))  element->SetFlexWrap(UI_FLEX_WRAP_WRAP);
+          else if(!flexwrapstr.Compare(__L("wrap-reverse"), true))  element->SetFlexWrap(UI_FLEX_WRAP_WRAP_REVERSE);
+    }
+
+  XSTRING aligncontentstr;
+  if(style.Get(__L("align-content"), aligncontentstr))
+    {
+      if(!aligncontentstr.Compare(__L("flex-start"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_FLEX_START);
+        else if(!aligncontentstr.Compare(__L("flex-end"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_FLEX_END);
+          else if(!aligncontentstr.Compare(__L("center"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_CENTER);
+            else if(!aligncontentstr.Compare(__L("space-between"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_SPACE_BETWEEN);
+              else if(!aligncontentstr.Compare(__L("space-around"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_SPACE_AROUND);
+                else if(!aligncontentstr.Compare(__L("space-evenly"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_SPACE_EVENLY);
+    }
+
+  XSTRING alignitemsstr;
+  if(style.Get(__L("align-items"), alignitemsstr))
+    {
+      if(!alignitemsstr.Compare(__L("flex-start"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_FLEX_START);
+        else if(!alignitemsstr.Compare(__L("flex-end"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_FLEX_END);
+          else if(!alignitemsstr.Compare(__L("center"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+            else if(!alignitemsstr.Compare(__L("stretch"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_STRETCH);
+    }
+
+  double flexgrowvalue = 0.0;
+  if(style.Get(__L("flex-grow"), flexgrowvalue)) element->SetFlexGrow(flexgrowvalue);
+
+  double flexshrinkvalue = 0.0;
+  if(style.Get(__L("flex-shrink"), flexshrinkvalue)) element->SetFlexShrink(flexshrinkvalue);
+
+  XSTRING flexbasisstr;
+  if(style.Get(__L("flex-basis"), flexbasisstr))
+    {
+      if(!flexbasisstr.Compare(__L("auto"), true))  element->SetFlexBasisAuto();
+        else element->SetFlexBasis(flexbasisstr.ConvertToDouble());
+    }
+
+  XSTRING alignselfstr;
+  if(style.Get(__L("align-self"), alignselfstr))
+    {
+      if(!alignselfstr.Compare(__L("auto"), true))  element->SetAlignSelf(UI_ALIGN_SELF_AUTO);
+        else if(!alignselfstr.Compare(__L("flex-start"), true))  element->SetAlignSelf(UI_ALIGN_SELF_FLEX_START);
+          else if(!alignselfstr.Compare(__L("flex-end"), true))  element->SetAlignSelf(UI_ALIGN_SELF_FLEX_END);
+            else if(!alignselfstr.Compare(__L("center"), true))  element->SetAlignSelf(UI_ALIGN_SELF_CENTER);
+              else if(!alignselfstr.Compare(__L("stretch"), true))  element->SetAlignSelf(UI_ALIGN_SELF_STRETCH);
     }
 
   // "text-align" (Step 10): "textalignment" is the historical GEN attribute name (already used, XML-only, by
@@ -5392,6 +5498,16 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
                                   // are targeted by pseudo-carrying rules so their state setters know they must
                                   // trigger a re-resolve. Cheap walk, runs once per layout.
                                   PrepareElementStyleState(element);
+
+                                  // Post-load hook, Phase 4 ("migración del ejemplo", first sub-step -- see
+                                  // UI_LayoutEngine.h's RunLayout()/BuildTree() SCOPE ADDENDUM): "element"'s own
+                                  // subtree (every nested <element> child, built recursively by
+                                  // CreatePartialLayout() above before this point) is already fully resolved by
+                                  // the existing legacy XML pipeline, so it is safe to hand the whole thing to
+                                  // the new CSS engine here. Deliberately unconditional -- see the SCOPE ADDENDUM
+                                  // for why this is behaviour-preserving for every layout that does not actually
+                                  // use "display: flex".
+                                  UI_LAYOUTENGINE::RunLayout(element, UI_LAYOUTSTRATEGY_CSS);
                                 }
                             }
                         }
