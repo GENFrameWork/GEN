@@ -68,8 +68,9 @@ class UI_STYLEPROPERTY
 *         It mirrors exactly the (key -> string) attribute model that the loader used to read straight from the XML
 *         node via UI_MANAGER::GetLayoutElementValue(). The element-construction code (GetLayoutElement_Base, and the
 *         per-type builders) now read from a UI_STYLE instead of from an XFILEXMLELEMENT*, so the front-end format is
-*         pluggable: today an XML front-end fills the bag (FillFromXMLElement); tomorrow an HTML/CSS front-end (or a
-*         litehtml document_container callback) fills the very same bag, without touching any builder.
+*         pluggable: today an XML front-end fills the bag (FillFromXMLElement); the GEN CSS Lite front-end (its own
+*         parser/cascade, no third-party HTML/CSS engine) fills the very same bag through FillFromCSSDeclarations,
+*         without touching any builder.
 *
 *         The typed getters reproduce the historical conversion semantics 1:1, so the refactor is behaviour-preserving:
 *           - Get(key, XSTRING&)  == GetLayoutElementValue(node, key, XSTRING&)
@@ -101,6 +102,14 @@ class UI_STYLE
 
 
     bool                            FillFromCSSDeclarations     (UI_STYLESHEET* sheet, UI_ELEMENT* element);
+
+
+    // Step 6 ("sin overrides puntuales por elemento"): inline "style=" front-end. Parses a bare CSS declaration
+    // list -- no selector needed, just "prop: value; prop: value" -- and layers it on top of the current bag.
+    // Called LAST by GetLayoutElement_Base(), after both the plain XML attributes and the stylesheet cascade,
+    // so it wins over both -- an exact match of HTML's own inline-style precedence -- without requiring a
+    // one-off class in the .css just to tweak a single element.
+    bool                            FillFromInlineStyle         (XSTRING& styletext);
 
   private:
 

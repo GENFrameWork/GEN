@@ -391,16 +391,185 @@ XSTRING* XLINUXSYSTEM::GetCPUSerialNumber()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool XLINUXSYSTEM_ReadThermalZoneTemperature(float& outcelsius)
+* @brief      First CPU temperature source: the kernel's generic thermal sysfs interface
+*             (/sys/class/thermal/thermal_zoneN/{type,temp}), present on any kernel built with CONFIG_THERMAL --
+*             desktop/server x86, Raspberry Pi, and most ARM SoCs.
+* @note       INTERNAL. Zones are numbered contiguously from 0 by the kernel, so the scan stops at the first
+*             missing index. Looks for a "type" that names the CPU/SoC package itself (x86_pkg_temp/acpitz on
+*             PC-class hardware, cpu-thermal/cpu_thermal/soc_thermal/soc-thermal on the ARM SoCs used by
+*             Raspberry Pi and most Android devices); the first zone found while scanning is kept as a fallback
+*             in case no zone matches one of those names, since some boards only expose a single,
+*             unlabelled-but-still-valid zone.
+* @ingroup    PLATFORM_LINUX
+*
+* @param[out] outcelsius : Temperature in Celsius. Untouched when this source has nothing to offer.
+*
+* @return     bool : true if a zone was read and parsed; false if the sysfs tree is absent, unreadable, or a
+*             zone's "temp" file does not parse as an integer.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool XLINUXSYSTEM_ReadThermalZoneTemperature(float& outcelsius)
+{
+  static const char* preferredzonetypes[] = { "x86_pkg_temp", "cpu-thermal", "cpu_thermal", "soc_thermal", "soc-thermal", "acpitz", NULL };
+
+  int foundzone    = -1;
+  int fallbackzone = -1;
+
+  for(int zone=0; zone<32; zone++)
+    {
+      char typepath[64];
+      snprintf(typepath, sizeof(typepath), "/sys/class/thermal/thermal_zone%d/type", zone);
+
+      FILE* typefile = fopen(typepath, "r");
+      if(!typefile) break;   // thermal_zoneN entries are numbered contiguously from 0, so the first miss ends the scan
+
+      char typevalue[64] = { 0 };
+      if(fgets(typevalue, sizeof(typevalue), typefile))
+        {
+          char* newline = strchr(typevalue, '\n');
+          if(newline) *newline = 0;
+
+          if(fallbackzone < 0) fallbackzone = zone;
+
+          for(int t=0; preferredzonetypes[t] && (foundzone < 0); t++)
+            {
+              if(!strcmp(typevalue, preferredzonetypes[t])) foundzone = zone;
+            }
+        }
+
+      fclose(typefile);
+
+      if(foundzone >= 0) break;
+    }
+
+  int usezone = (foundzone >= 0) ? foundzone : fallbackzone;
+  if(usezone < 0) return false;
+
+  char temppath[64];
+  snprintf(temppath, sizeof(temppath), "/sys/class/thermal/thermal_zone%d/temp", usezone);
+
+  FILE* tempfile = fopen(temppath, "r");
+  if(!tempfile) return false;
+
+  int  millidegrees = 0;
+  bool valid        = (fscanf(tempfile, "%d", &millidegrees) == 1);
+
+  fclose(tempfile);
+
+  if(!valid) return false;
+
+  outcelsius = (float)millidegrees / 1000.0f;   // thermal_zoneN/temp reports millidegrees Celsius
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool XLINUXSYSTEM_ReadHWMonTemperature(float& outcelsius)
+* @brief      Second CPU temperature source: /sys/class/hwmon/hwmonN, the interface the "coretemp" (Intel) and
+*             "k10temp" (AMD) kernel drivers publish through, and what user-space tools like "sensors"
+*             (lm-sensors) read from. Several real desktop/laptop installs report the CPU package temperature
+*             ONLY here, with no matching entry under /sys/class/thermal at all, so this is tried as a fallback
+*             whenever the thermal-zone source above found nothing.
+* @note       INTERNAL. hwmonN indices are not guaranteed contiguous nor stable across reboots, so every index
+*             is checked (unlike the thermal-zone scan above, this one does not stop at the first miss) up to a
+*             generous bound. "temp1_input" is the package/die reading on both coretemp and k10temp in practice.
+* @ingroup    PLATFORM_LINUX
+*
+* @param[out] outcelsius : Temperature in Celsius. Untouched when this source has nothing to offer.
+*
+* @return     bool : true if a matching hwmon device was read and parsed; false otherwise.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool XLINUXSYSTEM_ReadHWMonTemperature(float& outcelsius)
+{
+  static const char* preferreddrivernames[] = { "coretemp", "k10temp", "cpu_thermal", NULL };
+
+  for(int hw=0; hw<32; hw++)
+    {
+      char namepath[64];
+      snprintf(namepath, sizeof(namepath), "/sys/class/hwmon/hwmon%d/name", hw);
+
+      FILE* namefile = fopen(namepath, "r");
+      if(!namefile) continue;   // unlike thermal_zoneN, hwmonN numbering has gaps, so a miss does not end the scan
+
+      char namevalue[64] = { 0 };
+      bool matched       = false;
+
+      if(fgets(namevalue, sizeof(namevalue), namefile))
+        {
+          char* newline = strchr(namevalue, '\n');
+          if(newline) *newline = 0;
+
+          for(int d=0; preferreddrivernames[d] && !matched; d++)
+            {
+              if(!strcmp(namevalue, preferreddrivernames[d])) matched = true;
+            }
+        }
+
+      fclose(namefile);
+
+      if(!matched) continue;
+
+      char temppath[64];
+      snprintf(temppath, sizeof(temppath), "/sys/class/hwmon/hwmon%d/temp1_input", hw);
+
+      FILE* tempfile = fopen(temppath, "r");
+      if(!tempfile) continue;
+
+      int  millidegrees = 0;
+      bool valid        = (fscanf(tempfile, "%d", &millidegrees) == 1);
+
+      fclose(tempfile);
+
+      if(!valid) continue;
+
+      outcelsius = (float)millidegrees / 1000.0f;   // hwmon tempN_input also reports millidegrees Celsius
+
+      return true;
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         float XLINUXSYSTEM::GetCPUTemperature()
 * @brief      Get CPU temperature
+* @note       Tries two independent kernel sysfs sources in order, since which one a given board/distro actually
+*             populates varies: (1) the generic thermal-zone interface (XLINUXSYSTEM_ReadThermalZoneTemperature,
+*             covers desktop/server x86, Raspberry Pi, and Android -- its kernel is Linux, and XANDROIDSYSTEM
+*             inherits this implementation as-is instead of overriding it, so this one function covers both
+*             platforms), then (2) the hwmon interface used by coretemp/k10temp
+*             (XLINUXSYSTEM_ReadHWMonTemperature), for the real desktop/laptop installs whose CPU temperature
+*             only ever shows up there. Returns 0.0f -- exactly the old stub's value, so
+*             UI_SYSTEM::HardwareInfo_UpdateCPU() keeps showing "--" instead of a fake number -- when NEITHER
+*             source has anything to offer.
+* @note       A virtual machine (VMware, WSL2, VirtualBox, Hyper-V, ...) is expected to fail both sources: no
+*             mainstream hypervisor passes real ACPI thermal tables or CPU thermal MSRs through to the guest,
+*             precisely because "the CPU's temperature" is a property of the physical host, not of a vCPU, and
+*             exposing it would leak host information across guests. This was confirmed against a WSL2 guest
+*             (2026-09) and a VMware Workstation Debian guest (2026-09): both exposed cooling_device* nodes but
+*             zero thermal_zone* nodes under /sys/class/thermal, and no coretemp/k10temp hwmon device either --
+*             there is nothing here for ANY software, GEN included, to read. This is a property of running
+*             inside a VM, not a defect in this function; validating a real reading requires bare-metal Linux,
+*             a Raspberry Pi, or a real Android device.
 * @ingroup    PLATFORM_LINUX
-* 
+*
 * @return     float : Requested value.
-* 
+*
 * --------------------------------------------------------------------------------------------------------------------*/
 float XLINUXSYSTEM::GetCPUTemperature()
 {
+  float celsius = 0.0f;
+
+  if(XLINUXSYSTEM_ReadThermalZoneTemperature(celsius)) return celsius;
+  if(XLINUXSYSTEM_ReadHWMonTemperature(celsius))        return celsius;
+
   return 0.0f;
 }
 

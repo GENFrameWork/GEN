@@ -293,13 +293,15 @@ static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, doub
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         static void UI_SkinCanvas_AppendRoundRectPathPerCorner(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double rTL, double rTR, double rBR, double rBL)
+* @fn         void UI_SKINCANVAS::AppendRoundRectPathPerCorner(GRP2DPATH& path, double minx, double miny, double maxx, double maxy, double rTL, double rTR, double rBR, double rBL)
 * @brief      Build a rounded-rectangle outline with a possibly-different radius per corner. Corners with radius
 *             <= 0 are drawn square. Each non-zero radius is clamped to half the shorter side of the rect so
 *             two adjacent large radii never overlap into an invalid shape. Uses only MoveTo/LineTo, matching the
 *             stroke-friendly polyline convention of UI_SkinCanvas_AppendRoundRectPath so both fill and stroke
 *             paint through the same AGG code path.
-* @note       INTERNAL / FILE LOCAL. Inputs are already normalized (minx <= maxx, miny <= maxy).
+* @note       Shared box-model helper (built against base UI_ELEMENT accessors only, no GRP2DPATH-specific state
+*             on UI_SKINCANVAS itself): any subclass' Draw_X can call it. Inputs are already normalized
+*             (minx <= maxx, miny <= maxy).
 * @ingroup    USERINTERFACE
 *
 * @param[in]  path : Path to append into.
@@ -313,8 +315,8 @@ static void UI_SkinCanvas_AppendRoundRectPath(GRP2DPATH& path, double minx, doub
 * @param[in]  rBL : Bottom-left corner radius.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-static void UI_SkinCanvas_AppendRoundRectPathPerCorner(GRP2DPATH& path, double minx, double miny, double maxx, double maxy,
-                                                       double rTL, double rTR, double rBR, double rBL)
+void UI_SKINCANVAS::AppendRoundRectPathPerCorner(GRP2DPATH& path, double minx, double miny, double maxx, double maxy,
+                                                 double rTL, double rTR, double rBR, double rBL)
 {
   double w    = maxx - minx;
   double h    = maxy - miny;
@@ -591,22 +593,23 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         static void UI_SkinCanvas_DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* element, double x_position, double y_position)
+* @fn         void UI_SKINCANVAS::DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* element, double x_position, double y_position)
 * @brief      Draws an element's box-shadow layer, generic across widget types.
-* @note       INTERNAL / FILE LOCAL. Same box-shadow behaviour Draw_Form has had since steps 7-8 (soft shadow via
+* @note       Shared box-model helper. Same box-shadow behaviour Draw_Form has had since steps 7-8 (soft shadow via
 *             UI_SkinCanvas_DrawSoftShadow/agg::stack_blur_rgba32 when blur > 0, hard-edged silhouette otherwise),
 *             but written against base UI_ELEMENT accessors only (IsBoxShadowSet/GetShadowOffsetX/GetShadowOffsetY/
 *             GetShadowBlur/GetShadowColor/HasAnyPerCornerRadius/GetEffectiveBorderRadius/GetRoundRect are all
-*             declared on UI_ELEMENT itself, not UI_ELEMENT_FORM) so any Draw_X can call it. Draw_Form's own inline
-*             copy of this logic is deliberately left untouched rather than rewired to call this helper: it anchors
-*             the shadow on GetVisibleRect(), a UI_ELEMENT_FORM-specific rect (a distinct stored member, not simply
-*             recomputed from the base boundary line) that this function cannot reproduce without risking a behaviour
-*             change on the one widget that already shipped and was verified. This helper instead anchors the shadow
-*             on (x_position, y_position) plus element->GetBoundaryLine()->width/height -- the exact same geometry
-*             UI_SKINCANVAS::PreDrawFunction already uses to expand the rebuild-area for a shadow on ANY element type
-*             (see its own "Step 7" block), and the same (x_position, y_position) the calling Draw_X already uses to
-*             place its own content -- so the shadow, the widget's own drawing, and the invalidation rectangle all
-*             agree on where the element is, for every type this is wired into.
+*             declared on UI_ELEMENT itself, not UI_ELEMENT_FORM) so any Draw_X, in any UI_SKINCANVAS subclass,
+*             can call it. Draw_Form's own inline copy of this logic is deliberately left untouched rather than
+*             rewired to call this helper: it anchors the shadow on GetVisibleRect(), a UI_ELEMENT_FORM-specific
+*             rect (a distinct stored member, not simply recomputed from the base boundary line) that this
+*             function cannot reproduce without risking a behaviour change on the one widget that already shipped
+*             and was verified. This helper instead anchors the shadow on (x_position, y_position) plus
+*             element->GetBoundaryLine()->width/height -- the exact same geometry UI_SKINCANVAS::PreDrawFunction
+*             already uses to expand the rebuild-area for a shadow on ANY element type (see its own "Step 7"
+*             block), and the same (x_position, y_position) the calling Draw_X already uses to place its own
+*             content -- so the shadow, the widget's own drawing, and the invalidation rectangle all agree on
+*             where the element is, for every type this is wired into.
 * @ingroup    USERINTERFACE
 *
 * @param[in]  canvas : Target canvas.
@@ -615,7 +618,7 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
 * @param[in]  y_position : Element's resolved bottom edge (screen coords), as already computed by PreDrawFunction.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-static void UI_SkinCanvas_DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* element, double x_position, double y_position)
+void UI_SKINCANVAS::DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* element, double x_position, double y_position)
 {
   if(!canvas)                        return;
   if(!element)                       return;
@@ -679,7 +682,7 @@ static void UI_SkinCanvas_DrawElementBoxShadow(GRP2DCANVAS* canvas, UI_ELEMENT* 
       if(element->HasAnyPerCornerRadius())
         {
           GRP2DPATH shpath;
-          UI_SkinCanvas_AppendRoundRectPathPerCorner(shpath, sh_minx, sh_miny, sh_maxx, sh_maxy, rTL, rTR, rBR, rBL);
+          AppendRoundRectPathPerCorner(shpath, sh_minx, sh_miny, sh_maxx, sh_maxy, rTL, rTR, rBR, rBL);
           canvas->Path(shpath, true);
         }
        else if(element->GetRoundRect())
@@ -2737,18 +2740,37 @@ bool UI_SKINCANVAS::Draw_Text(UI_ELEMENT* element)
                          
       
       canvas->Vectorfont_GetConfig()->SetColor(&color);
-      canvas->Vectorfont_GetConfig()->SetSize(element_text->GetSizeFont());  
-      canvas->VectorFont_Print(x_position, y_position, element_text->GetText()->Get());
+      canvas->Vectorfont_GetConfig()->SetSize(element_text->GetSizeFont());
+
+      // "text-align" (Step 10, see UI_ELEMENT::GetTextAlign() / UI_MANAGER::GetLayoutElement_Base). GEN's
+      // VectorFont_Print(x, y, ...) always takes the LEFT edge of the string as its origin; CENTER/RIGHT are
+      // implemented here, locally, as a one-off x offset computed from the string's own measured width against
+      // the element's box width -- nothing in the canvas or layout layer needs to know alignment exists. LEFT
+      // (the default for every element created before this) reduces to offset 0.0: pixel-identical to before.
+      double alignoffset = 0.0f;
+
+      switch(element_text->GetTextAlign())
+        {
+          case UI_ELEMENT_TYPE_ALIGN_CENTER : alignoffset = (element_text->GetBoundaryLine()->width - canvas->VectorFont_GetWidth(element_text->GetText()->Get())) / 2.0;
+                                               break;
+
+          case UI_ELEMENT_TYPE_ALIGN_RIGHT  : alignoffset = element_text->GetBoundaryLine()->width - canvas->VectorFont_GetWidth(element_text->GetText()->Get());
+                                               break;
+
+          default                           : break; // LEFT (and any non-horizontal enum value): no offset.
+        }
+
+      canvas->VectorFont_Print(x_position + alignoffset, y_position, element_text->GetText()->Get());
     }
 
   PostDrawFunction(element, canvas, clip_rect, x_position, y_position);
-  
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
 * @fn         bool UI_SKINCANVAS::Draw_TextBox(UI_ELEMENT* element)
 * @brief      Draw text box
 * @ingroup    USERINTERFACE
@@ -2864,10 +2886,10 @@ bool UI_SKINCANVAS::Draw_Image(UI_ELEMENT* element)
 
   if(element->MustReDraw())
     {
-      // Box-shadow (see UI_SkinCanvas_DrawElementBoxShadow): drawn before the bitmap, same "shadow first, own
+      // Box-shadow (see UI_SKINCANVAS::DrawElementBoxShadow): drawn before the bitmap, same "shadow first, own
       // content on top" ordering Draw_Form uses. A no-op when the element does not declare box-shadow, so this
       // is zero behaviour change for every existing image layout.
-      UI_SkinCanvas_DrawElementBoxShadow(canvas, element, x_position, y_position);
+      DrawElementBoxShadow(canvas, element, x_position, y_position);
 
       canvas->PutBitmapAlpha(x_position ,
                              y_position - element_image->GetImage()->GetHeight(),
@@ -3436,7 +3458,7 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
               if(element_form->HasAnyPerCornerRadius())
                 {
                   GRP2DPATH shpath;
-                  UI_SkinCanvas_AppendRoundRectPathPerCorner(shpath, sh_minx, sh_miny, sh_maxx, sh_maxy, rTL, rTR, rBR, rBL);
+                  AppendRoundRectPathPerCorner(shpath, sh_minx, sh_miny, sh_maxx, sh_maxy, rTL, rTR, rBR, rBL);
                   canvas->Path(shpath, true);
                 }
                else if(element_form->GetRoundRect())
@@ -3515,7 +3537,7 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
           double rBL = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BL);
 
           GRP2DPATH path;
-          UI_SkinCanvas_AppendRoundRectPathPerCorner(path, vr_minx, vr_miny, vr_maxx, vr_maxy, rTL, rTR, rBR, rBL);
+          AppendRoundRectPathPerCorner(path, vr_minx, vr_miny, vr_maxx, vr_maxy, rTL, rTR, rBR, rBL);
 
           canvas->Path(path, true);       // fill
           canvas->Path(path, false);      // stroke (transparent line colour when border-width == 0)
@@ -3695,7 +3717,7 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
           // TRACK rect (element_progressrect) -- that sub-element is what UI_SkinCanvas_ProgressBar_DrawRect
           // below actually paints, so the shadow has to match its rect and its radius (including the roundcap
           // override just above) to line up. This is deliberately NOT a call to the generic
-          // UI_SkinCanvas_DrawElementBoxShadow helper: that helper anchors on the ELEMENT's own boundary and
+          // DrawElementBoxShadow helper: that helper anchors on the ELEMENT's own boundary and
           // supports per-corner radii, neither of which is what gets drawn here -- the visible track is a
           // different rect (a sub-element) with a single uniform radius (roundradius above), never per-corner.
           // Reuses UI_SkinCanvas_ProgressBar_DrawRect itself for the hard-shadow (no blur) fallback so the

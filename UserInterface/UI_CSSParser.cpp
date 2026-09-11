@@ -37,6 +37,7 @@
 
 #include "XFileTXT.h"
 #include "XFactory.h"
+#include "XTrace.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -81,16 +82,34 @@ UI_CSSPARSER::~UI_CSSPARSER()
 *
 * @fn         bool UI_CSSPARSER::ParseFile(XPATH& pathfile, UI_STYLESHEET& out)
 * @brief      Read a .css file from disk and parse it into `out`.
+* @note       Step 5 ("una sola hoja por layout"): this is also the entry point @import recurses through, so
+*             it (a) guards against cycles -- a file already open somewhere up this call's @import chain is
+*             skipped instead of recursed into again -- and (b) tracks `currentfiledir` (this file's own
+*             directory) around the ParseText() call, restoring the caller's value afterwards, so a NESTED
+*             @import inside an imported file resolves against ITS OWN directory rather than the top-level
+*             layout's. Both only matter to ResolveAndParseImport(); a normal, import-free stylesheet behaves
+*             exactly as before.
 * @ingroup    USERINTERFACE
 *
 * @param[in]  pathfile : Stylesheet file to load.
 * @param[out] out : Target stylesheet; parsed rules are appended.
 *
-* @return     bool : true if the file was opened and read; false if it could not be opened.
+* @return     bool : true if the file was opened and read; false if it could not be opened, or if it is
+*             already open along the current @import chain (cycle).
 *
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_CSSPARSER::ParseFile(XPATH& pathfile, UI_STYLESHEET& out)
 {
+  for(XDWORD c=0; c<importstack.GetSize(); c++)
+    {
+      XPATH* openfile = importstack.Get(c);
+      if(openfile && (*openfile) == pathfile)
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] @import cycle detected: [%s] is already open, skipping"), pathfile.Get());
+          return false;
+        }
+    }
+
   XFILETXT* file = GEN_NEW XFILETXT();
   if(!file) return false;
 
@@ -100,10 +119,38 @@ bool UI_CSSPARSER::ParseFile(XPATH& pathfile, UI_STYLESHEET& out)
     {
       if(file->ReadAllFile())
         {
+          // Phase 2 ("diagnóstico con línea real de fichero"): preserve a plain '\n' between source lines
+          // instead of the previous no-separator flatten (GetAllInOneLine()'s default, XFILETXTTYPELF_UNKNOWN).
+          // Every scanning loop in this parser already treats '\r'/'\n' as ordinary skippable whitespace
+          // (SkipWhitespaceAndComments(), the trim passes in ParseCompoundSelector()/ReadDeclarationBlock()), so
+          // this changes nothing about what parses -- it only means an offset into `alltext` can now be turned
+          // back into a real (line, column) pair via ResolveLineColumn() instead of being a meaningless index
+          // into a one-line soup.
           XSTRING alltext;
-          file->GetAllInOneLine(alltext);
+          file->GetAllInOneLine(alltext, XFILETXTTYPELF_0A);
+
+          XPATH* marker = GEN_NEW XPATH(pathfile);
+          if(marker) importstack.Add(marker);
+
+          XPATH   savedcurrentfiledir = currentfiledir;
+          XSTRING drive;
+          XSTRING dir;
+
+          pathfile.GetDrive(drive);
+          pathfile.GetPath(dir);
+
+          currentfiledir  = drive;
+          currentfiledir += dir;
 
           status = ParseText(alltext, out);
+
+          currentfiledir = savedcurrentfiledir;
+
+          if(marker)
+            {
+              importstack.DeleteLast();
+              GEN_DELETE marker;
+            }
         }
 
       file->Close();
@@ -120,6 +167,11 @@ bool UI_CSSPARSER::ParseFile(XPATH& pathfile, UI_STYLESHEET& out)
 * @fn         bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
 * @brief      Parse an in-memory CSS text buffer into `out`. Rules with syntax errors are skipped via
 *             SkipToNextRule() and do not abort the parse of the remaining input.
+* @note       Step 11: every discard (malformed rule, empty rule, malformed declaration -- see
+*             ReadDeclarationBlock()) is reported through XTRACE_PRINTCOLOR(). This costs nothing when GEN is
+*             built without XTRACE_ACTIVE (the macro compiles to a no-op, see XTrace.h) and is otherwise
+*             filtered exactly like every other GEN trace, through the app's own ini ([log] activesectionsID /
+*             levelmask) or target selection -- no separate on/off switch was added for this.
 * @ingroup    USERINTERFACE
 *
 * @param[in]  text : CSS source text.
@@ -130,20 +182,72 @@ bool UI_CSSPARSER::ParseFile(XPATH& pathfile, UI_STYLESHEET& out)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
 {
-  int pos = 0;
-  int len = (int)text.GetSize();
+  int pos        = 0;
+  int len        = (int)text.GetSize();
+  int ruleindex  = 0;   // 1-based, counts every rule ATTEMPT (kept or discarded) -- Step 11 debug trace only.
 
   while(pos < len)
     {
       SkipWhitespaceAndComments(text, pos);
       if(pos >= len) break;
 
+      // Step 5: "@import "file.css";" (ParseFile()-driven parses only -- see ResolveAndParseImport()). Handled
+      // BEFORE the generic rule path on purpose: an at-rule has no '{' of its own, so ReadSelectorList() would
+      // otherwise happily scan straight through it looking for one, folding it and the NEXT real rule's
+      // selector into a single corrupt token. Any other at-rule (@media, @font-face, ...) is outside GEN's CSS
+      // subset and is discarded the same way a malformed rule is, rather than being fed to the selector parser.
+      if(text[pos] == __C('@'))
+        {
+          int     atrulestart = pos;
+          int     kwend       = pos + 7; if(kwend > len) kwend = len;
+          XSTRING atkeyword;
+          text.Copy(pos, kwend, atkeyword);
+
+          if(!atkeyword.Compare(__L("@import"), true))
+            {
+              pos += 7;   // length of "@import"
+
+              XSTRING importurl;
+              if(ReadImportStatement(text, pos, importurl))
+                {
+                  ResolveAndParseImport(importurl, out);   // failures are traced inside; never fatal here
+                }
+               else
+                {
+                  int line, col;
+                  ResolveLineColumn(text, atrulestart, line, col);
+                  XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] malformed @import discarded (line %d, column %d)"), line, col);
+                  SkipToNextRule(text, pos);
+                }
+            }
+           else
+            {
+              int line, col;
+              ResolveLineColumn(text, atrulestart, line, col);
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] unsupported at-rule ignored (line %d, column %d)"), line, col);
+              SkipToNextRule(text, pos);
+            }
+
+          continue;
+        }
+
+      int rulestartcolumn = pos;
+      ruleindex++;
+
       UI_CSSRULE* rule = GEN_NEW UI_CSSRULE();
       if(!rule) return false;
 
-      if(!ReadSelectorList(text, pos, rule) || !ReadDeclarationBlock(text, pos, rule))
+      if(!ReadSelectorList(text, pos, rule) || !ReadDeclarationBlock(text, pos, rule->GetDeclarations()))
         {
-          // Malformed rule: throw it away and try to resync on the next '}'.
+          // Malformed rule: throw it away and try to resync on the next '}'. Step 11 gave this a flat character
+          // column (ParseFile() used to flatten the whole file into one line with no separators, so a real line
+          // number was not recoverable); Phase 2 keeps real '\n' separators through the flatten (see
+          // ParseFile()), so ResolveLineColumn() now turns both endpoints into a real (line, column) pair.
+          int startline, startcol, endline, endcol;
+          ResolveLineColumn(text, rulestartcolumn, startline, startcol);
+          ResolveLineColumn(text, pos,              endline,   endcol);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d discarded: malformed selector or declaration block (started at line %d, column %d; gave up at line %d, column %d)"), ruleindex, startline, startcol, endline, endcol);
+
           GEN_DELETE rule;
           SkipToNextRule(text, pos);
           continue;
@@ -153,6 +257,10 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
       // useful, and keeping it would just waste cycles during Resolve().
       if(rule->GetSelectors().GetSize() == 0 || rule->GetDeclarations().GetProperties()->GetSize() == 0)
         {
+          int line, col;
+          ResolveLineColumn(text, rulestartcolumn, line, col);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d dropped: parsed with %d selector(s) and %d declaration(s) (started at line %d, column %d)"), ruleindex, (int)rule->GetSelectors().GetSize(), (int)rule->GetDeclarations().GetProperties()->GetSize(), line, col);
+
           GEN_DELETE rule;
           continue;
         }
@@ -189,10 +297,92 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
       out.Rules_Add(rule);
     }
 
-  // Resolve variable references now, so cascade at load time sees fully-expanded values.
-  out.ExpandVariables();
+  // Resolve variable references now -- but ONLY if this ParseText() call is the outermost one, i.e. not itself
+  // running because ResolveAndParseImport() recursed into ParseFile() for an "@import"ed file (importdepth > 0
+  // in that case). Phase 2 fix for the residual variable-merge-order case: expanding here unconditionally, as
+  // before, meant an IMPORTED file's var() references got substituted (and, on a miss, permanently replaced by
+  // their fallback or by nothing at all -- SubstituteVars() always consumes the token) using whatever partial
+  // variable table existed at that point in the recursion, which is BEFORE the importING file has had a chance
+  // to parse its own ":root" block if that block is written after the "@import" line -- exactly the common
+  // "@import theme first, override one variable after it" pattern. Deferring expansion to the single outermost
+  // call means it always runs after every import in the chain (and the importer's own full ":root") has already
+  // contributed to `out.Variables()`, so overrides declared after the import line are honoured, matching real
+  // CSS "as if written in place" semantics. A ParseText() call made directly (no ParseFile() involved at all,
+  // e.g. by a test or any future direct caller) has importdepth == 0 by construction and keeps expanding
+  // immediately, exactly as before.
+  if(importdepth == 0) out.ExpandVariables();
 
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ParseInlineDeclarations(XSTRING& text, UI_STYLE& out)
+* @brief      Step 6 ("sin overrides puntuales por elemento"): parse a bare "prop: value; prop: value" list --
+*             no selector, no surrounding "{ }" of its own -- into `out`. This is what an XML "style=" attribute
+*             looks like; wrapping it in a synthetic "{ ... }" lets ReadDeclarationBlock() parse it unchanged,
+*             so it accepts exactly the same grammar (comments, whitespace, trimming) as a real rule body.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  text : Raw declaration-list text, e.g. "color: red; padding: 4".
+* @param[out] out : Style bag the declarations are written into.
+*
+* @return     bool : true if the block parsed to completion; false on malformed input (missing/mismatched
+*             braces are impossible here since they are synthetic, so this mirrors ReadDeclarationBlock()'s own
+*             EOF-before-'}' failure, which cannot happen with a well-formed wrapper -- kept for symmetry and
+*             to surface a NULL member misuse defensively).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ParseInlineDeclarations(XSTRING& text, UI_STYLE& out)
+{
+  XSTRING wrapped = __L("{");
+  wrapped += text;
+  wrapped += __L("}");
+
+  int pos = 0;
+  return ReadDeclarationBlock(wrapped, pos, out);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_CSSPARSER::ResolveLineColumn(XSTRING& text, int offset, int& outline, int& outcolumn)
+* @brief      Phase 2 ("diagnóstico con línea real de fichero"): turn a raw character offset into `text` into a
+*             1-based (line, column-within-line) pair, by counting '\n' occurrences up to `offset`. Relies on
+*             `text` actually containing real line separators -- true for anything ParseFile() flattened (see
+*             its GetAllInOneLine() call), and harmlessly degenerates to "line 1" for a caller-built buffer with
+*             no embedded '\n' at all (e.g. ParseInlineDeclarations()'s synthetic wrapper), which is correct: a
+*             single-line buffer genuinely has no line 2 to report.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  text : Source text the offset was taken from.
+* @param[in]  offset : Raw character offset, clamped into [0, text length] before use.
+* @param[out] outline : 1-based line number.
+* @param[out] outcolumn : 1-based column within that line.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_CSSPARSER::ResolveLineColumn(XSTRING& text, int offset, int& outline, int& outcolumn)
+{
+  int len = (int)text.GetSize();
+
+  if(offset < 0)   offset = 0;
+  if(offset > len) offset = len;
+
+  int line      = 1;
+  int linestart = 0;
+
+  for(int c=0; c<offset; c++)
+    {
+      if(text[c] == __C('\n'))
+        {
+          line++;
+          linestart = c + 1;
+        }
+    }
+
+  outline   = line;
+  outcolumn = (offset - linestart) + 1;
 }
 
 
@@ -244,6 +434,168 @@ void UI_CSSPARSER::SkipWhitespaceAndComments(XSTRING& text, int& pos)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool UI_CSSPARSER::ReadIdentifier(XSTRING& text, int& pos, XSTRING& outident)
+* @brief      Phase 2 ("lexer con tokens/strings/escapes reales"): read one identifier-like token starting at
+*             `pos` -- a selector's type/id/class/pseudo fragment. Consumes everything up to (but not including)
+*             an unescaped '#', '.' or ':', or end-of-text. "\X" decodes to the literal character X (dropping
+*             the backslash) and never counts as a delimiter, even when X is itself '#'/'.'/':' -- this is what
+*             lets e.g. ".foo\.bar" name a class literally containing a dot. See the class banner for why only
+*             single-character escapes are supported.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]     text : Source text (typically a single already-bounded compound-selector token).
+* @param[in,out] pos : Cursor; advanced past the consumed identifier.
+* @param[out]    outident : Decoded identifier text; emptied first.
+*
+* @return     bool : true if at least one character was consumed; false if the identifier is empty (cursor
+*             unchanged in that case, `pos` still sitting on the delimiter or at end-of-text).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ReadIdentifier(XSTRING& text, int& pos, XSTRING& outident)
+{
+  int len = (int)text.GetSize();
+
+  outident.Empty();
+
+  bool any = false;
+
+  while(pos < len)
+    {
+      XCHAR ch = text[pos];
+
+      if(ch == __C('\\'))
+        {
+          pos++;
+          if(pos < len)
+            {
+              outident += text[pos];
+              pos++;
+              any = true;
+            }
+          continue;
+        }
+
+      if(ch == __C('#') || ch == __C('.') || ch == __C(':')) break;
+
+      outident += ch;
+      pos++;
+      any = true;
+    }
+
+  return any;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ReadStringLiteral(XSTRING& text, int& pos, XSTRING& outstring)
+* @brief      Phase 2 ("lexer con tokens/strings/escapes reales"): read one quoted string token ('...' or "...")
+*             starting at `pos`, which MUST already be positioned on the opening quote. "\X" decodes to the
+*             literal character X (dropping the backslash), including an escaped quote ("\"") that would
+*             otherwise terminate the string early.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]     text : Source text.
+* @param[in,out] pos : Cursor; positioned on the opening quote on entry, advanced past the closing quote on
+*                success. Left at end-of-text on failure (unterminated string).
+* @param[out]    outstring : Decoded string contents (quotes stripped, escapes resolved); emptied first.
+*
+* @return     bool : true if a matching closing quote was found; false if `pos` was not on a quote, or the
+*             string runs to end-of-text with no closing quote (unterminated -- a hard failure, same as before).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ReadStringLiteral(XSTRING& text, int& pos, XSTRING& outstring)
+{
+  int len = (int)text.GetSize();
+
+  outstring.Empty();
+
+  if(pos >= len) return false;
+
+  XCHAR quote = text[pos];
+  if(quote != __C('"') && quote != __C('\'')) return false;
+
+  pos++;
+
+  while(pos < len)
+    {
+      XCHAR ch = text[pos];
+
+      if(ch == quote)
+        {
+          pos++;
+          return true;
+        }
+
+      if(ch == __C('\\'))
+        {
+          pos++;
+          if(pos < len)
+            {
+              outstring += text[pos];
+              pos++;
+            }
+          continue;
+        }
+
+      outstring += ch;
+      pos++;
+    }
+
+  return false;   // unterminated: pos left at end-of-text, outstring holds whatever was read so far (discarded by every caller on false)
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_CSSPARSER::SkipStringLiteral(XSTRING& text, int& pos)
+* @brief      Phase 2 ("lexer con tokens/strings/escapes reales"): same scan as ReadStringLiteral() but without
+*             building the decoded text, for callers that only need to jump an intact quoted span (a string
+*             embedded in a declaration value, or inside malformed content being resynced past) without caring
+*             what it says -- so a ';'/'}'/','/'{' INSIDE the quotes is never mistaken for a real delimiter.
+* @note       INTERNAL. A no-op if `pos` is not positioned on a quote character.
+* @ingroup    USERINTERFACE
+*
+* @param[in]     text : Source text.
+* @param[in,out] pos : Cursor; positioned on the opening quote on entry, advanced past the closing quote (or to
+*                end-of-text, if unterminated) on return.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_CSSPARSER::SkipStringLiteral(XSTRING& text, int& pos)
+{
+  int len = (int)text.GetSize();
+
+  if(pos >= len) return;
+
+  XCHAR quote = text[pos];
+  if(quote != __C('"') && quote != __C('\'')) return;
+
+  pos++;
+
+  while(pos < len)
+    {
+      XCHAR ch = text[pos];
+
+      if(ch == quote) { pos++; return; }
+
+      if(ch == __C('\\'))
+        {
+          pos++;
+          if(pos < len) pos++;
+          continue;
+        }
+
+      pos++;
+    }
+
+  // Unterminated: pos left at end-of-text, matching ReadStringLiteral()'s failure path.
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_CSSPARSER::ReadSelectorList(XSTRING& text, int& pos, UI_CSSRULE* rule)
 * @brief      Read the comma-separated selector list up to (but not including) '{'. Each compound selector is
 *             parsed via ParseCompoundSelector() and added to the rule.
@@ -268,9 +620,17 @@ bool UI_CSSPARSER::ReadSelectorList(XSTRING& text, int& pos, UI_CSSRULE* rule)
     {
       XCHAR ch = text[pos];
 
+      // Phase 2: a quoted span (not part of GEN's supported selector grammar, but defensive against a stray
+      // ',' or '{' inside one) is skipped atomically so it can never be mistaken for a selector-list delimiter.
+      if(ch == __C('"') || ch == __C('\''))
+        {
+          SkipStringLiteral(text, pos);
+          continue;
+        }
+
       if(ch == __C(',') || ch == __C('{'))
         {
-          UI_CSSSELECTOR* sel = ParseCompoundSelector(text, start, pos);
+          UI_CSSSELECTOR* sel = ParseCompoundSelectorSequence(text, start, pos);
           if(sel) rule->GetSelectors().Add(sel);
 
           if(ch == __C('{')) return true;
@@ -338,46 +698,39 @@ UI_CSSSELECTOR* UI_CSSPARSER::ParseCompoundSelector(XSTRING& text, int start, in
       return sel;
     }
 
-  // Type prefix (optional): identifier characters up to '#', '.' or ':'.
-  int k = i;
-  while(k < j)
-    {
-      XCHAR ch = token[k];
-      if(ch == __C('#') || ch == __C('.') || ch == __C(':')) break;
-      k++;
-    }
+  // Phase 2 ("lexer con tokens/strings/escapes reales"): work over the trimmed [i, j) span as its own bounded
+  // string so ReadIdentifier()'s cursor never wanders past it, then tokenize via ReadIdentifier() instead of
+  // the previous hand-rolled "scan to the next '#'/'.'/':' " loop -- same delimiters, same "type is optional,
+  // fragments in any order" grammar, now with backslash-escape support (".foo\.bar" is a class literally named
+  // "foo.bar") shared with every other identifier read in this parser.
+  XSTRING trimmed;
+  token.Copy(i, j, trimmed);
 
-  if(k > i)
+  int tpos  = 0;
+  int tsize = (int)trimmed.GetSize();
+
+  // Type prefix (optional): identifier up to '#', '.' or ':'.
+  XSTRING typestr;
+  if(ReadIdentifier(trimmed, tpos, typestr))
     {
-      XSTRING typestr;
-      token.Copy(i, k, typestr);
       sel->GetType().Set(typestr);
     }
 
   // Then a sequence of ("#" ident), ("." ident) and (":" ident) fragments, in any order.
-  while(k < j)
+  while(tpos < tsize)
     {
-      XCHAR marker = token[k];
+      XCHAR marker = trimmed[tpos];
       if(marker != __C('#') && marker != __C('.') && marker != __C(':'))
         {
           // Unknown character in selector: bail out but keep whatever we already parsed.
           break;
         }
 
-      k++;
-      int fragstart = k;
-      while(k < j)
-        {
-          XCHAR ch = token[k];
-          if(ch == __C('#') || ch == __C('.') || ch == __C(':')) break;
-          k++;
-        }
+      tpos++;
 
-      if(k > fragstart)
+      XSTRING frag;
+      if(ReadIdentifier(trimmed, tpos, frag))
         {
-          XSTRING frag;
-          token.Copy(fragstart, k, frag);
-
           if(marker == __C('#'))
             {
               // If two ids are supplied on the same compound selector, the last one wins: no meaningful
@@ -390,10 +743,13 @@ UI_CSSSELECTOR* UI_CSSPARSER::ParseCompoundSelector(XSTRING& text, int start, in
             }
            else /* marker == ':' */
             {
-              // Pseudo-class. ":root" is the only one honoured in this step: the parser lifts its declarations
-              // into the stylesheet's variable table when the rule is finalized. Every other pseudo-class is
-              // stored on the selector so authored rules parse cleanly, contributes 10 to specificity, and is
-              // rejected by Match() -- future state-aware cascade will be wired here.
+              // Pseudo-class. ":root" is special-cased here at parse time: the parser lifts its declarations
+              // into the stylesheet's variable table when the rule is finalized instead of storing it as a
+              // regular pseudo. Every other pseudo-class (including the live state ones -- ":preselect"/
+              // ":hover", ":selected", ":active", ":disabled" -- and any structural one GEN does not support,
+              // e.g. ":first-child") is stored on the selector as authored, so it parses cleanly and
+              // contributes 10 to specificity; whether it ever MATCHES an element is entirely Match()'s call
+              // at Resolve()/ReapplyStyleVisual() time, driven by UI_ELEMENT::GetActivePseudos().
               sel->AddPseudo(frag.Get());
             }
         }
@@ -406,28 +762,140 @@ UI_CSSSELECTOR* UI_CSSPARSER::ParseCompoundSelector(XSTRING& text, int start, in
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_CSSRULE* rule)
-* @brief      Parse the "{ key : value ; ... }" block into rule->GetDeclarations().
-* @note       INTERNAL
+* @fn         UI_CSSSELECTOR* UI_CSSPARSER::ParseCompoundSelectorSequence(XSTRING& text, int start, int end)
+* @brief      Phase 2 ("combinadores descendiente/hijo"): split [start, end) -- one comma-separated selector-list
+*             entry -- on top-level combinators (whitespace = descendant, '>' = child) and build the resulting
+*             UI_CSSSELECTOR: the RIGHTMOST span is parsed as the subject (via the unchanged
+*             ParseCompoundSelector()), every earlier span becomes an ancestor step attached closest-first. A
+*             single-span entry (the overwhelming common case, and every selector that existed before this
+*             phase) is a pure pass-through to ParseCompoundSelector() -- identical object, identical behaviour.
+* @note       INTERNAL. Quoted spans are skipped atomically (SkipStringLiteral()) while splitting, consistent
+*             with every other scan in this parser -- not part of GEN's selector grammar, but defensive.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  text : Source text.
+* @param[in]  start : Start offset (inclusive).
+* @param[in]  end : End offset (exclusive).
+*
+* @return     UI_CSSSELECTOR* : Owned pointer (subject, with any earlier spans attached as ancestor steps), or
+*             NULL if [start, end) contains no compound at all.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_CSSSELECTOR* UI_CSSPARSER::ParseCompoundSelectorSequence(XSTRING& text, int start, int end)
+{
+  XVECTOR<int>                    spanstarts;
+  XVECTOR<int>                    spanends;
+  XVECTOR<UI_CSSCOMBINATORTYPE>   combinatorafter;   // combinatorafter[c] ties span c to span c+1; last entry unused
+
+  int pos = start;
+
+  while(pos < end)
+    {
+      // Skip whitespace between compounds.
+      while(pos < end && (text[pos]==__C(' ')||text[pos]==__C('\t')||text[pos]==__C('\r')||text[pos]==__C('\n'))) pos++;
+      if(pos >= end) break;
+
+      if(text[pos] == __C('>'))
+        {
+          // A '>' with no compound before it in this range (leading '>', or two combinators in a row): bail
+          // out of splitting and keep whatever spans were already found -- same "unknown syntax: keep what we
+          // already parsed" spirit as ParseCompoundSelector()'s own recovery.
+          break;
+        }
+
+      int tokenstart = pos;
+
+      while(pos < end)
+        {
+          XCHAR ch = text[pos];
+
+          if(ch == __C('"') || ch == __C('\''))
+            {
+              SkipStringLiteral(text, pos);
+              if(pos > end) pos = end;
+              continue;
+            }
+
+          if(ch == __C('>')) break;
+          if(ch == __C(' ') || ch == __C('\t') || ch == __C('\r') || ch == __C('\n')) break;
+
+          pos++;
+        }
+
+      int tokenend = pos;
+      if(tokenend <= tokenstart) break;
+
+      spanstarts.Add(tokenstart);
+      spanends.Add(tokenend);
+
+      // Decide the combinator between THIS span and whatever comes next (meaningful only if another span
+      // follows; harmless/never read otherwise).
+      while(pos < end && (text[pos]==__C(' ')||text[pos]==__C('\t')||text[pos]==__C('\r')||text[pos]==__C('\n'))) pos++;
+
+      UI_CSSCOMBINATORTYPE combinator = UI_CSSCOMBINATOR_DESCENDANT;
+
+      if(pos < end && text[pos] == __C('>'))
+        {
+          combinator = UI_CSSCOMBINATOR_CHILD;
+          pos++;
+          while(pos < end && (text[pos]==__C(' ')||text[pos]==__C('\t')||text[pos]==__C('\r')||text[pos]==__C('\n'))) pos++;
+        }
+
+      combinatorafter.Add(combinator);
+    }
+
+  int spancount = (int)spanstarts.GetSize();
+  if(spancount == 0) return NULL;
+
+  // Fast path: no combinator at all -- pass straight through to ParseCompoundSelector() so a combinator-free
+  // selector produces EXACTLY the object it always did (same [start,end) trimming behaviour and all), not a
+  // one-ancestor-step-then-degenerate-subject rebuild of the same thing.
+  if(spancount == 1)
+    {
+      return ParseCompoundSelector(text, spanstarts.Get(0), spanends.Get(0));
+    }
+
+  UI_CSSSELECTOR* subject = ParseCompoundSelector(text, spanstarts.Get(spancount - 1), spanends.Get(spancount - 1));
+  if(!subject) return NULL;
+
+  // Attach every earlier span as an ancestor step, closest-ancestor-first: span[spancount-2] is immediately to
+  // the subject's left (step 0), span[spancount-3] is next (step 1), and so on down to span[0].
+  for(int c=spancount-2; c>=0; c--)
+    {
+      UI_CSSSELECTOR* compound = ParseCompoundSelector(text, spanstarts.Get(c), spanends.Get(c));
+      if(compound) subject->AddAncestorStep(compound, combinatorafter.Get(c));
+    }
+
+  // Ancestor compounds contribute to specificity too (see RecomputeSpecificity()'s own note) -- recompute now
+  // that they're all attached.
+  subject->RecomputeSpecificity();
+
+  return subject;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_STYLE& decls)
+* @brief      Parse the "{ key : value ; ... }" block into `decls`.
+* @note       INTERNAL. Takes the destination bag directly (rather than a UI_CSSRULE*) so it can populate either
+*             a rule's own declarations (see ParseText()) or a standalone bag with no rule/selector around it
+*             at all (see ParseInlineDeclarations(), Step 6).
 * @ingroup    USERINTERFACE
 *
 * @param[in]     text : Source text.
 * @param[in,out] pos : Cursor; expected at '{' on entry, positioned right after '}' on success.
-* @param[in,out] rule : Rule to populate.
+* @param[in,out] decls : Style bag to populate.
 *
 * @return     bool : true on success; false on EOF before '}'.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_CSSRULE* rule)
+bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_STYLE& decls)
 {
-  if(!rule) return false;
-
   int len = (int)text.GetSize();
 
   if(pos >= len || text[pos] != __C('{')) return false;
   pos++;
-
-  UI_STYLE& decls = rule->GetDeclarations();
 
   while(pos < len)
     {
@@ -441,17 +909,33 @@ bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_CSSRULE* rul
         }
 
       // --- Key : identifier up to ':' -----------------------------------------------------------------------------
+      // Phase 2: quoted spans are skipped atomically (SkipStringLiteral()) before ever testing a byte against
+      // ':'/';'/'}' , so a delimiter INSIDE a quoted string can never be mistaken for the real one. Not expected
+      // in a well-formed key, but keeps this scan consistent with the value scan just below.
       int keystart = pos;
       while(pos < len)
         {
           XCHAR ch = text[pos];
+
+          if(ch == __C('"') || ch == __C('\''))
+            {
+              SkipStringLiteral(text, pos);
+              continue;
+            }
+
           if(ch == __C(':') || ch == __C(';') || ch == __C('}')) break;
           pos++;
         }
 
       if(pos >= len || text[pos] != __C(':'))
         {
-          // Malformed declaration: skip to next ';' or '}' and try to keep parsing this block.
+          // Malformed declaration: skip to next ';' or '}' and try to keep parsing this block. Step 11: trace
+          // it -- this is the one discard SkipToNextRule() never sees, since the enclosing rule is otherwise
+          // fine and keeps being parsed. Phase 2: real (line, column), not a flat offset -- see ResolveLineColumn().
+          int line, col;
+          ResolveLineColumn(text, keystart, line, col);
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] declaration discarded at line %d, column %d: no ':' found before ';'/'}'"), line, col);
+
           while(pos < len && text[pos] != __C(';') && text[pos] != __C('}')) pos++;
           if(pos < len && text[pos] == __C(';')) pos++;
           continue;
@@ -464,11 +948,23 @@ bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_CSSRULE* rul
       pos++;  // past ':'
 
       // --- Value : everything up to ';' or '}' --------------------------------------------------------------------
+      // Phase 2 ("lexer con tokens/strings/escapes reales"): the real correctness fix in this whole increment --
+      // a quoted span is skipped atomically (SkipStringLiteral()) BEFORE its bytes are ever tested against
+      // ';'/'}' , so a value like 'font-family: "A; B";' keeps its embedded semicolon instead of being cut short
+      // at it. The value is still stored verbatim (quotes included) -- see the class banner's "Value semantics"
+      // note; only where the value's END is found has changed, not what ends up in it.
       SkipWhitespaceAndComments(text, pos);
       int valstart = pos;
       while(pos < len)
         {
           XCHAR ch = text[pos];
+
+          if(ch == __C('"') || ch == __C('\''))
+            {
+              SkipStringLiteral(text, pos);
+              continue;
+            }
+
           if(ch == __C(';') || ch == __C('}')) break;
           pos++;
         }
@@ -501,9 +997,11 @@ bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_CSSRULE* rul
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         void UI_CSSPARSER::SkipToNextRule(XSTRING& text, int& pos)
-* @brief      Error-recovery: consume everything up to and including the next '}'. String literals and comments
-*             are not tracked here; the parser doesn't accept either inside declarations, so this is safe.
-* @note       INTERNAL
+* @brief      Error-recovery: consume everything up to and including the next '}'.
+* @note       INTERNAL. Phase 2 ("lexer con tokens/strings/escapes reales"): a quoted span inside the malformed
+*             content being resynced past is now skipped atomically (SkipStringLiteral()), so a '}' INSIDE a
+*             string literal can no longer be mistaken for the real rule terminator and end the resync early.
+*             The recovery strategy itself -- resync on the next (now: unquoted) '}' -- is unchanged.
 * @ingroup    USERINTERFACE
 *
 * @param[in]     text : Source text.
@@ -516,9 +1014,142 @@ void UI_CSSPARSER::SkipToNextRule(XSTRING& text, int& pos)
 
   while(pos < len)
     {
-      XCHAR ch = text[pos++];
+      XCHAR ch = text[pos];
+
+      if(ch == __C('"') || ch == __C('\''))
+        {
+          SkipStringLiteral(text, pos);
+          continue;
+        }
+
+      pos++;
       if(ch == __C('}')) return;
     }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ReadImportStatement(XSTRING& text, int& pos, XSTRING& outurl)
+* @brief      Step 5: parse the body of an "@import" at-rule -- everything AFTER the "@import" keyword itself
+*             (the caller has already consumed that). Accepts a quoted string ("theme.css" / 'theme.css'),
+*             optionally wrapped in CSS's "url(...)" form (quoted or bare), terminated by ';'. Nothing else in
+*             real CSS's @import grammar (media queries and the like) is supported -- GEN's layouts don't need
+*             them, and a rule this small doesn't need to sniff for them either.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]     text : Source text.
+* @param[in,out] pos : Cursor; expected right after the "@import" keyword on entry, positioned right after the
+*                terminating ';' (or at EOF, if none was found) on return.
+* @param[out]    outurl : The quoted/bare URL text, verbatim (not yet resolved to a filesystem path).
+*
+* @return     bool : true if a non-empty URL was found; false otherwise (outurl is left empty).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ReadImportStatement(XSTRING& text, int& pos, XSTRING& outurl)
+{
+  int len = (int)text.GetSize();
+
+  outurl.Empty();
+
+  SkipWhitespaceAndComments(text, pos);
+
+  bool sawurlwrapper = false;
+
+  if((pos + 3) <= len)
+    {
+      XSTRING maybeurl;
+      text.Copy(pos, pos + 3, maybeurl);
+      if(!maybeurl.Compare(__L("url"), true))
+        {
+          sawurlwrapper = true;
+          pos += 3;
+          SkipWhitespaceAndComments(text, pos);
+          if(pos < len && text[pos] == __C('(')) pos++;
+          SkipWhitespaceAndComments(text, pos);
+        }
+    }
+
+  if(pos >= len) return false;
+
+  XCHAR quote = text[pos];
+
+  if(quote == __C('"') || quote == __C('\''))
+    {
+      // Phase 2: reuse the shared string-literal reader instead of a duplicate ad hoc quote scan -- this also
+      // gives the @import URL escape support ("\"") for free, consistent with every other quoted/identifier
+      // read in this parser. Same "unterminated string: bail out, let the caller resync" failure behaviour.
+      if(!ReadStringLiteral(text, pos, outurl)) return false;
+    }
+   else
+    {
+      // Bare token, only meaningful inside "url(...)" -- e.g. url(theme.css). Read up to ')' or ';'.
+      int start = pos;
+      while(pos < len && text[pos] != __C(')') && text[pos] != __C(';')) pos++;
+      text.Copy(start, pos, outurl);
+      outurl.DeleteNoCharacters(__L(" \t\r\n"));
+    }
+
+  SkipWhitespaceAndComments(text, pos);
+  if(sawurlwrapper && pos < len && text[pos] == __C(')'))
+    {
+      pos++;
+      SkipWhitespaceAndComments(text, pos);
+    }
+
+  while(pos < len && text[pos] != __C(';')) pos++;
+  if(pos < len && text[pos] == __C(';')) pos++;
+
+  return !outurl.IsEmpty();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ResolveAndParseImport(XSTRING& importurl, UI_STYLESHEET& out)
+* @brief      Step 5: resolve an @import URL against the directory of the file currently being parsed
+*             (`currentfiledir`, maintained by ParseFile()) and merge the target file's rules and ":root"
+*             variables into `out` by recursing into ParseFile() -- i.e. imported content behaves as if it had
+*             been written in place of the "@import" line, matching real CSS semantics.
+* @note       A no-op (traced, never fatal to the importING file) when: `currentfiledir` is empty (ParseText()
+*             was called directly on an in-memory buffer rather than through ParseFile(), so there is no
+*             directory to resolve a RELATIVE url against), the target file is missing or empty, or the target
+*             is already open along this @import chain (cycle -- see ParseFile()).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  importurl : Raw URL text from ReadImportStatement(), e.g. "theme.css".
+* @param[out] out : Target stylesheet; the imported file's rules/variables are appended into it.
+*
+* @return     bool : true if the imported file was found, parsed, and merged; false otherwise.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ResolveAndParseImport(XSTRING& importurl, UI_STYLESHEET& out)
+{
+  if(importurl.IsEmpty()) return false;
+
+  if(currentfiledir.IsEmpty())
+    {
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] @import [%s] ignored: no file context (stylesheet text was parsed directly, not loaded from a file)"), importurl.Get());
+      return false;
+    }
+
+  XPATH importpath;
+  importpath  = currentfiledir;
+  importpath += importurl;
+
+  // Phase 2: mark "we are now inside an @import recursion" for the duration of this nested ParseFile()/
+  // ParseText() call, so ITS OWN ParseText() knows not to expand variables yet -- see ParseText()'s note.
+  importdepth++;
+  bool status = ParseFile(importpath, out);
+  importdepth--;
+
+  if(status)
+    XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[CSS Parse] @import [%s] merged"), importpath.Get());
+   else
+    XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] @import [%s] not applied (missing, empty, or cyclic)"), importpath.Get());
+
+  return status;
 }
 
 
@@ -532,5 +1163,13 @@ void UI_CSSPARSER::SkipToNextRule(XSTRING& text, int& pos)
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_CSSPARSER::Clean()
 {
+  // Defensive only: importstack is pushed/popped in matched pairs within ParseFile(), so it is already empty
+  // by the time a top-level ParseFile()/ParseText() call returns. DeleteContents() covers the one path where
+  // it would not be -- an early return out of a deeply recursed @import chain -- without which those XPATH
+  // markers would leak.
+  importstack.DeleteContents();
+  importstack.DeleteAll();
 
+  currentfiledir.Empty();
+  importdepth = 0;
 }

@@ -29,18 +29,19 @@
 *   and GEN's internal UI coordinate storage, WITHOUT changing that internal storage.
 *
 *   GEN keeps its working, bottom-anchored convention (a stored element 'y' is its BOTTOM edge; see
-*   UI_BoundaryLine.h). A future HTML/CSS layout layer (e.g. litehtml) thinks entirely in CSS coordinates
-*   and is meant to COEXIST with the XML layout. Rather than flipping the whole engine, the two worlds meet
-*   ONLY here: CSS-minded code reads/writes element rectangles through these two helpers, and nothing else in
-*   the UI module needs to know about CSS.
+*   UI_BoundaryLine.h). The future GEN CSS Lite layout engine (own parser and box/layout model, no
+*   third-party HTML/CSS engine) thinks entirely in CSS coordinates and is meant to COEXIST with the XML
+*   layout. Rather than flipping the whole engine, the two worlds meet ONLY here: CSS-minded code reads/
+*   writes element rectangles through these two helpers, and nothing else in the UI module needs to know
+*   about CSS.
 *
 * READ side  (UI_CSSBox_Get) is already convention-independent: it routes through the element's resolved
 *            screen edges (GetLeftX/GetTopY), which themselves go through the single coordinate-conversion
 *            point (UI_BOUNDARYLINE_Edge*). It keeps working unchanged whatever the internal convention is.
 *
 * WRITE side (UI_CSSBox_Set) drives GEN rendering from a CSS box by setting the element's RESOLVED position
-*            directly (so an external CSS layout engine can position GEN elements without running the XML
-*            CalculePosition pass). Exactly ONE line is convention-dependent (the internal Y anchor); it is
+*            directly (so the future GEN CSS Lite layout engine can position GEN elements without running the
+*            XML CalculePosition pass). Exactly ONE line is convention-dependent (the internal Y anchor); it is
 *            isolated and documented below, so if the internal storage is ever flipped to top-left that single
 *            line is all that changes.
 *

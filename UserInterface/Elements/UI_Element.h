@@ -36,6 +36,13 @@
 #include "UI_Color.h"
 #include "UI_BoundaryLine.h"
 
+// CSS Lite wiring (see UI_LayoutEngine.h's RunLayout()/BuildTree() SCOPE ADDENDUM): UI_ELEMENT reuses the SAME
+// Flexbox enums/structs UI_LAYOUTBOX already defines (UI_FLEX_DIRECTION, UI_JUSTIFY_CONTENT, UI_FLEX_WRAP,
+// UI_ALIGN_CONTENT, UI_ALIGN_ITEMS, UI_ALIGN_SELF, UI_LAYOUTBOX_INSET) instead of a parallel duplicate set, so
+// BuildTree() can copy an element's Flexbox properties onto its mirrored UI_LAYOUTBOX with a plain assignment,
+// no translation table. UI_LayoutBox.h has no dependency on this header, so this include is one-directional.
+#include "UI_LayoutBox.h"
+
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
@@ -127,6 +134,7 @@ enum UI_ELEMENT_BORDER_CORNER
 
 class XTIMER;
 class UI_ELEMENT_SCROLL;
+class UI_LAYOUT;
 
 
 class UI_ELEMENT : public XSUBJECT 
@@ -176,8 +184,16 @@ class UI_ELEMENT : public XSUBJECT
 		UI_ELEMENT_CHROMEROLE									GetChromeRole								();
 		void																	SetChromeRole								(UI_ELEMENT_CHROMEROLE chromerole);
 
-		UI_ELEMENT*														GetFather										();	
-		void																	SetFather										(UI_ELEMENT* father);	
+		UI_ELEMENT*														GetFather										();
+		void																	SetFather										(UI_ELEMENT* father);
+
+		// Phase 1 ("estilo calculado tipado", ownership step): the UI_LAYOUT this element was built into, set
+		// once by UI_MANAGER::GetLayoutElement_Base() -- every widget builder routes through it, top-level AND
+		// nested/child elements alike -- so ReapplyStyleVisual() can resolve THIS element's own layout's
+		// stylesheet (UI_LAYOUT::GetStyleSheet()) instead of a single UI_MANAGER-wide one shared by every
+		// currently-loaded layout regardless of which screen/XML it came from.
+		UI_LAYOUT*														GetLayout										();
+		void																	SetLayout										(UI_LAYOUT* layout);
 
 		bool																	IsDetached									();	
 		void																	SetIsDetached								(bool isdetached);	
@@ -209,7 +225,14 @@ class UI_ELEMENT : public XSUBJECT
 		UI_ELEMENT_TYPE_DIRECTION							GetDirection								();
 		bool																	SetDirection								(UI_ELEMENT_TYPE_DIRECTION direction);
 
-		double																GetXPositionWithScroll			();		
+		// "text-align" (see UI_MANAGER::GetLayoutElement_Base): LEFT/RIGHT/CENTER, universal on the base class
+		// exactly like "direction"/"role"/"blink" above even though today only UI_ELEMENT_TEXT's Draw_Text reads
+		// it. Default is LEFT, which every widget type already renders as (no offset), so this is a no-op for
+		// every element type and every layout authored before it existed.
+		UI_ELEMENT_TYPE_ALIGN									GetTextAlign								();
+		bool																	SetTextAlign								(UI_ELEMENT_TYPE_ALIGN textalign);
+
+		double																GetXPositionWithScroll			();
 		bool																	SetXPositionWithScroll			(double x_positionwithscroll);		
 
 		double																GetYPositionWithScroll			();		
@@ -304,7 +327,18 @@ class UI_ELEMENT : public XSUBJECT
 		bool																	SetBlink										(XDWORD timeblink);
 		bool																	GetStateBlink								();
 		bool																	SwitchStateBlink					  ();
-		XTIMER*																GetTimerBlink								();	
+		XTIMER*																GetTimerBlink								();
+
+		// "transition" (Step 7, "transiciones"): a plain millisecond duration, read once at load time exactly
+		// like "blink" above (see UI_MANAGER::GetLayoutElement_Base). 0 (default, every layout authored before
+		// this existed) means ReapplyStyleVisual() keeps jumping color/bckgrdcolor instantly on a state change,
+		// same as always; a positive value makes it tween instead. IsTransitioning()/UpdateTransition() follow
+		// the exact polling idiom IsBlinking()/SwitchStateBlink() already use, driven from the same per-frame
+		// UI_SKIN::Draw() call.
+		XDWORD																GetTransitionDuration				();
+		bool																	SetTransitionDuration				(XDWORD milliseconds);
+		bool																	IsTransitioning							();
+		void																	UpdateTransition						();
 
 		UI_ELEMENT_TRANSITION_STATE_SHOW			GetTransitionStateShow			();
 		void																	SetTransitionStateShow			(UI_ELEMENT_TRANSITION_STATE_SHOW	 transitionstateshow);
@@ -322,6 +356,50 @@ class UI_ELEMENT : public XSUBJECT
 
 		bool																	SetToRedraw									(bool recursive);
 
+		// --- Flexbox: CSS Lite wiring -------------------------------------------------------------------------
+		// Pure storage, mirroring UI_LAYOUTBOX's own Flexbox properties one-for-one (same enums, same defaults)
+		// so UI_LAYOUTENGINE::BuildTree() can copy them verbatim onto the UI_LAYOUTBOX it mirrors this element
+		// into. Parsed from CSS by UI_MANAGER::GetLayoutElement_Base() ("display: flex", "flex-direction",
+		// "justify-content", "gap"/"row-gap"/"column-gap", "flex-wrap", "align-content", "align-items" on a
+		// container; "flex-grow", "flex-shrink", "flex-basis", "align-self" on an item). Like "direction"/
+		// margin/padding above, these are load-time-only: there is no ReapplyStyleVisual() hook for them (a
+		// pseudo-class state change does not currently re-run layout).
+		bool																	IsFlexContainer							();
+		void																	SetFlexContainer						(bool isflexcontainer);
+		UI_FLEX_DIRECTION										GetFlexDirection						();
+		void																	SetFlexDirection						(UI_FLEX_DIRECTION flexdirection);
+		UI_JUSTIFY_CONTENT										GetJustifyContent						();
+		void																	SetJustifyContent					(UI_JUSTIFY_CONTENT justifycontent);
+		double																GetRowGap										();
+		double																GetColumnGap								();
+		void																	SetGap											(double rowgap, double columngap);
+		UI_FLEX_WRAP													GetFlexWrap									();
+		void																	SetFlexWrap									(UI_FLEX_WRAP flexwrap);
+		UI_ALIGN_CONTENT											GetAlignContent							();
+		void																	SetAlignContent							(UI_ALIGN_CONTENT aligncontent);
+		UI_ALIGN_ITEMS												GetAlignItems								();
+		void																	SetAlignItems								(UI_ALIGN_ITEMS alignitems);
+
+		double																GetFlexGrow									();
+		void																	SetFlexGrow									(double flexgrow);
+		double																GetFlexShrink								();
+		void																	SetFlexShrink								(double flexshrink);
+		UI_LAYOUTBOX_INSET										GetFlexBasis								();
+		void																	SetFlexBasisAuto						();
+		void																	SetFlexBasis								(double value);
+		UI_ALIGN_SELF													GetAlignSelf								();
+		void																	SetAlignSelf								(UI_ALIGN_SELF alignself);
+
+		// Phase 4 ("migracion del ejemplo" -- footer icon/text gap regression fix): the "content size" a flex
+		// item's basis (flex-basis: auto) must be measured from, kept SEPARATE from the item's live BoundaryLine
+		// width/height -- see UI_LayoutEngine.cpp's BuildTree() and UI_Skin.cpp's CalculateBoundaryLine() for
+		// where this is read and stamped, respectively. -1 (unset) falls back to the live BoundaryLine value in
+		// every caller, so an element that predates this fix behaves exactly as before.
+		double																	GetIntrinsicWidth							();
+		void																	SetIntrinsicWidth							(double intrinsicwidth);
+		double																	GetIntrinsicHeight							();
+		void																	SetIntrinsicHeight							(double intrinsicheight);
+
   private:
 
 		void																	Clean												();
@@ -333,8 +411,10 @@ class UI_ELEMENT : public XSUBJECT
 		XVECTOR<XSTRING*>											class_names;
 		UI_ELEMENT_CHROMEROLE									chromerole;
 		
-		UI_ELEMENT*														father;	
+		UI_ELEMENT*														father;
 		bool																	isdetached;
+
+		UI_LAYOUT*														element_layout;
 		
 		UI_COLOR															color;
 		UI_COLOR															backgroundcolor;
@@ -355,6 +435,7 @@ class UI_ELEMENT : public XSUBJECT
 		XDWORD																z_level;
 
 		UI_ELEMENT_TYPE_DIRECTION							direction;
+		UI_ELEMENT_TYPE_ALIGN									textalign;
 
 		double																x_positionwithscroll;
 		double																y_positionwithscroll;
@@ -378,8 +459,16 @@ class UI_ELEMENT : public XSUBJECT
 
 		XDWORD																blink_time;
 		bool																	blink_state;
-		XTIMER*																blink_xtimer;	
-		XDWORD																blink_nchanges;		
+		XTIMER*																blink_xtimer;
+		XDWORD																blink_nchanges;
+
+		XDWORD																style_transition_duration;
+		bool																	style_transition_active;
+		XTIMER*																style_transition_xtimer;
+		UI_COLOR															style_transition_color_from;
+		UI_COLOR															style_transition_color_to;
+		UI_COLOR															style_transition_backgroundcolor_from;
+		UI_COLOR															style_transition_backgroundcolor_to;
 
 		UI_ELEMENT_TRANSITION_STATE_SHOW			transitionstateshow;
 
@@ -391,12 +480,46 @@ class UI_ELEMENT : public XSUBJECT
 		
 		XVECTOR<UI_ELEMENT*>									compose_elements;
 
+		// --- Flexbox: CSS Lite wiring -------------------------------------------------------------------------
+		bool																	css_flexcontainer;
+		UI_FLEX_DIRECTION										css_flexdirection;
+		UI_JUSTIFY_CONTENT										css_justifycontent;
+		double																css_rowgap;
+		double																css_columngap;
+		UI_FLEX_WRAP													css_flexwrap;
+		UI_ALIGN_CONTENT											css_aligncontent;
+		UI_ALIGN_ITEMS												css_alignitems;
 
+		double																css_flexgrow;
+		double																css_flexshrink;
+		UI_LAYOUTBOX_INSET										css_flexbasis;
+		UI_ALIGN_SELF													css_alignself;
+
+
+		// Phase 4: see GetIntrinsicWidth()/GetIntrinsicHeight()'s own comment above.
+		double																intrinsic_width;
+		double																intrinsic_height;
 
 
 		UI_COLOR															snapshot_color;
 		UI_COLOR															snapshot_backgroundcolor;
 		XDWORD																snapshot_roundrect;
+
+		// Step 8 ("reaplicar todas las propiedades"): the remaining base-level VISUAL properties that
+		// UI_MANAGER::GetLayoutElement_Base() applies and that do not affect layout/reflow (unlike xpos/ypos/
+		// width/height/margin/padding/direction, which stay load-time-only -- see ReapplyStyleVisual()'s
+		// comment). Snapshotted the same way as color/backgroundcolor/roundrect above, so a pseudo-class rule
+		// that does NOT touch one of these still falls back to the authored (XML + stateless CSS) value.
+		double																snapshot_border_width;
+		UI_COLOR															snapshot_border_color;
+		bool																	snapshot_border_color_set;
+		double																snapshot_border_radius[UI_ELEMENT_BORDER_CORNER_MAX];
+		bool																	snapshot_box_shadow_set;
+		double																snapshot_shadow_offset_x;
+		double																snapshot_shadow_offset_y;
+		double																snapshot_shadow_blur;
+		UI_COLOR															snapshot_shadow_color;
+
 		bool																	snapshot_taken;
 		bool																	style_has_state_rules;
 };

@@ -37,6 +37,7 @@
 #include "UI_Layout.h"
 
 #include "UI_Skin.h"
+#include "UI_StyleSheet.h"
 
 
 
@@ -79,8 +80,8 @@ UI_LAYOUT::UI_LAYOUT(UI_SKIN* ui_skin)
 * @ingroup    USERINTERFACE
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-UI_LAYOUT::~UI_LAYOUT()    
-{ 
+UI_LAYOUT::~UI_LAYOUT()
+{
   if(ui_skin)
     {
       GEN_DELETE ui_skin;
@@ -88,7 +89,13 @@ UI_LAYOUT::~UI_LAYOUT()
 
   Elements_DeleteAll();
 
-  Clean();                            
+  if(stylesheet)
+    {
+      GEN_DELETE stylesheet;
+      stylesheet = NULL;
+    }
+
+  Clean();
 }
 
 
@@ -149,6 +156,43 @@ void UI_LAYOUT::SetSkin(UI_SKIN* ui_skin)
 UI_BACKGROUND* UI_LAYOUT::GetBackground()
 {
   return &background;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_STYLESHEET* UI_LAYOUT::GetStyleSheet()
+* @brief      Currently active CSS stylesheet for this layout, or NULL when none was declared in its XML.
+* @ingroup    USERINTERFACE
+*
+* @return     UI_STYLESHEET* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_STYLESHEET* UI_LAYOUT::GetStyleSheet()
+{
+  return stylesheet;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUT::SetStyleSheet(UI_STYLESHEET* sheet)
+* @brief      Set style sheet
+* @note       Takes ownership of "sheet" -- deletes any previously owned instance first, then stores the new
+*             pointer (which may be NULL, e.g. this layout's XML declared no <stylesheet>).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  sheet : Sheet pointer to use.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUT::SetStyleSheet(UI_STYLESHEET* sheet)
+{
+  if(stylesheet && (stylesheet != sheet))
+    {
+      GEN_DELETE stylesheet;
+    }
+
+  stylesheet = sheet;
 }
 
 
@@ -462,7 +506,8 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, UI_ELEMENT_CHROMEROLE c
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_LAYOUT::Clean()
 {
-  ui_skin   =  NULL;
+  ui_skin    = NULL;
+  stylesheet = NULL;
 }
 
 
