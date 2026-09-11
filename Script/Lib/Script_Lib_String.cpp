@@ -314,108 +314,34 @@ void Call_SPrintf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 
   returnvalue->Set();
 
-  if(!params->GetSize())
+  if(params->GetSize() < 2)
     {
       script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
       return;
     }
 
-  XVARIANT  variantout = (*params->Get(0));
-  XCHAR*    out = variantout;
-  XSTRING  _out = out;
+  XVARIANT* maskparam = params->Get(1);
+  if(!maskparam) return;
 
-  XVARIANT  variantmask = (*params->Get(1));
+  XVARIANT  variantmask = (*maskparam);
   XCHAR*    mask = variantmask;
 
   XSTRING outstring;
-  XSTRING string;
 
-  int paramindex = 2;
-  int c          = 0;
+  if(!mask) return;
 
-  while(mask[c])
+  SCRIPT_LIB_FORMATSTATUS formatstatus = library->FormatParams(params, 2, mask, outstring);
+  if(formatstatus != SCRIPT_LIB_FORMATSTATUS_OK)
     {
-      switch(mask[c])
+      if(formatstatus == SCRIPT_LIB_FORMATSTATUS_INSUFFICIENT_PARAMS)
         {
-          case '%' : {
-                        #define MAXTEMPOSTR 32
-
-                        XCHAR param[MAXTEMPOSTR];
-
-                        int  nparam = 1;
-                        bool end    = false;
-
-                        memset(param,0,MAXTEMPOSTR*sizeof(XCHAR));
-                        param[0] = '%';
-
-                        c++;
-
-                        switch(mask[c])
-                              {
-                                case __C('c')   :
-                                case __C('C')   :
-                                case __C('d')   :
-                                case __C('i')   :
-                                case __C('o')   :
-                                case __C('u')   :
-                                case __C('x')   :
-                                case __C('X')   : { int value = 0;
-                                                    library->GetParamConverted(params->Get(paramindex), value);
-                                                    string.Format(param, value);
-                                                    paramindex++;
-                                                    end  = true;
-                                                  }
-                                                  break;
-
-                                case __C('f')   : { float value = 0;
-                                                    library->GetParamConverted(params->Get(paramindex), value);
-                                                    string.Format(param, value);
-                                                    paramindex++;
-                                                    end  = true;
-                                                  }
-                                                  break;
-
-                                case __C('g')   :
-                                case __C('G')   :
-
-                                case __C('e')   :
-                                case __C('E')   :
-
-                                case __C('n')   :
-                                case __C('p')   : end = true;
-                                                  break;
-
-                                case __C('s')   :
-                                case __C('S')   : { XVARIANT variantparam = (*params->Get(paramindex));
-                                                    paramindex++;
-                                                    string.Format(param,(XCHAR*)variantparam);
-                                                    end = true;
-                                                  }
-                                                  break;
-
-                                case __C('%')   : string = __L("%");
-                                                  end = true;
-                                                  break;
-
-                                case __C('\0')  : end = true;
-                                                  break;
-
-                                      default   : break;
-                              }
-
-                      }
-                      break;
-
-            default : string.Set(mask[c]);
-                      c++;
-                      break;
+          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
         }
 
-      outstring += string;
+      return;
     }
 
-  _out = outstring;
+  (*params->Get(0)) = outstring;
+  (*returnvalue)     = outstring;
 }
-
-
 

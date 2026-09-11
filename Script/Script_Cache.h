@@ -55,9 +55,12 @@ class SCRIPT_CACHE
     static bool                       DelInstance                 ();
 
     XDWORD                            GenerateID                  (XSTRING& stringID);    
+    bool                              GenerateListKey             (XVECTOR<XSTRING*>* namescripts, XSTRING& stringID);
 
     bool                              Cache_Add                   (XDWORD ID, XSTRING* script);    
+    bool                              Cache_Add                   (XDWORD ID, XSTRING* script, XSTRING& stringID);
     XSTRING*                          Cache_Get                   (XDWORD ID, int* index = NULL);
+    XSTRING*                          Cache_Get                   (XDWORD ID, XSTRING& stringID, int* index = NULL);
     bool                              Cache_Set                   (XDWORD ID, XSTRING* script);
     bool                              Cache_Del                   (XDWORD ID);
     
@@ -74,16 +77,18 @@ class SCRIPT_CACHE
     void                              operator =                  (SCRIPT_CACHE const&);
 
     void                              Clean                       ();
+    bool                              CacheKey_Set                (XDWORD ID, XSTRING& stringID);
+    bool                              CacheKey_Del                (XDWORD ID);
 
     static SCRIPT_CACHE*              instance;
     XMAP<XDWORD, XSTRING*>            cache;
+    XMAP<XDWORD, XSTRING*>            cachekeys;
 };
 
 
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

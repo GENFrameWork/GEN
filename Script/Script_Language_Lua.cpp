@@ -72,7 +72,14 @@ SCRIPT_LNG_LUA::SCRIPT_LNG_LUA()
   type = SCRIPT_TYPE_LUA;
 
   state = luaL_newstate();
-  if(state) luaL_openlibs(state);    // Load Lua libraries
+  if(!state)
+    {
+      errorcode    = SCRIPT_ERRORCODE_INTERNALERROR;
+      iscancelexec = true;
+      return;
+    }
+
+  luaL_openlibs(state);    // Load Lua libraries
 
   *static_cast<SCRIPT_LNG_LUA**>(lua_getextraspace(state)) = this;
 
@@ -109,6 +116,15 @@ SCRIPT_LNG_LUA::~SCRIPT_LNG_LUA()
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT_LNG_LUA::Run(int* returnval)
 {
+  if(returnval) (*returnval) = 0;
+
+  if(!state)
+    {
+      errorcode    = SCRIPT_ERRORCODE_INTERNALERROR;
+      iscancelexec = true;
+      return errorcode;
+    }
+
   XBUFFER charnamescript;
   XBUFFER charscript;
   XSTRING currenttoken;
@@ -192,6 +208,8 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_LUA::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY ptrfunction)
 {
+  if(!state || !library || !name || !ptrfunction) return false;
+
   XSTRING namefunction;
 
   namefunction = name;
@@ -469,5 +487,4 @@ int LUA_LibraryCallBack(lua_State* state)
   // Let Lua know how many return values we've passed
   return nreturnvalues;
 }
-
 

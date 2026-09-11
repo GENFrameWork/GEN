@@ -31,11 +31,24 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "XString.h"
+#include "XVector.h"
 
 
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
+#define SCRIPT_LIB_FORMAT_MAXTOKEN              32
+#define SCRIPT_LIB_FORMAT_MAXFIELD              1024
+#define SCRIPT_LIB_FORMAT_MAXOUTPUT             65536
+
+enum SCRIPT_LIB_FORMATSTATUS
+{
+  SCRIPT_LIB_FORMATSTATUS_OK                 ,
+  SCRIPT_LIB_FORMATSTATUS_INVALID_FORMAT     ,
+  SCRIPT_LIB_FORMATSTATUS_INSUFFICIENT_PARAMS,
+  SCRIPT_LIB_FORMATSTATUS_INVALID_PARAM      ,
+  SCRIPT_LIB_FORMATSTATUS_OUTPUT_TOO_LONG
+};
 
 
 
@@ -61,6 +74,8 @@ class SCRIPT_LIB
     bool                  GetParamConverted       (XVARIANT* variant, double& value);
     bool                  GetParamConverted       (XVARIANT* variant, XSTRING& value);
 
+    SCRIPT_LIB_FORMATSTATUS FormatParams          (XVECTOR<XVARIANT*>* params, XDWORD firstparamindex, XCHAR* mask, XSTRING& output);
+
   protected:
 
     SCRIPT*               script;
@@ -75,7 +90,6 @@ class SCRIPT_LIB
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

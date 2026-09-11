@@ -44,6 +44,7 @@
 #include "UI_Manager.h"
 #include "UI_Style.h"
 #include "UI_StyleSheet.h"
+#include "UI_PropertyRegistry.h"
 
 
 
@@ -76,9 +77,11 @@ UI_ELEMENT::UI_ELEMENT()
   isactive       = true;
 
   blink_xtimer=GEN_XFACTORY.CreateTimer();
-  blink_state    = true; 
-  
-  z_level        = 1; 
+  blink_state    = true;
+
+  style_transition_xtimer = GEN_XFACTORY.CreateTimer();
+
+  z_level        = 1;
 }
 
 
@@ -96,6 +99,12 @@ UI_ELEMENT::~UI_ELEMENT()
     {
       GEN_XFACTORY.DeleteTimer(blink_xtimer);
       blink_xtimer = NULL;
+    }
+
+  if(style_transition_xtimer)
+    {
+      GEN_XFACTORY.DeleteTimer(style_transition_xtimer);
+      style_transition_xtimer = NULL;
     }
 
   // Owned per-class split view. SetClassNames() also clears this vector, but the destructor may be reached
@@ -365,6 +374,36 @@ UI_ELEMENT* UI_ELEMENT::GetFather()
 void UI_ELEMENT::SetFather(UI_ELEMENT* father)
 {
   this->father = father;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_LAYOUT* UI_ELEMENT::GetLayout()
+* @brief      Get layout
+* @ingroup    USERINTERFACE
+*
+* @return     UI_LAYOUT* : Pointer to the requested object; NULL if it is not available.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_LAYOUT* UI_ELEMENT::GetLayout()
+{
+  return element_layout;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetLayout(UI_LAYOUT* layout)
+* @brief      Set layout
+* @ingroup    USERINTERFACE
+*
+* @param[in]  layout : Layout pointer to use.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetLayout(UI_LAYOUT* layout)
+{
+  element_layout = layout;
 }
 
 
@@ -761,6 +800,40 @@ UI_ELEMENT_TYPE_DIRECTION UI_ELEMENT::GetDirection()
 bool UI_ELEMENT::SetDirection(UI_ELEMENT_TYPE_DIRECTION direction)
 {
   this->direction = direction;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ELEMENT_TYPE_ALIGN UI_ELEMENT::GetTextAlign()
+* @brief      Get text align
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ELEMENT_TYPE_ALIGN : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT_TYPE_ALIGN UI_ELEMENT::GetTextAlign()
+{
+  return textalign;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT::SetTextAlign(UI_ELEMENT_TYPE_ALIGN textalign)
+* @brief      Set text align
+* @ingroup    USERINTERFACE
+*
+* @param[in]  textalign : Textalign value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::SetTextAlign(UI_ELEMENT_TYPE_ALIGN textalign)
+{
+  this->textalign = textalign;
 
   return true;
 }
@@ -1464,6 +1537,97 @@ XTIMER* UI_ELEMENT::GetTimerBlink()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD UI_ELEMENT::GetTransitionDuration()
+* @brief      Get the "transition" duration in milliseconds (Step 7). 0 means disabled: ReapplyStyleVisual()
+*             jumps color/bckgrdcolor instantly on a state change, exactly as before this feature existed.
+* @ingroup    USERINTERFACE
+*
+* @return     XDWORD : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD UI_ELEMENT::GetTransitionDuration()
+{
+  return style_transition_duration;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT::SetTransitionDuration(XDWORD milliseconds)
+* @brief      Set the "transition" duration in milliseconds (Step 7).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  milliseconds : Duration value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::SetTransitionDuration(XDWORD milliseconds)
+{
+  style_transition_duration = milliseconds;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT::IsTransitioning()
+* @brief      True while a color/background-color tween started by ReapplyStyleVisual() is still in flight.
+*             Polled by UI_SKIN::Draw() every frame, exactly like IsBlinking()/GetStateBlink() above.
+* @ingroup    USERINTERFACE
+*
+* @return     bool : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::IsTransitioning()
+{
+  return style_transition_active;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::UpdateTransition()
+* @brief      Advance the in-flight color/background-color tween by however much time has elapsed since
+*             ReapplyStyleVisual() started it, and write the interpolated values into the live color/
+*             backgroundcolor members that Draw_Form/Draw_Text already read every frame. Ends the transition
+*             (snapping exactly to the target, so it never gets stuck short of it due to frame timing) once
+*             the configured duration has elapsed.
+* @note       Called only while IsTransitioning() is true; no-op guards are still kept defensively.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::UpdateTransition()
+{
+  if(!style_transition_active) return;
+  if(!style_transition_xtimer) { style_transition_active = false; return; }
+
+  double elapsedms = (double)style_transition_xtimer->GetMeasureMilliSeconds();
+  double t         = style_transition_duration ? (elapsedms / (double)style_transition_duration) : 1.0;
+
+  if(t >= 1.0)
+    {
+      t = 1.0;
+      style_transition_active = false;
+    }
+
+  color.SetRed  (style_transition_color_from.GetRed()   + (int)((style_transition_color_to.GetRed()   - style_transition_color_from.GetRed())   * t));
+  color.SetGreen(style_transition_color_from.GetGreen() + (int)((style_transition_color_to.GetGreen() - style_transition_color_from.GetGreen()) * t));
+  color.SetBlue (style_transition_color_from.GetBlue()  + (int)((style_transition_color_to.GetBlue()  - style_transition_color_from.GetBlue())  * t));
+  color.SetAlpha(style_transition_color_from.GetAlpha() + (int)((style_transition_color_to.GetAlpha() - style_transition_color_from.GetAlpha()) * t));
+
+  backgroundcolor.SetRed  (style_transition_backgroundcolor_from.GetRed()   + (int)((style_transition_backgroundcolor_to.GetRed()   - style_transition_backgroundcolor_from.GetRed())   * t));
+  backgroundcolor.SetGreen(style_transition_backgroundcolor_from.GetGreen() + (int)((style_transition_backgroundcolor_to.GetGreen() - style_transition_backgroundcolor_from.GetGreen()) * t));
+  backgroundcolor.SetBlue (style_transition_backgroundcolor_from.GetBlue()  + (int)((style_transition_backgroundcolor_to.GetBlue()  - style_transition_backgroundcolor_from.GetBlue())  * t));
+  backgroundcolor.SetAlpha(style_transition_backgroundcolor_from.GetAlpha() + (int)((style_transition_backgroundcolor_to.GetAlpha() - style_transition_backgroundcolor_from.GetAlpha()) * t));
+
+  mustredraw = true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         UI_ELEMENT_TRANSITION_STATE_SHOW UI_ELEMENT::GetTransitionStateShow()
 * @brief      Get transition state show
@@ -1605,9 +1769,445 @@ bool UI_ELEMENT::DeleteAllComposeElements()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         bool UI_ELEMENT::IsFlexContainer()
+* @brief      Is flex container
+* @ingroup    USERINTERFACE
+*
+* @return     bool : true if this element is a flex container (CSS "display: flex"); otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT::IsFlexContainer()
+{
+  return css_flexcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexContainer(bool isflexcontainer)
+* @brief      Set flex container
+* @ingroup    USERINTERFACE
+*
+* @param[in]  isflexcontainer : Flex container value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexContainer(bool isflexcontainer)
+{
+  css_flexcontainer = isflexcontainer;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_FLEX_DIRECTION UI_ELEMENT::GetFlexDirection()
+* @brief      Get flex direction
+* @ingroup    USERINTERFACE
+*
+* @return     UI_FLEX_DIRECTION : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_FLEX_DIRECTION UI_ELEMENT::GetFlexDirection()
+{
+  return css_flexdirection;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexDirection(UI_FLEX_DIRECTION flexdirection)
+* @brief      Set flex direction
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexdirection : Flex direction value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexDirection(UI_FLEX_DIRECTION flexdirection)
+{
+  css_flexdirection = flexdirection;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_JUSTIFY_CONTENT UI_ELEMENT::GetJustifyContent()
+* @brief      Get justify content
+* @ingroup    USERINTERFACE
+*
+* @return     UI_JUSTIFY_CONTENT : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_JUSTIFY_CONTENT UI_ELEMENT::GetJustifyContent()
+{
+  return css_justifycontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetJustifyContent(UI_JUSTIFY_CONTENT justifycontent)
+* @brief      Set justify content
+* @ingroup    USERINTERFACE
+*
+* @param[in]  justifycontent : Justify content value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetJustifyContent(UI_JUSTIFY_CONTENT justifycontent)
+{
+  css_justifycontent = justifycontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetRowGap()
+* @brief      Get row gap
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetRowGap()
+{
+  return css_rowgap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetColumnGap()
+* @brief      Get column gap
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetColumnGap()
+{
+  return css_columngap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetGap(double rowgap, double columngap)
+* @brief      Set row/column gap
+* @ingroup    USERINTERFACE
+*
+* @param[in]  rowgap : CSS "row-gap" value.
+* @param[in]  columngap : CSS "column-gap" value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetGap(double rowgap, double columngap)
+{
+  css_rowgap    = rowgap;
+  css_columngap = columngap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_FLEX_WRAP UI_ELEMENT::GetFlexWrap()
+* @brief      Get flex wrap
+* @ingroup    USERINTERFACE
+*
+* @return     UI_FLEX_WRAP : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_FLEX_WRAP UI_ELEMENT::GetFlexWrap()
+{
+  return css_flexwrap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexWrap(UI_FLEX_WRAP flexwrap)
+* @brief      Set flex wrap
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexwrap : Flex wrap value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexWrap(UI_FLEX_WRAP flexwrap)
+{
+  css_flexwrap = flexwrap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_CONTENT UI_ELEMENT::GetAlignContent()
+* @brief      Get align content
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_CONTENT : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_CONTENT UI_ELEMENT::GetAlignContent()
+{
+  return css_aligncontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetAlignContent(UI_ALIGN_CONTENT aligncontent)
+* @brief      Set align content
+* @ingroup    USERINTERFACE
+*
+* @param[in]  aligncontent : Align content value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetAlignContent(UI_ALIGN_CONTENT aligncontent)
+{
+  css_aligncontent = aligncontent;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_ITEMS UI_ELEMENT::GetAlignItems()
+* @brief      Get align items
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_ITEMS : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_ITEMS UI_ELEMENT::GetAlignItems()
+{
+  return css_alignitems;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetAlignItems(UI_ALIGN_ITEMS alignitems)
+* @brief      Set align items
+* @ingroup    USERINTERFACE
+*
+* @param[in]  alignitems : Align items value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetAlignItems(UI_ALIGN_ITEMS alignitems)
+{
+  css_alignitems = alignitems;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetFlexGrow()
+* @brief      Get flex grow
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetFlexGrow()
+{
+  return css_flexgrow;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexGrow(double flexgrow)
+* @brief      Set flex grow
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexgrow : Flex grow value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexGrow(double flexgrow)
+{
+  css_flexgrow = flexgrow;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetFlexShrink()
+* @brief      Get flex shrink
+* @ingroup    USERINTERFACE
+*
+* @return     double : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetFlexShrink()
+{
+  return css_flexshrink;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexShrink(double flexshrink)
+* @brief      Set flex shrink
+* @ingroup    USERINTERFACE
+*
+* @param[in]  flexshrink : Flex shrink value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexShrink(double flexshrink)
+{
+  css_flexshrink = flexshrink;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_LAYOUTBOX_INSET UI_ELEMENT::GetFlexBasis()
+* @brief      Get flex basis
+* @ingroup    USERINTERFACE
+*
+* @return     UI_LAYOUTBOX_INSET : Requested value ("specified" false means "auto").
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_LAYOUTBOX_INSET UI_ELEMENT::GetFlexBasis()
+{
+  return css_flexbasis;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexBasisAuto()
+* @brief      Set flex basis to "auto"
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexBasisAuto()
+{
+  css_flexbasis.specified = false;
+  css_flexbasis.value     = 0.0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetFlexBasis(double value)
+* @brief      Set flex basis to an explicit value
+* @ingroup    USERINTERFACE
+*
+* @param[in]  value : Flex basis value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetFlexBasis(double value)
+{
+  css_flexbasis.specified = true;
+  css_flexbasis.value     = value;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ALIGN_SELF UI_ELEMENT::GetAlignSelf()
+* @brief      Get align self
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ALIGN_SELF : Requested value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ALIGN_SELF UI_ELEMENT::GetAlignSelf()
+{
+  return css_alignself;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetAlignSelf(UI_ALIGN_SELF alignself)
+* @brief      Set align self
+* @ingroup    USERINTERFACE
+*
+* @param[in]  alignself : Align self value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetAlignSelf(UI_ALIGN_SELF alignself)
+{
+  css_alignself = alignself;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetIntrinsicWidth()
+* @brief      Get intrinsic width
+* @ingroup    USERINTERFACE
+*
+* @return     double : The width UI_SKIN::CalculateBoundaryLine() last measured/resolved for this element (its
+*                       authored size for a fixed-size widget, or its freshly-measured natural size for auto-sized
+*                       content such as text) -- -1.0 if CalculateBoundaryLine() has never run for it, in which case
+*                       the caller should fall back to GetBoundaryLine()->width. See UI_Element.h's own comment.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetIntrinsicWidth()
+{
+  return intrinsic_width;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetIntrinsicWidth(double intrinsicwidth)
+* @brief      Set intrinsic width
+* @ingroup    USERINTERFACE
+*
+* @param[in]  intrinsicwidth : Intrinsic width value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetIntrinsicWidth(double intrinsicwidth)
+{
+  intrinsic_width = intrinsicwidth;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_ELEMENT::GetIntrinsicHeight()
+* @brief      Get intrinsic height
+* @ingroup    USERINTERFACE
+*
+* @return     double : Same rule as GetIntrinsicWidth(), for the vertical axis.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_ELEMENT::GetIntrinsicHeight()
+{
+  return intrinsic_height;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT::SetIntrinsicHeight(double intrinsicheight)
+* @brief      Set intrinsic height
+* @ingroup    USERINTERFACE
+*
+* @param[in]  intrinsicheight : Intrinsic height value.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::SetIntrinsicHeight(double intrinsicheight)
+{
+  intrinsic_height = intrinsicheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_ELEMENT::GetActivePseudos(XVECTOR<XSTRING*>& out)
 * @brief      Populates `out` with the pseudo-class names implied by the element's current live state.
 *             Strings are heap-allocated with GEN_NEW; the caller owns them and must delete them.
+* @note       "hover" is emitted as a synonym of "preselect": GEN's preselect state IS mouse-over (it is set
+*             from UI_MANAGER::PreSelectElement(), which tests the live cursor position against the element's
+*             box), so ":hover" and ":preselect" match exactly the same live state and either spelling can be
+*             used in a stylesheet -- authors coming from CSS can write the familiar ":hover", existing rules
+*             written against ":preselect" keep working unchanged.
+* @note       ":active" is a DELIBERATE, PERMANENT divergence from CSS. Here it mirrors GEN's own `isactive`
+*             ("this element is enabled / not disabled"), not CSS's `:active` ("the pointer is currently
+*             pressed on this element"). GEN has no press/pointer-down state to expose today, so ":active" /
+*             ":disabled" are kept as the enabled/disabled pair authors already use in existing stylesheets,
+*             and a real CSS-style pointer-press pseudo (":pressed", scoped to GEN's own semantics rather than
+*             reusing ":active" for it) is left for a later phase instead of overloading this name further.
 * @ingroup    USERINTERFACE
 *
 * @param[out] out : Vector to append pseudo names into.
@@ -1617,7 +2217,8 @@ void UI_ELEMENT::GetActivePseudos(XVECTOR<XSTRING*>& out)
 {
   if(ispreselect)
     {
-      XSTRING* p = GEN_NEW XSTRING(); if(p) { p->Set(__L("preselect")); out.Add(p); }
+      XSTRING* p1 = GEN_NEW XSTRING(); if(p1) { p1->Set(__L("preselect")); out.Add(p1); }
+      XSTRING* p2 = GEN_NEW XSTRING(); if(p2) { p2->Set(__L("hover"));     out.Add(p2); }
     }
 
   if(isselected)
@@ -1649,6 +2250,19 @@ void UI_ELEMENT::SnapshotStyleVisual()
   color          .CopyTo(&snapshot_color);
   backgroundcolor.CopyTo(&snapshot_backgroundcolor);
   snapshot_roundrect = roundrect;
+
+  snapshot_border_width     = border_width;
+  border_color.CopyTo(&snapshot_border_color);
+  snapshot_border_color_set = border_color_set;
+
+  for(int c=0; c<UI_ELEMENT_BORDER_CORNER_MAX; c++) snapshot_border_radius[c] = border_radius[c];
+
+  snapshot_box_shadow_set  = box_shadow_set;
+  snapshot_shadow_offset_x = shadow_offset_x;
+  snapshot_shadow_offset_y = shadow_offset_y;
+  snapshot_shadow_blur     = shadow_blur;
+  shadow_color.CopyTo(&snapshot_shadow_color);
+
   snapshot_taken     = true;
 }
 
@@ -1667,32 +2281,144 @@ void UI_ELEMENT::ReapplyStyleVisual()
   if(!style_has_state_rules) return;
   if(!snapshot_taken)        return;
 
-  UI_STYLESHEET* sheet = NULL;
-  if(UI_MANAGER::GetIsInstanced())
-    {
-      sheet = UI_MANAGER::GetInstance().GetStyleSheet();
-    }
+  // Phase 1 ownership step: the stylesheet belongs to THIS element's own UI_LAYOUT (set once at build time by
+  // UI_MANAGER::GetLayoutElement_Base(), see SetLayout()), not to a single UI_MANAGER-wide pointer shared by
+  // every currently-loaded layout -- otherwise loading a second, unrelated layout's XML would silently swap
+  // (and free) the stylesheet every pre-existing element on screen resolves against.
+  UI_STYLESHEET* sheet = element_layout ? element_layout->GetStyleSheet() : NULL;
 
   if(!sheet) return;
 
-  // Restore baseline BEFORE re-resolving, so keys the current cascade does not touch fall back to the authored
-  // (XML + stateless CSS) value rather than remaining stuck at whatever the previous state left them.
-  snapshot_color          .CopyTo(&color);
-  snapshot_backgroundcolor.CopyTo(&backgroundcolor);
-  roundrect = snapshot_roundrect;
+  // Resolve the TARGET values into local copies, starting from the stateless baseline so a key the current
+  // cascade does not touch still falls back to the authored (XML + stateless CSS) value instead of whatever
+  // the previous state left on screen. This used to be applied straight into color/backgroundcolor; now it is
+  // kept separate so a "transition" duration (Step 7) can animate towards it instead of jumping to it.
+  UI_COLOR targetcolor;           snapshot_color          .CopyTo(&targetcolor);
+  UI_COLOR targetbackgroundcolor; snapshot_backgroundcolor.CopyTo(&targetbackgroundcolor);
+  XDWORD   targetroundrect = snapshot_roundrect;
+
+  double   targetborderwidth = snapshot_border_width;
+  UI_COLOR targetbordercolor;    snapshot_border_color.CopyTo(&targetbordercolor);
+  bool     targetbordercolorset = snapshot_border_color_set;
+
+  double   targetborderradius[UI_ELEMENT_BORDER_CORNER_MAX];
+  for(int c=0; c<UI_ELEMENT_BORDER_CORNER_MAX; c++) targetborderradius[c] = snapshot_border_radius[c];
+
+  bool     targetboxshadowset = snapshot_box_shadow_set;
+  double   targetshadowoffsetx = snapshot_shadow_offset_x;
+  double   targetshadowoffsety = snapshot_shadow_offset_y;
+  double   targetshadowblur    = snapshot_shadow_blur;
+  UI_COLOR targetshadowcolor;    snapshot_shadow_color.CopyTo(&targetshadowcolor);
 
   // Re-resolve. FillFromCSSDeclarations internally builds the active-pseudo list from the element's live state.
   UI_STYLE bag;
   bag.FillFromCSSDeclarations(sheet, this);
 
-  // Apply the three baseline visual keys. Per-type keys (linecolor, gradientcolor, thickness, ...) are out of
-  // scope for this step; they remain frozen at load-time values.
+  // Apply the base-level visual keys that a pseudo-class rule can legitimately restyle without triggering a
+  // re-layout (color/background-color/roundrect, already handled since Step 6/"transiciones"; border-width/
+  // -color/-radius and box-shadow, added here). Per-type keys (linecolor, gradientcolor, thickness, ...) stay
+  // out of scope -- they live on subclasses this base-class method has no knowledge of, and would need virtual
+  // dispatch to reach; box-model/geometry keys (xpos/ypos/width/height/margin/padding/direction) stay out of
+  // scope too -- swapping those per pseudo-class state would require a full re-layout pass, not just a redraw,
+  // which is a materially bigger change than this step.
   XSTRING v;
   double  d;
 
-  if(bag.Get(__L("color")      , v))  color          .SetFromString(v);
-  if(bag.Get(__L("bckgrdcolor"), v))  backgroundcolor.SetFromString(v);
-  if(bag.Get(__L("roundrect")  , d))  roundrect = (XDWORD)d;
+  if(bag.Get(__L("color")      , v))  targetcolor          .SetFromString(v);
+
+  // "bckgrdcolor" or "background-color": same shared first-hit alias lookup as GetLayoutElement_Base() at load
+  // time (UI_Manager.cpp) -- both now go through UI_PROPERTYREGISTRY::GetAliased(), so a rule written with the
+  // CSS-natural name (e.g. ":hover { background-color: ... }") is honored here too instead of freezing at the
+  // stateless baseline, and the two call sites cannot silently drift onto different precedence.
+  XSTRING bckgrdcolor;
+  UI_PROPERTYREGISTRY::GetAliased(bag, __L("bckgrdcolor"), __L("background-color"), bckgrdcolor);
+  if(!bckgrdcolor.IsEmpty()) targetbackgroundcolor.SetFromString(bckgrdcolor);
+
+  if(bag.Get(__L("roundrect")  , d))  targetroundrect = (XDWORD)d;
+
+  if(bag.Get(__L("border-width"), d)) targetborderwidth = d;
+
+  XSTRING bordercolorstr;
+  if(bag.Get(__L("border-color"), bordercolorstr) && !bordercolorstr.IsEmpty())
+    {
+      targetbordercolor.SetFromString(bordercolorstr);
+      targetbordercolorset = true;
+    }
+
+  // border-radius shorthand (1-4 values, same CSS positional rule as load time) then per-corner longhands,
+  // which override the shorthand -- identical precedence to GetLayoutElement_Base().
+  XSTRING borderradiusstr;
+  if(bag.Get(__L("border-radius"), borderradiusstr))
+    {
+      double out[4] = { 0.0, 0.0, 0.0, 0.0 };
+      UI_PROPERTYREGISTRY::ExpandCSSShorthand4(borderradiusstr, out);            // out = TL, TR, BR, BL
+
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_TL] = out[0];
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_TR] = out[1];
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_BR] = out[2];
+      targetborderradius[UI_ELEMENT_BORDER_CORNER_BL] = out[3];
+    }
+
+  if(bag.Get(__L("border-top-left-radius")     , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_TL] = d;
+  if(bag.Get(__L("border-top-right-radius")    , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_TR] = d;
+  if(bag.Get(__L("border-bottom-right-radius") , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_BR] = d;
+  if(bag.Get(__L("border-bottom-left-radius")  , d)) targetborderradius[UI_ELEMENT_BORDER_CORNER_BL] = d;
+
+  XSTRING boxshadowstr;
+  if(bag.Get(__L("box-shadow"), boxshadowstr) && !boxshadowstr.IsEmpty())
+    {
+      double  sh_x    = 0.0;
+      double  sh_y    = 0.0;
+      double  sh_blur = 0.0;
+      XSTRING sh_color;
+
+      if(UI_PROPERTYREGISTRY::ParseBoxShadow(boxshadowstr, sh_x, sh_y, sh_blur, sh_color))
+        {
+          targetshadowoffsetx = sh_x;
+          targetshadowoffsety = sh_y;
+          targetshadowblur    = sh_blur;
+          targetshadowcolor.SetFromString(sh_color);
+          targetboxshadowset  = true;
+        }
+    }
+
+  // roundrect/border-width/border-color/border-radius/box-shadow are discrete/structural values, not ones that
+  // can be usefully interpolated the way a colour can, so they always jump immediately regardless of
+  // "transition". Only color/background-color -- the two keys this method has ever tweened -- are eligible.
+  roundrect = targetroundrect;
+
+  border_width     = targetborderwidth;
+  targetbordercolor.CopyTo(&border_color);
+  border_color_set = targetbordercolorset;
+
+  for(int c=0; c<UI_ELEMENT_BORDER_CORNER_MAX; c++) border_radius[c] = targetborderradius[c];
+
+  box_shadow_set  = targetboxshadowset;
+  shadow_offset_x = targetshadowoffsetx;
+  shadow_offset_y = targetshadowoffsety;
+  shadow_blur     = targetshadowblur;
+  targetshadowcolor.CopyTo(&shadow_color);
+
+  if(style_transition_duration)
+    {
+      // Animate FROM whatever is currently on screen (which may itself still be mid-transition, e.g. a fast
+      // hover-in immediately followed by a hover-out) TO the newly resolved target, over style_transition_
+      // duration ms. UpdateTransition(), polled every frame from UI_SKIN::Draw() exactly like the blink timer
+      // above, does the actual interpolation.
+      style_transition_color_from = color;
+      style_transition_color_to   = targetcolor;
+
+      style_transition_backgroundcolor_from = backgroundcolor;
+      style_transition_backgroundcolor_to   = targetbackgroundcolor;
+
+      style_transition_xtimer->Reset();
+      style_transition_active = true;
+    }
+   else
+    {
+      color           = targetcolor;
+      backgroundcolor = targetbackgroundcolor;
+    }
 
   mustredraw = true;
 }
@@ -1743,6 +2469,7 @@ void UI_ELEMENT::Clean()
 
   father                  = NULL;
   isdetached              = false;
+  element_layout          = NULL;
 
   x_position              = 0.0f;
 	y_position              = 0.0f;
@@ -1750,6 +2477,7 @@ void UI_ELEMENT::Clean()
   z_level                 = 0;
 
   direction               = UI_ELEMENT_TYPE_DIRECTION_UNKWOWN;
+  textalign               = UI_ELEMENT_TYPE_ALIGN_LEFT;
 
 	x_positionwithscroll    = 0.0f;
   y_positionwithscroll    = 0.0f;
@@ -1789,9 +2517,13 @@ void UI_ELEMENT::Clean()
 
   blink_time              = 0;
   blink_state             = false;
-	blink_xtimer            = NULL;	
-  blink_nchanges          = 0;	
-  
+	blink_xtimer            = NULL;
+  blink_nchanges          = 0;
+
+  style_transition_duration = 0;
+  style_transition_active   = false;
+  style_transition_xtimer   = NULL;
+
   transitionstateshow     = UI_ELEMENT_TRANSITION_STATE_SHOW_NONE;
 
   hasscroll               = false;
@@ -1801,6 +2533,26 @@ void UI_ELEMENT::Clean()
   snapshot_roundrect      = 0;
   snapshot_taken          = false;
   style_has_state_rules   = false;
+
+  // --- Flexbox: CSS Lite wiring -- same defaults as the mirrored UI_LAYOUTBOX properties (UI_LayoutBox.cpp's own
+  //     constructor), so an element that never sets any of these behaves exactly like a freshly-built UI_LAYOUTBOX.
+  css_flexcontainer       = false;
+  css_flexdirection       = UI_FLEX_DIRECTION_ROW;
+  css_justifycontent      = UI_JUSTIFY_CONTENT_FLEX_START;
+  css_rowgap              = 0.0;
+  css_columngap           = 0.0;
+  css_flexwrap            = UI_FLEX_WRAP_NOWRAP;
+  css_aligncontent        = UI_ALIGN_CONTENT_FLEX_START;
+  css_alignitems          = UI_ALIGN_ITEMS_FLEX_START;
+
+  css_flexgrow            = 0.0;
+  css_flexshrink          = 1.0;
+  css_flexbasis.specified = false;
+  css_flexbasis.value     = 0.0;
+  css_alignself           = UI_ALIGN_SELF_AUTO;
+
+  intrinsic_width         = -1.0;    // unset -- see GetIntrinsicWidth()'s own comment
+  intrinsic_height        = -1.0;
 }
 
 

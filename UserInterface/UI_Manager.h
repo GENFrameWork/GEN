@@ -70,6 +70,7 @@ class UI_ELEMENT_FORM;
 class UI_VIRTUALKEYBOARD;
 class UI_STYLE;
 class UI_STYLESHEET;
+class UI_COMPUTEDSTYLE;
 
 
 class UI_MANAGER : public XOBSERVER, public XSUBJECT
@@ -157,13 +158,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            CreaterVirtualKeyboard                    (UI_LAYOUT* layout, GRPSCREEN* screen);
     bool                            DeleteVirtualKeyboard                     ();
 
-
-
-
-
-    UI_STYLESHEET*                  GetStyleSheet                             ();
-
-  private:                                 
+  private:
                                     UI_MANAGER                                ();
                                     UI_MANAGER                                (UI_MANAGER const&);
     virtual                        ~UI_MANAGER                                ();
@@ -181,9 +176,16 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
 
     bool                            GetLayoutElement_CalculateBoundaryLine    (UI_LAYOUT* layout, UI_ELEMENT* element, bool adjustsizemargin = false);
     bool                            GetParentSizeFont                         (XFILEXMLELEMENT* node, double& sizefont);
+    bool                            ResolvePercentValue                       (XSTRING& valuestr, double basis, double& out);
 
     bool                            GetLayoutElement_Base                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);
     bool                            GetLayoutElement_Base                     (UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);
+
+    // Same as the XFILEXMLELEMENT* overload above, but also hands back the fully-resolved bag (XML attributes
+    // < CSS rules < inline style) it built internally, typed as UI_COMPUTEDSTYLE, so a per-widget builder can
+    // read its own extra keys (e.g. "sizefont") through the SAME cascade instead of re-reading the raw XML node
+    // and silently losing any CSS/inline override -- see UI_ComputedStyle.h.
+    bool                            GetLayoutElement_Base                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, UI_COMPUTEDSTYLE& outstyle, bool adjusttoparent = false);
     UI_ELEMENT*                     GetLayoutElement_Text                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_TextBox                  (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_Image                    (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
@@ -203,6 +205,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
 
     UI_ELEMENT*                     CreatePartialLayout                       (XFILEXMLELEMENT* nodeelement, UI_LAYOUT* layout, UI_ELEMENT* father);
     void                            PrepareElementStyleState                  (UI_ELEMENT* element);
+    void                            RefreshFlexProgressBarTracks              (UI_ELEMENT* element, UI_SKIN* skin);
     bool                            CreateLayouts                             (XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* screen, int viewportindex = 0);
     
     GRPBITMAP*                      LoadBackgroundBitmap                      (XSTRING& namefilebitmap, GRPPROPERTYMODE mode, GRP2DCANVAS* referencecanvas = NULL, double width = 0.0, double height = 0.0);
@@ -253,8 +256,6 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     UI_ELEMENT*                     preselect_element;
 
     UI_VIRTUALKEYBOARD*             virtualkeyboard;
-
-    UI_STYLESHEET*                  stylesheet;
 };
 
 

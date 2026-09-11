@@ -47,7 +47,7 @@
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
 #define SCRIPT_LNG_G_VERSION                    1
-#define SCRIPT_LNG_G_SUBVERSION                 0
+#define SCRIPT_LNG_G_SUBVERSION                 1
 #define SCRIPT_LNG_G_SUBVERSIONERR              0
 
 enum SCRIPT_LNG_G_TOKENTYPES
@@ -93,7 +93,8 @@ enum SCRIPT_LNG_G_TOKENIREPS
   SCRIPT_LNG_G_TOKENIREPS_WHILE        ,
   SCRIPT_LNG_G_TOKENIREPS_BREAK        ,
   SCRIPT_LNG_G_TOKENIREPS_RETURN       ,
-  SCRIPT_LNG_G_TOKENIREPS_END
+  SCRIPT_LNG_G_TOKENIREPS_END          ,
+  SCRIPT_LNG_G_TOKENIREPS_FLOAT
 };
 
 enum SCRIPT_LNG_G_ERRORCODE
@@ -114,13 +115,17 @@ enum SCRIPT_LNG_G_ERRORCODE
   SCRIPT_LNG_G_ERRORCODE_DIV_BY_ZERO                            ,   // "Division by zero"
   SCRIPT_LNG_G_ERRORCODE_BRACE_EXPECTED                         ,   // "{ expected (control statements must use blocks)"
   SCRIPT_LNG_G_ERRORCODE_COLON_EXPECTED                         ,   // "Colon expected"
-  SCRIPT_LNG_G_ERRORCODE_USERBREAK                                  // "Break by user"
+  SCRIPT_LNG_G_ERRORCODE_USERBREAK                              ,   // "Break by user"
+  SCRIPT_LNG_G_ERRORCODE_TOO_MANY_PARAMS                        ,   // "Too many parameters"
+  SCRIPT_LNG_G_ERRORCODE_TOKEN_TOO_LONG                         ,   // "Token too long"
+  SCRIPT_LNG_G_ERRORCODE_TYPE_MISMATCH                               // "Type mismatch"
 };
 
 
 union SCRIPT_LNG_G_VARVALUE
 {
   int          integer;
+  float        real;
   XCHAR        character;
   XDWORD       uinteger;
   XSTRING*     string;
@@ -196,6 +201,7 @@ class SCRIPT_LNG_G_VAR
     SCRIPT_LNG_G_TOKENIREPS             GetType                     ();
 
     int                                 GetValueInteger             ();
+    float                               GetValueFloat               ();
     XCHAR                               GetValueCharacter           ();
     XDWORD                              GetValueUInteger            ();
     XSTRING*                            GetValueString              ();
@@ -203,6 +209,8 @@ class SCRIPT_LNG_G_VAR
     bool                                HaveReservedSize            ();
     bool                                IsArg                       ();
     bool                                IsReturnValue               ();
+    bool                                IsNumeric                   ();
+    bool                                IsTrue                      ();
 
     bool                                Set                         (SCRIPT_LNG_G_VAR* var);
 
@@ -210,6 +218,7 @@ class SCRIPT_LNG_G_VAR
     bool                                SetType                     (SCRIPT_LNG_G_TOKENIREPS type);
 
     bool                                SetValueInteger             (int value);
+    bool                                SetValueFloat               (float value);
     bool                                SetValueCharacter           (XCHAR value);
     bool                                SetValueUInteger            (XDWORD value);
     bool                                SetValueString              (XSTRING* value);
@@ -345,8 +354,6 @@ class SCRIPT_LNG_G : public SCRIPT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
-
 
 
 

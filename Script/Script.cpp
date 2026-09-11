@@ -300,7 +300,7 @@ bool SCRIPT::Load(XPATH& xpath)
 
   XDWORD ID = GEN_SCRIPT_CACHE.GenerateID(xpath);
 
-  XSTRING* _script = GEN_SCRIPT_CACHE.Cache_Get(ID);
+  XSTRING* _script = GEN_SCRIPT_CACHE.Cache_Get(ID, xpath);
   if(_script)
     {
       script.Empty();
@@ -341,7 +341,7 @@ bool SCRIPT::Load(XPATH& xpath)
   if(status)
     {
       ID = GEN_SCRIPT_CACHE.GenerateID(xpath);      
-      GEN_SCRIPT_CACHE.Cache_Add(ID, &script);      
+      GEN_SCRIPT_CACHE.Cache_Add(ID, &script, xpath);
     }
   #endif
 
@@ -421,6 +421,73 @@ bool SCRIPT::Save(XPATH& xpath)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool SCRIPT::ResolvePathInScriptsRoot(XCHAR* namescript, XPATH& resolvedpath)
+* @brief      Resolve a relative script name inside the configured scripts root
+* @ingroup    SCRIPT
+*
+* @param[in]  namescript : Relative script name.
+* @param[out] resolvedpath : Normalized path inside the scripts root.
+*
+* @return     bool : true if the path is confined to the scripts root; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool SCRIPT::ResolvePathInScriptsRoot(XCHAR* namescript, XPATH& resolvedpath)
+{
+  resolvedpath.Empty();
+
+  if(!namescript || !namescript[0]) return false;
+
+  XPATH relativepath;
+
+  relativepath = namescript;
+  EliminateExtraChars(&relativepath);
+  relativepath.Slash_Normalize(false);
+
+  if(relativepath.IsEmpty()) return false;
+  if(relativepath.Get()[0] == __C('/')) return false;
+
+  int segmentstart = 0;
+
+  for(int index=0; index<=(int)relativepath.GetSize(); index++)
+    {
+      XCHAR character = relativepath.Get()[index];
+
+      if((character < __C(' ')) && character) return false;
+      if(character == __C(':') || character == __C('*') || character == __C('?') ||
+         character == __C('"') || character == __C('<') || character == __C('>') ||
+         character == __C('|')) return false;
+
+      if((character == __C('/')) || !character)
+        {
+          int segmentsize = index - segmentstart;
+
+          if(segmentsize <= 0) return false;
+          if((segmentsize == 1) && (relativepath.Get()[segmentstart] == __C('.'))) return false;
+          if((segmentsize == 2) && (relativepath.Get()[segmentstart]     == __C('.')) &&
+                                    (relativepath.Get()[segmentstart + 1] == __C('.'))) return false;
+
+          segmentstart = index + 1;
+        }
+    }
+
+  if(!GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, resolvedpath))
+    {
+      resolvedpath.Empty();
+      return false;
+    }
+
+  resolvedpath.Slash_Normalize(false);
+  resolvedpath.Slash_Delete();
+  resolvedpath.Slash_Add();
+  resolvedpath += relativepath.Get();
+  resolvedpath.Slash_Normalize(false);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRARYS adjustlibrarys)
 * @brief      Load script and run
@@ -452,15 +519,28 @@ bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRA
 
               linescripts->Split(__C(','), namescripts);
 
-              XSTRING* namescript = namescripts.Get(0);
+              bool pathsvalid = namescripts.GetSize()?true:false;
+
+              for(XDWORD d=0; d<namescripts.GetSize() && pathsvalid; d++)
+                {
+                  XSTRING* nametovalidate = namescripts.Get(d);
+                  XPATH    validatedpath;
+
+                  if(!nametovalidate || !SCRIPT::EliminateExtraChars(nametovalidate) ||
+                     !SCRIPT::ResolvePathInScriptsRoot(nametovalidate->Get(), validatedpath))
+                    {
+                      pathsvalid = false;
+                    }
+                }
+
+              if(!pathsvalid) status = false;
+
+              XSTRING* namescript = pathsvalid?namescripts.Get(0):NULL;
               if(namescript)
                 {
-                  SCRIPT::EliminateExtraChars(namescript);
-                  
                   SCRIPT* script = SCRIPT::Create(namescript->Get());
                   if(script) 
                     {
-                      XPATH       allpath;
                       XDWORD      ID = 0;
                       bool        incache = false;
 
@@ -469,27 +549,25 @@ bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRA
                           adjustlibrarys(script);
                         }
                  
-                      GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, allpath);
-    
-                      for(XDWORD d=0; d<namescripts.GetSize(); d++)
-                        {  
-                          allpath += __C(',');  
-                          allpath += namescript->Get();  
-                        }
-                                       
                       #ifdef SCRIPT_CACHE_ACTIVE
 
-                      allpath.Slash_Normalize(false);
-                      ID = GEN_SCRIPT_CACHE.GenerateID(allpath);
-                      XSTRING* _script = GEN_SCRIPT_CACHE.Cache_Get(ID);
-                      if(_script)
+                      XSTRING cachekey;
+                      bool    cachekeyvalid = GEN_SCRIPT_CACHE.GenerateListKey(&namescripts, cachekey);
+
+                      if(cachekeyvalid)
                         {                         
-                          (*script->GetScript()) += _script->Get();      
+                          ID = GEN_SCRIPT_CACHE.GenerateID(cachekey);
 
-                          incache = true;
-                          status  = !_script->IsEmpty();
+                          XSTRING* _script = GEN_SCRIPT_CACHE.Cache_Get(ID, cachekey);
+                          if(_script)
+                            {
+                              (*script->GetScript()) += _script->Get();
 
-                          script->GetNameScript()->Format(__L("ID%08X"), ID);
+                              incache = true;
+                              status  = !_script->IsEmpty();
+
+                              script->GetNameScript()->Format(__L("ID%08X"), ID);
+                            }
                         }
 
                       #endif
@@ -503,11 +581,11 @@ bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRA
                                 {                          
                                   XPATH xpath;   
 
-                                  SCRIPT::EliminateExtraChars(namescript);
-                  
-                                  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, xpath);
-                                  xpath.Slash_Add();
-                                  xpath += namescript->Get();
+                                  if(!SCRIPT::ResolvePathInScriptsRoot(namescript->Get(), xpath))
+                                    {
+                                      status = false;
+                                      break;
+                                    }
 
                                   status = script->LoadAdd(xpath);
                                   if(!status)  
@@ -519,9 +597,9 @@ bool SCRIPT::LoadScriptAndRun(XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRA
                         }
           
                       #ifdef SCRIPT_CACHE_ACTIVE
-                      if(status && !incache)
+                      if(status && !incache && cachekeyvalid)
                         {                          
-                          GEN_SCRIPT_CACHE.Cache_Add(ID, script->GetScript());
+                          GEN_SCRIPT_CACHE.Cache_Add(ID, script->GetScript(), cachekey);
                         }
                       #endif                    
 
@@ -871,12 +949,18 @@ bool SCRIPT::DeleteAllLibrarys()
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(XCHAR* name)
 {
+  if(!name) return NULL;
+
   for(XDWORD c=0;c<libraryfunctions.GetSize(); c++)
     {
       SCRIPT_LIB_FUNCTION* function = (SCRIPT_LIB_FUNCTION*)libraryfunctions.Get(c);
       if(function)
         {
-          if(!function->GetName()->Compare(name)) return function;
+          if(!function->GetName()->Compare(name))
+            {
+              if(IsLibraryFunctionAllowed(function->GetLibrary(), function->GetName()->Get())) return function;
+              return NULL;
+            }
         }
     }
 
@@ -897,12 +981,18 @@ SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(XCHAR* name)
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_FUNCTION* SCRIPT::GetLibraryFunction(void* ptrfunction)
 {
+  if(!ptrfunction) return NULL;
+
   for(XDWORD c=0;c<libraryfunctions.GetSize(); c++)
     {
       SCRIPT_LIB_FUNCTION* function = (SCRIPT_LIB_FUNCTION*)libraryfunctions.Get(c);
       if(function)
         {
-          if((void*)(function->GetFunctionLibrary()) == ptrfunction) return function;
+          if((void*)(function->GetFunctionLibrary()) == ptrfunction)
+            {
+              if(IsLibraryFunctionAllowed(function->GetLibrary(), function->GetName()->Get())) return function;
+              return NULL;
+            }
         }
     }
 
@@ -1030,6 +1120,154 @@ bool SCRIPT::AddInternalLibraries()
           AddLibrary(lib);
         }           
     }      
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD SCRIPT::GetCapabilities()
+* @brief      Get the explicitly enabled unsafe script capabilities
+* @ingroup    SCRIPT
+*
+* @return     XDWORD : Enabled SCRIPT_CAPABILITY mask.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD SCRIPT::GetCapabilities()
+{
+  return capabilities;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool SCRIPT::SetCapabilities(XDWORD capabilities)
+* @brief      Replace the unsafe script capability allowlist
+* @ingroup    SCRIPT
+*
+* @param[in]  capabilities : SCRIPT_CAPABILITY mask.
+*
+* @return     bool : true if the mask is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool SCRIPT::SetCapabilities(XDWORD capabilities)
+{
+  if(capabilities & ~((XDWORD)SCRIPT_CAPABILITY_ALL_UNSAFE)) return false;
+
+  this->capabilities = capabilities;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool SCRIPT::EnableCapabilities(XDWORD capabilities)
+* @brief      Add capabilities to the script allowlist
+* @ingroup    SCRIPT
+*
+* @param[in]  capabilities : SCRIPT_CAPABILITY mask.
+*
+* @return     bool : true if the mask is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool SCRIPT::EnableCapabilities(XDWORD capabilities)
+{
+  if(capabilities & ~((XDWORD)SCRIPT_CAPABILITY_ALL_UNSAFE)) return false;
+
+  this->capabilities |= capabilities;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool SCRIPT::DisableCapabilities(XDWORD capabilities)
+* @brief      Remove capabilities from the script allowlist
+* @ingroup    SCRIPT
+*
+* @param[in]  capabilities : SCRIPT_CAPABILITY mask.
+*
+* @return     bool : true if the mask is valid; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool SCRIPT::DisableCapabilities(XDWORD capabilities)
+{
+  if(capabilities & ~((XDWORD)SCRIPT_CAPABILITY_ALL_UNSAFE)) return false;
+
+  this->capabilities &= ~capabilities;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool SCRIPT::IsCapabilityEnabled(SCRIPT_CAPABILITY capability)
+* @brief      Check whether an unsafe script capability is enabled
+* @ingroup    SCRIPT
+*
+* @param[in]  capability : Capability to check.
+*
+* @return     bool : true if enabled; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool SCRIPT::IsCapabilityEnabled(SCRIPT_CAPABILITY capability)
+{
+  if(capability == SCRIPT_CAPABILITY_NONE) return true;
+
+  return (capabilities & (XDWORD)capability) == (XDWORD)capability;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool SCRIPT::IsLibraryFunctionAllowed(SCRIPT_LIB* library, XCHAR* name)
+* @brief      Apply the per-script capability allowlist to a native function
+* @ingroup    SCRIPT
+*
+* @param[in]  library : Function library.
+* @param[in]  name : Function name.
+*
+* @return     bool : true if the native function may be called; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool SCRIPT::IsLibraryFunctionAllowed(SCRIPT_LIB* library, XCHAR* name)
+{
+  if(!library || !name || !library->GetID()) return false;
+
+  XSTRING* libraryID = library->GetID();
+
+  if(!libraryID->Compare(__L("Process")))
+    {
+      return IsCapabilityEnabled(SCRIPT_CAPABILITY_PROCESS);
+    }
+
+  if(!libraryID->Compare(__L("System")))
+    {
+      return IsCapabilityEnabled(SCRIPT_CAPABILITY_SYSTEM);
+    }
+
+  if(!libraryID->Compare(__L("InpSimulate")))
+    {
+      return IsCapabilityEnabled(SCRIPT_CAPABILITY_INPUT_SIMULATE);
+    }
+
+  if(!libraryID->Compare(__L("Window")))
+    {
+      return IsCapabilityEnabled(SCRIPT_CAPABILITY_WINDOW);
+    }
+
+  if(!libraryID->Compare(__L("Dir")))
+    {
+      XSTRING functionname(name);
+
+      if(!functionname.Compare(__L("ChangeDir")) ||
+         !functionname.Compare(__L("RemoveDir")) ||
+         !functionname.Compare(__L("MakeDir")))
+        {
+          return IsCapabilityEnabled(SCRIPT_CAPABILITY_FILESYSTEM_WRITE);
+        }
+    }
 
   return true;
 }
@@ -1184,8 +1422,10 @@ void SCRIPT::Clean()
   returnvaluescript   = 0;
 
   iscancelexec        = false;
+
+  #ifdef SCRIPT_DENY_UNSAFE_LIBRARIES_BY_DEFAULT
+  capabilities        = SCRIPT_CAPABILITY_NONE;
+  #else
+  capabilities        = SCRIPT_CAPABILITY_ALL_UNSAFE;
+  #endif
 }
-
-
-
-

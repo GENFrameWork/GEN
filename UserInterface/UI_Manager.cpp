@@ -66,6 +66,8 @@
 #include "UI_XEvent.h"
 #include "UI_Style.h"
 #include "UI_StyleSheet.h"
+#include "UI_PropertyRegistry.h"
+#include "UI_ComputedStyle.h"
 #include "UI_CSSParser.h"
 #include "UI_Color.h"
 #include "UI_Colors.h"
@@ -74,6 +76,7 @@
 #include "UI_Animation.h"
 #include "UI_Animations.h"
 #include "UI_Element.h"
+#include "UI_LayoutEngine.h"
 #include "UI_Element_Text.h"
 #include "UI_Element_TextBox.h"
 #include "UI_Element_Image.h"
@@ -2528,31 +2531,57 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
                                                                                         {
                                                                                           width  =  ui_skincanvas->GetCanvas()->GetWidth();
                                                                                           height =  ui_skincanvas->GetCanvas()->GetHeight();
-                                                                                        }                                 
+                                                                                        }
 
-                                                                                      element->GetBoundaryLine()->height  = 0;
-                                                                                      element->GetBoundaryLine()->width   = 0;
-                                                                                         
-                                                                                      if(element_text->GetText()->Compare(resolve.Get(), true))  
-                                                                                        { 
-                                                                                          element_text->GetText()->Set(resolve);   
-                                                                                              
+                                                                                      // NOTE: the boundary line must be zeroed (to force CalculeBoundaryLine_AllElements to
+                                                                                      // re-measure an AUTO-sized box, e.g. a centered "37%" caption) ONLY when the resolved
+                                                                                      // value actually changed. This used to run unconditionally on every single tick this
+                                                                                      // function was called (i.e. every frame there is a live mask on the element, changed
+                                                                                      // or not): on every tick where the value happened to stay the SAME, the width/height
+                                                                                      // were zeroed but never rebuilt (the rebuild below only runs on an actual change), so
+                                                                                      // Draw_Text's text-align:center offset -- (boundarywidth - textwidth)/2 -- was computed
+                                                                                      // against a bogus width of 0 for as long as the value stayed put, permanently shifting
+                                                                                      // the text left by half its own width. The ONE frame where the value DID change was the
+                                                                                      // only frame with a correctly rebuilt (and therefore correctly centered) box, which is
+                                                                                      // exactly why a live value looked both permanently off-center AND "flashed" wider/
+                                                                                      // narrower every time it changed, most visibly on the CPU/RAM usage ring captions.
+                                                                                      if(element_text->GetText()->Compare(resolve.Get(), true))
+                                                                                        {
+                                                                                          element_text->GetText()->Set(resolve);
+
+                                                                                          element->GetBoundaryLine()->height  = 0;
+                                                                                          element->GetBoundaryLine()->width   = 0;
+
                                                                                           ui_skincanvas->CalculeBoundaryLine_AllElements(element, false);
                                                                                           ui_skincanvas->CalculePosition(element, width, height);
 
                                                                                           if(father && ((father->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR) || (father->GetType() == UI_ELEMENT_TYPE_PROGRESSRADIAL) || (father->GetType() == UI_ELEMENT_TYPE_PROGRESSIMAGE)))
                                                                                             {
                                                                                               ui_skincanvas->CalculateBoundaryLine(father, false);   // re-apply progress allocationtext/boundary with the new text size (don't leave the text mis-placed by the plain CalculePosition above)
-                                                                                            }                                                                                              
+                                                                                            }
 
-                                                                                          Elements_SetToRedraw(element);    
+                                                                                          // Phase 4 ("migración del ejemplo", second sub-step, live-update follow-up): CalculePosition() just above is
+                                                                                          // the LEGACY (pre-Flexbox) positioning pass -- it knows nothing about "display: flex" and simply drops the
+                                                                                          // element back near its father's origin using xpos/margin alone, ignoring every sibling. That is harmless for
+                                                                                          // a non-flex father (its only caller before this sub-step), but for a flex father it silently undid
+                                                                                          // UI_LAYOUTENGINE::RunLayout()'s one-time, load-time positioning the moment this text's own auto-sized box
+                                                                                          // changed width/height (e.g. dashboard.xml's "#[FOOTER_SO]"/"#[FOOTER_UPTIME]" ticking every second) --
+                                                                                          // collapsing every live text in the row onto the same spot instead of leaving it where the flex engine put
+                                                                                          // it. Re-running the father's own flex layout repositions ALL of its children (not just this one) with
+                                                                                          // their current (possibly just-changed) sizes, so a still-static sibling is not left stale either.
+                                                                                          if(father && father->IsFlexContainer())
+                                                                                            {
+                                                                                              UI_LAYOUTENGINE::RunLayout(father, UI_LAYOUTSTRATEGY_CSS);
+                                                                                            }
+
+                                                                                          Elements_SetToRedraw(element);
                                                                                         }
                                                                                     }
                                                                                     break;
 
                                                   case UI_SKIN_DRAWMODE_CONTEXT   : break;
-                                                }                                                                                                             
-                                                                                             
+                                                }
+
                                             }
                                         }
                                         break;
@@ -2814,12 +2843,6 @@ UI_MANAGER::~UI_MANAGER()
       xmutex_UIevent = NULL;
     }
 
-  if(stylesheet)
-    {
-      GEN_DELETE stylesheet;
-      stylesheet = NULL;
-    }
-
   Clean();
 }
 
@@ -3002,7 +3025,7 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
   if(!node) return false;
 
   sizefont = 0;
-    
+
   if(!GetLayoutElementValue(node, __L("sizefont"), sizefont))
     {
       return GetParentSizeFont(node->GetFather(), sizefont);
@@ -3013,7 +3036,44 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool UI_MANAGER::ResolvePercentValue(XSTRING& valuestr, double basis, double& out)
+* @brief      Step 4 (relative units): resolve a "N%" token against `basis` (the father element's own width or
+*             height, whichever axis `valuestr` was authored for). Returns false -- leaving `out` untouched --
+*             for anything that is not a trailing '%': callers keep using their existing raw-pixel path in that
+*             case, so this never changes behaviour for values that were never a percentage to begin with.
+* @note       Only "%" is added here; "em" is deliberately left out. Unlike a container's width/height (already
+*             resolved on `element->GetFather()` by the time GetLayoutElement_Base() runs its children), an
+*             element's own font size is not known at this point in the pipeline -- "sizefont" is read later,
+*             per widget type, by builders such as GetLayoutElement_Text() -- so "em" cannot be resolved here
+*             without reordering that pipeline. Flagged instead of worked around; see GEN_FrameWork chat log.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  valuestr : Raw attribute/declaration value, e.g. "50%" or "120".
+* @param[in]  basis : The dimension (in pixels) that 100% maps to. Callers pass 0.0 when there is no father to
+*             measure (a top-level layout element): the percentage then resolves to 0, same as any other
+*             not-yet-supported case, rather than reading garbage.
+* @param[out] out : Resolved pixel value. Untouched when `valuestr` is not a percentage.
+*
+* @return     bool : true if `valuestr` was a percentage and `out` was set; false otherwise.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ResolvePercentValue(XSTRING& valuestr, double basis, double& out)
+{
+  if(valuestr.IsEmpty()) return false;
+  if(valuestr.Find(__L("%"), true) == XSTRING_NOTFOUND) return false;
+
+  XSTRING number = valuestr;
+  number.DeleteNoCharacters(__L("% \t\r\n"));   // strip the '%' plus any stray whitespace, e.g. "50 %"
+
+  out = basis * (number.ConvertToDouble() / 100.0);
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
 * @brief      Get layout element base
 * @ingroup    USERINTERFACE
@@ -3028,14 +3088,37 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
 {
-  UI_STYLE style;
-  style.FillFromXMLElement(node);
+  UI_COMPUTEDSTYLE style;
+
+  return GetLayoutElement_Base(node, layout, element, style, adjusttoparent);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, UI_COMPUTEDSTYLE& outstyle, bool adjusttoparent)
+* @brief      Get layout element base
+* @ingroup    USERINTERFACE
+*
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  element : Element to process.
+* @param[out] outstyle : Receives the fully-resolved bag (XML attributes < CSS rules < inline style) this call
+*                         built, so the caller's own per-widget reads can go through the same cascade.
+* @param[in]  adjusttoparent : Adjusttoparent value.
+*
+* @return     bool : true if the operation is successful; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, UI_COMPUTEDSTYLE& outstyle, bool adjusttoparent)
+{
+  outstyle.FillFromXMLElement(node);
 
   // Set the element's identity BEFORE the CSS cascade runs, so #id and .class selectors can match. The XML
   // attributes we just harvested carry the authoritative identity; CSS may still overwrite visual keys later,
   // but never the identity itself.
-  XSTRING xml_name;   style.Get(__L("name"),  xml_name);
-  XSTRING xml_class;  style.Get(__L("class"), xml_class);
+  XSTRING xml_name;   outstyle.Get(__L("name"),  xml_name);
+  XSTRING xml_class;  outstyle.Get(__L("class"), xml_class);
 
   if(element)
     {
@@ -3043,16 +3126,32 @@ bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout,
       element->SetClassNames(xml_class);         // empty string clears the list; retro-compat safe
     }
 
-  // Layer stylesheet declarations on top (CSS-wins semantics). No stylesheet loaded -> no-op.
-  if(stylesheet && element)
+  // Layer stylesheet declarations on top (CSS-wins semantics). The stylesheet is owned by THIS element's own
+  // UI_LAYOUT (Phase 1 ownership step -- see UI_LAYOUT::GetStyleSheet(), set from CreateLayouts()), not by
+  // UI_MANAGER, so two layouts loaded from different XML files can never silently share (or clobber) one
+  // another's rules. No layout / no stylesheet loaded -> no-op, exactly as before.
+  if(layout && element)
     {
-      style.FillFromCSSDeclarations(stylesheet, element);
+      UI_STYLESHEET* sheet = layout->GetStyleSheet();
+      if(sheet) outstyle.FillFromCSSDeclarations(sheet, element);
+    }
+
+  // Step 6 ("sin overrides puntuales por elemento"): a "style=" XML attribute is the highest-priority layer,
+  // exactly like HTML's own inline style -- it wins over both the plain XML attributes and any stylesheet rule
+  // (class, id, or :root) applied above, without needing a one-off class in the .css for a single element's
+  // tweak. FillFromXMLElement() already copied "style" into the bag like any other attribute; read it back out
+  // and, if present, layer its declarations on top. Absent/empty "style" (the overwhelming majority of
+  // elements, and every layout authored before this existed) costs one bag lookup and nothing else.
+  XSTRING inlinestyle;
+  if(outstyle.Get(__L("style"), inlinestyle) && !inlinestyle.IsEmpty())
+    {
+      outstyle.FillFromInlineStyle(inlinestyle);
     }
 
   XSTRING fathertagname;
   if(node && node->GetFather()) fathertagname = node->GetFather()->GetName();
 
-  return GetLayoutElement_Base(style, fathertagname, layout, element, adjusttoparent);
+  return GetLayoutElement_Base(outstyle, fathertagname, layout, element, adjusttoparent);
 }
 
 
@@ -3080,6 +3179,12 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
 
   if(!element) return false;
 
+  // Phase 1 ownership step: tag the element with the UI_LAYOUT it belongs to. EVERY widget builder (top-level
+  // AND nested/child elements, via CreatePartialLayout()) routes through this one function, so this is the
+  // single point that guarantees UI_ELEMENT::ReapplyStyleVisual() can always resolve back to the correct
+  // per-layout stylesheet later, regardless of nesting depth -- see UI_ELEMENT::GetLayout()/SetLayout().
+  element->SetLayout(layout);
+
   element->SetIsDetached(false);
 
   if(!fathertagname.Compare(__L("layout"), true)) element->SetIsDetached(true);
@@ -3088,13 +3193,21 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   style.Get(__L("name"), name);
   element->GetName()->Set(name);
 
+  // Step 4 (relative units): "%" on xpos/ypos/width/height resolves against the father's own already-resolved
+  // box -- safe because GEN builds a layout top-down (a father's UI_ELEMENT is always fully resolved before
+  // GetLayoutElement_Base() ever runs for one of its children). A top-level element (no father) has no defined
+  // basis, so its percentage resolves to 0 exactly like today's "missing attribute" case, rather than guessing
+  // against the canvas -- see ResolvePercentValue()'s note on why "em" is not attempted here at all.
+  double fatherwidth  = element->GetFather() ? element->GetFather()->GetBoundaryLine()->width  : 0.0;
+  double fatherheight = element->GetFather() ? element->GetFather()->GetBoundaryLine()->height : 0.0;
+
   XSTRING position;
   if(style.Get(__L("xpos"), position))
     {
       if(!position.Compare(__L("left"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_LEFT;
         else if(!position.Compare(__L("right"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_RIGHT;
           else if(!position.Compare(__L("center"), true)) xpos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else style.Get(__L("xpos"), xpos);
+            else if(!ResolvePercentValue(position, fatherwidth, xpos)) style.Get(__L("xpos"), xpos);
     }
 
   if(style.Get(__L("ypos"), position))
@@ -3102,7 +3215,7 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
       if(!position.Compare(__L("up"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_UP;
         else if(!position.Compare(__L("down"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_DOWN;
           else if(!position.Compare(__L("center"), true)) ypos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else style.Get(__L("ypos"), ypos);
+            else if(!ResolvePercentValue(position, fatherheight, ypos)) style.Get(__L("ypos"), ypos);
     }
 
 
@@ -3111,13 +3224,13 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  width = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  width = UI_ELEMENT_TYPE_ALIGN_AUTO;
-            else style.Get(__L("width"), width);
+          else if(!ResolvePercentValue(size, fatherwidth, width)) style.Get(__L("width"), width);
     }
    else
     {
       if(element->GetFather() && adjusttoparent)
         {
-          width = element->GetFather()->GetBoundaryLine()->width;
+          width = fatherwidth;
         }
     }
 
@@ -3125,13 +3238,13 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  height = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  height = UI_ELEMENT_TYPE_ALIGN_AUTO;
-            else style.Get(__L("height"), height);
+          else if(!ResolvePercentValue(size, fatherheight, height)) style.Get(__L("height"), height);
     }
    else
     {
       if(element->GetFather() && adjusttoparent)
         {
-          height = element->GetFather()->GetBoundaryLine()->height;
+          height = fatherheight;
         }
     }
 
@@ -3145,6 +3258,112 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!directionstr.Compare(__L("horizontal"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_HORIZONTAL);
         else if(!directionstr.Compare(__L("vertical"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_VERTICAL);
+    }
+
+  // Flexbox: CSS Lite wiring (Phase 4, "migración del ejemplo", first sub-step -- see UI_LayoutEngine.h's
+  // RunLayout()/BuildTree() SCOPE ADDENDUM). "display: flex" is the only recognized "display" value today;
+  // anything else, or its absence, leaves IsFlexContainer() at its default "false" -- so this whole block is a
+  // no-op, and every property below keeps its UI_ELEMENT default, for every layout authored before it existed.
+  XSTRING displaystr;
+  if(style.Get(__L("display"), displaystr))
+    {
+      element->SetFlexContainer(!displaystr.Compare(__L("flex"), true));
+    }
+
+  XSTRING flexdirectionstr;
+  if(style.Get(__L("flex-direction"), flexdirectionstr))
+    {
+      if(!flexdirectionstr.Compare(__L("row"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_ROW);
+        else if(!flexdirectionstr.Compare(__L("row-reverse"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_ROW_REVERSE);
+          else if(!flexdirectionstr.Compare(__L("column"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+            else if(!flexdirectionstr.Compare(__L("column-reverse"), true))  element->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN_REVERSE);
+    }
+
+  XSTRING justifycontentstr;
+  if(style.Get(__L("justify-content"), justifycontentstr))
+    {
+      if(!justifycontentstr.Compare(__L("flex-start"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_FLEX_START);
+        else if(!justifycontentstr.Compare(__L("flex-end"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_FLEX_END);
+          else if(!justifycontentstr.Compare(__L("center"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_CENTER);
+            else if(!justifycontentstr.Compare(__L("space-between"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_BETWEEN);
+              else if(!justifycontentstr.Compare(__L("space-around"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_AROUND);
+                else if(!justifycontentstr.Compare(__L("space-evenly"), true))  element->SetJustifyContent(UI_JUSTIFY_CONTENT_SPACE_EVENLY);
+    }
+
+  // "gap" is the shorthand for both axes; "row-gap"/"column-gap" (read afterwards, so they win if present,
+  // exactly like the padding/margin longhands elsewhere in this function) override just their own axis.
+  double rowgap    = element->GetRowGap();
+  double columngap = element->GetColumnGap();
+  double gapvalue  = 0.0;
+  if(style.Get(__L("gap"), gapvalue)) { rowgap = gapvalue; columngap = gapvalue; }
+  if(style.Get(__L("row-gap"), gapvalue))    rowgap    = gapvalue;
+  if(style.Get(__L("column-gap"), gapvalue)) columngap = gapvalue;
+  element->SetGap(rowgap, columngap);
+
+  XSTRING flexwrapstr;
+  if(style.Get(__L("flex-wrap"), flexwrapstr))
+    {
+      if(!flexwrapstr.Compare(__L("nowrap"), true))  element->SetFlexWrap(UI_FLEX_WRAP_NOWRAP);
+        else if(!flexwrapstr.Compare(__L("wrap"), true))  element->SetFlexWrap(UI_FLEX_WRAP_WRAP);
+          else if(!flexwrapstr.Compare(__L("wrap-reverse"), true))  element->SetFlexWrap(UI_FLEX_WRAP_WRAP_REVERSE);
+    }
+
+  XSTRING aligncontentstr;
+  if(style.Get(__L("align-content"), aligncontentstr))
+    {
+      if(!aligncontentstr.Compare(__L("flex-start"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_FLEX_START);
+        else if(!aligncontentstr.Compare(__L("flex-end"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_FLEX_END);
+          else if(!aligncontentstr.Compare(__L("center"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_CENTER);
+            else if(!aligncontentstr.Compare(__L("space-between"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_SPACE_BETWEEN);
+              else if(!aligncontentstr.Compare(__L("space-around"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_SPACE_AROUND);
+                else if(!aligncontentstr.Compare(__L("space-evenly"), true))  element->SetAlignContent(UI_ALIGN_CONTENT_SPACE_EVENLY);
+    }
+
+  XSTRING alignitemsstr;
+  if(style.Get(__L("align-items"), alignitemsstr))
+    {
+      if(!alignitemsstr.Compare(__L("flex-start"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_FLEX_START);
+        else if(!alignitemsstr.Compare(__L("flex-end"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_FLEX_END);
+          else if(!alignitemsstr.Compare(__L("center"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+            else if(!alignitemsstr.Compare(__L("stretch"), true))  element->SetAlignItems(UI_ALIGN_ITEMS_STRETCH);
+    }
+
+  double flexgrowvalue = 0.0;
+  if(style.Get(__L("flex-grow"), flexgrowvalue)) element->SetFlexGrow(flexgrowvalue);
+
+  double flexshrinkvalue = 0.0;
+  if(style.Get(__L("flex-shrink"), flexshrinkvalue)) element->SetFlexShrink(flexshrinkvalue);
+
+  XSTRING flexbasisstr;
+  if(style.Get(__L("flex-basis"), flexbasisstr))
+    {
+      if(!flexbasisstr.Compare(__L("auto"), true))  element->SetFlexBasisAuto();
+        else element->SetFlexBasis(flexbasisstr.ConvertToDouble());
+    }
+
+  XSTRING alignselfstr;
+  if(style.Get(__L("align-self"), alignselfstr))
+    {
+      if(!alignselfstr.Compare(__L("auto"), true))  element->SetAlignSelf(UI_ALIGN_SELF_AUTO);
+        else if(!alignselfstr.Compare(__L("flex-start"), true))  element->SetAlignSelf(UI_ALIGN_SELF_FLEX_START);
+          else if(!alignselfstr.Compare(__L("flex-end"), true))  element->SetAlignSelf(UI_ALIGN_SELF_FLEX_END);
+            else if(!alignselfstr.Compare(__L("center"), true))  element->SetAlignSelf(UI_ALIGN_SELF_CENTER);
+              else if(!alignselfstr.Compare(__L("stretch"), true))  element->SetAlignSelf(UI_ALIGN_SELF_STRETCH);
+    }
+
+  // "text-align" (Step 10): "textalignment" is the historical GEN attribute name (already used, XML-only, by
+  // UI_ELEMENT_TEXTBOX's own builder); "text-align" is accepted as the CSS-natural alias, first-hit-wins same
+  // as "bckgrdcolor"/"background-color" above -- both now the SAME shared lookup, UI_PROPERTYREGISTRY::
+  // GetAliased(), so this precedence and ReapplyStyleVisual()'s cannot silently drift apart. Absent/unrecognized
+  // leaves the element's constructor default (LEFT) untouched, so this is a no-op for every layout authored
+  // before it existed.
+  XSTRING textalignstr;
+  UI_PROPERTYREGISTRY::GetAliased(style, __L("textalignment"), __L("text-align"), textalignstr);
+  if(!textalignstr.IsEmpty())
+    {
+      if(!textalignstr.Compare(__L("left"), true))  element->SetTextAlign(UI_ELEMENT_TYPE_ALIGN_LEFT);
+        else if(!textalignstr.Compare(__L("right"), true))  element->SetTextAlign(UI_ELEMENT_TYPE_ALIGN_RIGHT);
+          else if(!textalignstr.Compare(__L("center"), true)) element->SetTextAlign(UI_ELEMENT_TYPE_ALIGN_CENTER);
     }
 
   // NOTE: "role" is reserved for GEN custom Chromes (window caption) layouts: it lets GRPSCREEN find "the close
@@ -3195,10 +3414,7 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     }
 
   XSTRING bckgrdcolor;
-  if(!style.Get(__L("bckgrdcolor"), bckgrdcolor) || bckgrdcolor.IsEmpty())
-    {
-      style.Get(__L("background-color"), bckgrdcolor);
-    }
+  UI_PROPERTYREGISTRY::GetAliased(style, __L("bckgrdcolor"), __L("background-color"), bckgrdcolor);
   if(!bckgrdcolor.IsEmpty())
     {
       element->GetBackgroundColor()->SetFromString(bckgrdcolor);
@@ -3224,24 +3440,58 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   double blinktime;
   if(style.Get(__L("blink"), blinktime)) element->SetBlink((XDWORD)blinktime);
 
+  // Step 7 ("transiciones"): a plain "transition: <milliseconds>" duration -- GEN's minimal CSS subset stays
+  // minimal here too (no property list, no easing keyword). Read once at load time exactly like "blink" above;
+  // UI_ELEMENT::ReapplyStyleVisual() consults it whenever a pseudo-class state change re-resolves color/
+  // bckgrdcolor, tweening between the old and new value over that many milliseconds instead of jumping
+  // instantly. 0 (the default -- every layout authored before this existed) preserves the original instant
+  // jump exactly.
+  double transitionms;
+  if(style.Get(__L("transition"), transitionms)) element->SetTransitionDuration((XDWORD)transitionms);
+
   XSTRING extra;
   style.Get(__L("extra"), extra);
   element->GetExtra()->Set(extra);
 
+  // "margin": historically a FIXED 4-number shorthand only, order LEFT,RIGHT,UP,DOWN (UnFormat("%d,%d,%d,%d")) --
+  // note this is NOT the CSS TOP/RIGHT/BOTTOM/LEFT order that "padding"/"border-radius" already use below, so a
+  // 4-value "margin" keeps its exact historical meaning here (no existing layout that authored 4 values can
+  // silently change shape). What was missing, and is what the UI/CSS analysis report's Phase 1 asks for, is the
+  // same CSS 1-to-3-value shorthand padding/border-radius already accept: those counts had no defined legacy
+  // behaviour (UnFormat() with fewer than 4 comma-values just left the rest at 0), so giving them real CSS
+  // expansion semantics adds capability without changing any authored layout's rendered result.
   XSTRING marginstr;
   if(style.Get(__L("margin"), marginstr))
     {
-      int margin[UI_ELEMENT_MARGIN_MAX] = { 0, 0, 0, 0 };
+      double vals[UI_ELEMENT_MARGIN_MAX] = { 0.0, 0.0, 0.0, 0.0 };
+      XDWORD n = UI_PROPERTYREGISTRY::TokenizeNumbers(marginstr, vals, UI_ELEMENT_MARGIN_MAX);
 
-      marginstr.UnFormat(__L("%d,%d,%d,%d") , &margin[0]
-                                            , &margin[1]
-                                            , &margin[2]
-                                            , &margin[3]);
+      if(n == UI_ELEMENT_MARGIN_MAX)
+        {
+          // Legacy 4-value form: LEFT, RIGHT, UP, DOWN, unchanged from the historical UnFormat() behaviour.
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT   , vals[0]);
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT  , vals[1]);
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , vals[2]);
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , vals[3]);
+        }
+       else
+        {
+          // New 1-to-3-value CSS shorthand: TOP, RIGHT, BOTTOM, LEFT expansion, same as "padding" below.
+          double m_top = 0.0, m_right = 0.0, m_bottom = 0.0, m_left = 0.0;
 
-      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT   , (double)margin[0]);
-      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT  , (double)margin[1]);
-      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , (double)margin[2]);
-      element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , (double)margin[3]);
+          switch(n)
+            {
+              case 1  : m_top = m_right = m_bottom = m_left = vals[0];                              break;
+              case 2  : m_top = m_bottom = vals[0]; m_left = m_right = vals[1];                      break;
+              case 3  : m_top = vals[0]; m_left = m_right = vals[1]; m_bottom = vals[2];              break;
+              default : break;                                                                        // 0 values: no-op
+            }
+
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT   , m_left);
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT  , m_right);
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , m_top);
+          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , m_bottom);
+        }
     }
 
   // --- Step 4: box-model additions --------------------------------------------------------------------------------
@@ -3254,49 +3504,13 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   XSTRING paddingstr;
   if(style.Get(__L("padding"), paddingstr))
     {
-      double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
-      int    n       = 0;
+      double out[4] = { 0.0, 0.0, 0.0, 0.0 };
+      UI_PROPERTYREGISTRY::ExpandCSSShorthand4(paddingstr, out);          // out = TOP, RIGHT, BOTTOM, LEFT
 
-      // Split on any run of comma / whitespace.
-      XDWORD   len  = paddingstr.GetSize();
-      XDWORD   p    = 0;
-      while(p < len && n < 4)
-        {
-          while(p < len)
-            {
-              XCHAR ch = paddingstr[(int)p];
-              if(ch != __C(' ') && ch != __C('\t') && ch != __C(',')) break;
-              p++;
-            }
-          if(p >= len) break;
-
-          XDWORD start = p;
-          while(p < len)
-            {
-              XCHAR ch = paddingstr[(int)p];
-              if(ch == __C(' ') || ch == __C('\t') || ch == __C(',')) break;
-              p++;
-            }
-
-          XSTRING tok;
-          paddingstr.Copy((int)start, (int)p, tok);
-          vals[n++] = tok.ConvertToDouble();
-        }
-
-      double p_top = 0.0, p_right = 0.0, p_bottom = 0.0, p_left = 0.0;
-
-      switch(n)
-        {
-          case 1  : p_top = p_right = p_bottom = p_left = vals[0]; break;
-          case 2  : p_top = p_bottom = vals[0]; p_left = p_right = vals[1]; break;
-          case 3  : p_top = vals[0]; p_left = p_right = vals[1]; p_bottom = vals[2]; break;
-          default : p_top = vals[0]; p_right = vals[1]; p_bottom = vals[2]; p_left = vals[3]; break;
-        }
-
-      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , p_left);
-      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, p_right);
-      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP   , p_top);
-      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , p_bottom);
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , out[3]);
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, out[1]);
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP   , out[0]);
+      element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , out[2]);
     }
 
   double pv;
@@ -3324,48 +3538,13 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   XSTRING brstr;
   if(style.Get(__L("border-radius"), brstr))
     {
-      double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
-      int    n       = 0;
+      double out[4] = { 0.0, 0.0, 0.0, 0.0 };
+      UI_PROPERTYREGISTRY::ExpandCSSShorthand4(brstr, out);              // out = TL, TR, BR, BL
 
-      XDWORD  len = brstr.GetSize();
-      XDWORD  p   = 0;
-      while(p < len && n < 4)
-        {
-          while(p < len)
-            {
-              XCHAR ch = brstr[(int)p];
-              if(ch != __C(' ') && ch != __C('\t') && ch != __C(',')) break;
-              p++;
-            }
-          if(p >= len) break;
-
-          XDWORD start = p;
-          while(p < len)
-            {
-              XCHAR ch = brstr[(int)p];
-              if(ch == __C(' ') || ch == __C('\t') || ch == __C(',')) break;
-              p++;
-            }
-
-          XSTRING tok;
-          brstr.Copy((int)start, (int)p, tok);
-          vals[n++] = tok.ConvertToDouble();
-        }
-
-      double r_tl = 0.0, r_tr = 0.0, r_br = 0.0, r_bl = 0.0;
-
-      switch(n)
-        {
-          case 1  : r_tl = r_tr = r_br = r_bl = vals[0];                             break;
-          case 2  : r_tl = r_br = vals[0]; r_tr = r_bl = vals[1];                    break;
-          case 3  : r_tl = vals[0]; r_tr = r_bl = vals[1]; r_br = vals[2];           break;
-          default : r_tl = vals[0]; r_tr = vals[1]; r_br = vals[2]; r_bl = vals[3];  break;
-        }
-
-      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TL, r_tl);
-      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TR, r_tr);
-      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BR, r_br);
-      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BL, r_bl);
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TL, out[0]);
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TR, out[1]);
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BR, out[2]);
+      element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BL, out[3]);
     }
 
   double rv;
@@ -3384,79 +3563,12 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   XSTRING boxshadow;
   if(style.Get(__L("box-shadow"), boxshadow) && !boxshadow.IsEmpty())
     {
-      XVECTOR<XSTRING*> tokens;
-      XDWORD  bs_len = boxshadow.GetSize();
-      XDWORD  bs_p   = 0;
-
-      while(bs_p < bs_len)
-        {
-          while(bs_p < bs_len)
-            {
-              XCHAR ch = boxshadow[(int)bs_p];
-              if(ch != __C(' ') && ch != __C('\t')) break;
-              bs_p++;
-            }
-          if(bs_p >= bs_len) break;
-
-          XDWORD start = bs_p;
-          while(bs_p < bs_len)
-            {
-              XCHAR ch = boxshadow[(int)bs_p];
-              if(ch == __C(' ') || ch == __C('\t')) break;
-              bs_p++;
-            }
-
-          XSTRING* tok = GEN_NEW XSTRING();
-          if(tok)
-            {
-              boxshadow.Copy((int)start, (int)bs_p, *tok);
-              tokens.Add(tok);
-            }
-        }
-
-      // Classify: leading numeric tokens are (offset-x, offset-y, blur); the first non-numeric one starts the
-      // colour. A token is numeric when its first character is digit, '.', '-' or '+'.
-      double  sh_x     = 0.0;
-      double  sh_y     = 0.0;
-      double  sh_blur  = 0.0;
+      double  sh_x    = 0.0;
+      double  sh_y    = 0.0;
+      double  sh_blur = 0.0;
       XSTRING sh_color;
-      int     nnum     = 0;
 
-      for(XDWORD c=0; c<tokens.GetSize(); c++)
-        {
-          XSTRING* tok = tokens.Get(c);
-          if(!tok || tok->IsEmpty()) continue;
-
-          // A token is a numeric offset / blur when it starts with a digit-like character AND contains no
-          // comma. GEN colours never have interior spaces but the R,G,B[,A] tuple form embeds commas, so
-          // "0,0,0,120" starts with '0' but must be treated as a colour, not as a blur value. Hex ("#RRGGBB")
-          // and named colours ("red", "yellow") never start with a numeric character and are already handled
-          // by the first-character check.
-          XCHAR first          = (*tok)[0];
-          bool  starts_numeric = (first == __C('-')) || (first == __C('+')) || (first == __C('.')) ||
-                                 (first >= __C('0') && first <= __C('9'));
-          bool  has_comma      = tok->FindCharacter(__C(',')) >= 0;
-          bool  isnum          = starts_numeric && !has_comma;
-
-          if(isnum && nnum < 3)
-            {
-              double v = tok->ConvertToDouble();
-              if     (nnum == 0) sh_x    = v;
-              else if(nnum == 1) sh_y    = v;
-              else               sh_blur = v;
-              nnum++;
-            }
-           else
-            {
-              // Everything from here on is the colour (single token in practice; if the author put spaces
-              // inside a hypothetical multi-token color, we accept only the first token to stay simple).
-              sh_color = *tok;
-              break;
-            }
-        }
-
-      // Only latch the shadow when we got at least the two mandatory offsets and a colour.
-      if(nnum >= 2 && !sh_color.IsEmpty())
+      if(UI_PROPERTYREGISTRY::ParseBoxShadow(boxshadow, sh_x, sh_y, sh_blur, sh_color))
         {
           element->SetShadowOffsetX(sh_x);
           element->SetShadowOffsetY(sh_y);
@@ -3464,13 +3576,6 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
           element->GetShadowColor()->SetFromString(sh_color);
           element->SetBoxShadowSet(true);
         }
-
-      for(XDWORD c=0; c<tokens.GetSize(); c++)
-        {
-          XSTRING* tok = tokens.Get(c);
-          if(tok) GEN_DELETE tok;
-        }
-      tokens.DeleteAll();
     }
 
   return true;
@@ -3510,8 +3615,14 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
 
   element_text->SetFather(father);
 
-
-  if(!GetLayoutElement_Base(node, layout, element_text))
+  // Phase 1 (first builder migrated off raw-XML-only reads, per the UI/CSS analysis report's builder table):
+  // "outstyle" is the SAME fully-resolved bag (XML attributes < CSS rules < inline style) GetLayoutElement_Base()
+  // already used for "color"/"width"/etc. above -- "sizefont" and "maxsizetext" below now read through it too,
+  // instead of re-reading the raw XFILEXMLELEMENT* and silently losing any CSS/inline override. GetParentSizeFont()
+  // below is left reading raw XML on purpose: it walks ANCESTOR nodes for an inherited size, a distinct fallback
+  // mechanism from this element's own resolved style, and is not one of the report's 50 direct-read call sites.
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_text, outstyle))
     {
       GEN_DELETE element_text;
       return NULL;
@@ -3519,7 +3630,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
 
   SetLevelAuto(element_text, father);
 
-  if(!GetLayoutElementValue(node, __L("sizefont"), sizefont))
+  if(!outstyle.Get(__L("sizefont"), sizefont))
     {
       if(!GetParentSizeFont(node->GetFather(), sizefont))
         {
@@ -3552,10 +3663,10 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
       element_text->GetText()->Set(text.Get());
     }
 
-  double maxsizetext = 0.0f;  
-  if(GetLayoutElementValue(node, __L("maxsizetext"), maxsizetext))
-    {               
-      element_text->SetMaxSizeText((XDWORD)maxsizetext);    
+  double maxsizetext = 0.0f;
+  if(outstyle.Get(__L("maxsizetext"), maxsizetext))
+    {
+      element_text->SetMaxSizeText((XDWORD)maxsizetext);
     }
 
   if(!element_text->GetMaskText()->IsEmpty()) 
@@ -3658,7 +3769,11 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
 
   element_textbox->SetFather(father);
 
-  if(!GetLayoutElement_Base(node, layout, element_textbox, true))
+  // Phase 1: same migration pattern as GetLayoutElement_Text() -- "outstyle" is the fully-resolved bag (XML <
+  // CSS < inline) GetLayoutElement_Base() already built for "width"/"height"/etc. above; the four keys below
+  // (this builder's entire XML-only footprint per the UI/CSS analysis report) now read through it too.
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_textbox, outstyle, true))
     {
       GEN_DELETE element_textbox;
       return NULL;
@@ -3669,8 +3784,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
   if(!element_textbox->GetBoundaryLine()->width)  return NULL;
   if(!element_textbox->GetBoundaryLine()->height) return NULL;
 
-  double sizefont = 0;  
-  if(!GetLayoutElementValue(node, __L("sizefont"), sizefont))
+  double sizefont = 0;
+  if(!outstyle.Get(__L("sizefont"), sizefont))
     {
       if(!GetParentSizeFont(node->GetFather(), sizefont))
         {
@@ -3682,12 +3797,16 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
   element_textbox->SetSizeFont((XDWORD)sizefont);
 
   double linespacing = UI_ELEMENT_TEXTBOX_DEFAULTLINESPACING;
-  GetLayoutElementValue(node, __L("linespacing"), linespacing);     
+  outstyle.Get(__L("linespacing"), linespacing);
   element_textbox->SetLineSpacing((XDWORD)linespacing);
 
+  // "textalignment"/"text-align": same alias pair GetLayoutElement_Base() already resolves for the base
+  // UI_ELEMENT::SetTextAlign() above -- UI_ELEMENT_TEXTBOX::SetTextAlignment() is a distinct, textbox-specific
+  // setter (out of scope to unify here), but the property NAME and its CSS-natural alias are the same, so this
+  // read goes through the same UI_PROPERTYREGISTRY lookup rather than a third hand-rolled copy of it.
   XSTRING                textalignmentstr;
   UI_ELEMENT_TYPE_ALIGN  textalignment;
-  if(GetLayoutElementValue(node, __L("textalignment"), textalignmentstr))
+  if(outstyle.GetAliased(__L("textalignment"), __L("text-align"), textalignmentstr))
     {
       if(!textalignmentstr.Compare(__L("left"), true))  textalignment = UI_ELEMENT_TYPE_ALIGN_LEFT;
         else if(!textalignmentstr.Compare(__L("right"), true))  textalignment = UI_ELEMENT_TYPE_ALIGN_RIGHT;
@@ -3696,11 +3815,11 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
   element_textbox->SetTextAlignment(textalignment);
 
 
-  XSTRING wordclippingstr;  
+  XSTRING wordclippingstr;
   element_textbox->SetIsWordClipping(false);
-  if(GetLayoutElementValue(node, __L("wordclipping"), wordclippingstr))
+  if(outstyle.Get(__L("wordclipping"), wordclippingstr))
     {
-      element_textbox->SetIsWordClipping(wordclippingstr.ConvertToBoolean());         
+      element_textbox->SetIsWordClipping(wordclippingstr.ConvertToBoolean());
     }
 
   text.Empty();
@@ -3794,8 +3913,9 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
     }
 
   element_image->SetFather(father);
-  
-  if(!GetLayoutElement_Base(node, layout, element_image))
+
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_image, outstyle))
     {
       GEN_DELETE element_image;
       return NULL;
@@ -3804,7 +3924,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
   SetLevelAuto(element_image, father);
 
   double alpha = 0;
-  if(GetLayoutElementValue(node, __L("alpha"), alpha))
+  if(outstyle.Get(__L("alpha"), alpha))
     {
       element_image->SetAlpha((XBYTE)alpha);
     }
@@ -3893,17 +4013,18 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
     }
 
   element_animation->SetFather(father);
-  
-  if(!GetLayoutElement_Base(node, layout, element_animation))
+
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_animation, outstyle))
     {
       GEN_DELETE element_animation;
       return NULL;
-    } 
+    }
 
   SetLevelAuto(element_animation, father);
 
-  XSTRING statestring;  
-  if(GetLayoutElementValue(node, __L("state"), statestring))
+  XSTRING statestring;
+  if(outstyle.Get(__L("state"), statestring))
     {
       if(!statestring.Compare(__L("play"), true))                                                                     
         {
@@ -3926,13 +4047,13 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
     }
 
   double timedelay = 0;
-  if(GetLayoutElementValue(node, __L("timedelay"), timedelay))
+  if(outstyle.Get(__L("timedelay"), timedelay))
     {
       element_animation->SetMilliSecondsDelay((XDWORD)timedelay);
     }
 
   double alpha = 0;
-  if(GetLayoutElementValue(node, __L("alpha"), alpha))
+  if(outstyle.Get(__L("alpha"), alpha))
     {
       element_animation->SetAlpha((XBYTE)alpha);
     }
@@ -4068,25 +4189,26 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Option(XFILEXMLELEMENT* node, UI_LAYOUT
 
   element_option->SetFather(father);
 
-  if(!GetLayoutElement_Base(node, layout, element_option))
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_option, outstyle))
     {
       GEN_DELETE element_option;
       return NULL;
-    } 
+    }
 
   SetLevelAuto(element_option, father);
 
   element_option->SetActive(true);
 
-  GetLayoutElementValue(node, __L("sizefont"), sizefont);
+  outstyle.Get(__L("sizefont"), sizefont);   // read but not applied -- pre-existing, unrelated to this migration
 
- 
+
   XSTRING selectablestr;
-  GetLayoutElementValue(node, __L("selectablestatus"), selectablestr);
+  outstyle.Get(__L("selectablestatus"), selectablestr);
   element_option->SetSelectableStateFromString(selectablestr);
-    
+
   XSTRING allocationtextstr;
-  if(GetLayoutElementValue(node, __L("allocationtext"), allocationtextstr))
+  if(outstyle.Get(__L("allocationtext"), allocationtextstr))
     {
       if(!allocationtextstr.Compare(__L("none")     , true)) element_option->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE);  
       if(!allocationtextstr.Compare(__L("up")       , true)) element_option->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_UP);
@@ -4099,7 +4221,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Option(XFILEXMLELEMENT* node, UI_LAYOUT
   element_option->SetVisibleLimitType(UI_ELEMENT_OPTION_VISIBLE_LIMIT_NONE);
 
   XSTRING visiblelimittypestr;
-  if(GetLayoutElementValue(node, __L("visiblelimit"), visiblelimittypestr))
+  if(outstyle.Get(__L("visiblelimit"), visiblelimittypestr))
     {
       if(visiblelimittypestr.Find(__L("active"), true) != XSTRING_NOTFOUND) 
         {
@@ -4321,8 +4443,9 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
     }
 
   element_form->SetFather(father);
- 
-  if(!GetLayoutElement_Base(node, layout, element_form))
+
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_form, outstyle))
     {
       GEN_DELETE element_form;
       return NULL;
@@ -4330,10 +4453,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
 
   SetLevelAuto(element_form, father);
 
-  XSTRING linecolor;
-  GetLayoutElementValue(node, __L("linecolor"), linecolor);    
-  if(!linecolor.IsEmpty()) element_form->GetLineColor()->SetFromString(linecolor);  
-    
+  outstyle.GetColor(__L("linecolor"), *element_form->GetLineColor());
+
   GetLayoutElement_CalculateBoundaryLine(layout, element_form);
 
   for(int c=0; c<node->GetNElements(); c++)
@@ -4359,7 +4480,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
     }
 
   XSTRING visibleformstr;
-  if(GetLayoutElementValue(node, __L("visiblerect"), visibleformstr))
+  if(outstyle.Get(__L("visiblerect"), visibleformstr))
     {
       if(!visibleformstr.IsEmpty())
         {                     
@@ -4507,48 +4628,48 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
 
   element_progressbar->SetFather(father);
 
-  if(!GetLayoutElement_Base(node, layout, element_progressbar))
+  // Phase 1: same pattern as the other migrated builders -- "outstyle" is the fully-resolved bag (XML < CSS <
+  // inline) GetLayoutElement_Base() already built above. The "type" check on child nodes further below is left
+  // reading raw XML on purpose, same rationale as GetLayoutElement_Option(): it selects which sub-element
+  // handler to invoke, not a stylable value.
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_progressbar, outstyle))
     {
       GEN_DELETE element_progressbar;
       return NULL;
-    } 
+    }
 
   SetLevelAuto(element_progressbar, father);
 
   element_progressbar->SetActive(true);
 
-  GetLayoutElementValue(node, __L("sizefont"), sizefont);
+  outstyle.Get(__L("sizefont"), sizefont);   // read but not applied -- pre-existing, unrelated to this migration
 
-    
+
   XSTRING allocationtextstr;
-  if(GetLayoutElementValue(node, __L("allocationtext"), allocationtextstr))
+  if(outstyle.Get(__L("allocationtext"), allocationtextstr))
     {
-      if(!allocationtextstr.Compare(__L("none")     , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE);  
+      if(!allocationtextstr.Compare(__L("none")     , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE);
       if(!allocationtextstr.Compare(__L("up")       , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_UP);
-      if(!allocationtextstr.Compare(__L("down")     , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_DOWN);  
-      if(!allocationtextstr.Compare(__L("right")    , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_RIGHT);  
-	    if(!allocationtextstr.Compare(__L("left")     , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_LEFT); 
-      if(!allocationtextstr.Compare(__L("center")   , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_CENTER); 
-    }  
+      if(!allocationtextstr.Compare(__L("down")     , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_DOWN);
+      if(!allocationtextstr.Compare(__L("right")    , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_RIGHT);
+	    if(!allocationtextstr.Compare(__L("left")     , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_LEFT);
+      if(!allocationtextstr.Compare(__L("center")   , true)) element_progressbar->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_CENTER);
+    }
 
 
-  XSTRING linecolor;
-  GetLayoutElementValue(node, __L("linecolor"), linecolor);    
-  if(!linecolor.IsEmpty()) element_progressbar->GetLineColor()->SetFromString(linecolor);
-
-  XSTRING gradientcolor;
-  GetLayoutElementValue(node, __L("gradientcolor"), gradientcolor);
-  if(!gradientcolor.IsEmpty()) element_progressbar->GetGradientColor()->SetFromString(gradientcolor);
+  outstyle.GetColor(__L("linecolor")    , *element_progressbar->GetLineColor());
+  outstyle.GetColor(__L("gradientcolor"), *element_progressbar->GetGradientColor());
 
   XSTRING gradientmode;
-  if(GetLayoutElementValue(node, __L("gradientmode"), gradientmode))
+  if(outstyle.Get(__L("gradientmode"), gradientmode))
     {
       if(!gradientmode.Compare(__L("track"), true)) element_progressbar->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_TRACK);
       if(!gradientmode.Compare(__L("fill") , true)) element_progressbar->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL);
-    }  
+    }
 
   double levelvalue = 0.0f;
-  if(GetLayoutElementValue(node, __L("level"), levelvalue)) element_progressbar->SetLevel((float)levelvalue);
+  if(outstyle.Get(__L("level"), levelvalue)) element_progressbar->SetLevel((float)levelvalue);
 
   for(int c=0; c<node->GetNElements(); c++)
     {
@@ -4581,7 +4702,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
     }
 
   XSTRING roundcapstr;
-  if(GetLayoutElementValue(node, __L("roundcap"), roundcapstr))
+  if(outstyle.Get(__L("roundcap"), roundcapstr))
     {
       if(!roundcapstr.Compare(__L("yes"),  true) ||
          !roundcapstr.Compare(__L("true"), true) ||
@@ -4589,7 +4710,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
     }
 
   XSTRING continuouscyclestr;
-  if(GetLayoutElementValue(node, __L("continuouscycle"), continuouscyclestr))
+  if(outstyle.Get(__L("continuouscycle"), continuouscyclestr))
     {
       if(!continuouscyclestr.IsEmpty())
         {
@@ -4606,7 +4727,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressBar(XFILEXMLELEMENT* node, UI_L
     }
 
   XSTRING progressrectstr;
-  if(GetLayoutElementValue(node, __L("progressrect"), progressrectstr))
+  if(outstyle.Get(__L("progressrect"), progressrectstr))
     {
       if(!progressrectstr.IsEmpty())
         {
@@ -4694,7 +4815,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, U
 
   element_progress->SetFather(father);
 
-  if(!GetLayoutElement_Base(node, layout, element_progress))
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_progress, outstyle))
     {
       GEN_DELETE element_progress;
       return NULL;
@@ -4705,16 +4827,11 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, U
   element_progress->SetActive(true);
 
   // Value arc gradient END color (gradient START is the base "color"; track ring is "bckgrdcolor").
-  XSTRING linecolor;
-  GetLayoutElementValue(node, __L("linecolor"), linecolor);
-  if(!linecolor.IsEmpty()) element_progress->GetLineColor()->SetFromString(linecolor);
-
-  XSTRING gradientcolor;
-  GetLayoutElementValue(node, __L("gradientcolor"), gradientcolor);
-  if(!gradientcolor.IsEmpty()) element_progress->GetGradientColor()->SetFromString(gradientcolor);
+  outstyle.GetColor(__L("linecolor")    , *element_progress->GetLineColor());
+  outstyle.GetColor(__L("gradientcolor"), *element_progress->GetGradientColor());
 
   XSTRING gradientmode;
-  if(GetLayoutElementValue(node, __L("gradientmode"), gradientmode))
+  if(outstyle.Get(__L("gradientmode"), gradientmode))
     {
       if(!gradientmode.Compare(__L("track"), true)) element_progress->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_TRACK);
       if(!gradientmode.Compare(__L("fill") , true)) element_progress->SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL);
@@ -4722,20 +4839,20 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressRadial(XFILEXMLELEMENT* node, U
 
   // Level [0..100].
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("level"), value))      element_progress->SetLevel((float)value);
+  if(outstyle.Get(__L("level"), value))      element_progress->SetLevel((float)value);
 
   // Geometry.
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("startangle"), value)) element_progress->SetStartAngle(value);
+  if(outstyle.Get(__L("startangle"), value)) element_progress->SetStartAngle(value);
 
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("sweepangle"), value)) element_progress->SetSweepAngle(value);
+  if(outstyle.Get(__L("sweepangle"), value)) element_progress->SetSweepAngle(value);
 
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("thickness"), value))  element_progress->SetThickness(value);
+  if(outstyle.Get(__L("thickness"), value))  element_progress->SetThickness(value);
 
   XSTRING roundcapstr;
-  if(GetLayoutElementValue(node, __L("roundcap"), roundcapstr))
+  if(outstyle.Get(__L("roundcap"), roundcapstr))
     {
       if(!roundcapstr.Compare(__L("yes"),  true) ||
          !roundcapstr.Compare(__L("true"), true) ||
@@ -4806,7 +4923,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI
 
   element_progressimage->SetFather(father);
 
-  if(!GetLayoutElement_Base(node, layout, element_progressimage))
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_progressimage, outstyle))
     {
       GEN_DELETE element_progressimage;
       return NULL;
@@ -4817,7 +4935,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI
   element_progressimage->SetActive(true);
 
   XSTRING allocationtextstr;
-  if(GetLayoutElementValue(node, __L("allocationtext"), allocationtextstr))
+  if(outstyle.Get(__L("allocationtext"), allocationtextstr))
     {
       if(!allocationtextstr.Compare(__L("none")     , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE);
       if(!allocationtextstr.Compare(__L("up")       , true)) element_progressimage->SetAllocationTextType(UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_UP);
@@ -4829,17 +4947,17 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI
 
   // alpha [0..100]
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("alpha"), value)) element_progressimage->SetAlpha((XBYTE)value);
+  if(outstyle.Get(__L("alpha"), value)) element_progressimage->SetAlpha((XBYTE)value);
 
   // level [0..100]
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("level"), value)) element_progressimage->SetLevel((float)value);
+  if(outstyle.Get(__L("level"), value)) element_progressimage->SetLevel((float)value);
 
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("offsetstart"), value)) element_progressimage->SetOffsetStart(value);
+  if(outstyle.Get(__L("offsetstart"), value)) element_progressimage->SetOffsetStart(value);
 
   value = 0.0f;
-  if(GetLayoutElementValue(node, __L("offsetend"),   value)) element_progressimage->SetOffsetEnd(value);
+  if(outstyle.Get(__L("offsetend"),   value)) element_progressimage->SetOffsetEnd(value);
 
   // resolve the draw mode once (same as GetLayoutElement_Image)
   GRPPROPERTYMODE   grppropertymode = GRPPROPERTYMODE_XX_UNKNOWN;
@@ -4864,7 +4982,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI
 
   // empty (0%) graphic
   XSTRING fileempty;
-  GetLayoutElementValue(node, __L("imageempty"), fileempty);
+  outstyle.Get(__L("imageempty"), fileempty);
   if(!fileempty.IsEmpty())
     {
       UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), fileempty.Get());
@@ -4873,7 +4991,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI
 
   // full (100%) graphic
   XSTRING filefull;
-  GetLayoutElementValue(node, __L("imagefull"), filefull);
+  outstyle.Get(__L("imagefull"), filefull);
   if(!filefull.IsEmpty())
     {
       UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), filefull.Get());
@@ -5053,14 +5171,15 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
     }
 
   // --- Optional <stylesheet>file.css</stylesheet> declaration ---------------------------------------------------
-  // Discover a single (first-hit) stylesheet node under the XML root, resolve its filename against the XML's own
-  // directory and parse it into a fresh UI_STYLESHEET. On any I/O or parse issue we log and continue: an absent
-  // or malformed stylesheet must never abort layout construction (retro-compat with layouts that carry none).
-  if(stylesheet)
-    {
-      GEN_DELETE stylesheet;
-      stylesheet = NULL;
-    }
+  // Discover a single (first-hit) stylesheet node under the XML root and resolve its filename against the XML's
+  // own directory. Phase 1 ownership step: the stylesheet itself is now owned per-UI_LAYOUT (UI_LAYOUT::
+  // SetStyleSheet(), see below) rather than living as a single UI_MANAGER-wide pointer -- so only the PATH is
+  // resolved here; the actual parse (one fresh UI_STYLESHEET instance per <layout> this XML root defines, the
+  // overwhelming common case being exactly one) happens per-layout further down, guaranteeing each UI_LAYOUT
+  // owns and deletes its own instance with no shared pointer that a second, unrelated layout's load could ever
+  // silently repoint or free out from under a still-visible screen.
+  XPATH stylesheet_csspath;
+  bool  has_stylesheet_path = false;
 
   for(int c=0; c<root->GetNElements(); c++)
     {
@@ -5072,32 +5191,17 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
 
           if(!cssname.IsEmpty())
             {
-              XPATH   csspath;
               XSTRING drive;
               XPATH   dir;
 
               xmlpathfile.GetDrive(drive);
               xmlpathfile.GetPath (dir);
 
-              csspath  = drive;
-              csspath += dir;
-              csspath += cssname;
+              stylesheet_csspath  = drive;
+              stylesheet_csspath += dir;
+              stylesheet_csspath += cssname;
 
-              UI_STYLESHEET* sheet = GEN_NEW UI_STYLESHEET();
-              if(sheet)
-                {
-                  UI_CSSPARSER parser;
-                  if(parser.ParseFile(csspath, *sheet) && sheet->Rules_Count() > 0)
-                    {
-                      stylesheet = sheet;
-                      XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Load] stylesheet [%s] loaded (%d rules)"), csspath.Get(), sheet->Rules_Count());
-                    }
-                   else
-                    {
-                      GEN_DELETE sheet;
-                      XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[UI Load] stylesheet [%s] not applied (missing or empty)"), csspath.Get());
-                    }
-                }
+              has_stylesheet_path = true;
             }
 
           break;   // first-hit wins; ignore any additional <stylesheet> nodes at the root
@@ -5249,9 +5353,33 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
                       XSTRING  bckcolor;
                       XSTRING  bcknamefile;
 
-                      layout->GetNameID()->Set(namelayout);                         
-                      layout->GetBackground()->GetColor()->SetFromString(background_color[1]); 
+                      layout->GetNameID()->Set(namelayout);
+                      layout->GetBackground()->GetColor()->SetFromString(background_color[1]);
                       layout->GetBackground()->GetBitmapFileName()->Set(background_namefile[1]);
+
+                      // Phase 1 ownership step: parse a FRESH UI_STYLESHEET instance for THIS layout (instead of
+                      // one UI_MANAGER-wide instance shared by every <layout> this XML root defines, which is
+                      // the overwhelming common case anyway -- one root, one layout). Any I/O or parse issue is
+                      // logged and skipped: an absent or malformed stylesheet must never abort layout
+                      // construction, exactly like before.
+                      if(has_stylesheet_path)
+                        {
+                          UI_STYLESHEET* sheet = GEN_NEW UI_STYLESHEET();
+                          if(sheet)
+                            {
+                              UI_CSSPARSER parser;
+                              if(parser.ParseFile(stylesheet_csspath, *sheet) && sheet->Rules_Count() > 0)
+                                {
+                                  layout->SetStyleSheet(sheet);
+                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Load] stylesheet [%s] loaded (%d rules) for layout [%s]"), stylesheet_csspath.Get(), sheet->Rules_Count(), layout->GetNameID()->Get());
+                                }
+                               else
+                                {
+                                  GEN_DELETE sheet;
+                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[UI Load] stylesheet [%s] not applied (missing or empty)"), stylesheet_csspath.Get());
+                                }
+                            }
+                        }
                       
                       if(!background_color[0].IsEmpty())
                         {
@@ -5370,6 +5498,22 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
                                   // are targeted by pseudo-carrying rules so their state setters know they must
                                   // trigger a re-resolve. Cheap walk, runs once per layout.
                                   PrepareElementStyleState(element);
+
+                                  // Post-load hook, Phase 4 ("migración del ejemplo", first sub-step -- see
+                                  // UI_LayoutEngine.h's RunLayout()/BuildTree() SCOPE ADDENDUM): "element"'s own
+                                  // subtree (every nested <element> child, built recursively by
+                                  // CreatePartialLayout() above before this point) is already fully resolved by
+                                  // the existing legacy XML pipeline, so it is safe to hand the whole thing to
+                                  // the new CSS engine here. Deliberately unconditional -- see the SCOPE ADDENDUM
+                                  // for why this is behaviour-preserving for every layout that does not actually
+                                  // use "display: flex".
+                                  UI_LAYOUTENGINE::RunLayout(element, UI_LAYOUTSTRATEGY_CSS);
+
+                                  // Post-load hook, Phase 4 ("migración del ejemplo", fifth sub-step follow-up):
+                                  // re-sync any ProgressBar's "track" sub-element to its now flex-resolved
+                                  // position -- see RefreshFlexProgressBarTracks()'s own banner for the bug this
+                                  // fixes ("ram_linear_bar" drawing nothing after becoming a flex item).
+                                  RefreshFlexProgressBarTracks(element, layout->GetSkin());
                                 }
                             }
                         }
@@ -6433,17 +6577,46 @@ void UI_MANAGER::HandleEvent(XEVENT* xevent)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         UI_STYLESHEET* UI_MANAGER::GetStyleSheet()
-* @brief      Currently active CSS stylesheet, or NULL when none was declared in the layout XML.
+* @class      UI_MANAGER_ELEMENTANCESTORPROVIDER
+* @brief      Phase 2 ("combinadores descendiente/hijo"): concrete UI_CSSANCESTORPROVIDER for a real element
+*             tree, walking UI_ELEMENT::GetFather(). File-local counterpart of UI_STYLE_ELEMENTANCESTORPROVIDER
+*             (UI_Style.cpp) -- see that class's doc comment for why this stays a small file-local duplicate
+*             rather than a shared header type.
+* @note       INTERNAL
 * @ingroup    USERINTERFACE
 *
-* @return     UI_STYLESHEET* : Pointer to the requested object; NULL if it is not available.
-*
 * --------------------------------------------------------------------------------------------------------------------*/
-UI_STYLESHEET* UI_MANAGER::GetStyleSheet()
+class UI_MANAGER_ELEMENTANCESTORPROVIDER : public UI_CSSANCESTORPROVIDER
 {
-  return stylesheet;
-}
+  public:
+    UI_MANAGER_ELEMENTANCESTORPROVIDER(UI_ELEMENT* _startelement) { startelement = _startelement; }
+    virtual ~UI_MANAGER_ELEMENTANCESTORPROVIDER() {}
+
+    virtual bool GetAncestor(int depth, XSTRING** outtype, XSTRING** outid, XVECTOR<XSTRING*>** outclasses)
+    {
+      if(!startelement) return false;
+
+      UI_ELEMENT* current = startelement->GetFather();
+
+      for(int d=0; d<depth; d++)
+        {
+          if(!current) return false;
+          current = current->GetFather();
+        }
+
+      if(!current) return false;
+
+      if(outtype)    *outtype    = current->GetTypeString();
+      if(outid)      *outid      = current->GetName();
+      if(outclasses) *outclasses = current->GetClassNames();
+
+      return true;
+    }
+
+  private:
+
+    UI_ELEMENT* startelement;
+};
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -6464,7 +6637,13 @@ void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
 
   element->SnapshotStyleVisual();
 
-  if(stylesheet)
+  // Phase 1 ownership step: the stylesheet to check comes from THIS element's own UI_LAYOUT (set by
+  // GetLayoutElement_Base() before this function ever runs), not a single UI_MANAGER-wide pointer -- see
+  // UI_ELEMENT::GetLayout()/UI_LAYOUT::GetStyleSheet().
+  UI_LAYOUT*     element_layout = element->GetLayout();
+  UI_STYLESHEET* sheet          = element_layout ? element_layout->GetStyleSheet() : NULL;
+
+  if(sheet)
     {
       XSTRING*           type_string = element->GetTypeString();
       XSTRING*           name        = element->GetName();
@@ -6475,7 +6654,11 @@ void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
       XSTRING&           elem_id      = name        ? *name         : emptystr;
       XVECTOR<XSTRING*>& elem_classes = element->GetClassNames() ? *element->GetClassNames() : emptyclasses;
 
-      if(stylesheet->HasPseudoRulesFor(elem_type, elem_id, elem_classes))
+      // Phase 2 ("combinadores descendiente/hijo"): see UI_MANAGER_ELEMENTANCESTORPROVIDER above -- without it,
+      // a rule using a descendant/child combinator could never be found by this probe.
+      UI_MANAGER_ELEMENTANCESTORPROVIDER ancestorprovider(element);
+
+      if(sheet->HasPseudoRulesFor(elem_type, elem_id, elem_classes, &ancestorprovider))
         {
           element->SetStyleHasStateRules(true);
         }
@@ -6487,6 +6670,80 @@ void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
       for(XDWORD c=0; c<children->GetSize(); c++)
         {
           PrepareElementStyleState(children->Get(c));
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::RefreshFlexProgressBarTracks(UI_ELEMENT* element, UI_SKIN* skin)
+* @brief      Phase 4 ("migración del ejemplo", fifth sub-step: "card bodies") follow-up fix. A ProgressBar's
+*             "track" (the sub-element auto-created from its "progressrect" attribute) is positioned by
+*             UI_SKINCANVAS::CalculePosition() using its FATHER's (the ProgressBar's own) GetXPosition()/
+*             GetYPosition() as the anchor -- see CalculateBoundaryLine_ProgressBar(). That call happens once,
+*             at CreatePartialLayout() time, i.e. BEFORE UI_LAYOUTENGINE::RunLayout() ever runs (RunLayout() is
+*             a deliberate POST-load hook -- see its own SCOPE ADDENDUM in UI_LayoutEngine.h). For a ProgressBar
+*             that is itself a flex ITEM (e.g. dashboard.xml's "ram_linear_bar", nested inside "right-col"), the
+*             track was therefore positioned against the ProgressBar's PRE-flex position (whatever
+*             GetXPosition()/GetYPosition() held before RunLayout() moved it -- typically 0,0, since a flex item
+*             carries no xpos/ypos of its own), leaving the track's own drawn geometry stuck near the origin
+*             instead of tracking its father's real, flex-resolved position: the bar's fill/track rectangle
+*             silently failed to render anywhere near the visible ProgressBar box (confirmed against a real
+*             windowed build: "ram_linear_bar" drew nothing at all in its card).
+*
+*             This is the SAME class of bug UI_MANAGER::ChangeTextElementValue() already works around for a
+*             live-updating flex CHILD (see its own "second sub-step, live-update follow-up" comment): a
+*             one-time legacy position calculation does not automatically track a later flex reflow. The fix
+*             there is to re-run the affected calculation once the flex-resolved position is known; this is
+*             that same fix applied once, at LOAD time, for every ProgressBar in the freshly-built subtree
+*             (whether or not it turns out to be a flex item -- re-running CalculateBoundaryLine_ProgressBar()
+*             against an UNCHANGED position is a harmless no-op, so this does not need to special-case which
+*             ProgressBars actually moved). ProgressRadial/ProgressImage do not need this: their own children
+*             (e.g. "cpu_usage_value"/"ram_usage_value") are centered via UI_ELEMENT_TYPE_ALIGN_CENTER, resolved
+*             by CalculePosition() against the FATHER's already-correct GetBoundaryLine() width/height at DRAW
+*             time (see UI_SKINCANVAS::Draw_ProgressRadial()), not cached from a one-time load-time snapshot.
+*
+*             Deliberately narrower than "just call CalculateBoundaryLine_ProgressBar() again": that function's
+*             OWN first step re-runs CalculePosition() on the ProgressBar element itself, using its raw
+*             GetBoundaryLine()->x/y (a legacy alignment token/offset, e.g. UI_ELEMENT_TYPE_ALIGN_LEFT for a flex
+*             item that carries no "xpos" attribute at all) against its FATHER's position -- which would silently
+*             throw away the ProgressBar's own correct, flex-resolved GetXPosition()/GetYPosition() (see
+*             UI_CSSBox_Set()) and re-pin it back to its father's raw corner, undoing RunLayout() instead of
+*             completing it. This helper therefore repositions ONLY the track, directly, using the ProgressBar's
+*             OWN already-correct position as the anchor -- exactly the sub-step CalculateBoundaryLine_ProgressBar()
+*             would have run, minus the one that must NOT be repeated.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Root of the subtree (a freshly-built top-level element, or any descendant during recursion).
+* @param[in]  skin : Skin to resolve positions against; NULL (or a non-canvas skin) is a safe no-op.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::RefreshFlexProgressBarTracks(UI_ELEMENT* element, UI_SKIN* skin)
+{
+  if(!element) return;
+
+  UI_SKINCANVAS* skincanvas = dynamic_cast<UI_SKINCANVAS*>(skin);
+
+  if(skincanvas && (element->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR))
+    {
+      UI_ELEMENT_PROGRESSBAR* element_progressbar   = (UI_ELEMENT_PROGRESSBAR*)element;
+      UI_ELEMENT*              element_progressrect = element_progressbar->GetProgressRect();
+
+      if(element_progressrect)
+        {
+          skincanvas->CalculePosition(element_progressrect, element_progressbar->GetBoundaryLine()->width,
+                                       element_progressbar->GetBoundaryLine()->height, false);
+        }
+    }
+
+  XVECTOR<UI_ELEMENT*>* children = element->GetComposeElements();
+  if(children)
+    {
+      for(XDWORD c=0; c<children->GetSize(); c++)
+        {
+          RefreshFlexProgressBarTracks(children->Get(c), skin);
         }
     }
 }
@@ -6518,8 +6775,6 @@ void UI_MANAGER::Clean()
   preselect_element   = NULL;
 
   virtualkeyboard     = NULL;
-
-  stylesheet          = NULL;
 }
 
 
