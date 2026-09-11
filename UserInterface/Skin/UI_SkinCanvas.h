@@ -91,11 +91,13 @@ class UI_SKINCANVAS_REBUILDAREAS : public GRP2DREBUILDAREAS
 
 	private:
 
-		void															Clean																		();		
+		void															Clean																		();
+
+		void															RestoreOverlappingAreas									(GRP2DREBUILDAREA* area, GRPBITMAP* bitmap, int excludeindex);
 
 		GRPSCREEN*												screen;
 		int																viewportindex;
-		GRP2DCANVAS*											canvas; 		
+		GRP2DCANVAS*											canvas;
 };
 
 

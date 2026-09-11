@@ -842,6 +842,14 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
                           GRPBITMAP* bitmap = area->GetBitmap();
                           if(bitmap) PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), bitmap);
 
+                          // Any other still-registered area whose saved rectangle overlaps this one (typically a
+                          // neighboring card whose box-shadow blur padding reaches into this element's footprint)
+                          // must be restored too. Otherwise its stale "before" bitmap is left on screen and gets
+                          // captured as-is into THIS element's next CreateRebuildArea() snapshot, so the neighbor's
+                          // already-drawn shadow gets baked in and re-darkened every time this element redraws --
+                          // the cumulative "ghost wedge" defect at overlapping rounded corners.
+                          if(bitmap) RestoreOverlappingAreas(area, bitmap, index);
+
                           areas.Delete(area);
                           GEN_DELETE area;
                         }
@@ -856,7 +864,73 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         void UI_SKINCANVAS_REBUILDAREAS::RestoreOverlappingAreas(GRP2DREBUILDAREA* area, GRPBITMAP* bitmap, int excludeindex)
+* @brief      Restores (and forces a redraw on) every other still-registered rebuild area whose saved rectangle
+*             overlaps the rectangle of "area". Used right before "area" itself is restored/deleted in
+*             RebuildAllAreas(), so overlapping neighbors (e.g. two adjacent cards whose box-shadow blur padding
+*             spans into each other) stay in sync instead of one of them keeping a stale "before" snapshot that
+*             later gets baked into the other's next save, which is what let shadow pixels darken cumulatively
+*             frame after frame at overlapping rounded corners.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  area         : Area about to be restored/deleted by the caller; its saved rectangle is the overlap
+*                             reference (xpos/ypos plus "bitmap"'s width/height).
+* @param[in]  bitmap       : Bitmap of "area", already fetched by the caller (avoids fetching it twice).
+* @param[in]  excludeindex : Index of "area" inside "areas", skipped so it is never compared against itself.
+*
+* @return     void.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS_REBUILDAREAS::RestoreOverlappingAreas(GRP2DREBUILDAREA* area, GRPBITMAP* bitmap, int excludeindex)
+{
+  if((!area) || (!bitmap)) return;
+
+  double x1 = area->GetXPos();
+  double y1 = area->GetYPos();
+  double w1 = (double)bitmap->GetWidth();
+  double h1 = (double)bitmap->GetHeight();
+
+  int nareas = (int)areas.GetSize();
+
+  for(int index = nareas-1; index>=0; index--)
+    {
+      if(index == excludeindex) continue;
+
+      GRP2DREBUILDAREA* neighborarea = areas.Get((XDWORD)index);
+      if(!neighborarea) continue;
+
+      GRPBITMAP* neighborbitmap = neighborarea->GetBitmap();
+      if(!neighborbitmap) continue;
+
+      double x2 = neighborarea->GetXPos();
+      double y2 = neighborarea->GetYPos();
+      double w2 = (double)neighborbitmap->GetWidth();
+      double h2 = (double)neighborbitmap->GetHeight();
+
+      bool overlaps = ((x1 < (x2+w2)) && (x2 < (x1+w1)) && (y1 < (y2+h2)) && (y2 < (y1+h1)));
+      if(!overlaps) continue;
+
+      // Restore the neighbor's saved "before" pixels now, then force it to redraw itself so nothing is left
+      // visibly erased once this frame is presented. Its own PreDrawFunction() pass will create a fresh
+      // rebuild area for it (since none is registered for it anymore) and repaint it on top, in sync again.
+      PutBitmapNoAlpha(neighborarea->GetXPos(), neighborarea->GetYPos(), neighborbitmap);
+
+      UI_ELEMENT* neighborelement = (UI_ELEMENT*)neighborarea->GetExtraData();
+      if(neighborelement) neighborelement->SetMustReDraw(true);
+
+      areas.Delete(neighborarea);
+      GEN_DELETE neighborarea;
+
+      // "areas" just shrank by one: entries after "index" shifted down into "index", so re-reading GetSize()
+      // keeps the loop bound correct and the next iteration (index--) still lands on the next area to check.
+      nareas = (int)areas.GetSize();
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas(UI_LAYOUT* layout)
 * @brief      Rebuild all areas
 * @ingroup    USERINTERFACE
@@ -2717,28 +2791,28 @@ bool UI_SKINCANVAS::Draw_Scroll(UI_ELEMENT* element)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKINCANVAS::Draw_Text(UI_ELEMENT* element)  
+bool UI_SKINCANVAS::Draw_Text(UI_ELEMENT* element)
 {
-  if(!element) return false;  
+  if(!element) return false;
 
   UI_ELEMENT_TEXT*    element_text  = (UI_ELEMENT_TEXT*)element;
-  GRP2DCANVAS*          canvas        = GetCanvas();  
+  GRP2DCANVAS*          canvas        = GetCanvas();
   double              x_position    = 0.0f;
-  double              y_position    = 0.0f;  
-  XRECT               clip_rect;                       
-  
+  double              y_position    = 0.0f;
+  XRECT               clip_rect;
+
   if(!canvas) return false;
- 
+
   PreDrawFunction(element, canvas, clip_rect, x_position, y_position);
-      
-  if(element->MustReDraw()) 
+
+  if(element->MustReDraw())
     {
       GRP2DCOLOR_RGBA8  color(element->GetColor()->GetRed(),
                               element->GetColor()->GetGreen(),
                               element->GetColor()->GetBlue(),
                               element->GetColor()->GetAlpha());
-                         
-      
+
+
       canvas->Vectorfont_GetConfig()->SetColor(&color);
       canvas->Vectorfont_GetConfig()->SetSize(element_text->GetSizeFont());
 
