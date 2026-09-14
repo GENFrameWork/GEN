@@ -64,11 +64,12 @@
 * @param[in]  ui_skin : Ui skin pointer to use.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-UI_LAYOUT::UI_LAYOUT(UI_SKIN* ui_skin)    
-{ 
-  Clean();                        
-  
-  this->ui_skin = ui_skin;    
+UI_LAYOUT::UI_LAYOUT(UI_SKIN* ui_skin)
+{
+  Clean();
+
+  this->ui_skin = ui_skin;
+  this->ownskin = true;                 // default: this layout exclusively owns "ui_skin" -- see SetOwnsSkin()
 }
 
 
@@ -82,8 +83,8 @@ UI_LAYOUT::UI_LAYOUT(UI_SKIN* ui_skin)
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_LAYOUT::~UI_LAYOUT()
 {
-  if(ui_skin)
-    {
+  if(ui_skin && ownskin)          // see SetOwnsSkin(): only the owning layout frees a UI_SKIN shared by several
+    {                             // UI_LAYOUT instances (one skin per XML root, not per <layout> node)
       GEN_DELETE ui_skin;
     }
 
@@ -141,6 +142,24 @@ UI_SKIN* UI_LAYOUT::GetSkin()
 void UI_LAYOUT::SetSkin(UI_SKIN* ui_skin)
 {
   this->ui_skin = ui_skin;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUT::SetOwnsSkin(bool ownskin)
+* @brief      Sets whether this layout is responsible for deleting its "ui_skin" in the destructor.
+* @note       See the declaration in UI_Layout.h for why this exists: UI_MANAGER::CreateLayouts() constructs
+*             every UI_LAYOUT for a given XML root with the SAME UI_SKIN*, so all but the first must pass
+*             "false" here to avoid deleting it more than once.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  ownskin : false if this layout must NOT delete "ui_skin" in its destructor.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUT::SetOwnsSkin(bool ownskin)
+{
+  this->ownskin = ownskin;
 }
 
 
@@ -507,6 +526,7 @@ UI_ELEMENT* UI_LAYOUT::Elements_Get(UI_ELEMENT* element, UI_ELEMENT_CHROMEROLE c
 void UI_LAYOUT::Clean()
 {
   ui_skin    = NULL;
+  ownskin    = true;
   stylesheet = NULL;
 }
 

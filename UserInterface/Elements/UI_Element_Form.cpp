@@ -36,6 +36,9 @@
 
 #include "UI_Element_Form.h"
 
+#include "GRPBitmap.h"
+#include "GRPFactory.h"
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -77,9 +80,10 @@ UI_ELEMENT_FORM::UI_ELEMENT_FORM()
 * @ingroup    USERINTERFACE
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-UI_ELEMENT_FORM::~UI_ELEMENT_FORM()    
-{ 
-  Clean();                            
+UI_ELEMENT_FORM::~UI_ELEMENT_FORM()
+{
+  ShadowCache_Release();              // must run BEFORE Clean() -- see the note on shadowcache_bitmap in the header
+  Clean();
 }
 
 
@@ -146,6 +150,109 @@ void UI_ELEMENT_FORM::SetLegacyFillWarningEmitted(bool value)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         GRPBITMAP* UI_ELEMENT_FORM::ShadowCache_GetIfMatches(int shape_w, int shape_h, double rTL, double rTR, double rBR, double rBL, int blur, UI_COLOR* color)
+* @brief      Returns the cached, already-blurred box-shadow bitmap if it was built with exactly this key (the
+*             only inputs that change its pixels); NULL if there is no cache yet or the key no longer matches,
+*             meaning the caller must re-render (see UI_SkinCanvas_DrawSoftShadow_FormCached).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  shape_w : Un-padded shadow silhouette width (screen pixels).
+* @param[in]  shape_h : Un-padded shadow silhouette height (screen pixels).
+* @param[in]  rTL : Top-left corner radius.
+* @param[in]  rTR : Top-right corner radius.
+* @param[in]  rBR : Bottom-right corner radius.
+* @param[in]  rBL : Bottom-left corner radius.
+* @param[in]  blur : Blur radius in pixels.
+* @param[in]  color : Shadow colour.
+*
+* @return     GRPBITMAP* : The cached bitmap on a match; NULL otherwise.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPBITMAP* UI_ELEMENT_FORM::ShadowCache_GetIfMatches(int shape_w, int shape_h, double rTL, double rTR, double rBR, double rBL, int blur, UI_COLOR* color)
+{
+  if(!shadowcache_bitmap) return NULL;
+  if(!color)              return NULL;
+
+  XDWORD colorrgba = ((XDWORD)color->GetRed()   << 24) |
+                      ((XDWORD)color->GetGreen() << 16) |
+                      ((XDWORD)color->GetBlue()  <<  8) |
+                      ((XDWORD)color->GetAlpha());
+
+  if(shadowcache_shape_w   != shape_w)     return NULL;
+  if(shadowcache_shape_h   != shape_h)     return NULL;
+  if(shadowcache_rTL       != rTL)         return NULL;
+  if(shadowcache_rTR       != rTR)         return NULL;
+  if(shadowcache_rBR       != rBR)         return NULL;
+  if(shadowcache_rBL       != rBL)         return NULL;
+  if(shadowcache_blur      != blur)        return NULL;
+  if(shadowcache_colorrgba != colorrgba)   return NULL;
+
+  return shadowcache_bitmap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_FORM::ShadowCache_Set(GRPBITMAP* bitmap, int shape_w, int shape_h, double rTL, double rTR, double rBR, double rBL, int blur, UI_COLOR* color)
+* @brief      Takes ownership of a freshly-rendered, already-blurred box-shadow bitmap and stores it as the new
+*             cache entry, freeing whatever was cached before. The element now owns "bitmap" -- the caller must
+*             not delete it.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  bitmap : Newly-rendered blurred shadow bitmap (ownership transfers to this element).
+* @param[in]  shape_w : Un-padded shadow silhouette width (screen pixels) this bitmap was built for.
+* @param[in]  shape_h : Un-padded shadow silhouette height (screen pixels) this bitmap was built for.
+* @param[in]  rTL : Top-left corner radius this bitmap was built for.
+* @param[in]  rTR : Top-right corner radius this bitmap was built for.
+* @param[in]  rBR : Bottom-right corner radius this bitmap was built for.
+* @param[in]  rBL : Bottom-left corner radius this bitmap was built for.
+* @param[in]  blur : Blur radius (pixels) this bitmap was built for.
+* @param[in]  color : Shadow colour this bitmap was built for.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_FORM::ShadowCache_Set(GRPBITMAP* bitmap, int shape_w, int shape_h, double rTL, double rTR, double rBR, double rBL, int blur, UI_COLOR* color)
+{
+  ShadowCache_Release();      // drop whatever was cached before taking ownership of the new bitmap
+
+  shadowcache_bitmap  = bitmap;
+  shadowcache_shape_w = shape_w;
+  shadowcache_shape_h = shape_h;
+  shadowcache_rTL     = rTL;
+  shadowcache_rTR     = rTR;
+  shadowcache_rBR     = rBR;
+  shadowcache_rBL     = rBL;
+  shadowcache_blur    = blur;
+
+  if(color) shadowcache_colorrgba = ((XDWORD)color->GetRed()   << 24) |
+                                     ((XDWORD)color->GetGreen() << 16) |
+                                     ((XDWORD)color->GetBlue()  <<  8) |
+                                     ((XDWORD)color->GetAlpha());
+   else     shadowcache_colorrgba = 0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_FORM::ShadowCache_Release()
+* @brief      Frees the cached box-shadow bitmap, if any. Safe to call whether or not a bitmap is cached. Called
+*             from the destructor (before Clean() resets the key fields) and from ShadowCache_Set() before
+*             taking ownership of a new bitmap.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_FORM::ShadowCache_Release()
+{
+  if(shadowcache_bitmap)
+    {
+      GRPFACTORY::GetInstance().DeleteBitmap(shadowcache_bitmap);
+      shadowcache_bitmap = NULL;
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_ELEMENT_FORM::Clean()
 * @brief      Clean the attributes of the class: Default initialize
 * @note       INTERNAL
@@ -156,6 +263,19 @@ void UI_ELEMENT_FORM::Clean()
 {
   roundvisiblerect            = 0;
   legacy_fill_warning_emitted = false;
+
+  // Box-shadow bitmap cache: reset the KEY/pointer only -- freeing shadowcache_bitmap, if set, is the caller's
+  // job (ShadowCache_Release()) since Clean() also runs from the CONSTRUCTOR, before shadowcache_bitmap holds
+  // a defined value to safely inspect or delete.
+  shadowcache_bitmap    = NULL;
+  shadowcache_shape_w   = -1;
+  shadowcache_shape_h   = -1;
+  shadowcache_rTL       = -1.0;
+  shadowcache_rTR       = -1.0;
+  shadowcache_rBR       = -1.0;
+  shadowcache_rBL       = -1.0;
+  shadowcache_blur      = -1;
+  shadowcache_colorrgba = 0;
 }
 
 

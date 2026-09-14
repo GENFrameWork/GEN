@@ -1320,20 +1320,28 @@ bool UI_ELEMENT::IsPreSelect()
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         void UI_ELEMENT::SetPreSelect(bool ispreselect)
+* @fn         bool UI_ELEMENT::SetPreSelect(bool ispreselect)
 * @brief      Set pre select
+* @note       Returns whether the state actually flipped, so a caller that ALSO needs to decide whether to
+*             invalidate/redraw (a different concern than the CSS re-resolve done here) does not have to
+*             duplicate this same "did it change" comparison -- see UI_MANAGER::PreSelectElement(), which used
+*             to call Elements_SetToRedraw() unconditionally on every hovered tick even when nothing changed.
 * @ingroup    USERINTERFACE
-* 
+*
 * @param[in]  ispreselect : Ispreselect value.
-* 
+*
+* @return     bool : true if the pre-select state actually changed; false if it was already "ispreselect".
+*
 * --------------------------------------------------------------------------------------------------------------------*/
-void UI_ELEMENT::SetPreSelect(bool ispreselect)
+bool UI_ELEMENT::SetPreSelect(bool ispreselect)
 {
   bool changed = (this->ispreselect != ispreselect);
 
   this->ispreselect = ispreselect;
 
   if(changed) ReapplyStyleVisual();
+
+  return changed;
 }
 
 

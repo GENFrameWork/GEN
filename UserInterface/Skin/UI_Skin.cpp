@@ -45,11 +45,25 @@
 #include "UI_Property_Scrolleable.h"
 #include "UI_Animation.h"
 
+#include "XDiagLog.h"    // TEMPORARY diagnostics -- see XDiagLog.h. Delete along with the counters below once root-caused.
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
 
 #include "GEN_Control.h"
+
+
+/*---- TEMPORARY DIAGNOSTIC COUNTERS ------------------------------------------------------------------------------------
+*  Counts every UI_SKIN::Draw() call THIS FRAME -- top-level AND every recursive descendant call made from
+*  Draw_Form()/Draw_Menu() etc, since those re-enter this exact same Draw() dispatcher for each child. Read and
+*  reset once per frame from UI_SYSTEM::DrawFrame() (extern-declared there, no header change needed). This is
+*  what tells us whether a ~36ms frame with nothing dirty is walking a handful of elements (-> per-element cost is
+*  anomalously high) or thousands of them (-> the tree itself is larger than expected).
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD diagskin_visits  = 0;      // every Draw() call, including invisible elements that bail out immediately
+XDWORD diagskin_visible = 0;      // calls where IsVisible() was true (i.e. did real administrative work)
+XDWORD diagskin_dirty   = 0;      // calls where MustReDraw() was true (i.e. did real painting work)
 
 
 
@@ -1032,11 +1046,16 @@ bool UI_SKIN::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 * @return     bool : true if the operation is successful; otherwise false.
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_SKIN::Draw(UI_ELEMENT* element)  
+bool UI_SKIN::Draw(UI_ELEMENT* element)
 {
+  diagskin_visits++;                               // TEMPORARY diagnostics -- see XDiagLog.h
+
   if(!element) return false;
 
   if(!element->IsVisible())  return false;
+
+  diagskin_visible++;                              // TEMPORARY diagnostics
+  if(element->MustReDraw()) diagskin_dirty++;       // TEMPORARY diagnostics
 
   if(element->IsBlinking())
     {

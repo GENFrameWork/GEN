@@ -312,7 +312,7 @@ class UI_ELEMENT : public XSUBJECT
 		void																	SetActive										(bool isactive);
 
 		bool																	IsPreSelect									();
-		void																	SetPreSelect								(bool ispreselect);
+		bool																	SetPreSelect								(bool ispreselect);
 
 		bool																	IsSelected									();
 		void																	SetSelected									(bool isselected);		

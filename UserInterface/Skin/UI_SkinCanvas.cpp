@@ -39,6 +39,7 @@
 #include "XTrace.h"
 #include "XTimer.h"
 #include "XSleep.h"
+#include "XDiagLog.h"                        // TEMPORARY diagnostic-only, see XDiagLog.h -- remove with it
 
 #include "GRP2DCanvas.h"
 #include "GRP2DColor.h"
@@ -458,15 +459,28 @@ static bool UI_SkinCanvas_RoundedRectInside(int px, int py, int w, int h, double
 * @return     bool : true on success; false when the canvas mode is not 32-bit RGBA/BGRA (caller draws hard).
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, double miny, double maxx, double maxy,
-                                          double rTL, double rTR, double rBR, double rBL,
-                                          UI_COLOR* shadow_color, int blur_radius)
-{
-  if(!canvas || !shadow_color || blur_radius <= 0) return false;
+// TEMPORARY diagnostics -- see XDiagLog.h. Accumulated microseconds spent building/compositing soft shadows and
+// how many calls happened THIS FRAME, split into cache hits/misses (see UI_SkinCanvas_DrawSoftShadow_FormCached
+// below and UI_ELEMENT_FORM::ShadowCache_* in UI_Element_Form.cpp/.h) so the effect of the bitmap cache shows up
+// directly in the next uidiag.log. Read and reset once per frame from UI_SYSTEM::DrawFrame() (extern-declared
+// there).
+XQWORD diagskin_shadowus         = 0;
+XDWORD diagskin_shadowcalls      = 0;
+XDWORD diagskin_shadowcachehits  = 0;
+XDWORD diagskin_shadowcachemiss  = 0;
 
-  int shape_w = (int)(maxx - minx);
-  int shape_h = (int)(maxy - miny);
-  if(shape_w <= 0 || shape_h <= 0) return false;
+
+// Rasterises the shadow silhouette into a NEW off-screen RGBA bitmap, padded to hold the blur fade, and runs
+// agg::stack_blur_rgba32 on it. Does NOT composite it onto the canvas and does NOT delete it -- the caller owns
+// the returned bitmap (either compositing-then-deleting it immediately, as UI_SkinCanvas_DrawSoftShadow_Impl
+// does for the two non-Form call sites, or compositing-then-CACHING it on the owning UI_ELEMENT_FORM, as
+// UI_SkinCanvas_DrawSoftShadow_FormCached does, so the SAME bitmap can be reused on a later frame instead of
+// rebuilt from scratch). Returns NULL on failure (caller falls back to a hard shadow).
+static GRPBITMAP* UI_SkinCanvas_BuildSoftShadowBitmap(int shape_w, int shape_h, double rTL, double rTR, double rBR, double rBL,
+                                                        UI_COLOR* shadow_color, int blur_radius)
+{
+  if(!shadow_color || blur_radius <= 0)   return NULL;
+  if(shape_w <= 0 || shape_h <= 0)        return NULL;
 
   // Pad the bitmap on each side so the fade at the shape's border has room to fully dissipate before the
   // buffer ends. Padding tighter than the blur radius would leave a visible hard cut. The very same formula
@@ -477,21 +491,22 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
 
   // Always create the off-screen bitmap in RGBA_8888. This decouples the shadow pipeline from the canvas
   // native pixel format: our per-pixel writes below use fixed R=0/G=1/B=2/A=3 offsets, and the composite
-  // step at the end goes through canvas->PutBlendPixel with a GRP2DCOLOR_RGBA8 -- the canvas layer handles
-  // whatever mode conversion is needed to write into 24-bit RGB, 16-bit RGB565 or another 32-bit backend.
+  // step (UI_SkinCanvas_CompositeSoftShadowBitmap) goes through canvas->PutBlendPixel with a GRP2DCOLOR_RGBA8
+  // -- the canvas layer handles whatever mode conversion is needed to write into 24-bit RGB, 16-bit RGB565 or
+  // another 32-bit backend.
   GRPBITMAP* bitmap = GRPFACTORY::GetInstance().CreateBitmap(bw, bh, GRPPROPERTYMODE_32_RGBA_8888);
-  if(!bitmap)         return false;
+  if(!bitmap)         return NULL;
   if(!bitmap->IsValid())
     {
       GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
-      return false;
+      return NULL;
     }
 
   XBYTE* buf = bitmap->GetBuffer();
   if(!buf)
     {
       GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
-      return false;
+      return NULL;
     }
 
   // Fixed RGBA_8888 layout: R, G, B, A per pixel.
@@ -562,6 +577,31 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
       once = false;
     }
 
+  return bitmap;
+}
+
+
+// Composites an already-built (fresh or cached) blurred shadow bitmap onto the canvas, anchored so its
+// silhouette lands back at (minx, miny) exactly as when it was rasterised (the padding added by
+// UI_SkinCanvas_BuildSoftShadowBitmap is recovered here from blur_radius via the same shared macro, so the
+// caller does not need to remember it). Safe to call every frame even when reusing a cached bitmap: this is
+// the part of the work that genuinely must happen on every redraw (the canvas pixels underneath were erased).
+static void UI_SkinCanvas_CompositeSoftShadowBitmap(GRP2DCANVAS* canvas, GRPBITMAP* bitmap, double minx, double miny, int blur_radius)
+{
+  if(!canvas || !bitmap) return;
+
+  int pad = UI_SKINCANVAS_SHADOW_BLURPADDING(blur_radius);
+  int bw  = (int)bitmap->GetWidth();
+  int bh  = (int)bitmap->GetHeight();
+
+  XBYTE* buf = bitmap->GetBuffer();
+  if(!buf) return;
+
+  const int r_off = 0;
+  const int g_off = 1;
+  const int b_off = 2;
+  const int a_off = 3;
+
   // Composite the blurred bitmap onto the canvas. We deliberately do NOT use canvas->PutBitmapAlpha because
   // that helper passes the source pixel's alpha as agg's cover_type, which then multiplies the source alpha
   // AGAIN internally -- effectively squaring the alpha and crushing every semi-transparent edge to zero.
@@ -585,8 +625,100 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
           canvas->PutBlendPixel(dest_x + (double)x, dest_y + (double)y, &c, 255.0);
         }
     }
+}
+
+
+// Behaviour-preserving recombination of UI_SkinCanvas_BuildSoftShadowBitmap + UI_SkinCanvas_CompositeSoftShadowBitmap
+// for the two call sites that do not (yet) cache: build, composite, delete, in one shot -- exactly what the
+// original single-piece function used to do.
+static bool UI_SkinCanvas_DrawSoftShadow_Impl(GRP2DCANVAS* canvas, double minx, double miny, double maxx, double maxy,
+                                          double rTL, double rTR, double rBR, double rBL,
+                                          UI_COLOR* shadow_color, int blur_radius)
+{
+  if(!canvas) return false;
+
+  int shape_w = (int)(maxx - minx);
+  int shape_h = (int)(maxy - miny);
+
+  GRPBITMAP* bitmap = UI_SkinCanvas_BuildSoftShadowBitmap(shape_w, shape_h, rTL, rTR, rBR, rBL, shadow_color, blur_radius);
+  if(!bitmap) return false;
+
+  UI_SkinCanvas_CompositeSoftShadowBitmap(canvas, bitmap, minx, miny, blur_radius);
 
   GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
+  return true;
+}
+
+
+// TEMPORARY diagnostics -- thin timing wrapper around UI_SkinCanvas_DrawSoftShadow_Impl (renamed above), kept
+// under the ORIGINAL name so the two non-Form call sites are untouched. Measures wall-clock time for the whole
+// call and tallies it into diagskin_shadowus/diagskin_shadowcalls, read once per frame from UI_SYSTEM::DrawFrame().
+// See XDiagLog.h.
+static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, double miny, double maxx, double maxy,
+                                          double rTL, double rTR, double rBR, double rBL,
+                                          UI_COLOR* shadow_color, int blur_radius)
+{
+  XQWORD diagskin_shadow_t0 = XDIAGLOG_NOWUS();
+
+  bool result = UI_SkinCanvas_DrawSoftShadow_Impl(canvas, minx, miny, maxx, maxy, rTL, rTR, rBR, rBL, shadow_color, blur_radius);
+
+  diagskin_shadowus += (XDIAGLOG_NOWUS() - diagskin_shadow_t0);
+  diagskin_shadowcalls++;
+
+  return result;
+}
+
+
+// Box-shadow entry point used ONLY by Draw_Form (the one path dashboard.css actually exercises -- "form.card"
+// is the sole "box-shadow" rule in the stylesheet, per the 2026-09 investigation). Reuses the already-blurred
+// bitmap cached on "element_form" when the shadow's appearance (size/corner-radii/blur/colour) has not changed
+// since it was last rendered, instead of rebuilding it from scratch on every redraw -- measured ~6.5ms per
+// call before this cache, almost entirely in the build step (fill passes + per-pixel rounded-rect test + AGG
+// blur), not the composite step, which still runs every time (see UI_SkinCanvas_CompositeSoftShadowBitmap).
+// The other 2 call sites (the generic DrawElementBoxShadow helper, used by images/animations; and the
+// ProgressBar track shadow) keep using the uncached UI_SkinCanvas_DrawSoftShadow above -- dashboard.css does
+// not author box-shadow on those element types today, so they were left as-is rather than widening this
+// change beyond what was actually measured.
+static bool UI_SkinCanvas_DrawSoftShadow_FormCached(GRP2DCANVAS* canvas, UI_ELEMENT_FORM* element_form, double minx, double miny, double maxx, double maxy,
+                                                      double rTL, double rTR, double rBR, double rBL,
+                                                      UI_COLOR* shadow_color, int blur_radius)
+{
+  if(!canvas || !element_form) return false;
+
+  XQWORD diagskin_shadow_t0 = XDIAGLOG_NOWUS();       // TEMPORARY diagnostics -- see XDiagLog.h
+
+  int shape_w = (int)(maxx - minx);
+  int shape_h = (int)(maxy - miny);
+
+  GRPBITMAP* bitmap = element_form->ShadowCache_GetIfMatches(shape_w, shape_h, rTL, rTR, rBR, rBL, blur_radius, shadow_color);
+
+  if(bitmap)
+    {
+      diagskin_shadowcachehits++;                     // TEMPORARY diagnostics
+    }
+   else
+    {
+      diagskin_shadowcachemiss++;                      // TEMPORARY diagnostics
+
+      bitmap = UI_SkinCanvas_BuildSoftShadowBitmap(shape_w, shape_h, rTL, rTR, rBR, rBL, shadow_color, blur_radius);
+      if(!bitmap)
+        {
+          diagskin_shadowus    += (XDIAGLOG_NOWUS() - diagskin_shadow_t0);   // TEMPORARY diagnostics
+          diagskin_shadowcalls++;                                             // TEMPORARY diagnostics
+          return false;
+        }
+
+      // Ownership transfers to the element's cache -- NOT deleted here. It is freed either the next time this
+      // element's shadow key changes (ShadowCache_Set releases the old one first) or when the element itself
+      // is destroyed (UI_ELEMENT_FORM::~UI_ELEMENT_FORM -> ShadowCache_Release).
+      element_form->ShadowCache_Set(bitmap, shape_w, shape_h, rTL, rTR, rBR, rBL, blur_radius, shadow_color);
+    }
+
+  UI_SkinCanvas_CompositeSoftShadowBitmap(canvas, bitmap, minx, miny, blur_radius);
+
+  diagskin_shadowus    += (XDIAGLOG_NOWUS() - diagskin_shadow_t0);   // TEMPORARY diagnostics
+  diagskin_shadowcalls++;                                             // TEMPORARY diagnostics
+
   return true;
 }
 
@@ -796,12 +928,64 @@ UI_SKINCANVAS_REBUILDAREAS::~UI_SKINCANVAS_REBUILDAREAS()
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
-{   
+{
   XDWORD max_z_level = 0;
   XDWORD nareas      = areas.GetSize();
-  bool   first       =  false;
+
+  // TEMPORARY diagnostic-only (see XDiagLog.h): wall-clock the whole function, and count how many areas this
+  // pass restores (z-level loop) vs. drops as orphaned (cleanup loop below) -- part of root-causing the
+  // multi-second blank-freeze under investigation. diag_t0 shared across every return path below.
+  XQWORD diag_t0             = XDIAGLOG_NOWUS();
+  XDWORD diag_nareas_initial = nareas;
+  XDWORD diag_restored       = 0;
+  XDWORD diag_orphaned       = 0;
 
   if(!nareas) return true;
+
+  // Invalidating one saved area can expose pixels owned by another area that overlaps it. Resolve that
+  // dependency transitively BEFORE restoring a single bitmap: every affected element is then dirty when the
+  // restore pass starts, so all layers are peeled in one transaction and no neighbour is deferred to the next
+  // frame. Deferring even one overlap is observable as a one-frame empty card/menu flash.
+  XDWORD ndirty_before = 0;
+  XDWORD ndirty_after  = 0;
+
+  do
+    {
+      ndirty_before = 0;
+
+      for(XDWORD c=0; c<nareas; c++)
+        {
+          GRP2DREBUILDAREA* area = areas.Get(c);
+          if(!area) continue;
+
+          UI_ELEMENT* element = (UI_ELEMENT*)area->GetExtraData();
+          if(element && (element->MustReDraw() || (!element->IsVisible()))) ndirty_before++;
+        }
+
+      for(XDWORD c=0; c<nareas; c++)
+        {
+          GRP2DREBUILDAREA* area = areas.Get(c);
+          if(!area) continue;
+
+          UI_ELEMENT* element = (UI_ELEMENT*)area->GetExtraData();
+          if(!element || ((!element->MustReDraw()) && element->IsVisible())) continue;
+
+          GRPBITMAP* bitmap = area->GetBitmap();
+          if(bitmap) MarkOverlappingAreasDirty(area, bitmap, (int)c);
+        }
+
+      ndirty_after = 0;
+
+      for(XDWORD c=0; c<nareas; c++)
+        {
+          GRP2DREBUILDAREA* area = areas.Get(c);
+          if(!area) continue;
+
+          UI_ELEMENT* element = (UI_ELEMENT*)area->GetExtraData();
+          if(element && (element->MustReDraw() || (!element->IsVisible()))) ndirty_after++;
+        }
+    }
+  while(ndirty_after > ndirty_before);
 
   for(XDWORD c=0; c<nareas; c++)
     {
@@ -820,9 +1004,10 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
   //XTRACE_PRINTCOLOR(XTRACE_COLOR_INFO, __L("[DEBUGCAPTION] UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas: nareas=%d max_z_level=%d"), (int)nareas, (int)max_z_level);
   #endif
 
-  if(!max_z_level) return false;
-
-  for(XDWORD level = max_z_level; level>0; level--)  
+  // Level zero is a real paint layer, not a sentinel. Every fatherless element keeps the default z_level=0,
+  // including the cards and menu hit targets in UI_System. The old `level>0` loop never restored or deleted
+  // those areas, so each redraw composited transparency and shadows over stale pixels indefinitely.
+  for(int level=(int)max_z_level; level>=0; level--)
     {
       nareas = areas.GetSize();  
 
@@ -834,24 +1019,18 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
               UI_ELEMENT* element = (UI_ELEMENT*)area->GetExtraData();
               if(element)
                 {
-                  if(element->MustReDraw() || (!element->IsVisible())) 
-                    { 
-                      if(element->GetZLevel() == level)
+                  if(element->MustReDraw() || (!element->IsVisible()))
+                    {
+                      if(element->GetZLevel() == (XDWORD)level)
                         {
                           // XTRACE_PRINTCOLOR(XTRACE_COLOR_PURPLE, __L("Del area level [%d] [%s] "), element->GetZLevel(), element->GetName()->Get());
                           GRPBITMAP* bitmap = area->GetBitmap();
                           if(bitmap) PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), bitmap);
 
-                          // Any other still-registered area whose saved rectangle overlaps this one (typically a
-                          // neighboring card whose box-shadow blur padding reaches into this element's footprint)
-                          // must be restored too. Otherwise its stale "before" bitmap is left on screen and gets
-                          // captured as-is into THIS element's next CreateRebuildArea() snapshot, so the neighbor's
-                          // already-drawn shadow gets baked in and re-darkened every time this element redraws --
-                          // the cumulative "ghost wedge" defect at overlapping rounded corners.
-                          if(bitmap) RestoreOverlappingAreas(area, bitmap, index);
-
                           areas.Delete(area);
                           GEN_DELETE area;
+
+                          diag_restored++;                    // TEMPORARY diagnostic-only, see XDiagLog.h
                         }
                     }
                 }
@@ -859,19 +1038,102 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
         }
     }
 
+  // Discard orphaned areas -- one whose owning element is neither dirty nor invisible was skipped by EVERY
+  // z-level pass above (the "if" they are gated on never matched at any level), meaning nothing is scheduled
+  // to redraw over it right now. That area's saved bitmap is the background from BEFORE the element's most
+  // recent (successful, already-completed) draw; the element's CURRENT on-screen content is already correct,
+  // so there is nothing to "undo" -- restoring that old snapshot would erase perfectly good pixels for no
+  // reason. Left registered, it would instead sit inertly for an unbounded number of frames and eventually get
+  // consumed whenever the element happens to become dirty again for a LATER, unrelated reason (a different
+  // section selected, a future global Elements_SetToRedraw()...); at that point its bitmap is no longer a
+  // snapshot of "just before this redraw" but of some arbitrary earlier moment, possibly missing content that
+  // other elements have since drawn over the same rectangle. Restoring it then paints a stale picture over the
+  // current correct one, and nothing is left dirty to draw it back -- exactly the multi-frame "blank flash"
+  // seen after clicking a sidebar navigation entry (UI_SYSTEM::UserInterface_SelectSection() marks the WHOLE
+  // tree dirty at once, so every element redraws and clears its own flag the same frame it was set; any area
+  // whose owning element does not need a SECOND redraw this same frame is, by construction, exactly one frame
+  // old and already served its purpose). Dropping it now (without restoring) costs nothing: if the element
+  // becomes dirty again later, PreDrawFunction() finds no existing area and creates a fresh one from whatever
+  // is on screen at that moment, which is always at least as correct as an old, possibly-invalidated snapshot.
+  nareas = areas.GetSize();
+
+  for(int index = (int)nareas-1; index>=0; index--)
+    {
+      GRP2DREBUILDAREA* area = areas.Get(index);
+      if(!area) continue;
+
+      UI_ELEMENT* element = (UI_ELEMENT*)area->GetExtraData();
+      if(!element) continue;
+
+      if(element->MustReDraw() || (!element->IsVisible())) continue;  // still due a restore -- leave it alone
+
+      areas.Delete(area);
+      GEN_DELETE area;
+
+      diag_orphaned++;                                        // TEMPORARY diagnostic-only, see XDiagLog.h
+    }
+
+  // TEMPORARY diagnostic-only (see XDiagLog.h): only written when this pass took an abnormal amount of wall-clock
+  // time (>5ms) OR touched an unusually large number of areas, to keep the log small during normal operation
+  // while still catching the pass whenever it is the slow one inside a stalled frame.
+  { XQWORD diag_elapsed = XDIAGLOG_NOWUS() - diag_t0;
+    if(diag_elapsed > 5000 || diag_nareas_initial > 20)
+      {
+        XDIAGLOG_WRITE("REBUILDAREAS", "nareas=%u restored=%u orphaned=%u elapsed=%lluus",
+                        (unsigned)diag_nareas_initial, (unsigned)diag_restored, (unsigned)diag_orphaned, (unsigned long long)diag_elapsed);
+      }
+  }
+
   return true;
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void UI_SKINCANVAS_REBUILDAREAS::RestoreOverlappingAreas(GRP2DREBUILDAREA* area, GRPBITMAP* bitmap, int excludeindex)
-* @brief      Restores (and forces a redraw on) every other still-registered rebuild area whose saved rectangle
-*             overlaps the rectangle of "area". Used right before "area" itself is restored/deleted in
-*             RebuildAllAreas(), so overlapping neighbors (e.g. two adjacent cards whose box-shadow blur padding
-*             spans into each other) stay in sync instead of one of them keeping a stale "before" snapshot that
-*             later gets baked into the other's next save, which is what let shadow pixels darken cumulatively
-*             frame after frame at overlapping rounded corners.
+* @fn         void UI_SKINCANVAS_REBUILDAREAS::MarkElementSubtreeDirty(UI_ELEMENT* element)
+* @brief      Marks "element" and every element in its compose-children subtree as needing a redraw.
+* @note       Root-cause fix for the "empty card" blank-flash defect: a rebuild area's neighbour is very often
+*             an opaque container (a "form.card"/"form.inner-box"), not a leaf. Draw_Form() always visits every
+*             child during its own redraw pass regardless of dirty state, but each child's own painter
+*             (Draw_Text/Draw_Image/...) only emits pixels when THAT child's own MustReDraw() is true. Marking
+*             only the container therefore repaints its background/border on top of whatever was already on
+*             screen while its still-clean children never redraw to replace what just got painted over them --
+*             a fully-formed but content-less card shell is exactly what gets presented that frame. Mirrors
+*             UI_LAYOUT::Elements_SetToRedraw(element, true) (UI_Layout.cpp), repeated locally here because this
+*             class only ever sees a bare UI_ELEMENT* (via a rebuild area's ExtraData) and has no UI_LAYOUT* to
+*             call through -- see MarkOverlappingAreasDirty()'s own note on why this must stay inside the element
+*             tree instead of reaching for a manager/layout singleton from inside the skin.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Root of the subtree to mark; NULL is a no-op.
+*
+* @return     void.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS_REBUILDAREAS::MarkElementSubtreeDirty(UI_ELEMENT* element)
+{
+  if(!element) return;
+
+  element->SetMustReDraw(true);
+
+  for(XDWORD c=0; c<element->GetComposeElements()->GetSize(); c++)
+    {
+      UI_ELEMENT* subelement = (UI_ELEMENT*)element->GetComposeElements()->Get(c);
+      if(subelement) MarkElementSubtreeDirty(subelement);
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_SKINCANVAS_REBUILDAREAS::MarkOverlappingAreasDirty(GRP2DREBUILDAREA* area, GRPBITMAP* bitmap, int excludeindex)
+* @brief      Marks dirty every other still-registered rebuild area whose saved rectangle overlaps the rectangle
+*             of "area", so it gets its OWN proper restore+redraw cycle instead of being skipped as "clean" while
+*             its shadow silently keeps stacking on top of a neighbor's. RebuildAllAreas() calls this in a
+*             fixed-point pass before restoring any bitmap, so transitive overlaps are part of the same frame.
+* @note       This function deliberately changes flags only. Two independently-owned, partially-overlapping
+*             snapshots cannot both be replayed immediately here without one re-introducing stale data the other
+*             has already cleared. The subsequent Z-ordered restore pass writes each affected snapshot once.
 * @ingroup    USERINTERFACE
 *
 * @param[in]  area         : Area about to be restored/deleted by the caller; its saved rectangle is the overlap
@@ -882,7 +1144,7 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
 * @return     void.
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void UI_SKINCANVAS_REBUILDAREAS::RestoreOverlappingAreas(GRP2DREBUILDAREA* area, GRPBITMAP* bitmap, int excludeindex)
+void UI_SKINCANVAS_REBUILDAREAS::MarkOverlappingAreasDirty(GRP2DREBUILDAREA* area, GRPBITMAP* bitmap, int excludeindex)
 {
   if((!area) || (!bitmap)) return;
 
@@ -891,9 +1153,9 @@ void UI_SKINCANVAS_REBUILDAREAS::RestoreOverlappingAreas(GRP2DREBUILDAREA* area,
   double w1 = (double)bitmap->GetWidth();
   double h1 = (double)bitmap->GetHeight();
 
-  int nareas = (int)areas.GetSize();
+  XDWORD nareas = areas.GetSize();
 
-  for(int index = nareas-1; index>=0; index--)
+  for(int index = (int)nareas-1; index>=0; index--)
     {
       if(index == excludeindex) continue;
 
@@ -911,20 +1173,15 @@ void UI_SKINCANVAS_REBUILDAREAS::RestoreOverlappingAreas(GRP2DREBUILDAREA* area,
       bool overlaps = ((x1 < (x2+w2)) && (x2 < (x1+w1)) && (y1 < (y2+h2)) && (y2 < (y1+h1)));
       if(!overlaps) continue;
 
-      // Restore the neighbor's saved "before" pixels now, then force it to redraw itself so nothing is left
-      // visibly erased once this frame is presented. Its own PreDrawFunction() pass will create a fresh
-      // rebuild area for it (since none is registered for it anymore) and repaint it on top, in sync again.
-      PutBitmapNoAlpha(neighborarea->GetXPos(), neighborarea->GetYPos(), neighborbitmap);
-
+      // Just flag it dirty -- do NOT touch its bitmap or delete its area here. The restore phase starts only
+      // after the complete overlap closure has been found, then restores it exactly once from its own snapshot.
+      //
+      // The flag must cover the neighbour's WHOLE subtree, not just the neighbour itself: see
+      // MarkElementSubtreeDirty()'s note just above for why marking a single opaque container without its
+      // children is exactly the "empty card" blank-flash defect (the container's own redraw repaints over its
+      // children, and those children never redraw back because nothing marked THEM dirty).
       UI_ELEMENT* neighborelement = (UI_ELEMENT*)neighborarea->GetExtraData();
-      if(neighborelement) neighborelement->SetMustReDraw(true);
-
-      areas.Delete(neighborarea);
-      GEN_DELETE neighborarea;
-
-      // "areas" just shrank by one: entries after "index" shifted down into "index", so re-reading GetSize()
-      // keeps the loop bound correct and the next iteration (index--) still lands on the next area to check.
-      nareas = (int)areas.GetSize();
+      if(neighborelement) MarkElementSubtreeDirty(neighborelement);
     }
 }
 
@@ -1169,16 +1426,37 @@ UI_SKINCANVAS::UI_SKINCANVAS(GRPSCREEN* screen,  int viewportindex) : UI_SKIN(),
 * @ingroup    USERINTERFACE
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-UI_SKINCANVAS::~UI_SKINCANVAS()    
-{ 
+UI_SKINCANVAS::~UI_SKINCANVAS()
+{
   if(!fontpathfile.IsEmpty())
     {
-      GEN_USERINTERFACE.DeleteTemporalUnZipFile(fontpathfile);  
+      GEN_USERINTERFACE.DeleteTemporalUnZipFile(fontpathfile);
     }
 
   DeleteAllRebuildAreas();
 
-  Clean();                            
+  // Mirrors DeleteAllRebuildAreas() above but for our own, separate progressbackdrops cache (see UI_SkinCanvas.h
+  // and Draw_ProgressBar()): GRP2DREBUILDAREA's destructor already frees its own captured GRPBITMAP, so
+  // DeleteContents() correctly releases every cached backdrop bitmap here too.
+  progressbackdrops.DeleteContents();
+  progressbackdrops.DeleteAll();
+
+  // Companion cache to progressbackdrops above (see UI_SkinCanvas.h and Draw_ProgressBar()): plain records,
+  // no bitmaps to free, but still owned by this object and must be deleted here.
+  progressbarlastbounds.DeleteContents();
+  progressbarlastbounds.DeleteAll();
+
+  // Mirrors progressbackdrops above but for the ALPHA-DARKENING FIX's own cache (see UI_SkinCanvas.h and
+  // Draw_Form()): same reasoning, same cleanup.
+  formbackdrops.DeleteContents();
+  formbackdrops.DeleteAll();
+
+  // Mirrors progressbackdrops above but for the RADIAL CAPTION GHOSTING FIX's own cache (see UI_SkinCanvas.h
+  // and Draw_ProgressRadial()): same reasoning, same cleanup.
+  radialbackdrops.DeleteContents();
+  radialbackdrops.DeleteAll();
+
+  Clean();
 }
 
 
@@ -2377,7 +2655,152 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ListBox(UI_ELEMENT* element, bool adju
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         void UI_SKINCANVAS::ReapplyProgressBarAllocationLayout(UI_ELEMENT_PROGRESSBAR* element_progressbar, bool adjustsizemargin)
+* @brief      Positions element_progressrect/element_animation/element_text against element_progressbar's OWN
+*             (already resolved) box and applies the allocationtext-driven shift (DOWN/UP/LEFT move the rect/
+*             animation to free up room for the caption).
+* @note       ROOT-CAUSE FIX (2026-09, fourth pass): extracted out of CalculateBoundaryLine_ProgressBar() (which
+*             still calls this immediately after resolving element_progressbar's own position/size) so that
+*             UI_MANAGER::RefreshFlexProgressBarTracks() (UI_Manager.cpp) can call the EXACT same logic.
+*
+*             That function is a post-load hook that runs, unconditionally, for every ProgressBar right after
+*             UI_LAYOUTENGINE::RunLayout() -- so that a ProgressBar which is itself a flex item gets its track
+*             re-anchored to its flex-resolved position (see that function's own banner: without this, a flex
+*             ProgressBar's track stayed stuck near the origin and never rendered at all). Its OLD implementation
+*             called only the bare CalculePosition(element_progressrect, ...) -- the same first step
+*             CalculateBoundaryLine_ProgressBar() takes -- and stopped there, never reapplying the allocationtext
+*             switch below. For allocationtext="none"/"center" that is harmless (neither shifts the rect), which
+*             is exactly why this went unnoticed; but for "down"/"up"/"left" -- e.g. progressbar3 in UI_Options'
+*             example.xml, allocationtext="down" -- CalculateBoundaryLine_ProgressBar() (called moments earlier,
+*             from CreatePartialLayout()) had ALREADY shifted element_progressrect to free up room for the
+*             caption underneath it, and this post-load hook's bare CalculePosition() call silently RESET it back
+*             to its natural, unshifted position, undoing that shift for the entire lifetime of the very first
+*             frame. Confirmed live (see the GHOST-FILL FIX comment in Draw_ProgressBar()): the rect renders
+*             unshifted (overlapping the caption's own zone) from the very first frame, and only jumps to its
+*             correct shifted position the first time something ELSE re-runs CalculateBoundaryLine_ProgressBar()
+*             (a real value change) -- a full-fledged, one-time geometry jump between "load" and "first value
+*             change" that every downstream restore/redraw mechanism (including the widget-level backdrop cache
+*             added alongside this fix) has to treat as a real, on-screen move, when the truly correct behaviour
+*             is for the rect to already be at its final, shifted position from the very first frame and never
+*             move again for this reason.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element_progressbar : The progress-bar element itself; NULL is a no-op. Its own position/size are
+*                                    read here, never written -- the caller (either call site) is responsible for
+*                                    those being correct before calling this.
+* @param[in]  adjustsizemargin : Forwarded to every CalculePosition() call below, exactly as CalculateBoundaryLine_ProgressBar() does.
+*
+* @return     void.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS::ReapplyProgressBarAllocationLayout(UI_ELEMENT_PROGRESSBAR* element_progressbar, bool adjustsizemargin)
+{
+  if(!element_progressbar) return;
+
+  UI_ELEMENT*           element_progressrect  = element_progressbar->GetProgressRect();
+  UI_ELEMENT_ANIMATION* element_animation     = (UI_ELEMENT_ANIMATION*)element_progressbar->Get_UIAnimation();
+  UI_ELEMENT_TEXT*      element_text          = (UI_ELEMENT_TEXT*)element_progressbar->Get_UIText();
+
+  if(element_progressrect)  CalculePosition(element_progressrect  , element_progressbar->GetBoundaryLine()->width, element_progressbar->GetBoundaryLine()->height, adjustsizemargin);
+  if(element_animation)     CalculePosition(element_animation     , element_progressbar->GetBoundaryLine()->width, element_progressbar->GetBoundaryLine()->height, adjustsizemargin);
+  if(element_text)          CalculePosition(element_text          , element_progressbar->GetBoundaryLine()->width, element_progressbar->GetBoundaryLine()->height, adjustsizemargin);
+
+  // DEEP ROOT-CAUSE FIX (2026-09, third pass -- see the GHOST-FILL FIX comment in Draw_ProgressBar() for the
+  // visual symptom this was ultimately traced back to): CalculePosition() just above gives element_progressrect/
+  // element_animation/element_text their NATURAL, unshifted positions -- captured here, ONCE, before the
+  // allocationtext switch below moves anything. Every branch of that switch MUST compute its shifted
+  // position(s) from these frozen natural values, never from GetXPosition()/GetYPosition() read again after a
+  // shift has already been applied -- otherwise a position that looks like a one-time "make room for the
+  // caption" adjustment is actually INCREMENTAL: calling this function a second time (this function is re-run
+  // on every real value change, and, it turns out, on every dirty tick while an element stays marked dirty --
+  // see below) reads back the ALREADY-shifted coordinate and shifts it again by the same amount, silently
+  // drifting the rect/animation further and further off its correct position on every call, with nothing to
+  // ever bring it back. That drift was confirmed live: element_progressrect's own Y position for progressbar3
+  // (allocationtext="down") changed on successive calls instead of converging, which in turn kept the widget's
+  // on-screen boundary line "changing" every tick and thereby kept it (and its caption) marked dirty forever --
+  // a second-order perpetual-redraw bug on top of the original one-shot mispositioning, and the true reason a
+  // caption that DOES get redrawn every single tick can still end up invisible: whatever it draws one tick, a
+  // still-drifting rect (or a backdrop-restore keyed to the widget's nominal box) can legitimately no longer
+  // agree with the very next tick. A previous pass here already made element_text's OWN position absolute for
+  // the DOWN and LEFT cases (see the two comments retained below); this pass finishes the job for
+  // element_progressrect, element_animation, and the UP case's element_text, using the same principle
+  // throughout: every SetXPosition()/SetYPosition() below is computed from a NATURAL baseline captured once,
+  // so calling this function any number of times with the same inputs always produces the same output.
+  double rect_natural_x = element_progressrect ? element_progressrect->GetXPosition() : 0.0;
+  double rect_natural_y = element_progressrect ? element_progressrect->GetYPosition() : 0.0;
+  double anim_natural_x = element_animation    ? element_animation->GetXPosition()    : 0.0;
+  double anim_natural_y = element_animation    ? element_animation->GetYPosition()    : 0.0;
+  double text_natural_y = element_text         ? element_text->GetYPosition()         : 0.0;
+
+  switch(element_progressbar->GetAllocationTextType())
+    {
+      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE    : break;
+
+      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_DOWN    : if(element_animation && element_text)     element_animation->SetYPosition(anim_natural_y - element_text->GetBoundaryLine()->height);
+                                                            if(element_progressrect && element_text)  element_progressrect->SetYPosition(rect_natural_y - (element_text->GetBoundaryLine()->height + 6));
+                                                            if(element_progressrect && element_text)  element_text->SetXPosition(element_progressrect->GetXPosition() + ((element_progressrect->GetBoundaryLine()->width - element_text->GetBoundaryLine()->width) / 2.0));   // horizontal center on the bar
+                                                            // ROOT-CAUSE FIX (2026-09, confirmed live against progressbar3 in UI_Options' example.xml,
+                                                            // allocationtext="down"): the line above moves element_progressrect UP by
+                                                            // (text height + 6) to free up room for the caption underneath it, but this function
+                                                            // never used to reposition element_text itself along that same axis -- element_text
+                                                            // kept whatever Y CalculePosition(element_text, ...) gave it moments earlier (the SAME
+                                                            // "natural" baseline element_progressrect ALSO started from, before its own shift).
+                                                            // The very first time this function runs for a given element (layout parse), that
+                                                            // stale Y happens to still read correctly on screen because nothing has repainted the
+                                                            // gap yet; the first REAL value change afterwards re-enters this function (see
+                                                            // ChangeTextElementValue's progress-type-father special case) and reapplies the SAME
+                                                            // rect shift, but Draw_ProgressBar's own track/fill painting only ever covers
+                                                            // element_progressrect's (now shifted) rect -- never the stale, unshifted caption
+                                                            // position -- so that row of the canvas is left with whatever raw, uninitialized
+                                                            // (fully transparent) pixels were there, and the freshly-drawn glyph blends against
+                                                            // that instead of an opaque background: exactly the "letters overlap / caption
+                                                            // vanishes" defect reported on progress widgets after their first value change.
+                                                            // Fix: reposition element_text into the space element_progressrect's shift just
+                                                            // freed up, the same way every OTHER branch below positions text relative to the
+                                                            // rect's post-shift position (absolute, not incremental -- safe to call this
+                                                            // function any number of times with an identical result each time).
+                                                            if(element_progressrect && element_text)  element_text->SetYPosition(element_progressrect->GetYPosition() + element_text->GetBoundaryLine()->height + 6);
+                                                            break;
+
+      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_UP      : { double shifted_text_y = text_natural_y;
+                                                            if(element_animation && element_text)     shifted_text_y -= element_animation->GetBoundaryLine()->height;
+                                                            if(element_progressrect && element_text)  shifted_text_y -= (element_progressrect->GetBoundaryLine()->height + 6);
+                                                            if(element_text)                          element_text->SetYPosition(shifted_text_y);
+                                                            if(element_progressrect && element_text)  element_text->SetXPosition(element_progressrect->GetXPosition() + ((element_progressrect->GetBoundaryLine()->width - element_text->GetBoundaryLine()->width)/2));   // horizontal center on the bar
+                                                            break; }
+
+      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_RIGHT   : if(element_progressrect && element_text)
+                                                              {
+                                                                element_text->SetXPosition(element_progressrect->GetXPosition() + element_progressrect->GetBoundaryLine()->width + 6);                                              // right of the bar (+gap), absolute not incremental
+                                                                element_text->SetYPosition(element_progressrect->GetYPosition() - ((element_progressrect->GetBoundaryLine()->height - element_text->GetBoundaryLine()->height)/2));   // vertical center on the bar
+                                                              }
+                                                            break;
+
+      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_LEFT    : if(element_animation && element_text)     element_animation->SetXPosition(anim_natural_x + element_text->GetBoundaryLine()->width);
+                                                            if(element_progressrect && element_text)  element_progressrect->SetXPosition(rect_natural_x + element_text->GetBoundaryLine()->width);
+                                                            if(element_progressrect && element_text)  element_text->SetYPosition(element_progressrect->GetYPosition() - ((element_progressrect->GetBoundaryLine()->height - element_text->GetBoundaryLine()->height)/2));   // vertical center on the bar
+                                                            // ROOT-CAUSE FIX (2026-09): same class of bug as ALLOCATION_TEXT_TYPE_DOWN above --
+                                                            // element_progressrect is shifted RIGHT by element_text's width to free up room for
+                                                            // the caption on its left, but element_text's own X position was never set here at
+                                                            // all, so it kept the stale X CalculePosition(element_text, ...) gave it (the same
+                                                            // pre-shift baseline the rect started from). Absolute, not incremental -- safe to
+                                                            // call this function any number of times with an identical result each time.
+                                                            if(element_progressrect && element_text)  element_text->SetXPosition(element_progressrect->GetXPosition() - element_text->GetBoundaryLine()->width);
+                                                            break;
+
+      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_CENTER  : if(element_progressrect && element_text)
+                                                              {
+                                                                element_text->SetXPosition(element_progressrect->GetXPosition() + ((element_progressrect->GetBoundaryLine()->width  - element_text->GetBoundaryLine()->width)/2));
+                                                                element_text->SetYPosition(element_progressrect->GetYPosition() - ((element_progressrect->GetBoundaryLine()->height - element_text->GetBoundaryLine()->height)/2));
+                                                              }
+                                                            break;
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool adjustsizemargin)
 * @brief      Calculate boundary line progress bar
 * @ingroup    USERINTERFACE
@@ -2463,44 +2886,11 @@ bool UI_SKINCANVAS::CalculateBoundaryLine_ProgressBar(UI_ELEMENT* element, bool 
   
   CalculePosition(element_progressbar, fatherwidth, fatherheight, adjustsizemargin);
 
-  if(element_progressrect)  CalculePosition(element_progressrect  , element_progressbar->GetBoundaryLine()->width, element_progressbar->GetBoundaryLine()->height, adjustsizemargin);
-  if(element_animation)     CalculePosition(element_animation     , element_progressbar->GetBoundaryLine()->width, element_progressbar->GetBoundaryLine()->height, adjustsizemargin);
-  if(element_text)          CalculePosition(element_text          , element_progressbar->GetBoundaryLine()->width, element_progressbar->GetBoundaryLine()->height, adjustsizemargin);  
-
-
-  switch(element_progressbar->GetAllocationTextType())
-    {
-      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE    : break;
-
-      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_DOWN    : if(element_animation && element_text)     element_animation->SetYPosition(element_animation->GetYPosition() - element_text->GetBoundaryLine()->height);
-                                                            if(element_progressrect && element_text)  element_progressrect->SetYPosition(element_progressrect->GetYPosition() - (element_text->GetBoundaryLine()->height + 6));
-                                                            if(element_progressrect && element_text)  element_text->SetXPosition(element_progressrect->GetXPosition() + ((element_progressrect->GetBoundaryLine()->width - element_text->GetBoundaryLine()->width) / 2.0));   // horizontal center on the bar
-                                                            break;
-
-      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_UP      : if(element_animation && element_text)     element_text->SetYPosition(element_text->GetYPosition() - element_animation->GetBoundaryLine()->height);
-                                                            if(element_progressrect && element_text)  element_text->SetYPosition(element_text->GetYPosition() - (element_progressrect->GetBoundaryLine()->height + 6));
-                                                            if(element_progressrect && element_text)  element_text->SetXPosition(element_progressrect->GetXPosition() + ((element_progressrect->GetBoundaryLine()->width - element_text->GetBoundaryLine()->width)/2));   // horizontal center on the bar
-                                                            break;
-
-      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_RIGHT   : if(element_progressrect && element_text)
-                                                              {
-                                                                element_text->SetXPosition(element_progressrect->GetXPosition() + element_progressrect->GetBoundaryLine()->width + 6);                                              // right of the bar (+gap), absolute not incremental
-                                                                element_text->SetYPosition(element_progressrect->GetYPosition() - ((element_progressrect->GetBoundaryLine()->height - element_text->GetBoundaryLine()->height)/2));   // vertical center on the bar
-                                                              }
-                                                            break;
-
-      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_LEFT    : if(element_animation && element_text)     element_animation->SetXPosition(element_animation->GetXPosition() + element_text->GetBoundaryLine()->width);
-                                                            if(element_progressrect && element_text)  element_progressrect->SetXPosition(element_progressrect->GetXPosition() + element_text->GetBoundaryLine()->width);
-                                                            if(element_progressrect && element_text)  element_text->SetYPosition(element_progressrect->GetYPosition() - ((element_progressrect->GetBoundaryLine()->height - element_text->GetBoundaryLine()->height)/2));   // vertical center on the bar
-                                                            break;
-
-      case UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_CENTER  : if(element_progressrect && element_text)  
-                                                              {
-                                                                element_text->SetXPosition(element_progressrect->GetXPosition() + ((element_progressrect->GetBoundaryLine()->width  - element_text->GetBoundaryLine()->width)/2));    
-                                                                element_text->SetYPosition(element_progressrect->GetYPosition() - ((element_progressrect->GetBoundaryLine()->height - element_text->GetBoundaryLine()->height)/2));             
-                                                              }
-                                                            break; 
-    } 
+  // Sub-element positioning + the allocationtext-driven shift (element_progressrect/element_animation/
+  // element_text against element_progressbar's OWN box, just resolved above) is shared with
+  // UI_MANAGER::RefreshFlexProgressBarTracks() (UI_Manager.cpp) -- see ReapplyProgressBarAllocationLayout()'s
+  // own banner and .cpp comment for why that function needs the EXACT same logic, not a hand-rolled subset.
+  ReapplyProgressBarAllocationLayout(element_progressbar, adjustsizemargin);
 
   if(element_animation)
     {
@@ -3468,6 +3858,72 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
 
   if(element->MustReDraw())
     {
+      // ALPHA-DARKENING FIX (2026-09): steps 4-8 below (box-shadow, then fill+stroke) always paint by
+      // ALPHA-BLENDING onto whatever is already on the canvas (AGG "over" compositing) -- never a plain
+      // overwrite -- because that is what lets a translucent color (e.g. color="black,50", used by both
+      // "form" and "menu" elements for a frosted-glass panel look) show the real background through it. A
+      // form/menu that gets marked MustReDraw() again later WITHOUT ever moving or becoming invisible (the
+      // common case: some unrelated interaction elsewhere in the layout calls a global
+      // Elements_SetToRedraw(), which recursively re-dirties this element and its children too) simply
+      // repaints the SAME nominal translucent color on top of its own earlier repaint of itself -- and
+      // standard "over" compositing of a color onto itself compounds toward full opacity every time (50%
+      // over 50% = 75%, then 87.5%, ...), NOT a no-op. Confirmed live via canvas->GetBitmap() buffer reads on
+      // "ListBoxMenuID" (color="black,50"): stored alpha measured 127 -> 191 -> 242 across three consecutive
+      // real redraws, each one triggered by selecting a different row (an unrelated, recursive
+      // Elements_SetToRedraw() call, not a change to this element's own geometry or color) -- visually, the
+      // translucent panel darkens toward solid black a little more on every such redraw, exactly as reported.
+      //
+      // Fix: cache the TRUE backdrop (the real pixels behind this element, e.g. the seamless background
+      // pattern) once, the very first time this element is ever drawn -- before any of its own shadow, fill,
+      // border or children have painted anything -- and restore it (PutBitmapNoAlpha(), GEN's own real
+      // restore primitive, never a synthetic fill colour) immediately before repainting on every later real
+      // redraw, so the translucent blend below always starts fresh instead of compounding on top of itself.
+      //
+      // Only done when this element actually owns its own rebuild-area THIS tick (GetRebuildAreaByElement(),
+      // set a few lines above by PreDrawFunction()): that area's geometry is already correctly expanded for
+      // the box-shadow footprint (see PreDrawFunction()'s own step-7 padding), so reusing it here keeps the
+      // captured/restored box perfectly in sync with the shadow without duplicating that padding logic. When
+      // this element is instead a descendant of an already-dirty ancestor (no area of its own), it is left
+      // alone: the ancestor's own redraw -- running first, higher up this same recursive Draw() walk -- is
+      // trusted to already have cleared/reset the canvas beneath before this descendant ever paints, exactly
+      // the same "ancestor covers descendant" assumption the rest of this rebuild-area system relies on.
+      GRP2DREBUILDAREA* ownarea = GetRebuildAreaByElement(element);
+
+      if(ownarea)
+        {
+          GRP2DREBUILDAREA* formbackdrop = FormBackdrop_Find(element);
+
+          if(!formbackdrop)
+            {
+              // First time this element is ever drawn: nothing has painted shadow/fill/border/children ink
+              // here yet, so this is the one guaranteed-pristine moment to capture the true backdrop. Reuses
+              // ownarea's already-computed box (position + size, shadow footprint included) rather than
+              // recomputing it here.
+              FormBackdrop_Capture(element, ownarea->GetXPos(), ownarea->GetYPos(),
+                                    (double)ownarea->GetBitmap()->GetWidth(), (double)ownarea->GetBitmap()->GetHeight());
+            }
+           else
+            {
+              // Not the first draw: restore the true backdrop now, before repainting below.
+              PutBitmapNoAlpha(formbackdrop->GetXPos(), formbackdrop->GetYPos(), formbackdrop->GetBitmap());
+
+              // Restoring just wiped any ink our own children (an edit field, listbox rows, a scrollbar...)
+              // already painted on earlier ticks. The children loop further down in this function already
+              // calls Draw() on every child unconditionally, but each Draw_X() only actually repaints when
+              // THAT child's own MustReDraw() is set -- so a child not ALSO marked dirty this exact tick
+              // would be erased by the restore above and never repainted. Force every direct child dirty here
+              // so the loop below always repaints it on top of the freshly restored backdrop. Harmless when a
+              // child WAS already going to redraw anyway (repainting unchanged content is idempotent, the
+              // same reasoning already relied on elsewhere in this file -- see the GHOST-FILL FIX comment in
+              // Draw_ProgressBar()).
+              for(XDWORD c=0; c<element_form->GetComposeElements()->GetSize(); c++)
+                {
+                  UI_ELEMENT* formchild = (UI_ELEMENT*)element_form->GetComposeElements()->Get(c);
+                  if(formchild) formchild->SetMustReDraw(true);
+                }
+            }
+        }
+
       // Element geometry (screen coords, y-down). Shared by the shadow layer (step 7) and the fill+stroke
       // layer (steps 4-5-6) below.
       double  vr_minx = element_form->GetVisibleRect()->x;
@@ -3510,7 +3966,9 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
           bool soft_ok = false;
           if(sh_blur > 0.0)
             {
-              soft_ok = UI_SkinCanvas_DrawSoftShadow(canvas, sh_minx, sh_miny, sh_maxx, sh_maxy,
+              // Cached path (see UI_SkinCanvas_DrawSoftShadow_FormCached): reuses the already-blurred bitmap
+              // on "element_form" across frames instead of rebuilding it every redraw.
+              soft_ok = UI_SkinCanvas_DrawSoftShadow_FormCached(canvas, element_form, sh_minx, sh_miny, sh_maxx, sh_maxy,
                                                     rTL, rTR, rBR, rBL,
                                                     element_form->GetShadowColor(), (int)sh_blur);
             }
@@ -3759,14 +4217,191 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
   double                  y_position            = 0.0f;
   GRP2DCANVAS*              canvas                = GetCanvas();    
   static bool             visible               = false;
-  XRECT                   clip_rect;                       
-  
+  XRECT                   clip_rect;
+
   if(!canvas) return false;
+
+  // Our OWN rebuild-area (created by PreDrawFunction() right below, sized from GetXPosition()/GetYPosition()/
+  // GetBoundaryLine()) must cover only what OUR OWN painting further down in this function actually repaints --
+  // element_progressrect's track/fill (and element_animation's frame, if present). For an AUTO-sized progress
+  // bar whose caption sits OUTSIDE the rect (allocationtext DOWN/UP/LEFT/RIGHT), GetBoundaryLine() is
+  // deliberately bigger than that: it spans rect+gap+caption too, so SIBLINGS lay out around the whole widget,
+  // caption included (see the width/height AUTO block in CalculateBoundaryLine_ProgressBar()). Reusing that
+  // same box to size OUR rebuild-area conflates "how big I am for layout" with "what my own redraw repaints" --
+  // element_text (below) now owns its own independent rebuild-area, so if OUR area still also covers the
+  // caption strip, restoring it later pastes OUR stale "before" caption snapshot back over whatever
+  // element_text's own, more current area just correctly settled: the caption vanishes/overlaps after a real
+  // value change (root cause of the long-standing progressbar caption defect). Fix: temporarily shrink our own
+  // position/size to the exact union of element_progressrect + element_animation's CURRENT absolute bounds --
+  // already correctly placed by CalculateBoundaryLine_ProgressBar() -- for this one PreDrawFunction() call,
+  // then restore the real (caption-inclusive) box immediately after so every other use of GetBoundaryLine()/
+  // GetXPosition()/GetYPosition() this tick (siblings' layout, hit-testing, etc.) is unaffected.
+  double savedx      = element->GetXPosition();
+  double savedy      = element->GetYPosition();
+  double savedwidth  = element->GetBoundaryLine()->width;
+  double savedheight = element->GetBoundaryLine()->height;
+  bool   shrunkarea  = false;
+
+  if(element_text && element_progressrect &&
+     (element_progressbar->GetAllocationTextType() != UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_NONE) &&
+     (element_progressbar->GetAllocationTextType() != UI_ELEMENT_OPTION_ALLOCATION_TEXT_TYPE_CENTER))
+    {
+      double left   = element_progressrect->GetXPosition();
+      double right  = element_progressrect->GetXPosition() + element_progressrect->GetBoundaryLine()->width;
+      double bottom = element_progressrect->GetYPosition();
+      double top    = element_progressrect->GetYPosition() - element_progressrect->GetBoundaryLine()->height;
+
+      if(element_animation)
+        {
+          left   = __MIN(left,   element_animation->GetXPosition());
+          right  = __MAX(right,  element_animation->GetXPosition() + element_animation->GetBoundaryLine()->width);
+          bottom = __MAX(bottom, element_animation->GetYPosition());
+          top    = __MIN(top,    element_animation->GetYPosition() - element_animation->GetBoundaryLine()->height);
+        }
+
+      // Pull every edge in by a small, fixed safety margin (well under the >=6px gap every allocationtext case
+      // in CalculateBoundaryLine_ProgressBar() leaves between the rect/animation and the caption -- see the
+      // "+ 6" in each branch there). Without this, PreDrawFunction()'s own "edge" padding on this area and on
+      // element_text's OWN independent area (added a few lines below) can make the two areas touch or overlap
+      // by a pixel or two even though the real content does not -- and if they do, MarkOverlappingAreasDirty()
+      // (called from RebuildAllAreas() before every restore) perpetually re-marks each dirty because of the
+      // other, which defeats element_text's own one-shot capture/redraw/settle cycle exactly as badly as the
+      // original bug this whole block exists to avoid. The margin only shrinks what OUR OWN rebuild-area
+      // covers, never the actual drawing below, so it cannot clip anything on screen.
+      const double SAFETY_MARGIN = 3.0;
+
+      left   += SAFETY_MARGIN;
+      right  -= SAFETY_MARGIN;
+      top    += SAFETY_MARGIN;
+      bottom -= SAFETY_MARGIN;
+
+      element->SetXPosition(left);
+      element->SetYPosition(bottom);
+      element->GetBoundaryLine()->width  = __MAX(0.0, right - left);
+      element->GetBoundaryLine()->height = __MAX(0.0, bottom - top);
+
+      shrunkarea = true;
+    }
 
   PreDrawFunction(element, canvas, clip_rect, x_position, y_position, 1);
 
-  if(element->MustReDraw()) 
+  if(shrunkarea)
     {
+      element->SetXPosition(savedx);
+      element->SetYPosition(savedy);
+      element->GetBoundaryLine()->width  = savedwidth;
+      element->GetBoundaryLine()->height = savedheight;
+    }
+
+  if(element->MustReDraw())
+    {
+      // GHOST-FILL FIX (2026-09, follow-up to the two fixes above): CalculateBoundaryLine_ProgressBar() can
+      // MOVE element_progressrect (and element_animation) to make room for the caption -- for DOWN it shifts
+      // the rect's bottom edge inward (up), for LEFT its right edge inward, freeing a strip that used to be
+      // part of the rect's own painted area (border AND fill). The very first time this widget is laid out,
+      // nothing has painted anything there yet, so the shift is invisible; but from the first REAL value
+      // change onward, this function re-runs with the rect already sitting at its shifted position, paints
+      // only that CURRENT (already-shifted) rect -- and the strip the rect used to occupy, now vacated, is
+      // never explicitly repainted by anything: the shrink-fix above intentionally narrows OUR OWN
+      // rebuild-area to the rect/animation's CURRENT bounds (so it cannot fight with element_text's own
+      // area), so the vacated strip falls outside both this tick's capture and every later one, and the OLD
+      // rect/border/fill ink painted there the previous frame is left behind for good -- confirmed live as a
+      // persistent smear of the fill colour (plus a stray border line) sitting behind/under the caption from
+      // the second real value change onward, distinct from the text-ghosting defect fixed below.
+      //
+      // Fix: the same real-backdrop-cache technique as the (now superseded) caption-only fix below, but sized
+      // to the WIDGET'S FULL natural box (rect + gap + caption -- savedx/savedy/savedwidth/savedheight above,
+      // captured BEFORE the temporary shrink further up in this function) instead of just the caption's own
+      // box. Captured once, the very first time this widget is ever drawn -- before rect, animation or
+      // caption have painted anything, so it is guaranteed the true backdrop -- and painted back
+      // (PutBitmapNoAlpha(), GEN's own restore primitive, never a synthetic fill) whenever the rect/animation
+      // actually MOVE, so everything below repaints onto a clean canvas exactly at the moment the vacated
+      // strip would otherwise start collecting stale ink.
+      //
+      // Restoring this backdrop is only safe to do on a tick where it is actually NEEDED, never unconditionally
+      // on every tick this widget happens to be marked dirty (see the perpetual-redraw note below). Two,
+      // INDEPENDENT conditions each mean a vacated/stale strip can exist right now and must be wiped before the
+      // rect/animation/caption painting below repaints:
+      //
+      //   (a) element_progressrect/element_animation's OWN bounds changed since the last tick we looked (the
+      //       original GHOST-FILL FIX case: a shift/resize vacates the strip the rect used to occupy).
+      //
+      //   (b) element_text is about to actually repaint new glyph content (element_text->MustReDraw()). This
+      //       second condition was MISSING from the original GHOST-FILL FIX and is the root cause of a
+      //       regression reported live by a user: CAPTION GHOSTING RETURNED from the second real value change
+      //       onward, even though the rect never moves for a same-digit-count change (e.g. "15%" -> "16%" for
+      //       allocationtext="down"/"up"/"left"/"right" -- only the fill AMOUNT changes, drawn from
+      //       element_progressrect's own, unchanged, stored bounds; see widthpercent/heightpercent below).
+      //       Condition (a) alone therefore NEVER re-fires after the very first capture for an ordinary value
+      //       change, which was the (incorrect) assumption behind the "GHOSTING FIX" comment a few dozen lines
+      //       below this one ("it is now handled once, up front, by the GHOST-FILL FIX's whole-widget
+      //       restore") -- it is not, because that whole-widget restore was gated ONLY on (a). Proven live via
+      //       direct GetBitmap() buffer reads (not a screen capture): three consecutive real value changes on
+      //       "progressbar3" (15% -> 16% -> 17% -> 18%) render cleanly on the FIRST change, then show a solid
+      //       black blob merging the old and new second digit from the SECOND change onward -- exactly the
+      //       "letters overlap" defect this whole investigation started from, because UI_SKINCANVAS::Draw_Text()
+      //       never clears its own background, it only ever blends new glyph ink on top of whatever is already
+      //       there (see the GHOSTING FIX comment below), and nothing else was clearing the caption's zone for
+      //       an ordinary value-only change. Fix: also restore on condition (b), reusing the SAME already-
+      //       captured widget backdrop (its box already spans rect + gap + caption, see WIDGETEDGE below) --
+      //       no new capture, no synthetic fill color, just GEN's own real PutBitmapNoAlpha() restore primitive
+      //       applied more often.
+      //
+      // element_progressrect and (independently) element_text can both stay marked dirty for many consecutive
+      // ticks after a single value change (confirmed live: dozens to hundreds of extra redraw ticks, with the
+      // rect's own resolved bounds and the text's own resolved string identical to the previous tick's the
+      // whole time) -- an unrelated, pre-existing perpetual-redraw condition on this widget that remains out of
+      // scope for this fix. Restoring the backdrop on every one of those extra ticks is still safe with
+      // condition (b) added: the restore is immediately followed, in every case, by this same function's own
+      // rect/animation repaint and then element_text's own repaint further down, so an extra restore+repaint
+      // cycle on a tick where nothing actually changed just reproduces the same pixels a second time -- visibly
+      // idempotent, unlike a bare/unconditional restore with nothing scheduled to redraw after it (which is
+      // what caused the caption to vanish outright in an earlier, naive attempt at this same fix).
+      if(shrunkarea)
+        {
+          double rx = element_progressrect ? element_progressrect->GetXPosition() : 0.0;
+          double ry = element_progressrect ? element_progressrect->GetYPosition() : 0.0;
+          double rw = element_progressrect ? element_progressrect->GetBoundaryLine()->width  : 0.0;
+          double rh = element_progressrect ? element_progressrect->GetBoundaryLine()->height : 0.0;
+          double ax = element_animation ? element_animation->GetXPosition() : 0.0;
+          double ay = element_animation ? element_animation->GetYPosition() : 0.0;
+          double aw = element_animation ? element_animation->GetBoundaryLine()->width  : 0.0;
+          double ah = element_animation ? element_animation->GetBoundaryLine()->height : 0.0;
+
+          GRP2DREBUILDAREA* widgetbackdrop = ProgressBackdrop_Find(element);
+
+          if(!widgetbackdrop)
+            {
+              // First time this widget is ever drawn: nothing has painted rect/animation/caption ink yet, so
+              // this is the one guaranteed-pristine moment to capture the true backdrop.
+              const double WIDGETEDGE = 5.0;
+
+              double wb_left = savedx - WIDGETEDGE;
+              double wb_top  = (savedy - savedheight) - WIDGETEDGE;
+              double wb_w    = savedwidth  + (WIDGETEDGE * 2.0);
+              double wb_h    = savedheight + (WIDGETEDGE * 2.0);
+
+              if(wb_left < 0) wb_left = 0;
+              if(wb_top  < 0) wb_top  = 0;
+
+              ProgressBackdrop_Capture(element, wb_left, wb_top, wb_w, wb_h);
+              ProgressBounds_Remember(element, rx, ry, rw, rh, ax, ay, aw, ah);
+            }
+           else if(ProgressBounds_HasChanged(element, rx, ry, rw, rh, ax, ay, aw, ah) ||
+                   (element_text && element_text->MustReDraw()))
+            {
+              // Either the rect/animation moved (condition (a): a vacated strip of stale ink can appear), or
+              // the caption is about to repaint new text (condition (b): its old glyph ink would otherwise
+              // never be cleared -- see the long comment above). Either way, restore the true backdrop now,
+              // then let the rect/animation/caption painting below repaint the whole box fresh.
+              PutBitmapNoAlpha(widgetbackdrop->GetXPos(), widgetbackdrop->GetYPos(), widgetbackdrop->GetBitmap());
+              ProgressBounds_Remember(element, rx, ry, rw, rh, ax, ay, aw, ah);
+            }
+          // else: neither the geometry nor the caption text is about to change -- leave the canvas alone here;
+          // the normal per-element redraw just below (and element_text's own redraw further down) is already
+          // correct and idempotent for this case, exactly as it was before this whole GHOST-FILL FIX existed.
+        }
+
       if(element_progressrect)
         {
           GRP2DCOLOR_RGBA8  linecolor(element_progressbar->GetLineColor()->GetRed(), element_progressbar->GetLineColor()->GetGreen(), element_progressbar->GetLineColor()->GetBlue(), element_progressbar->GetLineColor()->GetAlpha());
@@ -3991,16 +4626,71 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
                                                      element_progressrect->GetYPosition() - heightpercent,
                                                      roundradius);
                 }
-            } 
+            }
 
-          if(element_text) Draw(element_text);  
-            
-        }  
-    
-      if(element_animation) Draw(element_animation);                    
+          // ROOT-CAUSE FIX (2026-09, confirmed live pixel-by-pixel against progressbar3/progressbar0/
+          // progressbar4 in UI_Options' example.xml -- see PreDrawFunction() above in this same file): for
+          // every allocationtext mode except NONE/CENTER, element_text's own box sits OUTSIDE
+          // element_progressrect's box (CalculateBoundaryLine_ProgressBar offsets one or the other to make
+          // room). PreDrawFunction()'s ancestor-walk assumes a dirty ancestor's own redraw geometrically
+          // covers every descendant, so it never lets element_text own its own rebuild-area while its father
+          // (this progressbar) is dirty -- which normally IS every frame here. But this progressbar's own
+          // redraw (the track/fill painting above) only ever covers element_progressrect's bounds, never
+          // element_text's -- so that assumption is false for exactly this child, and element_text is left
+          // with no rebuild-area of its own to correctly capture/restore its own backdrop. In practice the
+          // caption's zone still LOOKS fine while element_progressrect's bounds happen to overlap it (the
+          // father's restore+repaint cycle papers over it by accident), but the moment a real value change
+          // shifts the rect away from the caption (see CalculateBoundaryLine_ProgressBar), nothing is left to
+          // restore/repaint that zone at all, and the freshly-drawn glyph blends against whatever was there
+          // one frame too early in the cycle (proven via direct framebuffer reads: a transient, wrong
+          // snapshot that the rect's own repaint happened to hide every prior frame) -- exactly the "letters
+          // overlap / caption vanishes after the value changes" defect reported on progress widgets.
+          // Fix: momentarily tell PreDrawFunction() this element is NOT dirty while element_text draws, so
+          // its own ancestor-walk stops at OUR still-real dirty state and lets element_text own a normal,
+          // self-restoring rebuild-area of its own -- precisely as if it were a standalone dirty element, the
+          // same protection every other on-screen element already gets. Restored immediately after (Draw()
+          // clears element_text's OWN flag via its own PostDrawFunction(), never touches ours), so
+          // element_animation right below and our own PostDrawFunction() call at the end of this function see
+          // this element's real dirty state, unchanged.
+          if(element_text)
+            {
+              // GHOSTING FIX (2026-09, follow-up to the ROOT-CAUSE FIX above; the actual ghosting protection now
+              // lives in the GHOST-FILL FIX at the top of this function -- see that comment's condition (b),
+              // added as a correction to a regression this same toggle used to (incompletely) guard against):
+              // the toggle below gives element_text its own one-shot rebuild-area, which correctly protects its
+              // FIRST-ever draw -- but that area is captured fresh and thrown away every time (see
+              // RebuildAllAreas()'s orphan-discard path: an area whose element has already settled clean is
+              // dropped WITHOUT ever being restored, because normally "nothing to undo" is exactly right). For
+              // an ordinary element that is correct: some ancestor's own redraw already re-covers its zone from
+              // scratch every time it repaints. A progress-bar caption has no such ancestor -- our own painting
+              // above only ever touches element_progressrect/element_animation, never the caption strip -- and
+              // Draw_Text() itself (shared by every text element) never erases anything either, it only ever
+              // blends new glyph ink on top of whatever is already there (canvas->VectorFont_Print(), no clear
+              // step). This toggle ALONE cannot prevent that: it only changes which rebuild-area element_text
+              // gets, never what is already on the canvas the moment Draw_Text() paints onto it. The actual
+              // clearing has to happen BEFORE this point in the tick, and is now condition (b) of the GHOST-FILL
+              // FIX's restore above (element_text->MustReDraw()) -- confirmed live via GetBitmap() buffer reads
+              // to fully resolve the "letters overlap" defect across multiple consecutive value changes, not
+              // just the first one.
+
+              // Momentarily hide OUR OWN dirty state from PreDrawFunction()'s ancestor-walk (see the ROOT-CAUSE
+              // FIX comment above) so element_text's own PreDrawFunction() call, made from inside Draw() below,
+              // is free to give it an independent rebuild-area instead of being suppressed as "a descendant of
+              // an already-dirty ancestor". This does NOT affect OUR OWN rebuild-area: that one was already
+              // created by the PreDrawFunction(element, ...) call at the top of this function, before this
+              // toggle ever runs. Restored immediately after so element_animation below and our own
+              // PostDrawFunction() call at the end of this function see our real dirty state, unchanged.
+              element->SetMustReDraw(false);
+              Draw(element_text);
+              element->SetMustReDraw(true);
+            }
+
+        }
+
+      if(element_animation) Draw(element_animation);
     }
 
-  PostDrawFunction(element, canvas, clip_rect, x_position, y_position); 
+  PostDrawFunction(element, canvas, clip_rect, x_position, y_position);
     
   if(element_progressbar->ContinuousCycle_Is()) 
     {
@@ -4044,6 +4734,54 @@ bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
 
   if(element->MustReDraw())
     {
+      // RADIAL CAPTION GHOSTING FIX (2026-09): this widget's track ring, value arc, round caps and centered
+      // caption are ALL painted by alpha-blending onto whatever is already on the canvas -- the ring/arc never
+      // fill the whole box (only the ring geometry itself), and the caption is anti-aliased glyph ink, painted
+      // via VectorFont blending, never a solid fill. Nothing here ever clears the box first.
+      //
+      // That is normally safe because the generic per-tick rebuild-area system (see GetRebuildAreaByElement()
+      // and UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()) is expected to restore the true backdrop before each
+      // real repaint. But a progressradial is typically dirty for exactly ONE frame per value change and idle
+      // in between, so its rebuild area is ORPHAN-DISCARDED (deleted WITHOUT restoring -- see RebuildAllAreas()'s
+      // orphan-discard comment: "the element's current on-screen content is already correct", true only for a
+      // widget that clears its own background) the very next frame. The NEXT real value change then creates a
+      // brand-new area that captures whatever is CURRENTLY on screen -- already showing the PREVIOUS caption's
+      // ink -- and blends the new caption straight on top of it. Confirmed live via canvas->GetBitmap() reads
+      // (alpha/RGB of the caption area) and a temporary trace of PreDrawFunction/RebuildAllAreas: progressbar1's
+      // area is created fresh on every real tick and is ALWAYS orphan-discarded (never restored) afterwards.
+      //
+      // Fix: cache the TRUE backdrop (the real pixels behind this whole widget) once, the very first time it is
+      // ever drawn -- before any track/arc/cap/caption ink exists -- and restore it (PutBitmapNoAlpha(), never a
+      // synthetic fill colour) immediately before repainting on every later real redraw, exactly mirroring the
+      // already-verified ProgressBackdrop (linear progress bar) and FormBackdrop (form/menu) fixes above. Unlike
+      // the linear bar's EXTERNAL caption, the radial caption is centered INSIDE the widget's own box, so one
+      // capture covering the widget's own rebuild-area geometry is enough for ring+arc+caption together.
+      GRP2DREBUILDAREA* ownarea = GetRebuildAreaByElement(element);
+
+      if(ownarea)
+        {
+          GRP2DREBUILDAREA* radialbackdrop = RadialBackdrop_Find(element);
+
+          if(!radialbackdrop)
+            {
+              // First time this widget is ever drawn: nothing has painted track/arc/caption ink here yet, so
+              // this is the one guaranteed-pristine moment to capture the true backdrop.
+              RadialBackdrop_Capture(element, ownarea->GetXPos(), ownarea->GetYPos(),
+                                      (double)ownarea->GetBitmap()->GetWidth(), (double)ownarea->GetBitmap()->GetHeight());
+            }
+           else
+            {
+              // Not the first draw: restore the true backdrop now, before repainting below.
+              PutBitmapNoAlpha(radialbackdrop->GetXPos(), radialbackdrop->GetYPos(), radialbackdrop->GetBitmap());
+
+              // Restoring just wiped the previous caption's glyph ink. Draw(element_text) below only actually
+              // repaints when the caption's OWN MustReDraw() is set -- force it here so the caption always
+              // repaints on top of the freshly restored backdrop instead of vanishing (same reasoning as the
+              // force-children-dirty step in the Draw_Form() ALPHA-DARKENING FIX above).
+              if(element_text) element_text->SetMustReDraw(true);
+            }
+        }
+
       double width  = element->GetBoundaryLine()->width;
       double height = element->GetBoundaryLine()->height;
 
@@ -4518,10 +5256,10 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XR
   element->SetYPositionWithScroll(y_position);
  
   bool createarea = false;
-  if(element->MustReDraw()) 
+  if(element->MustReDraw())
     {
       createarea = true;
-      if(GetRebuildAreaByElement(element)) createarea = false;          
+      if(GetRebuildAreaByElement(element)) createarea = false;
 
       // A descendant of an element that is already going to be redrawn must NOT own another rebuild area.
       // Otherwise nested transparent elements (button -> animation -> image) store overlapping copies of the same
@@ -4672,8 +5410,9 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XR
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKINCANVAS::PostDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XRECT& clip_rect, double x_position, double y_position)
-{  
+{
   bool redrew = element->MustReDraw();           // capture before clearing: true only when the area was just repainted
+
   element->SetMustReDraw(false);
 
   UI_PROPERTY_SCROLLEABLE* scrolleable = dynamic_cast<UI_PROPERTY_SCROLLEABLE*>(element);
@@ -5574,6 +6313,355 @@ void UI_SKINCANVAS::Clean()
 }
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRP2DREBUILDAREA* UI_SKINCANVAS::ProgressBackdrop_Find(UI_ELEMENT* element)
+* @brief      Look up the persistent "true backdrop" snapshot previously captured for a progress-bar widget's
+*             FULL natural box (rect + gap + caption together).
+* @note       See the GHOST-FILL FIX comment in Draw_ProgressBar() and the progressbackdrops member comment in
+*             UI_SkinCanvas.h. Linear scan is deliberate: this cache only ever holds one entry per progress-bar
+*             widget in a layout (a handful at most), so there is nothing to gain from a hash lookup here.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Progress-bar element to look up (used only as an opaque identity key, never dereferenced).
+*
+* @return     GRP2DREBUILDAREA* : The cached entry (xpos/ypos/bitmap already positioned for PutBitmapNoAlpha);
+*                                  NULL if this widget has never been captured yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRP2DREBUILDAREA* UI_SKINCANVAS::ProgressBackdrop_Find(UI_ELEMENT* element)
+{
+  if(!element) return NULL;
 
+  for(XDWORD c=0; c<progressbackdrops.GetSize(); c++)
+    {
+      GRP2DREBUILDAREA* entry = progressbackdrops.Get(c);
+      if(entry && (entry->GetExtraData() == (void*)element)) return entry;
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::ProgressBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+* @brief      Captures the CURRENT on-screen pixels under a progress-bar widget's full natural box and keeps them
+*             indefinitely as that widget's "true backdrop" reference.
+* @note       Only ever correct to call the FIRST time a given widget is about to be drawn (see the caller in
+*             Draw_ProgressBar(), gated on ProgressBackdrop_Find() returning NULL): at that point nothing has
+*             painted a rect, animation or caption glyph in this zone yet, so whatever is on screen right now
+*             genuinely IS the backdrop -- the same real pixels (seamless background pattern, gradient,
+*             translucent panel, whatever this widget actually sits on) that must show through on every later
+*             redraw. Reuses the inherited GetBitmap() -- the exact same capture primitive
+*             UI_SKINCANVAS_REBUILDAREAS::CreateRebuildArea() itself uses -- so this is GEN's own real capture
+*             machinery, not a new one.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Progress-bar element this capture belongs to (stored only as an opaque identity key).
+* @param[in]  x       : Left edge of the region to capture, in canvas coordinates.
+* @param[in]  y       : Top edge of the region to capture, in canvas coordinates.
+* @param[in]  width   : Width of the region to capture.
+* @param[in]  height  : Height of the region to capture.
+*
+* @return     bool : true if the capture was stored; false if the bitmap grab or allocation failed (caller simply
+*                     has no cached backdrop this tick and behaves as before this fix -- never worse).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::ProgressBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+{
+  if(!element) return false;
+
+  GRPBITMAP* bitmap = GetBitmap(x, y, width, height);
+  if(!bitmap) return false;
+
+  GRP2DREBUILDAREA* entry = GEN_NEW GRP2DREBUILDAREA();
+  if(!entry)
+    {
+      GEN_DELETE bitmap;
+      return false;
+    }
+
+  entry->SetXPos(x);
+  entry->SetYPos(y);
+  entry->SetBitmap(bitmap);
+  entry->SetExtraData((void*)element);
+
+  return progressbackdrops.Add(entry);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_PROGRESSBAR_LASTBOUNDS* UI_SKINCANVAS::ProgressBounds_Find(UI_ELEMENT* element)
+* @brief      Look up the last-known element_progressrect/element_animation bounds recorded for a progress bar.
+* @note       See the ProgressBounds_Remember/HasChanged declarations and the GHOST-FILL FIX comment in
+*             Draw_ProgressBar(). Linear scan is deliberate: same small-cardinality reasoning as
+*             ProgressBackdrop_Find() above (one entry per progress-bar widget in a layout).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Progress-bar element to look up (used only as an opaque identity key, never dereferenced).
+*
+* @return     UI_PROGRESSBAR_LASTBOUNDS* : The cached entry; NULL if this widget's bounds have never been
+*                                          recorded yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_PROGRESSBAR_LASTBOUNDS* UI_SKINCANVAS::ProgressBounds_Find(UI_ELEMENT* element)
+{
+  if(!element) return NULL;
+
+  for(XDWORD c=0; c<progressbarlastbounds.GetSize(); c++)
+    {
+      UI_PROGRESSBAR_LASTBOUNDS* entry = progressbarlastbounds.Get(c);
+      if(entry && (entry->element == element)) return entry;
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_SKINCANVAS::ProgressBounds_Remember(UI_ELEMENT* element, double rectx, double recty, double rectwidth, double rectheight, double animx, double animy, double animwidth, double animheight)
+* @brief      Records (creating the entry the first time) the CURRENT element_progressrect/element_animation
+*             bounds for a progress bar, so the next tick can tell whether they moved.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element     : Progress-bar element these bounds belong to (stored only as an opaque identity key).
+* @param[in]  rectx       : element_progressrect's current X position (0 if this widget has no rect sub-element).
+* @param[in]  recty       : element_progressrect's current Y position.
+* @param[in]  rectwidth   : element_progressrect's current width.
+* @param[in]  rectheight  : element_progressrect's current height.
+* @param[in]  animx       : element_animation's current X position (0 if this widget has no animation sub-element).
+* @param[in]  animy       : element_animation's current Y position.
+* @param[in]  animwidth   : element_animation's current width.
+* @param[in]  animheight  : element_animation's current height.
+*
+* @return     void.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS::ProgressBounds_Remember(UI_ELEMENT* element, double rectx, double recty, double rectwidth, double rectheight, double animx, double animy, double animwidth, double animheight)
+{
+  if(!element) return;
+
+  UI_PROGRESSBAR_LASTBOUNDS* entry = ProgressBounds_Find(element);
+
+  if(!entry)
+    {
+      entry = GEN_NEW UI_PROGRESSBAR_LASTBOUNDS();
+      if(!entry) return;
+
+      entry->element = element;
+
+      progressbarlastbounds.Add(entry);
+    }
+
+  entry->rectx      = rectx;
+  entry->recty      = recty;
+  entry->rectwidth  = rectwidth;
+  entry->rectheight = rectheight;
+  entry->animx      = animx;
+  entry->animy      = animy;
+  entry->animwidth  = animwidth;
+  entry->animheight = animheight;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::ProgressBounds_HasChanged(UI_ELEMENT* element, double rectx, double recty, double rectwidth, double rectheight, double animx, double animy, double animwidth, double animheight)
+* @brief      Compares the CURRENT element_progressrect/element_animation bounds against the last-recorded ones.
+* @note       An element with no recorded entry yet counts as "changed" (the caller in Draw_ProgressBar() only
+*             calls this after already handling the "never captured" case via ProgressBackdrop_Find() returning
+*             NULL, so in practice this is always called with an existing entry -- treating a missing one as
+*             changed is simply the safe default were that ever not true). Exact double comparison is
+*             deliberate and safe here: both the current values and the remembered ones come from the same
+*             deterministic, absolute (never incremental -- see CalculateBoundaryLine_ProgressBar()) layout
+*             math, so two ticks with nothing genuinely different between them always compare bit-for-bit equal.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element     : Progress-bar element to check.
+* @param[in]  rectx       : element_progressrect's CURRENT X position to compare.
+* @param[in]  recty       : element_progressrect's CURRENT Y position to compare.
+* @param[in]  rectwidth   : element_progressrect's CURRENT width to compare.
+* @param[in]  rectheight  : element_progressrect's CURRENT height to compare.
+* @param[in]  animx       : element_animation's CURRENT X position to compare.
+* @param[in]  animy       : element_animation's CURRENT Y position to compare.
+* @param[in]  animwidth   : element_animation's CURRENT width to compare.
+* @param[in]  animheight  : element_animation's CURRENT height to compare.
+*
+* @return     bool : true if these bounds differ from the last-recorded ones (or none were recorded yet);
+*                    false if they are identical, meaning nothing moved since the last tick we looked.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::ProgressBounds_HasChanged(UI_ELEMENT* element, double rectx, double recty, double rectwidth, double rectheight, double animx, double animy, double animwidth, double animheight)
+{
+  UI_PROGRESSBAR_LASTBOUNDS* entry = ProgressBounds_Find(element);
+
+  if(!entry) return true;
+
+  return (entry->rectx      != rectx)      ||
+         (entry->recty      != recty)      ||
+         (entry->rectwidth  != rectwidth)  ||
+         (entry->rectheight != rectheight) ||
+         (entry->animx      != animx)      ||
+         (entry->animy      != animy)      ||
+         (entry->animwidth  != animwidth)  ||
+         (entry->animheight != animheight);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRP2DREBUILDAREA* UI_SKINCANVAS::FormBackdrop_Find(UI_ELEMENT* element)
+* @brief      Look up the persistent "true backdrop" snapshot previously captured for a "form"/"menu" element's
+*             own box (see the ALPHA-DARKENING FIX comment in Draw_Form() and the formbackdrops member comment
+*             in UI_SkinCanvas.h).
+* @note       Linear scan is deliberate: same small-cardinality reasoning as ProgressBackdrop_Find() above -- a
+*             typical layout has only a handful of translucent forms/menus.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Form/menu element to look up (used only as an opaque identity key, never dereferenced).
+*
+* @return     GRP2DREBUILDAREA* : The cached entry (xpos/ypos/bitmap already positioned for PutBitmapNoAlpha);
+*                                  NULL if this element has never been captured yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRP2DREBUILDAREA* UI_SKINCANVAS::FormBackdrop_Find(UI_ELEMENT* element)
+{
+  if(!element) return NULL;
+
+  for(XDWORD c=0; c<formbackdrops.GetSize(); c++)
+    {
+      GRP2DREBUILDAREA* entry = formbackdrops.Get(c);
+      if(entry && (entry->GetExtraData() == (void*)element)) return entry;
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::FormBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+* @brief      Captures the CURRENT on-screen pixels under a form/menu element's own box and keeps them indefinitely
+*             as that element's "true backdrop" reference.
+* @note       Only ever correct to call the FIRST time a given element is about to be drawn (see the caller in
+*             Draw_Form(), gated on FormBackdrop_Find() returning NULL): at that point nothing has painted this
+*             element's own shadow, fill, border or children in this zone yet, so whatever is on screen right now
+*             genuinely IS the backdrop (the real background image/pattern, or whatever sits behind this element).
+*             Reuses the inherited GetBitmap() -- the exact same capture primitive
+*             UI_SKINCANVAS_REBUILDAREAS::CreateRebuildArea() and ProgressBackdrop_Capture() themselves use -- so
+*             this is GEN's own real capture machinery, not a new one, and never a synthetic/flat fill colour.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Form/menu element this capture belongs to (stored only as an opaque identity key).
+* @param[in]  x       : Left edge of the region to capture, in canvas coordinates.
+* @param[in]  y       : Top edge of the region to capture, in canvas coordinates.
+* @param[in]  width   : Width of the region to capture.
+* @param[in]  height  : Height of the region to capture.
+*
+* @return     bool : true if the capture was stored; false if the bitmap grab or allocation failed (caller simply
+*                     has no cached backdrop this tick and behaves as before this fix -- never worse).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::FormBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+{
+  if(!element) return false;
+
+  GRPBITMAP* bitmap = GetBitmap(x, y, width, height);
+  if(!bitmap) return false;
+
+  GRP2DREBUILDAREA* entry = GEN_NEW GRP2DREBUILDAREA();
+  if(!entry)
+    {
+      GEN_DELETE bitmap;
+      return false;
+    }
+
+  entry->SetXPos(x);
+  entry->SetYPos(y);
+  entry->SetBitmap(bitmap);
+  entry->SetExtraData((void*)element);
+
+  return formbackdrops.Add(entry);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRP2DREBUILDAREA* UI_SKINCANVAS::RadialBackdrop_Find(UI_ELEMENT* element)
+* @brief      Look up the persistent "true backdrop" snapshot previously captured for a progressradial widget's
+*             own box (see the RADIAL CAPTION GHOSTING FIX comment in Draw_ProgressRadial() and the
+*             radialbackdrops member comment in UI_SkinCanvas.h).
+* @note       Linear scan is deliberate: same small-cardinality reasoning as ProgressBackdrop_Find()/
+*             FormBackdrop_Find() above -- a typical layout has only a handful of radial progress widgets.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Progressradial element to look up (used only as an opaque identity key, never dereferenced).
+*
+* @return     GRP2DREBUILDAREA* : The cached entry (xpos/ypos/bitmap already positioned for PutBitmapNoAlpha);
+*                                  NULL if this element has never been captured yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRP2DREBUILDAREA* UI_SKINCANVAS::RadialBackdrop_Find(UI_ELEMENT* element)
+{
+  if(!element) return NULL;
+
+  for(XDWORD c=0; c<radialbackdrops.GetSize(); c++)
+    {
+      GRP2DREBUILDAREA* entry = radialbackdrops.Get(c);
+      if(entry && (entry->GetExtraData() == (void*)element)) return entry;
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::RadialBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+* @brief      Captures the CURRENT on-screen pixels under a progressradial element's own box and keeps them
+*             indefinitely as that element's "true backdrop" reference.
+* @note       Only ever correct to call the FIRST time a given element is about to be drawn (see the caller in
+*             Draw_ProgressRadial(), gated on RadialBackdrop_Find() returning NULL): at that point nothing has
+*             painted this widget's own track/arc/caps/caption in this zone yet, so whatever is on screen right
+*             now genuinely IS the backdrop. Reuses the inherited GetBitmap() -- the exact same capture primitive
+*             UI_SKINCANVAS_REBUILDAREAS::CreateRebuildArea(), ProgressBackdrop_Capture() and FormBackdrop_Capture()
+*             themselves use -- so this is GEN's own real capture machinery, not a new one, and never a
+*             synthetic/flat fill colour.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Progressradial element this capture belongs to (stored only as an opaque identity key).
+* @param[in]  x       : Left edge of the region to capture, in canvas coordinates.
+* @param[in]  y       : Top edge of the region to capture, in canvas coordinates.
+* @param[in]  width   : Width of the region to capture.
+* @param[in]  height  : Height of the region to capture.
+*
+* @return     bool : true if the capture was stored; false if the bitmap grab or allocation failed (caller simply
+*                     has no cached backdrop this tick and behaves as before this fix -- never worse).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::RadialBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+{
+  if(!element) return false;
+
+  GRPBITMAP* bitmap = GetBitmap(x, y, width, height);
+  if(!bitmap) return false;
+
+  GRP2DREBUILDAREA* entry = GEN_NEW GRP2DREBUILDAREA();
+  if(!entry)
+    {
+      GEN_DELETE bitmap;
+      return false;
+    }
+
+  entry->SetXPos(x);
+  entry->SetYPos(y);
+  entry->SetBitmap(bitmap);
+  entry->SetExtraData((void*)element);
+
+  return radialbackdrops.Add(entry);
+}
 
 

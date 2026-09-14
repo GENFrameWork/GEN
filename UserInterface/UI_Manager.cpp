@@ -43,6 +43,7 @@
 
 #include "XFactory.h"
 #include "XThread.h"
+#include "XDiagLog.h"                        // TEMPORARY diagnostic-only, see XDiagLog.h -- remove with it
 #include "XTimer.h"
 #include "XPath.h"
 #include "XFile.h"
@@ -1703,17 +1704,24 @@ bool UI_MANAGER::Element_SetModal(UI_ELEMENT* element_modal)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_SetToRedraw()
 {
-  bool status = false; 
-  
+  bool status = false;
+
+  // TEMPORARY diagnostic-only (see XDiagLog.h): this is the GLOBAL, whole-tree redraw entry point -- fired once
+  // per nav click/section change (UI_SYSTEM::UserInterface_SelectSection()) and suspected of being the trigger
+  // for the multi-second blank-freeze under investigation. Logged once per call (not per-layout/per-element).
+  XDIAGLOG_WRITE("GLOBALREDRAW", "UI_MANAGER::Elements_SetToRedraw() BEGIN nlayouts=%u", (unsigned)layouts.GetSize());
+
   for(XDWORD c=0; c<layouts.GetSize(); c++)
     {
       UI_LAYOUT* layout = layouts.Get(c);
       if(layout)
-        {     
+        {
           status = layout->Elements_SetToRedraw();
         }
     }
-  
+
+  XDIAGLOG_WRITE("GLOBALREDRAW", "UI_MANAGER::Elements_SetToRedraw() END");
+
   return status;
 }
 
@@ -1732,8 +1740,8 @@ bool UI_MANAGER::Elements_SetToRedraw()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 {
-  bool status = false; 
-  
+  bool status = false;
+
   for(XDWORD c=0; c<layouts.GetSize(); c++)
     {
       UI_LAYOUT* layout = layouts.Get(c);
@@ -2519,19 +2527,32 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
                                                                                       
                                                                                       UI_SKINCANVAS* ui_skincanvas = (UI_SKINCANVAS*)layout->GetSkin(); 
 
-                                                                                      UI_ELEMENT* father =(UI_ELEMENT_TEXT*)element->GetFather(); 
+                                                                                      UI_ELEMENT* father =(UI_ELEMENT_TEXT*)element->GetFather();
                                                                                       if(father)
                                                                                         {
                                                                                           width  = father->GetBoundaryLine()->width;
                                                                                           height = father->GetBoundaryLine()->height;
-
-                                                                                          Elements_SetToRedraw(father);    
                                                                                         }
                                                                                         else
                                                                                         {
                                                                                           width  =  ui_skincanvas->GetCanvas()->GetWidth();
                                                                                           height =  ui_skincanvas->GetCanvas()->GetHeight();
                                                                                         }
+
+                                                                                      // NOTE: Elements_SetToRedraw(father) used to fire right here, unconditionally, every single
+                                                                                      // tick this function runs for ANY text element carrying a live "#[MASK]" -- i.e. every frame,
+                                                                                      // whether the resolved value actually differs from what is already on screen or not (the
+                                                                                      // "change" flag above only means the mask was successfully RESOLVED this tick, not that its
+                                                                                      // value is new). On a layout with several live masks (temperature, CPU%, RAM%, clock...) that
+                                                                                      // marked each one's father -- e.g. the CARD itself -- dirty tens of times per second instead of
+                                                                                      // ~once per second (whenever the underlying value truly ticks over). Every one of those
+                                                                                      // spurious redraws re-blends that card's (and, through UI_SkinCanvas's rebuild-area overlap,
+                                                                                      // its neighbors') box-shadow on top of whatever was already there, which is what let the
+                                                                                      // shadow at overlapping rounded corners darken far faster than intended, saturating to near
+                                                                                      // black within the first second or two of runtime instead of staying stable. Moved below, into
+                                                                                      // the same "value actually changed" branch that already gates the boundary-line rebuild and
+                                                                                      // Elements_SetToRedraw(element), so the father redraws exactly as often as the child does --
+                                                                                      // once per real value change, not once per frame.
 
                                                                                       // NOTE: the boundary line must be zeroed (to force CalculeBoundaryLine_AllElements to
                                                                                       // re-measure an AUTO-sized box, e.g. a centered "37%" caption) ONLY when the resolved
@@ -2573,6 +2594,8 @@ bool UI_MANAGER::ChangeTextElementValue(UI_LAYOUT* layout, UI_ELEMENT* element)
                                                                                             {
                                                                                               UI_LAYOUTENGINE::RunLayout(father, UI_LAYOUTSTRATEGY_CSS);
                                                                                             }
+
+                                                                                          if(father) Elements_SetToRedraw(father);
 
                                                                                           Elements_SetToRedraw(element);
                                                                                         }
@@ -4510,17 +4533,52 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Form(XFILEXMLELEMENT* node, UI_LAYOUT* 
             }
 
           element_form->GetBoundaryLine()->SetAround((*element_form->GetVisibleRect()));
+
+          // FORM VISIBLERECT/INTRINSIC-SIZE FIX (2026-09): the SetAround() call just above can WIDEN
+          // GetBoundaryLine() beyond the natural, content-only size that UI_SKIN::CalculateBoundaryLine()
+          // (invoked a few lines above via GetLayoutElement_CalculateBoundaryLine() -> CalculateBoundaryLine_Form())
+          // already snapshotted into GetIntrinsicWidth()/Height() -- see that function's own "Phase 4" comment,
+          // which added the snapshot to make UI_LAYOUTENGINE::RunLayout() idempotent across repeated flex passes.
+          // That snapshot is taken the moment CalculateBoundaryLine_Form() returns, i.e. BEFORE this visiblerect
+          // union runs, so for a form whose authored visiblerect is wider/taller than its own auto-fit content
+          // (exactly this branch: "value[2]"/"value[3]" authored, or the width/height fallback above) the
+          // snapshot is left stale -- narrower than the boundary this union just produced.
+          //
+          // UI_LAYOUTENGINE::RunLayout() then runs UNCONDITIONALLY on every top-level layout element right after
+          // construction (see UI_MANAGER::CreateLayouts()), regardless of whether the layout authors any CSS/
+          // flex at all. Its BuildTree() prefers a set GetIntrinsicWidth()/Height() over the live boundary (by
+          // design, for the idempotency fix above), so it reads back the STALE, pre-union value and its
+          // WriteBackTree() writes it straight into GetBoundaryLine() -- silently UNDOING the widening this
+          // union just performed.
+          //
+          // Confirmed live on "menu_horz" (UI_Options' example.xml, xpos=60 visiblerect="0,0,550,70" over a
+          // narrower ~520px-wide row of buttons): GetBoundaryLine() read 550 wide right here, but only 520 wide
+          // by the time Draw_Form() ran. Draw_Form()'s own fill/stroke paints the FULL visiblerect every frame
+          // (GetVisibleRect(), a separate property RunLayout() never touches) but the "ALPHA-DARKENING FIX"'s
+          // true-backdrop capture/restore area is sized from GetBoundaryLine() (see
+          // UI_SKINCANVAS::PreDrawFunction()) -- so the ~30px trailing strip the shrunk boundary no longer
+          // covered was painted every redraw WITHOUT ever being restored first, and its translucent fill
+          // alpha-compounded toward solid, opaque colour within the first few of the many redraws a running
+          // animation drives per second (a spinning child icon forces continuous full-row redraws): visually a
+          // dark rectangle appearing right next to the row's last button, present from moments after startup.
+          //
+          // Fix: re-snapshot the intrinsic size from the NOW-current (post-union) boundary, so RunLayout() sees
+          // the same value CalculateBoundaryLine()'s own snapshot would have produced had it run after this
+          // union instead of before it. Mirrors that function's own snapshot call exactly (same two setters,
+          // same source), just re-run at the point where the boundary is actually final for this element.
+          element_form->SetIntrinsicWidth(element_form->GetBoundaryLine()->width);
+          element_form->SetIntrinsicHeight(element_form->GetBoundaryLine()->height);
         }
     }
-   else 
+   else
     {
       element_form->GetVisibleRect()->x       = element_form->GetXPosition();
       element_form->GetVisibleRect()->y       = element_form->GetYPosition();
       element_form->GetVisibleRect()->width   = element_form->GetBoundaryLine()->width;
-      element_form->GetVisibleRect()->height  = element_form->GetBoundaryLine()->height;      
+      element_form->GetVisibleRect()->height  = element_form->GetBoundaryLine()->height;
     }
-   
-  return element_form;  
+
+  return element_form;
 }
 
 
@@ -5155,6 +5213,11 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
     }
 
   XFILEXMLELEMENT*  root          = xml.GetRoot();
+  bool              skinowned     = false;   // P0.3 ownership guard: true once some UI_LAYOUT below has claimed
+                                              // "ui_skin" (created once for the whole root, just below) as its
+                                              // own -- see UI_LAYOUT::SetOwnsSkin(). Every <layout> node under
+                                              // THIS root shares that one UI_SKIN*; only the first one actually
+                                              // constructed may delete it.
   XSTRING           nametypeskin;
   UI_SKIN_DRAWMODE  drawmode      = UI_SKIN_DRAWMODE_UNKNOWN;
   XSTRING           raster_fontname;
@@ -5350,6 +5413,12 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
                   UI_LAYOUT* layout = GEN_NEW UI_LAYOUT(ui_skin);
                   if(layout)
                     {
+                      // P0.3 ownership guard (see the "skinowned" declaration above): the first UI_LAYOUT built
+                      // for this root keeps the default (owning) behaviour set by its constructor; every
+                      // subsequent one sharing the same "ui_skin" must NOT also delete it.
+                      if(skinowned) layout->SetOwnsSkin(false);
+                      else          skinowned = true;
+
                       XSTRING  bckcolor;
                       XSTRING  bcknamefile;
 
@@ -5918,11 +5987,17 @@ UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
                 }
             }
 
-          element->SetPreSelect(preselect);                                                                           
-          if(preselect) 
+          bool preselectchanged = element->SetPreSelect(preselect);
+          if(preselect)
             {
-              Elements_SetToRedraw(element); 
-            
+              // P1.2 fix: only invalidate on the false->true transition. While the pointer keeps moving inside
+              // an already-preselected element (the common case on every mouse-move tick spent hovering one
+              // button), re-marking it -- and, per Elements_SetToRedraw()'s own scrolleable-ancestor handling,
+              // potentially a whole scrollable container -- dirty on EVERY tick produced a needless repaint
+              // storm, especially costly with box-shadow/alpha cards, and was flagged as amplifying the
+              // section-change blank-flash bug under investigation (see Informe_tecnico_GEN_UI_CSS_video.md).
+              if(preselectchanged) Elements_SetToRedraw(element);
+
               last_xposition = x;
               last_yposition = y;
 
@@ -5942,19 +6017,28 @@ UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
     }
 
   if(intofather)
-    {                                                                                                                                     
+    {
       if(element->GetComposeElements()->GetSize())
-        {                                                                      
-          for(XDWORD d=0; d<element->GetComposeElements()->GetSize(); d++)   
+        {
+          // P1.8 fix: this used to "if(found) break;" as soon as the hovered sibling turned up, which meant
+          // every OTHER selectable sibling declared AFTER it in this same container was skipped entirely for
+          // the tick -- including the SetPreSelect(false) that Update()/ReapplyStyleVisual() rely on to reverse
+          // an earlier hover (and its CSS "transition:" tween, see dashboard.css). A sibling hovered on a
+          // previous tick and left behind by a non-monotonic mouse path (e.g. sweeping down past it, then back
+          // up to a row above it) would never be told the pointer left, so it stayed lit -- exactly the "stuck
+          // highlighted nav row" symptom reported after the video capture. Visiting every sibling every tick is
+          // cheap (a boundary-box compare; SetPreSelect() itself only touches style on an actual change), so
+          // there is no reason to short-circuit here at all.
+          for(XDWORD d=0; d<element->GetComposeElements()->GetSize(); d++)
             {
               UI_ELEMENT* subelement = element->GetComposeElements()->Get(d);
-              if(subelement) 
-                {                  
-                  preselect_element = PreSelectElement(subelement, x, y);                
-                  if(preselect_element) break;  
+              if(subelement)
+                {
+                  UI_ELEMENT* found = PreSelectElement(subelement, x, y);
+                  if(found) preselect_element = found;
                 }
             }
-        }     
+        }
     }
 
   return preselect_element;
@@ -6449,28 +6533,36 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
                                                         last_yposition = y;
                                                   
                                                         if(element_modal)
-                                                          {                                                              
-                                                            _preselect_element = PreSelectElement(element_modal, x, y);                                                              
+                                                          {
+                                                            _preselect_element = PreSelectElement(element_modal, x, y);
                                                           }
                                                          else
                                                           {
+                                                            // P1.8 fix: this used to "break" out of both loops as soon as one
+                                                            // top-level element/layout produced a hit, leaving every element
+                                                            // declared AFTER it (e.g. "nav-procesos-btn".."nav-configuracion-btn",
+                                                            // which sit after "nav-disco-btn" in dashboard.xml) unvisited for the
+                                                            // tick -- so a row hovered on an earlier tick and then skipped over by
+                                                            // a non-monotonic pointer path never received its SetPreSelect(false),
+                                                            // and stayed visually stuck (see PreSelectElement()'s own note on the
+                                                            // same issue one level down, in the recursive child loop). Visiting
+                                                            // every top-level element/layout every tick is cheap and guarantees a
+                                                            // single, correct hover state regardless of the path the pointer took.
                                                             for(int d=0; d<layouts.GetSize(); d++)
-                                                              {    
-                                                                UI_LAYOUT* layout = layouts.Get(d);                                                          
-                                                                if(layout) 
+                                                              {
+                                                                UI_LAYOUT* layout = layouts.Get(d);
+                                                                if(layout)
                                                                   {
                                                                     for(XDWORD c=0; c<layout->Elements_Get()->GetSize(); c++)
                                                                       {
                                                                         UI_ELEMENT* element = layout->Elements_Get()->Get(c);
-                                                                        if(element) 
+                                                                        if(element)
                                                                           {
-                                                                            _preselect_element = PreSelectElement(element, x, y);
-                                                                            if(_preselect_element) break;                                                                       
+                                                                            UI_ELEMENT* found = PreSelectElement(element, x, y);
+                                                                            if(found) _preselect_element = found;
                                                                           }
                                                                       }
                                                                   }
-
-                                                                if(_preselect_element) break;       
                                                               }
                                                           }
 
@@ -6710,10 +6802,27 @@ void UI_MANAGER::PrepareElementStyleState(UI_ELEMENT* element)
 *             item that carries no "xpos" attribute at all) against its FATHER's position -- which would silently
 *             throw away the ProgressBar's own correct, flex-resolved GetXPosition()/GetYPosition() (see
 *             UI_CSSBox_Set()) and re-pin it back to its father's raw corner, undoing RunLayout() instead of
-*             completing it. This helper therefore repositions ONLY the track, directly, using the ProgressBar's
-*             OWN already-correct position as the anchor -- exactly the sub-step CalculateBoundaryLine_ProgressBar()
+*             completing it. This helper therefore repositions the track using the ProgressBar's OWN
+*             already-correct position as the anchor -- exactly the sub-step CalculateBoundaryLine_ProgressBar()
 *             would have run, minus the one that must NOT be repeated.
-* @note       INTERNAL
+* @note       ROOT-CAUSE FIX (2026-09): this used to reposition ONLY element_progressrect, via a bare
+*             CalculePosition() call -- the sub-element's NATURAL, unshifted position. That is a safe no-op for
+*             allocationtext="none"/"center" (CalculateBoundaryLine_ProgressBar() never moves the rect for
+*             those), but for "down"/"up"/"left" it silently UNDID the shift CalculateBoundaryLine_ProgressBar()
+*             had already applied moments earlier (from CreatePartialLayout(), just before RunLayout()/this hook
+*             run): that shift moves element_progressrect (and element_animation) to free up room for the
+*             caption, and resetting it back to "natural" leaves the rect overlapping the caption's own zone for
+*             the entire first frame -- confirmed live on progressbar3 in UI_Options' example.xml
+*             (allocationtext="down"): the rect sat unshifted until the first REAL value change re-ran
+*             CalculateBoundaryLine_ProgressBar() from scratch, at which point it jumped to its correct position
+*             in one visible step. That one-time load-vs-first-change geometry jump is what every downstream
+*             caption redraw/restore mechanism (see the GHOST-FILL FIX in Draw_ProgressBar(), UI_SkinCanvas.cpp)
+*             had to treat as a real, unexpected move. Fix: call
+*             UI_SKINCANVAS::ReapplyProgressBarAllocationLayout() instead of a bare CalculePosition() -- the EXACT
+*             same sub-element positioning + allocationtext shift CalculateBoundaryLine_ProgressBar() itself runs
+*             (extracted there into that one shared method for this reason), so the track (and, where relevant,
+*             the animation/caption) end up at their final, correctly-shifted position from this very first call,
+*             and never need to jump later.
 * @ingroup    USERINTERFACE
 *
 * @param[in]  element : Root of the subtree (a freshly-built top-level element, or any descendant during recursion).
@@ -6728,14 +6837,9 @@ void UI_MANAGER::RefreshFlexProgressBarTracks(UI_ELEMENT* element, UI_SKIN* skin
 
   if(skincanvas && (element->GetType() == UI_ELEMENT_TYPE_PROGRESSBAR))
     {
-      UI_ELEMENT_PROGRESSBAR* element_progressbar   = (UI_ELEMENT_PROGRESSBAR*)element;
-      UI_ELEMENT*              element_progressrect = element_progressbar->GetProgressRect();
+      UI_ELEMENT_PROGRESSBAR* element_progressbar = (UI_ELEMENT_PROGRESSBAR*)element;
 
-      if(element_progressrect)
-        {
-          skincanvas->CalculePosition(element_progressrect, element_progressbar->GetBoundaryLine()->width,
-                                       element_progressbar->GetBoundaryLine()->height, false);
-        }
+      skincanvas->ReapplyProgressBarAllocationLayout(element_progressbar, false);
     }
 
   XVECTOR<UI_ELEMENT*>* children = element->GetComposeElements();

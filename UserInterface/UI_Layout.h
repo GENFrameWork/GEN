@@ -58,6 +58,14 @@ class UI_LAYOUT
     UI_SKIN*                        GetSkin                       ();
     void                            SetSkin                       (UI_SKIN* ui_skin);
 
+    // Ownership guard: a UI_LAYOUT deletes its "ui_skin" in its destructor by default (unchanged, historical
+    // behaviour -- the overwhelming common case is one <layout> node per XML root, exclusively owning the
+    // UI_SKIN created for it). When UI_MANAGER::CreateLayouts() builds MORE THAN ONE UI_LAYOUT from the same
+    // XML root, every one of them is constructed with the SAME UI_SKIN* (one skin per root, not per layout),
+    // so only the first is left owning it; CreateLayouts() calls SetOwnsSkin(false) on every subsequent one to
+    // prevent a double "GEN_DELETE ui_skin" (double-free/use-after-free) when those layouts are destroyed.
+    void                            SetOwnsSkin                   (bool ownskin);
+
     UI_BACKGROUND*                  GetBackground                 ();
 
     // Phase 1 ("estilo calculado tipado", ownership step): the CSS stylesheet declared by this layout's own
@@ -90,6 +98,7 @@ class UI_LAYOUT
     void                            Clean                         ();    
 
     UI_SKIN*                        ui_skin;
+    bool                            ownskin;
     XSTRING                         nameID;
 
     UI_BACKGROUND                   background;
