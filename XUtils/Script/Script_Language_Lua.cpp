@@ -160,44 +160,45 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
 
   int status = LUA_OK;
 
-  lua_settop(state, 0);
-  lua_pushnil(state);
-  lua_setglobal(state, SCRIPT_LNG_LUA_MAINFUNCTIONNAME);
-
-  errorcode    = SCRIPT_ERRORCODE_NONE;
-  iscancelexec = false;
-
   status  = luaL_loadbuffer(state, charscript.GetPtrChar(), strlen(charscript.GetPtrChar()), charnamescript.GetPtrChar());
   if(status == LUA_OK )  
     {
-      status = lua_pcall(state, 0, LUA_MULTRET, 0);
-      if(status != LUA_OK) 
+      errorcode  = SCRIPT_ERRORCODE_NONE;
+      iscancelexec = false;
+      
+      if(!HaveMainFunction())
         {
-          currenttoken = lua_tostring(state, -1);
+          // Exec to ajust the Stack in Lua with Main Function. lua_getglobal dont work well without this.
+          status = lua_pcall(state, 0, LUA_MULTRET, 0);
+          if(status != LUA_OK) currenttoken = lua_tostring(state, -1);
         }
        else
-        {
+        {       
           lua_getglobal(state, SCRIPT_LNG_LUA_MAINFUNCTIONNAME);
 
-          if(lua_isfunction(state, lua_gettop(state)))
+          status = lua_isfunction(state, lua_gettop(state));
+          if(status)
             {
               status = lua_pcall(state, 0, 1, 0);
-              if(status != LUA_OK) currenttoken = lua_tostring(state, -1);
             }
-           else
+           else 
             {
-              lua_pop(state, 1);
+              lua_setglobal(state, SCRIPT_LNG_LUA_MAINFUNCTIONNAME);
+              status = lua_pcall(state, 0, 1, 0);
             }
+
+          if(status != LUA_OK) currenttoken = lua_tostring(state, -1);
         }
       
       if(status == LUA_OK)
         {  
-          if(returnval && lua_gettop(state))
-            {
-              (*returnval) = (int)lua_tonumber(state, -1);
-            }
+          int returnvalue = (int)lua_tonumber(state, -1);
+          lua_pop(state, -1);
 
-          lua_settop(state, 0);
+          if(returnval)
+            {
+              (*returnval) = (int)returnvalue;
+            }
         }
     }
 
@@ -217,8 +218,6 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
 
           HaveError(currenttoken, errorcode);
         }
-
-      lua_settop(state, 0);
 
       return errorcode;
     }
@@ -501,7 +500,6 @@ int LUA_LibraryCallBack(lua_State* state)
       case XVARIANT_TYPE_CHAR          : lua_pushnumber(state, (int)(returnvalue));    nreturnvalues++;     break;
       case XVARIANT_TYPE_XCHAR         :                                                                    break;
       case XVARIANT_TYPE_FLOAT         : lua_pushnumber(state, (float)(returnvalue));  nreturnvalues++;     break;
-      case XVARIANT_TYPE_DOUBLE        : lua_pushnumber(state, (double)(returnvalue)); nreturnvalues++;     break;
 
       case XVARIANT_TYPE_STRING        : { XSTRING stringreturnvalue;
 

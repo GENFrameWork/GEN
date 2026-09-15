@@ -491,8 +491,12 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
       case XVARIANT_TYPE_INTEGER       :  duk_push_int(context, (int)(returnvalue));     nreturnvalues++;   break;
       case XVARIANT_TYPE_CHAR          :  duk_push_int(context, (int)(returnvalue));     nreturnvalues++;   break;
       case XVARIANT_TYPE_XCHAR         :                                                                    break;
-      case XVARIANT_TYPE_FLOAT         :  duk_push_number(context, (duk_double_t)(float)(returnvalue));     nreturnvalues++;   break;
-      case XVARIANT_TYPE_DOUBLE        :  duk_push_number(context, (duk_double_t)(double)(returnvalue));    nreturnvalues++;   break;
+      case XVARIANT_TYPE_FLOAT         :  { XDWORD data = returnvalue;
+
+                                            duk_push_int(context, data);
+                                            nreturnvalues++;
+                                          }
+                                          break;
 
       case XVARIANT_TYPE_STRING        : { XSTRING stringreturnvalue;
 
