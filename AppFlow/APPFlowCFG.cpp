@@ -234,12 +234,8 @@ bool APPFLOWCFG::DoVariableMapping()
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PASSWORD                                  , &webserver_password                                                 , __L("Password for the WEB server")                                        , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_RESOURCES                            , &webserver_path_resources                                           , __L("Path resources for the WEB server")                                  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PHP                                  , &webserver_path_PHP                                                 , __L("Path instalation PHP for the WEB server")                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
+
   #ifdef DIO_STREAMTLS_ACTIVE
-  // No "istls" value: the WEB server runs TLS (HTTPS) by default and only falls back to plain HTTP when
-  // path_privatekey and/or path_certificate are left empty (see APPFLOWCFG::WebServer_IsTLS()). At least the
-  // file name is required in each (they can never be completely empty and still be used) -- see
-  // APPFLOWWEBSERVER::Ini_ResolveCertificatePath() for how a bare file name is resolved against
-  // XPATHSMANAGERSECTIONTYPE_CERTIFICATES.
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_PRIVATEKEY                           , &webserver_path_privatekey                                          , __L("Path to the private key file for the WEB server (empty = no TLS)")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PATH_CERTIFICATE                          , &webserver_path_certificate                                         , __L("Path to the certificate file for the WEB server (empty = no TLS)")  , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
   AddValue(XFILECFG_VALUETYPE_STRING  , APPFLOW_CFG_SECTION_WEBSERVER                 , APPFLOW_CFG_WEBSERVER_PRIVATEKEY_PASSWORD                       , &webserver_privatekey_password                                      , __L("Password for encrypted TLS private key / PKCS#12 container")        , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
@@ -290,7 +286,7 @@ bool APPFLOWCFG::DoVariableMapping()
   AddRemark(APPFLOW_CFG_SECTION_LOG, __L("--------------------------------------------------------------------------------------------------------------------------------------------"), 0, 1);
   AddRemark(APPFLOW_CFG_SECTION_LOG, __L(" Scripts list"), 0, 2);
 
-  AddValueSecuence<XSTRING>(XFILECFG_VALUETYPE_STRING, APPFLOW_CFG_SECTION_SCRIPTS    , APPFLOW_CFG_SCRIPTS_SCRIPT                , __L("%03d"), 3, 999 
+  AddValueSecuence<XSTRING>(XFILECFG_VALUETYPE_STRING, APPFLOW_CFG_SECTION_SCRIPTS    , APPFLOW_CFG_SCRIPTS_SCRIPT                , __L("%03d"), 1, 999 
                                                                                                                                   , scripts_list
                                                                                                                                   , scripts_nscripts                                                                          , __L("Scripts")                                                            , APPFLOW_CFG_DEFAULT_REMARK_COLUMN);
 

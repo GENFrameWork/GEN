@@ -68,6 +68,26 @@ static void SCRIPT_LNG_LUA_OpenLibrary(lua_State* state, const char* name, lua_C
 }
 
 
+static void SCRIPT_LNG_LUA_RemoveGlobal(lua_State* state, const char* name)
+{
+  if(!state || !name) return;
+
+  lua_pushnil(state);
+  lua_setglobal(state, name);
+}
+
+
+static void SCRIPT_LNG_LUA_RemoveUnsafeBaseFunctions(lua_State* state)
+{
+  if(!state) return;
+
+  SCRIPT_LNG_LUA_RemoveGlobal(state, "dofile");
+  SCRIPT_LNG_LUA_RemoveGlobal(state, "loadfile");
+  SCRIPT_LNG_LUA_RemoveGlobal(state, "require");
+  SCRIPT_LNG_LUA_RemoveGlobal(state, "module");
+}
+
+
 static void SCRIPT_LNG_LUA_OpenSafeLibraries(lua_State* state)
 {
   if(!state) return;
@@ -76,6 +96,8 @@ static void SCRIPT_LNG_LUA_OpenSafeLibraries(lua_State* state)
   SCRIPT_LNG_LUA_OpenLibrary(state, LUA_TABLIBNAME , luaopen_table);
   SCRIPT_LNG_LUA_OpenLibrary(state, LUA_STRLIBNAME , luaopen_string);
   SCRIPT_LNG_LUA_OpenLibrary(state, LUA_MATHLIBNAME, luaopen_math);
+
+  SCRIPT_LNG_LUA_RemoveUnsafeBaseFunctions(state);
 }
 
 
@@ -176,6 +198,7 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
           currenttoken = lua_tostring(state, -1);
         }
        else
+       /*
         {
           lua_getglobal(state, SCRIPT_LNG_LUA_MAINFUNCTIONNAME);
 
@@ -191,6 +214,7 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
         }
       
       if(status == LUA_OK)
+      */
         {  
           if(returnval && lua_gettop(state))
             {

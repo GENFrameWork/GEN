@@ -44,9 +44,12 @@
 #endif
 
 #include "XPath.h"
+#include "XBuffer.h"
 #include "XFactory.h"
 #include "XFileTXT.h"
 #include "XTrace.h"
+
+#include "HashCRC32.h"
 
 #ifdef SCRIPT_G_ACTIVE
 #include "Script_Language_G.h"
@@ -270,6 +273,115 @@ static bool SCRIPT_IsWritablePathPhysicallyInScriptsRoot(XPATH& path)
 #endif
 
 
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool SCRIPT_ReadScriptFile(XPATH& path, SCRIPT_TYPE type, XSTRING& contents)
+* @brief      Read a script text file using the same line handling as SCRIPT::Load.
+* @ingroup    SCRIPT
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool SCRIPT_ReadScriptFile(XPATH& path, SCRIPT_TYPE type, XSTRING& contents)
+{
+  XFILETXT filetxt;
+
+  contents.Empty();
+
+  if(!filetxt.Open(path)) return false;
+
+  bool status = filetxt.ReadAllFile();
+
+  if(status)
+    {
+      for(int c=0; c<filetxt.GetNLines(); c++)
+        {
+          XSTRING* line = filetxt.GetLine(c);
+          if(line)
+            {
+              contents += line->Get();
+              switch(type)
+                {
+                  case SCRIPT_TYPE_UNKNOWN       :
+                                       default   : contents += __L("\r\n"); break;
+                  case SCRIPT_TYPE_G             : contents += __L("\r\n"); break;
+                  case SCRIPT_TYPE_LUA           : contents += __L("\r");   break;
+                  case SCRIPT_TYPE_JAVASCRIPT    : contents += __L("\r");   break;
+                }
+            }
+        }
+    }
+
+  filetxt.Close();
+
+  return status;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool SCRIPT_GenerateFileCacheKey(XPATH& path, XSTRING& contents, XSTRING& cachekey)
+* @brief      Generate a cache key that changes when file contents change.
+* @ingroup    SCRIPT
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool SCRIPT_GenerateFileCacheKey(XPATH& path, XSTRING& contents, XSTRING& cachekey)
+{
+  HASHCRC32 crc32;
+  XBUFFER   buffer;
+
+  cachekey.Empty();
+
+  if(path.IsEmpty()) return false;
+
+  buffer.Add(contents);
+  crc32.Do(buffer);
+
+  cachekey.Format(__L("file|%u:%s|size:%u|crc:%08X"), path.GetSize(), path.Get(), contents.GetSize(), crc32.GetResultCRC32());
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         static bool SCRIPT_FillTextFileLines(XFILETXT* filetxt, XSTRING& contents)
+* @brief      Copy SCRIPT::script text to an XFILETXT line model before writing.
+* @ingroup    SCRIPT
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static bool SCRIPT_FillTextFileLines(XFILETXT* filetxt, XSTRING& contents)
+{
+  if(!filetxt) return false;
+  if(contents.IsEmpty()) return false;
+
+  filetxt->DeleteAllLines();
+
+  XVECTOR<XSTRING*> lines;
+  XSTRING           normalized;
+
+  normalized = contents.Get();
+  normalized.DeleteCharacter(__C('\r'));
+
+  if(!normalized.Split(__C('\n'), lines, true))
+    {
+      return filetxt->AddLine(normalized);
+    }
+
+  for(XDWORD c=0; c<lines.GetSize(); c++)
+    {
+      XSTRING* line = lines.Get(c);
+      if(line)
+        {
+          filetxt->AddLine((*line));
+        }
+    }
+
+  lines.DeleteContents();
+  lines.DeleteAll();
+
+  return filetxt->GetNLines()?true:false;
+}
+
+
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
@@ -296,8 +408,6 @@ SCRIPT::SCRIPT()
   RegisterEvent(SCRIPT_XEVENT_TYPE_BREAK);
 
   thread = CREATEXTHREAD(XTHREADGROUPID_SCRIPT, __L("SCRIPT::SCRIPT"),ThreadFunction,(void*)this);
-
-  AddInternalLibraries();
 }
 
 
@@ -476,17 +586,26 @@ bool SCRIPT::Load(XPATH& xpath)
 
   if(!SCRIPT_IsExistingPathPhysicallyInScriptsRoot(xpath)) return false;
 
+  XSTRING loadedscript;
+
+  if(!SCRIPT_ReadScriptFile(xpath, type, loadedscript)) return false;
+
   #ifdef SCRIPT_CACHE_ACTIVE
 
-  XDWORD ID = GEN_SCRIPT_CACHE.GenerateID(xpath);
+  XSTRING cachekey;
 
-  XSTRING* _script = GEN_SCRIPT_CACHE.Cache_Get(ID, xpath);
+  if(!SCRIPT_GenerateFileCacheKey(xpath, loadedscript, cachekey)) return false;
+
+  XDWORD ID = GEN_SCRIPT_CACHE.GenerateID(cachekey);
+
+  XSTRING* _script = GEN_SCRIPT_CACHE.Cache_Get(ID, cachekey);
   if(_script)
     {
       script.Empty();
       script += _script->Get();  
 
-      GetNameScript()->Format(__L("ID%08X"), ID);
+      this->xpath = xpath;
+      xpath.GetNamefileExt(namescript);
 
       return true;
     }
@@ -495,33 +614,19 @@ bool SCRIPT::Load(XPATH& xpath)
 
   if(!xfiletxt) return false;
 
-  bool status = false;
+  bool status = true;
 
   this->xpath = xpath;
 
   xpath.GetNamefileExt(namescript);
 
-  if(xfiletxt->Open(xpath))
-    {
-      if(xfiletxt->ReadAllFile()) status = true;
-
-      script.Empty();
-
-      for(int c=0; c<xfiletxt->GetNLines(); c++)
-        {
-          script += xfiletxt->GetLine(c)->Get();
-      
-          AddReturnByType();
-        }
-
-      xfiletxt->Close();
-    }
+  script.Empty();
+  script += loadedscript.Get();
 
   #ifdef SCRIPT_CACHE_ACTIVE
   if(status)
     {
-      ID = GEN_SCRIPT_CACHE.GenerateID(xpath);      
-      GEN_SCRIPT_CACHE.Cache_Add(ID, &script, xpath);
+      GEN_SCRIPT_CACHE.Cache_Add(ID, &script, cachekey);
     }
   #endif
 
@@ -600,7 +705,11 @@ bool SCRIPT::Save(XPATH& xpath)
 
   if(xfiletxt->Create(xpath))
     {
-      if(xfiletxt->WriteAllFile()) status = true;
+      if(SCRIPT_FillTextFileLines(xfiletxt, script))
+        {
+          if(xfiletxt->WriteAllFile()) status = true;
+        }
+
       xfiletxt->Close();
     }
 
