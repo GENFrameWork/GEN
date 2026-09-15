@@ -1322,6 +1322,7 @@ bool SCRIPT_LNG_G::HaveError(int errorcode)
       static XCHAR* errorstr[]= { __L("None")                       ,
                                   __L("Internal error")             ,
                                   __L("Insufficient parameters")    ,
+                                  __L("Capability denied")          ,
                                   __L("Syntax error")               ,
                                   __L("No expression present")      ,
                                   __L("Not a variable")             ,

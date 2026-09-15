@@ -157,11 +157,7 @@ void Call_OpenURL(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   XSTRING* string1 = (XSTRING*)params->Get(0)->GetData();
   bool     status  = false;
@@ -196,11 +192,7 @@ void Call_MakeCommand(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   XSTRING* command    = NULL;
   bool     status     = false;
@@ -240,11 +232,7 @@ void Call_ExecApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   XSTRING* app_path   = NULL;
   XSTRING* app_params = NULL;
@@ -255,7 +243,7 @@ void Call_ExecApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
       app_path = (XSTRING*)params->Get(0)->GetData();
     }
 
-  if(params->Get(1))
+  if((params->GetSize() > 1) && params->Get(1))
     {
       app_params = (XSTRING*)params->Get(1)->GetData();
     }
@@ -304,11 +292,7 @@ void Call_TerminateApplication(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   XSTRING* string  = NULL;
   bool     status  = false;
@@ -348,11 +332,7 @@ void Call_TerminateApplicationWithWindow(SCRIPT_LIB* library, SCRIPT* script, XV
 
   returnvalue->Set();
 
-  if(params->GetSize()<2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
  
   XVECTOR<XPROCESS*>  applist;
   XSTRING             appname       = (*params->Get(0));
@@ -380,6 +360,5 @@ void Call_TerminateApplicationWithWindow(SCRIPT_LIB* library, SCRIPT* script, XV
    
   (*returnvalue) = status;
 }
-
 
 

@@ -1456,6 +1456,11 @@ UI_SKINCANVAS::~UI_SKINCANVAS()
   radialbackdrops.DeleteContents();
   radialbackdrops.DeleteAll();
 
+  // Mirrors progressbackdrops above but for the TEXT CAPTION GHOSTING FIX's own cache (see UI_SkinCanvas.h
+  // and Draw_Text()): same reasoning, same cleanup.
+  textbackdrops.DeleteContents();
+  textbackdrops.DeleteAll();
+
   Clean();
 }
 
@@ -3197,6 +3202,80 @@ bool UI_SKINCANVAS::Draw_Text(UI_ELEMENT* element)
 
   if(element->MustReDraw())
     {
+      // TEXT CAPTION GHOSTING FIX (2026-09): Draw_Text() paints glyph ink PURELY by alpha-blending
+      // (VectorFont_Print below is anti-aliased glyph ink, never a solid fill) onto whatever is already on the
+      // canvas. That is normally safe because the generic per-tick rebuild-area system (PreDrawFunction() /
+      // UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()) is expected to restore the true backdrop before each
+      // real repaint -- but a text element whose value changes via a live "#[...]" placeholder (e.g.
+      // dashboard.xml's "#[UPTIME_SECONDS]") is typically dirty for exactly ONE frame per value change and idle
+      // in between, so its rebuild area is ORPHAN-DISCARDED (deleted WITHOUT restoring -- see
+      // RebuildAllAreas()'s own orphan-discard comment: "the element's current on-screen content is already
+      // correct", true only for a widget that clears its own background, NOT for glyph ink blended on top of
+      // it) the very next frame. The NEXT real value change then creates a brand-new area that captures
+      // whatever is CURRENTLY on screen -- already showing the PREVIOUS glyph's ink -- and blends the new glyph
+      // straight on top. Confirmed live on UI_System's "uptime_seconds_value" (ticks every second): its
+      // "Segundos" tile converges from a clean single digit into a solid, near-opaque green block within a few
+      // seconds, each new digit's anti-aliased strokes blending onto every previous one. Exactly the same root
+      // cause already fixed for progressradial captions -- see the RADIAL CAPTION GHOSTING FIX in
+      // Draw_ProgressRadial() -- generalised here to Draw_Text() itself, since ANY text element painted this
+      // way can suffer it, not only captions nested inside a progress widget.
+      //
+      // Fix: cache the TRUE backdrop and restore it (PutBitmapNoAlpha(), GEN's own real restore primitive,
+      // never a synthetic fill colour) immediately before repainting on every later real redraw, mirroring the
+      // already-verified ProgressBackdrop/FormBackdrop/RadialBackdrop fixes elsewhere in this file.
+      //
+      // One extra wrinkle specific to plain text: an element authored with no explicit "width" auto-measures
+      // its own rebuild-area box from its CURRENT string on every tick (see UI_MANAGER::
+      // ChangeTextElementValue()), so a caption whose text grows/shrinks (e.g. "9" -> "10") can change WIDTH
+      // between two real redraws. Guarded below by discarding a cached entry whose stored geometry no longer
+      // matches this tick's rebuild area and re-capturing fresh instead of blindly restoring it, so a resize
+      // does not restore a wrong-sized bitmap over a differently-sized area.
+      //
+      // RESIZE-RECAPTURE FIX (2026-09, live-diagnosed with a temporary instrumented build): the first version of
+      // this guard re-captured the NEW, wider area directly from whatever was currently on screen at that
+      // instant -- but "currently on screen" at that exact moment is NOT the true backdrop for the old, still-
+      // un-erased sub-region: the OLD glyph ("9") was painted there on a previous tick and, being pure alpha-
+      // blended ink with nothing that ever clears it, is still sitting on screen when the box widens for "10".
+      // Capturing it as the "backdrop" permanently baked that leftover "9" into the cache, which was then
+      // faithfully restored every following tick -- a static ghost digit stuck in front of every later value,
+      // confirmed live via a temporary trace (mismatch detected and a fresh capture taken at the exact "9"->"10"
+      // transition, old cached area narrower than the new one, followed by an unbroken run of plain restores
+      // while the visible tile kept showing a stuck extra "9"). Fix: when an old, now-undersized cached entry
+      // exists, restore IT FIRST -- into its own old position/size, using the same real PutBitmapNoAlpha()
+      // primitive as every other restore in this file -- before dropping it and capturing the new, wider area.
+      // That erases the stale ink from the sub-region the old entry covered, so the fresh capture that follows
+      // reads genuinely clean pixels there; the newly-exposed strip outside the old bounds was never painted by
+      // this element in the first place, so it is already correct.
+      GRP2DREBUILDAREA* ownarea = GetRebuildAreaByElement(element);
+
+      if(ownarea)
+        {
+          GRP2DREBUILDAREA* textbackdrop = TextBackdrop_Find(element);
+
+          if(textbackdrop && !TextBackdrop_MatchesArea(textbackdrop, ownarea))
+            {
+              // Erase this element's own leftover ink from the OLD (smaller) region first -- see the RESIZE-
+              // RECAPTURE FIX comment above -- so the fresh, wider capture below reads true pixels there instead
+              // of baking the stale glyph in permanently.
+              PutBitmapNoAlpha(textbackdrop->GetXPos(), textbackdrop->GetYPos(), textbackdrop->GetBitmap());
+              TextBackdrop_Delete(element);
+              textbackdrop = NULL;
+            }
+
+          if(!textbackdrop)
+            {
+              // First time this element is ever drawn (or first redraw after a size change): nothing has
+              // painted THIS tick's glyph ink here yet, so this is the pristine moment to capture the backdrop.
+              TextBackdrop_Capture(element, ownarea->GetXPos(), ownarea->GetYPos(),
+                                    (double)ownarea->GetBitmap()->GetWidth(), (double)ownarea->GetBitmap()->GetHeight());
+            }
+           else
+            {
+              // Not the first draw at this size: restore the true backdrop now, before repainting below.
+              PutBitmapNoAlpha(textbackdrop->GetXPos(), textbackdrop->GetYPos(), textbackdrop->GetBitmap());
+            }
+        }
+
       GRP2DCOLOR_RGBA8  color(element->GetColor()->GetRed(),
                               element->GetColor()->GetGreen(),
                               element->GetColor()->GetBlue(),
@@ -6662,6 +6741,151 @@ bool UI_SKINCANVAS::RadialBackdrop_Capture(UI_ELEMENT* element, double x, double
   entry->SetExtraData((void*)element);
 
   return radialbackdrops.Add(entry);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRP2DREBUILDAREA* UI_SKINCANVAS::TextBackdrop_Find(UI_ELEMENT* element)
+* @brief      Look up the persistent "true backdrop" snapshot previously captured for a text element's own box
+*             (see the TEXT CAPTION GHOSTING FIX comment in Draw_Text() and the textbackdrops member comment in
+*             UI_SkinCanvas.h).
+* @note       Linear scan is deliberate: same small-cardinality reasoning as ProgressBackdrop_Find()/
+*             FormBackdrop_Find()/RadialBackdrop_Find() above -- kept simple and consistent with them.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Text element to look up (used only as an opaque identity key, never dereferenced).
+*
+* @return     GRP2DREBUILDAREA* : The cached entry (xpos/ypos/bitmap already positioned for PutBitmapNoAlpha);
+*                                  NULL if this element has never been captured yet.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRP2DREBUILDAREA* UI_SKINCANVAS::TextBackdrop_Find(UI_ELEMENT* element)
+{
+  if(!element) return NULL;
+
+  for(XDWORD c=0; c<textbackdrops.GetSize(); c++)
+    {
+      GRP2DREBUILDAREA* entry = textbackdrops.Get(c);
+      if(entry && (entry->GetExtraData() == (void*)element)) return entry;
+    }
+
+  return NULL;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::TextBackdrop_MatchesArea(GRP2DREBUILDAREA* textbackdrop, GRP2DREBUILDAREA* ownarea)
+* @brief      Checks whether a cached TextBackdrop entry still covers exactly the same screen rectangle as this
+*             tick's rebuild area, i.e. whether it is still safe to restore-and-reuse (see the "extra wrinkle"
+*             part of the TEXT CAPTION GHOSTING FIX comment in Draw_Text(): an auto-width text element's own box
+*             can change size between two real redraws when its string content changes length).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  textbackdrop : The previously cached entry (never NULL when called from Draw_Text()).
+* @param[in]  ownarea      : This tick's rebuild area for the same element (never NULL when called from Draw_Text()).
+*
+* @return     bool : true if position AND bitmap size still match (safe to restore); false if the element's box
+*                     has moved or been resized since the capture was taken (caller must re-capture instead).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::TextBackdrop_MatchesArea(GRP2DREBUILDAREA* textbackdrop, GRP2DREBUILDAREA* ownarea)
+{
+  if(!textbackdrop || !ownarea) return false;
+
+  GRPBITMAP* cachedbitmap = textbackdrop->GetBitmap();
+  GRPBITMAP* areabitmap   = ownarea->GetBitmap();
+
+  if(!cachedbitmap || !areabitmap) return false;
+
+  if(textbackdrop->GetXPos() != ownarea->GetXPos()) return false;
+  if(textbackdrop->GetYPos() != ownarea->GetYPos()) return false;
+
+  if(cachedbitmap->GetWidth()  != areabitmap->GetWidth())  return false;
+  if(cachedbitmap->GetHeight() != areabitmap->GetHeight()) return false;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::TextBackdrop_Delete(UI_ELEMENT* element)
+* @brief      Discards (and frees) a stale TextBackdrop entry for "element", e.g. right before re-capturing it at
+*             a new size (see TextBackdrop_MatchesArea() and the caller in Draw_Text()).
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Text element whose cached entry should be dropped (used only as an opaque identity key).
+*
+* @return     bool : true if a matching entry was found and removed; false if there was none to remove.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::TextBackdrop_Delete(UI_ELEMENT* element)
+{
+  if(!element) return false;
+
+  for(XDWORD c=0; c<textbackdrops.GetSize(); c++)
+    {
+      GRP2DREBUILDAREA* entry = textbackdrops.Get(c);
+      if(entry && (entry->GetExtraData() == (void*)element))
+        {
+          textbackdrops.Delete(entry);
+          GEN_DELETE entry;
+
+          return true;
+        }
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_SKINCANVAS::TextBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+* @brief      Captures the CURRENT on-screen pixels under a text element's own box and keeps them as that
+*             element's "true backdrop" reference until it is next discarded (element destroyed, or a size
+*             change invalidates it -- see TextBackdrop_MatchesArea()).
+* @note       Only ever correct to call when TextBackdrop_Find() (after the TextBackdrop_MatchesArea() check)
+*             found no usable entry (see the caller in Draw_Text()): at that point nothing has painted THIS
+*             tick's glyph ink in this zone yet, so whatever is on screen right now genuinely IS the backdrop.
+*             Reuses the inherited GetBitmap() -- the exact same capture primitive
+*             UI_SKINCANVAS_REBUILDAREAS::CreateRebuildArea(), ProgressBackdrop_Capture(), FormBackdrop_Capture()
+*             and RadialBackdrop_Capture() themselves use -- so this is GEN's own real capture machinery, not a
+*             new one, and never a synthetic/flat fill colour.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Text element this capture belongs to (stored only as an opaque identity key).
+* @param[in]  x       : Left edge of the region to capture, in canvas coordinates.
+* @param[in]  y       : Top edge of the region to capture, in canvas coordinates.
+* @param[in]  width   : Width of the region to capture.
+* @param[in]  height  : Height of the region to capture.
+*
+* @return     bool : true if the capture was stored; false if the bitmap grab or allocation failed (caller simply
+*                     has no cached backdrop this tick and behaves as before this fix -- never worse).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::TextBackdrop_Capture(UI_ELEMENT* element, double x, double y, double width, double height)
+{
+  if(!element) return false;
+
+  GRPBITMAP* bitmap = GetBitmap(x, y, width, height);
+  if(!bitmap) return false;
+
+  GRP2DREBUILDAREA* entry = GEN_NEW GRP2DREBUILDAREA();
+  if(!entry)
+    {
+      GEN_DELETE bitmap;
+      return false;
+    }
+
+  entry->SetXPos(x);
+  entry->SetYPos(y);
+  entry->SetBitmap(bitmap);
+  entry->SetExtraData((void*)element);
+
+  return textbackdrops.Add(entry);
 }
 
 

@@ -143,18 +143,21 @@ void SCRIPT_LIB_DIR::Clean()
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_IsItExists(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
+  if(!library)      return;
+  if(!script)       return;
+  if(!params)       return;
+  if(!returnvalue)  return;
+
+  returnvalue->Set();
+
+  if(!library->CheckParams(script, params, 1)) return;
+
   XDIR* dir     = NULL;
   bool  status  = false;
   
   dir = GEN_XFACTORY.Create_Dir();
   if(dir)
     {     
-      if(!params->GetSize())
-        {
-          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-          return;
-        }
-
       XSTRING* string = (XSTRING*)params->Get(0)->GetData();  
       if(string)
         {
@@ -185,18 +188,21 @@ void Call_IsItExists(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* pa
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_ChangeDir(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
+  if(!library)      return;
+  if(!script)       return;
+  if(!params)       return;
+  if(!returnvalue)  return;
+
+  returnvalue->Set();
+
+  if(!library->CheckParams(script, params, 1)) return;
+
   XDIR* dir     = NULL;
   bool  status  = false;
   
   dir = GEN_XFACTORY.Create_Dir();
   if(dir)
     {     
-      if(!params->GetSize())
-        {
-          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-          return;
-        }
-
       XSTRING* string = (XSTRING*)params->Get(0)->GetData();  
       if(string)
         {
@@ -227,18 +233,21 @@ void Call_ChangeDir(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_RemoveDir(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
+  if(!library)      return;
+  if(!script)       return;
+  if(!params)       return;
+  if(!returnvalue)  return;
+
+  returnvalue->Set();
+
+  if(!library->CheckParams(script, params, 1)) return;
+
   XDIR* dir     = NULL;
   bool  status  = false;
   
   dir = GEN_XFACTORY.Create_Dir();
   if(dir)
     {     
-      if(!params->GetSize())
-        {
-          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-          return;
-        }
-
       XSTRING* string = (XSTRING*)params->Get(0)->GetData();  
       if(string)
         {
@@ -269,18 +278,21 @@ void Call_RemoveDir(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 * --------------------------------------------------------------------------------------------------------------------*/
 void Call_MakeDir(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, XVARIANT* returnvalue)
 {
+  if(!library)      return;
+  if(!script)       return;
+  if(!params)       return;
+  if(!returnvalue)  return;
+
+  returnvalue->Set();
+
+  if(!library->CheckParams(script, params, 1)) return;
+
   XDIR* dir     = NULL;
   bool  status  = false;
   
   dir = GEN_XFACTORY.Create_Dir();
   if(dir)
     {     
-      if(!params->GetSize())
-        {
-          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-          return;
-        }
-
       XSTRING* string = (XSTRING*)params->Get(0)->GetData();  
       if(string)
         {
@@ -295,6 +307,5 @@ void Call_MakeDir(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 
   (*returnvalue) = status;
 }
-
 
 

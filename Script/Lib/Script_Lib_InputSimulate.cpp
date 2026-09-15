@@ -160,11 +160,7 @@ void Call_Key_Press(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 
   bool status  = false;
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   int key = 0;
   
@@ -208,11 +204,7 @@ void Call_Key_UnPress(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
 
   bool status  = false;
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   int key = 0;
   
@@ -256,11 +248,7 @@ void Call_Key_Click(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 
   bool status  = false;
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   int key          = 0;
   int pressuretime = 0;
@@ -306,11 +294,7 @@ void Call_Key_ClickByLiteral(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
 
   bool status  = false;
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   XVARIANT* variant;
   variant = params->Get(0);
@@ -358,11 +342,7 @@ void Call_Key_ClickByText(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   bool status  = false;
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   XVARIANT* variant;
   variant = params->Get(0);
@@ -410,11 +390,7 @@ void Call_Mouse_SetPos(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* 
 
   bool status  = false;
 
-  if(params->GetSize()<2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   int x = 0;
   int y = 0;
@@ -460,11 +436,7 @@ void Call_Mouse_Click(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
 
   bool status  = false;
 
-  if(params->GetSize()<2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   int x = 0;
   int y = 0;
@@ -485,7 +457,6 @@ void Call_Mouse_Click(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* p
   
   (*returnvalue) = status;
 }
-
 
 
 

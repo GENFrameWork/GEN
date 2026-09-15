@@ -300,6 +300,31 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		bool													RadialBackdrop_Capture									(UI_ELEMENT* element, double x, double y, double width, double height);
 
 		XVECTOR<GRP2DREBUILDAREA*>				radialbackdrops;
+
+		// TEXT CAPTION GHOSTING FIX (2026-09): persistent "true backdrop" cache for a plain text element's own
+		// box (Draw_Text()) -- same rationale, same real capture/restore primitives (GetBitmap()/
+		// PutBitmapNoAlpha()) as progressbackdrops/formbackdrops/radialbackdrops above, generalised here to
+		// EVERY text element (not just captions nested inside a progress widget) since Draw_Text() paints glyph
+		// ink purely by alpha-blending and is just as exposed to the same orphan-discard gap in the generic
+		// per-tick rebuild-area system (UI_SKINCANVAS_REBUILDAREAS): a text element whose value changes via a
+		// live "#[...]" placeholder is typically dirty for exactly one frame per value change and idle in
+		// between, so its area is ORPHAN-DISCARDED (deleted WITHOUT restoring) the very next frame; the NEXT
+		// real value change then blends its new glyph straight onto whatever is on screen -- still showing the
+		// PREVIOUS glyph's ink. Confirmed live on UI_System's "uptime_seconds_value": converges from a clean
+		// digit into a solid, near-opaque block within a few seconds of ticking. Captured once, the first time a
+		// given text element is ever drawn, and restored immediately before every later real redraw -- EXCEPT
+		// when the element's own box has changed size since the capture (an auto-width caption whose string grew/
+		// shrank, e.g. "9" -> "10"), in which case the OLD, undersized entry is first restored into its own old
+		// position (erasing this element's own leftover ink there) and only then discarded and re-captured fresh
+		// at the new size (see TextBackdrop_MatchesArea() and the RESIZE-RECAPTURE FIX comment in Draw_Text()) --
+		// a naive re-capture-without-restoring-first was tried and diagnosed live to bake the stale digit in
+		// permanently, since the "current screen" at the resize instant still held the old, un-erased glyph.
+		GRP2DREBUILDAREA*								TextBackdrop_Find											(UI_ELEMENT* element);
+		bool													TextBackdrop_MatchesArea								(GRP2DREBUILDAREA* textbackdrop, GRP2DREBUILDAREA* ownarea);
+		bool													TextBackdrop_Delete										(UI_ELEMENT* element);
+		bool													TextBackdrop_Capture										(UI_ELEMENT* element, double x, double y, double width, double height);
+
+		XVECTOR<GRP2DREBUILDAREA*>				textbackdrops;
 };
 
 

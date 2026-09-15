@@ -52,6 +52,32 @@
 
 /*---- GENERAL VARIABLE ----------------------------------------------------------------------------------------------*/
 
+static void SCRIPT_LNG_LUA_OpenLibrary(lua_State* state, const char* name, lua_CFunction openfunction)
+{
+  if(!state || !name || !openfunction) return;
+
+  #if LUA_VERSION_NUM >= 502
+  luaL_requiref(state, name, openfunction, 1);
+  lua_pop(state, 1);
+  #else
+  lua_pushcfunction(state, openfunction);
+  lua_pushstring(state, name);
+  lua_call(state, 1, 1);
+  lua_setglobal(state, name);
+  #endif
+}
+
+
+static void SCRIPT_LNG_LUA_OpenSafeLibraries(lua_State* state)
+{
+  if(!state) return;
+
+  SCRIPT_LNG_LUA_OpenLibrary(state, "_G"           , luaopen_base);
+  SCRIPT_LNG_LUA_OpenLibrary(state, LUA_TABLIBNAME , luaopen_table);
+  SCRIPT_LNG_LUA_OpenLibrary(state, LUA_STRLIBNAME , luaopen_string);
+  SCRIPT_LNG_LUA_OpenLibrary(state, LUA_MATHLIBNAME, luaopen_math);
+}
+
 
 
 
@@ -79,7 +105,7 @@ SCRIPT_LNG_LUA::SCRIPT_LNG_LUA()
       return;
     }
 
-  luaL_openlibs(state);    // Load Lua libraries
+  SCRIPT_LNG_LUA_OpenSafeLibraries(state);
 
   *static_cast<SCRIPT_LNG_LUA**>(lua_getextraspace(state)) = this;
 
@@ -143,7 +169,8 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
       if(!HaveMainFunction())
         {
           // Exec to ajust the Stack in Lua with Main Function. lua_getglobal dont work well without this.
-          lua_pcall(state, 0, LUA_MULTRET, 0);
+          status = lua_pcall(state, 0, LUA_MULTRET, 0);
+          if(status != LUA_OK) currenttoken = lua_tostring(state, -1);
         }
        else
         {       
@@ -158,33 +185,39 @@ int SCRIPT_LNG_LUA::Run(int* returnval)
             {
               lua_setglobal(state, SCRIPT_LNG_LUA_MAINFUNCTIONNAME);
               status = lua_pcall(state, 0, 1, 0);
-              currenttoken = lua_tostring(state, -1);
             }
+
+          if(status != LUA_OK) currenttoken = lua_tostring(state, -1);
         }
       
-      int returnvalue = (int)lua_tonumber(state, -1);
-      lua_pop(state, -1);
-
-      if(returnval)
+      if(status == LUA_OK)
         {  
-          (*returnval) = (int)returnvalue;
-           
-        }          
+          int returnvalue = (int)lua_tonumber(state, -1);
+          lua_pop(state, -1);
+
+          if(returnval)
+            {
+              (*returnval) = (int)returnvalue;
+            }
+        }
     }
 
   if(status != LUA_OK)
     {
-      switch(status)
+      if(errorcode == SCRIPT_ERRORCODE_NONE)
         {
-          case LUA_YIELD      : errorcode = SCRIPT_LNG_LUA_ERRORCODE_YIELD;          break;
-          case LUA_ERRRUN     : errorcode = SCRIPT_LNG_LUA_ERRORCODE_RUN;            break;
-          case LUA_ERRSYNTAX  : errorcode = SCRIPT_LNG_LUA_ERRORCODE_SYNTAX;         break;
-          case LUA_ERRMEM     : errorcode = SCRIPT_LNG_LUA_ERRORCODE_MEM;            break;
-          case LUA_ERRGCMM    : errorcode = SCRIPT_LNG_LUA_ERRORCODE_GCMM;           break;
-          case LUA_ERRERR     : errorcode = SCRIPT_LNG_LUA_ERRORCODE_ERRERR;         break;
-        }
+          switch(status)
+            {
+              case LUA_YIELD      : errorcode = SCRIPT_LNG_LUA_ERRORCODE_YIELD;          break;
+              case LUA_ERRRUN     : errorcode = SCRIPT_LNG_LUA_ERRORCODE_RUN;            break;
+              case LUA_ERRSYNTAX  : errorcode = SCRIPT_LNG_LUA_ERRORCODE_SYNTAX;         break;
+              case LUA_ERRMEM     : errorcode = SCRIPT_LNG_LUA_ERRORCODE_MEM;            break;
+              case LUA_ERRGCMM    : errorcode = SCRIPT_LNG_LUA_ERRORCODE_GCMM;           break;
+              case LUA_ERRERR     : errorcode = SCRIPT_LNG_LUA_ERRORCODE_ERRERR;         break;
+            }
 
-      HaveError(currenttoken, errorcode);
+          HaveError(currenttoken, errorcode);
+        }
 
       return errorcode;
     }
@@ -241,8 +274,9 @@ bool SCRIPT_LNG_LUA::HaveError(XSTRING& currenttoken, int errorcode)
     {
       static XCHAR* errorstr[]= { __L("None")                                             ,
                                   __L("Internal error")                                   ,
-                                  __L("Syntax error")                                     ,
                                   __L("Insufficient parameters")                          ,
+                                  __L("Capability denied")                                ,
+                                  __L("Syntax error")                                     ,
                                   __L("Thread not yield")                                 ,
                                   __L("runtime error")                                    ,
                                   __L("memory allocation error")                          ,
@@ -385,12 +419,20 @@ int LUA_LibraryCallBack(lua_State* state)
   SCRIPT_LIB_FUNCTION* libfunction = script->GetLibraryFunction(namefunction.Get());
   if(!libfunction) 
     {
-      return 0;
+      XSTRING currenttoken;
+
+      currenttoken.Format(__L("Capability denied: %s"), namefunction.Get());
+      script->HaveError(currenttoken, SCRIPT_ERRORCODE_CAPABILITY_DENIED);
+      return luaL_error(state, "Script capability denied");
     }
 
   if(!libfunction->GetFunctionLibrary()) 
     {
-      return 0;
+      XSTRING currenttoken;
+
+      currenttoken.Format(__L("Capability denied: %s"), namefunction.Get());
+      script->HaveError(currenttoken, SCRIPT_ERRORCODE_CAPABILITY_DENIED);
+      return luaL_error(state, "Script capability denied");
     }
 
   XVECTOR<XVARIANT*> params;
@@ -487,4 +529,3 @@ int LUA_LibraryCallBack(lua_State* state)
   // Let Lua know how many return values we've passed
   return nreturnvalues;
 }
-

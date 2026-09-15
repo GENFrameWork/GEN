@@ -169,7 +169,7 @@ int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
   duk_int_t error =  duk_peval_string(context, charstr.GetPtrChar());
   if(error) 
     {
-      HaveError(DUK_ERR_ERROR);
+      if(errorcode == SCRIPT_ERRORCODE_NONE) HaveError(DUK_ERR_ERROR);
       duk_pop(context);
       return errorcode;
     }
@@ -398,12 +398,18 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
 
   if(!libfunction) 
     {
-      return 0;
+      duk_push_error_object(context, DUK_ERR_ERROR, "Script capability denied");
+      script->errorcode    = SCRIPT_ERRORCODE_CAPABILITY_DENIED;
+      script->iscancelexec = true;
+      return duk_throw(context);
     }
 
   if(!libfunction->GetFunctionLibrary()) 
     {
-      return 0;
+      duk_push_error_object(context, DUK_ERR_ERROR, "Script capability denied");
+      script->errorcode    = SCRIPT_ERRORCODE_CAPABILITY_DENIED;
+      script->iscancelexec = true;
+      return duk_throw(context);
     }
 
   duk_pop_2(context);

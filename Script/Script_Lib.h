@@ -73,6 +73,7 @@ class SCRIPT_LIB
     bool                  GetParamConverted       (XVARIANT* variant, float& value);
     bool                  GetParamConverted       (XVARIANT* variant, double& value);
     bool                  GetParamConverted       (XVARIANT* variant, XSTRING& value);
+    bool                  CheckParams             (SCRIPT* script, XVECTOR<XVARIANT*>* params, XDWORD minimum);
 
     SCRIPT_LIB_FORMATSTATUS FormatParams          (XVECTOR<XVARIANT*>* params, XDWORD firstparamindex, XCHAR* mask, XSTRING& output);
 
@@ -90,6 +91,5 @@ class SCRIPT_LIB
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 

@@ -156,11 +156,7 @@ void Call_TraceClearScreen(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT
 
   returnvalue->Set();
 
-  if(params->GetSize() < 2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   bool  recursive  = false;
   library->GetParamConverted(params->Get(0), recursive);
@@ -198,11 +194,7 @@ void Call_TraceClearMsgsStatus(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   bool  recursive  = false;
   library->GetParamConverted(params->Get(0), recursive);
@@ -239,11 +231,7 @@ void Call_TracePrintColor(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   XDWORD    color       = 0;
   library->GetParamConverted(params->Get(0), color);

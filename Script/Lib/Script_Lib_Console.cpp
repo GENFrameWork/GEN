@@ -205,11 +205,7 @@ void Call_Console_PutChar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   XCHAR character = (*params->Get(0));
 
@@ -241,11 +237,7 @@ void Call_Console_Printf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   XVARIANT* maskparam = params->Get(0);
   if(!maskparam) return;

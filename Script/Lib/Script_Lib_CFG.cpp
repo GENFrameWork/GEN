@@ -178,11 +178,7 @@ void Call_GetFileCFGValue(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(params->GetSize() < 2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
   
   XSTRING          datakey;
   SCRIPT_LIB_CFG*  libraryCFG = (SCRIPT_LIB_CFG*)library;
@@ -203,5 +199,4 @@ void Call_GetFileCFGValue(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   (*returnvalue) = datakey.Get();
 }
-
 

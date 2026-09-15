@@ -40,6 +40,8 @@
 
 #include "XVariant.h"
 
+#include "Script.h"
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -377,6 +379,42 @@ bool SCRIPT_LIB::GetParamConverted(XVARIANT* variant, XSTRING& value)
       case XVARIANT_TYPE_DATETIME       : 
                             default     : return false;
 
+    }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool SCRIPT_LIB::CheckParams(SCRIPT* script, XVECTOR<XVARIANT*>* params, XDWORD minimum)
+* @brief      Validate the minimum number of non-null parameters required by a native script function
+* @ingroup    SCRIPT
+*
+* @param[in]  script : Script receiving the validation error.
+* @param[in]  params : Script parameters.
+* @param[in]  minimum : Minimum number of required parameters.
+*
+* @return     bool : true if all required parameters are available; otherwise false.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool SCRIPT_LIB::CheckParams(SCRIPT* script, XVECTOR<XVARIANT*>* params, XDWORD minimum)
+{
+  if(!script || !params) return false;
+
+  if(params->GetSize() < minimum)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return false;
+    }
+
+  for(XDWORD c=0; c<minimum; c++)
+    {
+      if(!params->Get(c))
+        {
+          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+          return false;
+        }
     }
 
   return true;

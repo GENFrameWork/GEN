@@ -150,16 +150,11 @@ void Call_Abs(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params, X
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   int value = 0;
   library->GetParamConverted(params->Get(0), value);
 
   (*returnvalue) = abs(value);
 }
-
 

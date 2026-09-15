@@ -1423,9 +1423,9 @@ void SCRIPT::Clean()
 
   iscancelexec        = false;
 
-  #ifdef SCRIPT_DENY_UNSAFE_LIBRARIES_BY_DEFAULT
-  capabilities        = SCRIPT_CAPABILITY_NONE;
-  #else
+  #ifdef SCRIPT_ALLOW_UNSAFE_LIBRARIES_BY_DEFAULT
   capabilities        = SCRIPT_CAPABILITY_ALL_UNSAFE;
+  #else
+  capabilities        = SCRIPT_CAPABILITY_NONE;
   #endif
 }

@@ -169,11 +169,7 @@ void Call_Log_Ini(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 
   returnvalue->Set();
 
-  if(params->GetSize()<2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -215,11 +211,7 @@ void Call_Log_CFG_SetLimit(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT
 
   returnvalue->Set();
 
-  if(params->GetSize()<2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -261,11 +253,7 @@ void Call_Log_CFG_SetFilters(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
 
   returnvalue->Set();
 
-  if(params->GetSize()<2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -307,11 +295,7 @@ void Call_Log_CFG_SetBackup(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIAN
 
   returnvalue->Set();
 
-  if(params->GetSize()<3)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 3)) return;
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -355,11 +339,7 @@ void Call_Log_AddEntry(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* 
 
   returnvalue->Set();
 
-  if(params->GetSize()<3)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 3)) return;
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())

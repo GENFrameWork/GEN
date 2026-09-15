@@ -266,11 +266,7 @@ void Call_System_GetEnviromentVar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<X
 
   returnvalue->Set();
 
-  if(!params->GetSize())
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 1)) return;
 
   XSTRING* namevar = (XSTRING*)params->Get(0)->GetData();    
   if(!namevar)  return;
@@ -281,6 +277,5 @@ void Call_System_GetEnviromentVar(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<X
       (*returnvalue) = variable;
     }   
 }
-
 
 

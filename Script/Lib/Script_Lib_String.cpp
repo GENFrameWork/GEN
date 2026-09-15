@@ -153,11 +153,7 @@ void Call_AddString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 
   returnvalue->Set();
 
-  if(params->GetSize() < 2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   XSTRING* string1 = (XSTRING*)params->Get(0)->GetData();
   XSTRING* string2 = (XSTRING*)params->Get(1)->GetData();
@@ -189,11 +185,7 @@ void Call_FindString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* pa
 
   returnvalue->Set();
 
-  if(params->GetSize() < 3)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 3)) return;
 
   XSTRING* string1    = (XSTRING*)params->Get(0)->GetData();
   XSTRING* string2    = (XSTRING*)params->Get(1)->GetData();
@@ -231,11 +223,7 @@ void Call_CompareString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 
   returnvalue->Set();
 
-  if(params->GetSize() < 3)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 3)) return;
 
   XSTRING* string1    = (XSTRING*)params->Get(0)->GetData();
   XSTRING* string2    = (XSTRING*)params->Get(1)->GetData();
@@ -273,11 +261,7 @@ void Call_ReplaceString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 
   returnvalue->Set();
 
-  if(params->GetSize() < 3)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 3)) return;
 
   XSTRING* string     = (XSTRING*)params->Get(0)->GetData();
   XSTRING* tofind     = (XSTRING*)params->Get(1)->GetData();
@@ -314,11 +298,7 @@ void Call_SPrintf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 
   returnvalue->Set();
 
-  if(params->GetSize() < 2)
-    {
-      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-      return;
-    }
+  if(!library->CheckParams(script, params, 2)) return;
 
   XVARIANT* maskparam = params->Get(1);
   if(!maskparam) return;
@@ -344,4 +324,3 @@ void Call_SPrintf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
   (*params->Get(0)) = outstring;
   (*returnvalue)     = outstring;
 }
-
