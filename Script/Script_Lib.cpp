@@ -505,14 +505,14 @@ SCRIPT_LIB_FORMATSTATUS SCRIPT_LIB::FormatParams(XVECTOR<XVARIANT*>* params, XDW
       XCHAR conversion = mask[index];
       if(!conversion) return SCRIPT_LIB_FORMATSTATUS_INVALID_FORMAT;
 
-      bool isinteger = (conversion == __C('c')) || (conversion == __C('C')) ||
-                       (conversion == __C('d')) || (conversion == __C('i'));
+      bool isinteger  = (conversion == __C('c')) || (conversion == __C('C')) ||
+                        (conversion == __C('d')) || (conversion == __C('i'));
       bool isunsigned = (conversion == __C('o')) || (conversion == __C('u')) ||
                         (conversion == __C('x')) || (conversion == __C('X'));
-      bool isreal = (conversion == __C('f')) || (conversion == __C('F')) ||
-                    (conversion == __C('g')) || (conversion == __C('G')) ||
-                    (conversion == __C('e')) || (conversion == __C('E'));
-      bool isstring = (conversion == __C('s')) || (conversion == __C('S'));
+      bool isreal     = (conversion == __C('f')) || (conversion == __C('F')) ||
+                        (conversion == __C('g')) || (conversion == __C('G')) ||
+                        (conversion == __C('e')) || (conversion == __C('E'));
+      bool isstring   = (conversion == __C('s')) || (conversion == __C('S'));
 
       if(!isinteger && !isunsigned && !isreal && !isstring) return SCRIPT_LIB_FORMATSTATUS_INVALID_FORMAT;
       if(paramindex >= params->GetSize()) return SCRIPT_LIB_FORMATSTATUS_INSUFFICIENT_PARAMS;
