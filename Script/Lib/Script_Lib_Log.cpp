@@ -169,7 +169,11 @@ void Call_Log_Ini(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -211,7 +215,11 @@ void Call_Log_CFG_SetLimit(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -253,7 +261,11 @@ void Call_Log_CFG_SetFilters(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -295,7 +307,11 @@ void Call_Log_CFG_SetBackup(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIAN
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 3)) return;
+  if(params->GetSize()<3)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -339,7 +355,11 @@ void Call_Log_AddEntry(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* 
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 3)) return;
+  if(params->GetSize()<3)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
   if(!liblog->GetLog())
@@ -349,8 +369,6 @@ void Call_Log_AddEntry(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* 
 
   int       level   = 0;
   XVARIANT* variant = params->Get(1);
-  if(!variant || !params->Get(0) || !params->Get(2)) return;
-
   XSTRING   section = (*variant);  
     
   library->GetParamConverted(params->Get(0), level);
@@ -358,26 +376,110 @@ void Call_Log_AddEntry(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* 
   XVARIANT  variantmask = (*params->Get(2));
   XCHAR*    mask = variantmask;
   XSTRING   outstring;
+  XSTRING   string;
+
+  int paramindex = 3;
+  int c          = 0;
 
   if(!mask) return;
 
-  SCRIPT_LIB_FORMATSTATUS formatstatus = library->FormatParams(params, 3, mask, outstring);
-  if(formatstatus != SCRIPT_LIB_FORMATSTATUS_OK)
+  while(mask[c])
     {
-      if(formatstatus == SCRIPT_LIB_FORMATSTATUS_INSUFFICIENT_PARAMS)
+      switch(mask[c])
         {
-          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+          case '%' : {
+                        #define MAXTEMPOSTR 32
+
+                        XCHAR param[MAXTEMPOSTR];
+
+                        int  nparam = 1;
+                        bool end    = false;
+
+                        memset(param,0,MAXTEMPOSTR*sizeof(XCHAR));
+                        param[0] = '%';
+
+                        c++;
+
+                        do{ string.Empty();
+
+                            param[nparam] = mask[c];
+                            nparam++;
+
+                            switch(mask[c])
+                              {
+                                case __C('c')   :
+                                case __C('C')   :
+                                case __C('d')   :
+                                case __C('i')   :
+                                case __C('o')   :
+                                case __C('u')   :
+                                case __C('x')   :
+                                case __C('X')   : { int value = 0;
+                                                    library->GetParamConverted(params->Get(paramindex), value);
+                                                    string.Format(param, value);
+                                                    paramindex++;
+                                                    end  = true;
+                                                  }
+                                                  break;
+
+                                case __C('f')   : { float value = 0.0f;
+                                                    library->GetParamConverted(params->Get(paramindex), value);
+                                                    string.Format(param, value);
+                                                    paramindex++;
+                                                    end  = true;
+                                                  }
+                                                  break;
+
+                                case __C('g')   :
+                                case __C('G')   :
+
+                                case __C('e')   :
+                                case __C('E')   :
+
+                                case __C('n')   :
+                                case __C('p')   : end = true;
+                                                  break;
+
+                                case __C('s')   :
+                                case __C('S')   : { XVARIANT variantparam = (*params->Get(paramindex));
+                                                    paramindex++;
+                                                    string.Format(param,(XCHAR*)variantparam);
+                                                    end = true;
+                                                  }
+                                                  break;
+
+                                case __C('%')   : string = __L("%");
+                                                  end = true;
+                                                  break;
+
+                                case __C('\0')  : end = true;
+                                                  break;
+
+                                      default   : break;
+                              }
+
+                            c++;
+
+                          } while(!end);
+                      }
+                      break;
+
+            default : string.Set(mask[c]);
+                      c++;
+                      break;
         }
 
-      return;
+      outstring += string;
     }
 
   if(liblog->GetLog())
     {
-      liblog->GetLog()->AddEntry((XLOGLEVEL)level, section.Get(), false, __L("%s"), outstring.Get());
+      liblog->GetLog()->AddEntry((XLOGLEVEL)level, section.Get(), false, outstring.Get());
     }
    else  
     {
-      GEN_XLOG.AddEntry((XLOGLEVEL)level, section.Get(), false, __L("%s"), outstring.Get());
+      GEN_XLOG.AddEntry((XLOGLEVEL)level, section.Get(), false, outstring.Get());
     }
 }
+
+

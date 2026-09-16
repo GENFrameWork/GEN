@@ -40,7 +40,6 @@ enum SCRIPT_ERRORCODE
   SCRIPT_ERRORCODE_NONE             ,   //00 "None"
   SCRIPT_ERRORCODE_INTERNALERROR    ,   //01 "Internal error"
   SCRIPT_ERRORCODE_INSUF_PARAMS     ,   //02 "Insufficient parameters"
-  SCRIPT_ERRORCODE_CAPABILITY_DENIED,   //03 "Capability denied"
 
   SCRIPT_ERRORCODE_OWN
 };
@@ -53,6 +52,7 @@ enum SCRIPT_ERRORCODE
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
+
 
 
 

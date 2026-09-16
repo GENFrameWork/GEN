@@ -149,12 +149,17 @@ void Call_Sleep(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* params,
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 1)) return;
+  if(!params->GetSize())
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   int milliseconds = 0;
   library->GetParamConverted(params->Get(0), milliseconds);
 
   GEN_XSLEEP.MilliSeconds(milliseconds);
 }
+
 
 

@@ -140,69 +140,6 @@ XDWORD SCRIPT_CACHE::GenerateID(XSTRING& stringID)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         bool SCRIPT_CACHE::GenerateListKey(XVECTOR<XSTRING*>* namescripts, XSTRING& stringID)
-* @brief      Generate a canonical cache key for an ordered list of scripts
-* @ingroup    SCRIPT
-* 
-* @param[in]  namescripts : Script names in execution order.
-* @param[out] stringID : Canonical cache key.
-* 
-* @return     bool : true if the key was generated; otherwise false.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool SCRIPT_CACHE::GenerateListKey(XVECTOR<XSTRING*>* namescripts, XSTRING& stringID)
-{
-  stringID.Empty();
-
-  if(!namescripts)
-    {
-      return false;
-    }
-
-  if(!namescripts->GetSize())
-    {
-      return false;
-    }
-
-  stringID.Format(__L("bundle|%u"), namescripts->GetSize());
-
-  for(XDWORD c=0; c<namescripts->GetSize(); c++)
-    {
-      XSTRING* namescript = namescripts->Get(c);
-      if(!namescript)
-        {
-          stringID.Empty();
-          return false;
-        }
-
-      XSTRING namescriptnormalized;
-
-      namescriptnormalized = namescript->Get();
-      SCRIPT::EliminateExtraChars(&namescriptnormalized);
-
-      if(namescriptnormalized.IsEmpty())
-        {
-          stringID.Empty();
-          return false;
-        }
-
-      XPATH xpathscript;
-      if(!SCRIPT::ResolvePathInScriptsRoot(namescriptnormalized.Get(), xpathscript))
-        {
-          stringID.Empty();
-          return false;
-        }
-
-      stringID.AddFormat(__L("|%u:"), xpathscript.GetSize());
-      stringID += xpathscript.Get();
-    }
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
 * @fn         bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script)
 * @brief      Cache add
 * @ingroup    SCRIPT
@@ -227,10 +164,9 @@ bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script)
 
   if(SCRIPT_CACHE::Cache_Get(ID))
     {
-      return Cache_Set(ID, script);
+      Cache_Set(ID, script);
+      return true;
     }
-
-  CacheKey_Del(ID);
 
   XSTRING* _script;   
 
@@ -244,47 +180,8 @@ bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script)
   
   (*_script) = script->Get();
 
-  if(!cache.Add(ID, _script))
-    {
-      GEN_DELETE _script;
-      return false;
-    }
+  cache.Add(ID, _script);
   
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script, XSTRING& stringID)
-* @brief      Cache add with collision verification key
-* @ingroup    SCRIPT
-* 
-* @param[in]  ID : Identifier to use.
-* @param[in]  script : Script pointer to use.
-* @param[in]  stringID : Canonical key associated with the identifier.
-* 
-* @return     bool : true if the operation is successful; otherwise false.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool SCRIPT_CACHE::Cache_Add(XDWORD ID, XSTRING* script, XSTRING& stringID)
-{
-  if(stringID.IsEmpty())
-    {
-      return false;
-    }
-
-  if(!Cache_Add(ID, script))
-    {
-      return false;
-    }
-
-  if(!CacheKey_Set(ID, stringID))
-    {
-      Cache_Del(ID);
-      return false;
-    }
-
   return true;
 }
 
@@ -337,38 +234,6 @@ XSTRING* SCRIPT_CACHE::Cache_Get(XDWORD ID, int* index)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         XSTRING* SCRIPT_CACHE::Cache_Get(XDWORD ID, XSTRING& stringID, int* index)
-* @brief      Cache get with collision verification
-* @ingroup    SCRIPT
-* 
-* @param[in]  ID : Identifier to use.
-* @param[in]  stringID : Canonical key associated with the identifier.
-* @param[in]  index : Index value.
-* 
-* @return     XSTRING* : Pointer to the requested string; NULL if it is not available.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-XSTRING* SCRIPT_CACHE::Cache_Get(XDWORD ID, XSTRING& stringID, int* index)
-{
-  XSTRING* script = Cache_Get(ID, index);
-  if(!script)
-    {
-      return NULL;
-    }
-
-  XSTRING* cachekey = cachekeys.Get(ID);
-  if(!cachekey || cachekey->Compare(stringID))
-    {
-      if(index) (*index) = SCRIPT_CACHE_NOTFOUND;
-      return NULL;
-    }
-
-  return script;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
 * @fn         bool SCRIPT_CACHE::Cache_Set(XDWORD ID, XSTRING* script)
 * @brief      Cache set
 * @ingroup    SCRIPT
@@ -410,81 +275,6 @@ bool SCRIPT_CACHE::Cache_Set(XDWORD ID, XSTRING* script)
     }
 
   (*_script) = script->Get();
-  CacheKey_Del(ID);
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool SCRIPT_CACHE::CacheKey_Set(XDWORD ID, XSTRING& stringID)
-* @brief      Set the canonical key associated with a cache identifier
-* @ingroup    SCRIPT
-* 
-* @param[in]  ID : Identifier to use.
-* @param[in]  stringID : Canonical key.
-* 
-* @return     bool : true if the operation is successful; otherwise false.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool SCRIPT_CACHE::CacheKey_Set(XDWORD ID, XSTRING& stringID)
-{
-  if(!ID || stringID.IsEmpty())
-    {
-      return false;
-    }
-
-  XSTRING* cachekey = cachekeys.Get(ID);
-  if(cachekey)
-    {
-      (*cachekey) = stringID.Get();
-      return true;
-    }
-
-  cachekey = GEN_NEW XSTRING();
-  if(!cachekey)
-    {
-      return false;
-    }
-
-  (*cachekey) = stringID.Get();
-
-  if(!cachekeys.Add(ID, cachekey))
-    {
-      GEN_DELETE cachekey;
-      return false;
-    }
-
-  return true;
-}
-
-
-/**-------------------------------------------------------------------------------------------------------------------
-* 
-* @fn         bool SCRIPT_CACHE::CacheKey_Del(XDWORD ID)
-* @brief      Delete the canonical key associated with a cache identifier
-* @ingroup    SCRIPT
-* 
-* @param[in]  ID : Identifier to use.
-* 
-* @return     bool : true if the operation is successful; otherwise false.
-* 
-* --------------------------------------------------------------------------------------------------------------------*/
-bool SCRIPT_CACHE::CacheKey_Del(XDWORD ID)
-{
-  XSTRING* cachekey = cachekeys.Get(ID);
-  if(!cachekey)
-    {
-      return false;
-    }
-
-  if(!cachekeys.Delete(ID))
-    {
-      return false;
-    }
-
-  GEN_DELETE cachekey;
 
   return true;
 }
@@ -508,23 +298,12 @@ bool SCRIPT_CACHE::Cache_Del(XDWORD ID)
       return false;
     }
   
-  int index = SCRIPT_CACHE_NOTFOUND;
-
-  XSTRING* script = SCRIPT_CACHE::Cache_Get(ID, &index);
-  if(!script || index == SCRIPT_CACHE_NOTFOUND)
+  if(!SCRIPT_CACHE::Cache_Get(ID))
     {
       return false;
     }
 
-  if(!cache.Delete(ID))
-    {
-      return false;
-    }
-
-  GEN_DELETE script;
-  CacheKey_Del(ID);
-
-  return true;
+  return cache.Delete(ID);
 }
     
     
@@ -554,16 +333,13 @@ XMAP<XDWORD, XSTRING*>* SCRIPT_CACHE::Cache_GetAll()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_CACHE::Cache_DelAll()
 {
-  if(!cache.GetSize() && !cachekeys.GetSize())
+  if(!cache.GetSize())
     {
       return false;
     }
 
   cache.DeleteElementContents();
   cache.DeleteAll();
-
-  cachekeys.DeleteElementContents();
-  cachekeys.DeleteAll();
 
   return true;
 }
@@ -651,41 +427,31 @@ bool SCRIPT_CACHE::Cache_AllList(XVECTOR<XSTRING*>* listscripts)
 
               linescripts->Split(__C(','), namescripts);
 
-              bool pathsvalid = namescripts.GetSize()?true:false;
-
-              for(XDWORD d=0; d<namescripts.GetSize() && pathsvalid; d++)
-                {
-                  XSTRING* nametovalidate = namescripts.Get(d);
-                  XPATH    validatedpath;
-
-                  if(!nametovalidate || !SCRIPT::EliminateExtraChars(nametovalidate) ||
-                     !SCRIPT::ResolvePathInScriptsRoot(nametovalidate->Get(), validatedpath))
-                    {
-                      pathsvalid = false;
-                    }
-                }
-
-              if(!pathsvalid) status = false;
-
-              XSTRING* namescript = pathsvalid?namescripts.Get(0):NULL;
+              XSTRING* namescript = namescripts.Get(0);
               if(namescript)
                 {
+                  SCRIPT::EliminateExtraChars(namescript);
+                  
                   SCRIPT* script = SCRIPT::Create(namescript->Get());
                   if(script) 
                     {
+                      XPATH       allpath;
                       XDWORD      ID = 0;
                       bool        incache = false;
-                      XSTRING     cachekey;
-                      bool        cachekeyvalid = GEN_SCRIPT_CACHE.GenerateListKey(&namescripts, cachekey);
-
-                      if(cachekeyvalid)
-                        {
-                          ID = GEN_SCRIPT_CACHE.GenerateID(cachekey);
+                      
+                      GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, allpath);
+    
+                      for(XDWORD d=0; d<namescripts.GetSize(); d++)
+                        {  
+                          allpath += __C(',');  
+                          allpath += namescript->Get();  
                         }
+                    
+                      ID = GEN_SCRIPT_CACHE.GenerateID(allpath);
 
                       #ifdef SCRIPT_CACHE_ACTIVE
 
-                      XSTRING* _script = cachekeyvalid?GEN_SCRIPT_CACHE.Cache_Get(ID, cachekey):NULL;
+                      XSTRING* _script = GEN_SCRIPT_CACHE.Cache_Get(ID);
                       if(_script)
                         {                         
                           (*script->GetScript()) += _script->Get();      
@@ -705,11 +471,11 @@ bool SCRIPT_CACHE::Cache_AllList(XVECTOR<XSTRING*>* listscripts)
                                 {                          
                                   XPATH xpath;   
 
-                                  if(!SCRIPT::ResolvePathInScriptsRoot(namescript->Get(), xpath))
-                                    {
-                                      status = false;
-                                      break;
-                                    }
+                                  SCRIPT::EliminateExtraChars(namescript);
+                  
+                                  GEN_XPATHSMANAGER.GetPathOfSection(XPATHSMANAGERSECTIONTYPE_SCRIPTS, xpath);
+                                  xpath.Slash_Add();
+                                  xpath += namescript->Get();
 
                                   status = script->LoadAdd(xpath);
                                   if(!status)  
@@ -721,9 +487,9 @@ bool SCRIPT_CACHE::Cache_AllList(XVECTOR<XSTRING*>* listscripts)
                         }
           
                       #ifdef SCRIPT_CACHE_ACTIVE
-                      if(status && !incache && cachekeyvalid)
+                      if(status && !incache)
                         {                          
-                          GEN_SCRIPT_CACHE.Cache_Add(ID, script->GetScript(), cachekey);
+                          GEN_SCRIPT_CACHE.Cache_Add(ID, script->GetScript());
                         }
                       #endif                                          
                       
@@ -785,3 +551,7 @@ void SCRIPT_CACHE::Clean()
 {
 
 }
+
+
+
+

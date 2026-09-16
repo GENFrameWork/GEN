@@ -284,7 +284,11 @@ void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   windowsposx = 0xFFFFFF;
   windowsposy = 0xFFFFFF;
@@ -331,14 +335,7 @@ void Call_Window_GetPosX(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
 
                                   for(XDWORD d=2; d<params->GetSize(); d++)
                                     { 
-                                      XVARIANT* bitmapparam = params->Get(d);
-                                      if(!bitmapparam)
-                                        {
-                                          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-                                          break;
-                                        }
-
-                                      XSTRING bitmaprefname  = (*bitmapparam);
+                                      XSTRING bitmaprefname  = (*params->Get(d));
                                       if(!bitmaprefname.IsEmpty())
                                         {                                         
                                           XPATH  xpathbitmapref;  
@@ -454,7 +451,11 @@ void Call_Window_GetPosY(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   (*returnvalue) = windowsposy;
 }
@@ -486,7 +487,11 @@ void Call_Window_SetBmpFindCFG(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 
   (*returnvalue) = status;
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   int bmpfindCFG_difflimitpercent = 0;
   int bmpfindCFG_pixelmargin      = 0;
@@ -523,7 +528,11 @@ void Call_Window_SetFocus(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
  
   XVECTOR<XPROCESS*>  applist;
   XSTRING             appname       = (*params->Get(0));
@@ -588,7 +597,11 @@ void Call_Window_SetPosition(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 4)) return;
+  if(params->GetSize()<4)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
  
   XVECTOR<XPROCESS*>  applist;
   XSTRING             appname       = (*params->Get(0));
@@ -658,7 +671,11 @@ void Call_Window_Resize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 4)) return;
+  if(params->GetSize()<4)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
  
   XVECTOR<XPROCESS*>  applist;
   XSTRING             appname       = (*params->Get(0));
@@ -728,7 +745,11 @@ void Call_Window_Minimize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 3)) return;
+  if(params->GetSize()<3)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
  
   XVECTOR<XPROCESS*>  applist;
   XSTRING             appname       = (*params->Get(0));
@@ -794,7 +815,11 @@ void Call_Window_Maximize(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 3)) return;
+  if(params->GetSize()<3)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
  
   XVECTOR<XPROCESS*>  applist;
   XSTRING             appname       = (*params->Get(0));
@@ -1168,6 +1193,7 @@ void FillLineDebug(GRPBITMAP* bitmapscreen, XDWORD*  bufferscreen, XDWORD scrpos
 
 
 #endif
+
 
 
 

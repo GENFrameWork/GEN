@@ -153,7 +153,11 @@ void Call_AddString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* par
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize() < 2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   XSTRING* string1 = (XSTRING*)params->Get(0)->GetData();
   XSTRING* string2 = (XSTRING*)params->Get(1)->GetData();
@@ -185,7 +189,11 @@ void Call_FindString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* pa
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 3)) return;
+  if(params->GetSize() < 3)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   XSTRING* string1    = (XSTRING*)params->Get(0)->GetData();
   XSTRING* string2    = (XSTRING*)params->Get(1)->GetData();
@@ -223,7 +231,11 @@ void Call_CompareString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 3)) return;
+  if(params->GetSize() < 3)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   XSTRING* string1    = (XSTRING*)params->Get(0)->GetData();
   XSTRING* string2    = (XSTRING*)params->Get(1)->GetData();
@@ -261,7 +273,11 @@ void Call_ReplaceString(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>*
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 3)) return;
+  if(params->GetSize() < 3)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   XSTRING* string     = (XSTRING*)params->Get(0)->GetData();
   XSTRING* tofind     = (XSTRING*)params->Get(1)->GetData();
@@ -298,29 +314,108 @@ void Call_SPrintf(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
-
-  XVARIANT* maskparam = params->Get(1);
-  if(!maskparam) return;
-
-  XVARIANT  variantmask = (*maskparam);
-  XCHAR*    mask = variantmask;
-
-  XSTRING outstring;
-
-  if(!mask) return;
-
-  SCRIPT_LIB_FORMATSTATUS formatstatus = library->FormatParams(params, 2, mask, outstring);
-  if(formatstatus != SCRIPT_LIB_FORMATSTATUS_OK)
+  if(!params->GetSize())
     {
-      if(formatstatus == SCRIPT_LIB_FORMATSTATUS_INSUFFICIENT_PARAMS)
-        {
-          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
-        }
-
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
       return;
     }
 
-  (*params->Get(0)) = outstring;
-  (*returnvalue)     = outstring;
+  XVARIANT  variantout = (*params->Get(0));
+  XCHAR*    out = variantout;
+  XSTRING  _out = out;
+
+  XVARIANT  variantmask = (*params->Get(1));
+  XCHAR*    mask = variantmask;
+
+  XSTRING outstring;
+  XSTRING string;
+
+  int paramindex = 2;
+  int c          = 0;
+
+  while(mask[c])
+    {
+      switch(mask[c])
+        {
+          case '%' : {
+                        #define MAXTEMPOSTR 32
+
+                        XCHAR param[MAXTEMPOSTR];
+
+                        int  nparam = 1;
+                        bool end    = false;
+
+                        memset(param,0,MAXTEMPOSTR*sizeof(XCHAR));
+                        param[0] = '%';
+
+                        c++;
+
+                        switch(mask[c])
+                              {
+                                case __C('c')   :
+                                case __C('C')   :
+                                case __C('d')   :
+                                case __C('i')   :
+                                case __C('o')   :
+                                case __C('u')   :
+                                case __C('x')   :
+                                case __C('X')   : { int value = 0;
+                                                    library->GetParamConverted(params->Get(paramindex), value);
+                                                    string.Format(param, value);
+                                                    paramindex++;
+                                                    end  = true;
+                                                  }
+                                                  break;
+
+                                case __C('f')   : { float value = 0;
+                                                    library->GetParamConverted(params->Get(paramindex), value);
+                                                    string.Format(param, value);
+                                                    paramindex++;
+                                                    end  = true;
+                                                  }
+                                                  break;
+
+                                case __C('g')   :
+                                case __C('G')   :
+
+                                case __C('e')   :
+                                case __C('E')   :
+
+                                case __C('n')   :
+                                case __C('p')   : end = true;
+                                                  break;
+
+                                case __C('s')   :
+                                case __C('S')   : { XVARIANT variantparam = (*params->Get(paramindex));
+                                                    paramindex++;
+                                                    string.Format(param,(XCHAR*)variantparam);
+                                                    end = true;
+                                                  }
+                                                  break;
+
+                                case __C('%')   : string = __L("%");
+                                                  end = true;
+                                                  break;
+
+                                case __C('\0')  : end = true;
+                                                  break;
+
+                                      default   : break;
+                              }
+
+                      }
+                      break;
+
+            default : string.Set(mask[c]);
+                      c++;
+                      break;
+        }
+
+      outstring += string;
+    }
+
+  _out = outstring;
 }
+
+
+

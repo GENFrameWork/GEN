@@ -58,18 +58,6 @@ enum SCRIPT_TYPE
 };
 
 
-enum SCRIPT_CAPABILITY
-{
-  SCRIPT_CAPABILITY_NONE                  = 0x00000000,
-  SCRIPT_CAPABILITY_PROCESS               = 0x00000001,
-  SCRIPT_CAPABILITY_SYSTEM                = 0x00000002,
-  SCRIPT_CAPABILITY_FILESYSTEM_WRITE      = 0x00000004,
-  SCRIPT_CAPABILITY_INPUT_SIMULATE        = 0x00000008,
-  SCRIPT_CAPABILITY_WINDOW                = 0x00000010,
-  SCRIPT_CAPABILITY_ALL_UNSAFE            = 0x0000001F
-};
-
-
 class SCRIPT;
 class SCRIPT_LIB;
 
@@ -103,7 +91,6 @@ class SCRIPT : public XSUBJECT
     bool                                Save                          (XPATH& xpath);
 
     static bool                         LoadScriptAndRun              (XVECTOR<XSTRING*>* listscripts, SCRFUNCADJUSTLIBRARYS adjustlibrarys = NULL);
-    static bool                         ResolvePathInScriptsRoot      (XCHAR* namescript, XPATH& resolvedpath);
 
     bool                                AddReturnByType               ();
 
@@ -135,13 +122,6 @@ class SCRIPT : public XSUBJECT
 
     bool                                AddInternalLibraries          ();  
 
-    XDWORD                              GetCapabilities               ();
-    bool                                SetCapabilities               (XDWORD capabilities);
-    bool                                EnableCapabilities            (XDWORD capabilities);
-    bool                                DisableCapabilities           (XDWORD capabilities);
-    bool                                IsCapabilityEnabled           (SCRIPT_CAPABILITY capability);
-    bool                                IsLibraryFunctionAllowed      (SCRIPT_LIB* library, XCHAR* name);
-
     int                                 GetErrorScript                ();
     bool                                SetErrorScript                (int errorcode);
 
@@ -167,8 +147,6 @@ class SCRIPT : public XSUBJECT
 
     bool                                iscancelexec;
 
-    XDWORD                              capabilities;
-
     XVECTOR<SCRIPT_LIB*>                librarys;
     XVECTOR<SCRIPT_LIB_FUNCTION*>       libraryfunctions;
 
@@ -185,6 +163,7 @@ class SCRIPT : public XSUBJECT
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
+
 
 
 

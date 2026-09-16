@@ -173,7 +173,11 @@ void Call_RandMax(SCRIPT_LIB* library, SCRIPT* script , XVECTOR<XVARIANT*>* para
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 1)) return;
+  if(params->GetSize()<1)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   SCRIPT_LIB_RAND* librand = (SCRIPT_LIB_RAND*)library;
   if(!librand) return;
@@ -212,7 +216,11 @@ void Call_RandBetween(SCRIPT_LIB* library, SCRIPT* script , XVECTOR<XVARIANT*>* 
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(params->GetSize()<2)
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   SCRIPT_LIB_RAND* librand = (SCRIPT_LIB_RAND*)library;
   if(!librand) return;
@@ -230,5 +238,6 @@ void Call_RandBetween(SCRIPT_LIB* library, SCRIPT* script , XVECTOR<XVARIANT*>* 
 
   (*returnvalue) = (int)xrand->Between(min, max);
 }
+
 
 

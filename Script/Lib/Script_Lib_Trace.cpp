@@ -156,7 +156,11 @@ void Call_TraceClearScreen(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 1)) return;
+  if(!params->GetSize())
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   bool  recursive  = false;
   library->GetParamConverted(params->Get(0), recursive);
@@ -194,7 +198,11 @@ void Call_TraceClearMsgsStatus(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVAR
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 1)) return;
+  if(!params->GetSize())
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   bool  recursive  = false;
   library->GetParamConverted(params->Get(0), recursive);
@@ -231,30 +239,114 @@ void Call_TracePrintColor(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*
 
   returnvalue->Set();
 
-  if(!library->CheckParams(script, params, 2)) return;
+  if(!params->GetSize())
+    {
+      script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+      return;
+    }
 
   XDWORD    color       = 0;
   library->GetParamConverted(params->Get(0), color);
 
-  XVARIANT* maskparam = params->Get(1);
-  if(!maskparam) return;
-
-  XVARIANT  variantmask = (*maskparam);
+  XVARIANT  variantmask = (*params->Get(1));
   XCHAR*    mask = variantmask;
   XSTRING   outstring;
+  XSTRING   string;
+
+  int paramindex = 2;
+  int c          = 0;
 
   if(!mask) return;
 
-  SCRIPT_LIB_FORMATSTATUS formatstatus = library->FormatParams(params, 2, mask, outstring);
-  if(formatstatus != SCRIPT_LIB_FORMATSTATUS_OK)
+  while(mask[c])
     {
-      if(formatstatus == SCRIPT_LIB_FORMATSTATUS_INSUFFICIENT_PARAMS)
+      switch(mask[c])
         {
-          script->HaveError(SCRIPT_ERRORCODE_INSUF_PARAMS);
+          case '%' : {
+                        #define MAXTEMPOSTR 32
+
+                        XCHAR param[MAXTEMPOSTR];
+
+                        int  nparam = 1;
+                        bool end    = false;
+
+                        memset(param,0,MAXTEMPOSTR*sizeof(XCHAR));
+                        param[0] = '%';
+
+                        c++;
+
+                        do{ string.Empty();
+
+                            param[nparam] = mask[c];
+                            nparam++;
+
+                            switch(mask[c])
+                              {
+                                case __C('c')   :
+                                case __C('C')   :
+                                case __C('d')   :
+                                case __C('i')   :
+                                case __C('o')   :
+                                case __C('u')   :
+                                case __C('x')   :
+                                case __C('X')   : { int value = 0;
+                                                    library->GetParamConverted(params->Get(paramindex), value);
+                                                    string.Format(param, value);
+                                                    paramindex++;
+                                                    end  = true;
+                                                  }
+                                                  break;
+
+                                case __C('f')   : { float value = 0.0f;
+                                                    library->GetParamConverted(params->Get(paramindex), value);
+                                                    string.Format(param, value);
+                                                    paramindex++;
+                                                    end  = true;
+                                                  }
+                                                  break;
+
+                                case __C('g')   :
+                                case __C('G')   :
+
+                                case __C('e')   :
+                                case __C('E')   :
+
+                                case __C('n')   :
+                                case __C('p')   : end = true;
+                                                  break;
+
+                                case __C('s')   :
+                                case __C('S')   : { XVARIANT variantparam = (*params->Get(paramindex));
+                                                    paramindex++;
+                                                    string.Format(param,(XCHAR*)variantparam);
+                                                    end = true;
+                                                  }
+                                                  break;
+
+                                case __C('%')   : string = __L("%");
+                                                  end = true;
+                                                  break;
+
+                                case __C('\0')  : end = true;
+                                                  break;
+
+                                      default   : break;
+                              }
+
+                            c++;
+
+                          } while(!end);
+                      }
+                      break;
+
+            default : string.Set(mask[c]);
+                      c++;
+                      break;
         }
 
-      return;
+      outstring += string;
     }
 
- XTRACE_PRINTCOLOR(color, __L("%s"), outstring.Get());
+ XTRACE_PRINTCOLOR(color, outstring.Get());
 }
+

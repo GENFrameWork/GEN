@@ -59,28 +59,6 @@
 
 /*---- CLASS MEMBERS -------------------------------------------------------------------------------------------------*/
 
-struct SCRIPT_LNG_JAVASCRIPT_REGISTERDATA
-{
-  const char*     name;
-  duk_c_function callback;
-  void*           function;
-};
-
-
-static duk_ret_t SCRIPT_LNG_JAVASCRIPT_RegisterFunction(duk_context* context, void* udata)
-{
-  SCRIPT_LNG_JAVASCRIPT_REGISTERDATA* data = (SCRIPT_LNG_JAVASCRIPT_REGISTERDATA*)udata;
-  if(!context || !data || !data->name || !data->callback || !data->function) return DUK_RET_TYPE_ERROR;
-
-  duk_push_c_function(context, data->callback, DUK_VARARGS);
-  duk_push_pointer(context, data->function);
-  duk_put_prop_string(context, -2, "\xFF""_ptr");
-  duk_put_global_string(context, data->name);
-  duk_push_true(context);
-
-  return 1;
-}
-
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
@@ -97,12 +75,6 @@ SCRIPT_LNG_JAVASCRIPT::SCRIPT_LNG_JAVASCRIPT() : SCRIPT()
 
   //context = duk_create_heap(NULL, NULL, NULL, (void*)this, SCRIPT_LNG_JAVASCRIPT::FatalErrorHandler);
   context = duk_create_heap(NULL, NULL, NULL, (void*)this, NULL);
-  if(!context)
-    {
-      errorcode    = SCRIPT_ERRORCODE_INTERNALERROR;
-      iscancelexec = true;
-      return;
-    }
 
   AddInternalLibraries();
 
@@ -142,15 +114,6 @@ SCRIPT_LNG_JAVASCRIPT::~SCRIPT_LNG_JAVASCRIPT()
 * --------------------------------------------------------------------------------------------------------------------*/
 int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
 {
-  if(returnval) (*returnval) = 0;
-
-  if(!context)
-    {
-      errorcode    = SCRIPT_ERRORCODE_INTERNALERROR;
-      iscancelexec = true;
-      return errorcode;
-    }
-
   errorcode    = SCRIPT_ERRORCODE_NONE;
   iscancelexec = false;
 
@@ -169,22 +132,12 @@ int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
   duk_int_t error =  duk_peval_string(context, charstr.GetPtrChar());
   if(error) 
     {
-      if(errorcode == SCRIPT_ERRORCODE_NONE) HaveError(DUK_ERR_ERROR);
-      duk_pop(context);
-      return errorcode;
+      HaveError(DUK_ERR_ERROR);  
     }
-
+  
   if(returnval) 
     {
-      if(!duk_is_number(context, -1))
-        {
-          duk_push_string(context, "Script return value is not numeric");
-          HaveError(DUK_ERR_TYPE_ERROR);
-          duk_set_top(context, 0);
-          return errorcode;
-        }
-
-      (*returnval) = duk_get_int(context, -1);
+      (*returnval) =  duk_require_int(context, 0);
     }
 
   duk_pop(context);
@@ -208,9 +161,8 @@ int SCRIPT_LNG_JAVASCRIPT::Run(int* returnval)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_JAVASCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name, SCRFUNCIONLIBRARY ptrfunction)
 {
-  if(!context || !library || !name || !ptrfunction) return false;
-
   XSTRING namefunction;
+  XSTRING ptrfunctionstr;
 
   namefunction = name;
 
@@ -218,28 +170,11 @@ bool SCRIPT_LNG_JAVASCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name,
   
   namefunction.ConvertToASCII(charstr);
   
-  SCRIPT_LNG_JAVASCRIPT_REGISTERDATA registerdata;
+  duk_push_c_function(context, SCRIPT_LNG_JAVASCRIPT::LibraryCallBack, DUK_VARARGS);
 
-  registerdata.name     = charstr.GetPtrChar();
-  registerdata.callback = SCRIPT_LNG_JAVASCRIPT::LibraryCallBack;
-  registerdata.function = (void*)ptrfunction;
-
-  if(!duk_check_stack(context, 1))
-    {
-      errorcode    = SCRIPT_ERRORCODE_INTERNALERROR;
-      iscancelexec = true;
-      return false;
-    }
-
-  duk_int_t status = duk_safe_call(context, SCRIPT_LNG_JAVASCRIPT_RegisterFunction, &registerdata, 0, 1);
-  if(status != DUK_EXEC_SUCCESS)
-    {
-      HaveError(DUK_ERR_ERROR);
-      duk_pop(context);
-      return false;
-    }
-
-  duk_pop(context);
+  duk_push_pointer(context, (void *)ptrfunction);
+  duk_put_prop_string(context, -2, "\xFF""_ptr");
+  duk_put_global_string(context, charstr.GetPtrChar());
 
   return SCRIPT::AddLibraryFunction(library, name, ptrfunction);
 }
@@ -258,13 +193,6 @@ bool SCRIPT_LNG_JAVASCRIPT::AddLibraryFunction(SCRIPT_LIB* library, XCHAR* name,
 * --------------------------------------------------------------------------------------------------------------------*/
 bool SCRIPT_LNG_JAVASCRIPT::HaveError(int _errorcode)
 {
-  if(!context)
-    {
-      errorcode    = _errorcode?_errorcode:SCRIPT_ERRORCODE_INTERNALERROR;
-      iscancelexec = true;
-      return true;
-    }
-
   XSTRING   currenttoken;
   XPATH     namefile;
   int       errorcode    = _errorcode;
@@ -398,18 +326,12 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
 
   if(!libfunction) 
     {
-      duk_push_error_object(context, DUK_ERR_ERROR, "Script capability denied");
-      script->errorcode    = SCRIPT_ERRORCODE_CAPABILITY_DENIED;
-      script->iscancelexec = true;
-      return duk_throw(context);
+      return 0;
     }
 
   if(!libfunction->GetFunctionLibrary()) 
     {
-      duk_push_error_object(context, DUK_ERR_ERROR, "Script capability denied");
-      script->errorcode    = SCRIPT_ERRORCODE_CAPABILITY_DENIED;
-      script->iscancelexec = true;
-      return duk_throw(context);
+      return 0;
     }
 
   duk_pop_2(context);
@@ -437,15 +359,15 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
                                               break;
 
               case DUK_TYPE_BOOLEAN        :  // ECMAScript boolean: 0 or 1
-                                              (*variant) = (duk_get_boolean(context, c)?true:false);
+                                              (*variant) = (duk_require_boolean(context, c)?true:false);
                                               break;
 
               case DUK_TYPE_NUMBER         :  // ECMAScript number: double
-                                              (*variant) = (double)duk_get_number(context, c);
+                                              (*variant) = (double)duk_require_number(context, c);
                                               break;
 
               case DUK_TYPE_STRING         :  // ECMAScript string: CESU-8 / extended UTF-8 encoded
-                                              (*variant) = (char*)duk_get_string(context, c);
+                                              (*variant) = (char*)duk_require_string(context, c);
                                               break;
 
               case DUK_TYPE_OBJECT         :  // ECMAScript object: includes objects, arrays, functions, threads
@@ -491,8 +413,12 @@ duk_ret_t SCRIPT_LNG_JAVASCRIPT::LibraryCallBack(duk_context* context)
       case XVARIANT_TYPE_INTEGER       :  duk_push_int(context, (int)(returnvalue));     nreturnvalues++;   break;
       case XVARIANT_TYPE_CHAR          :  duk_push_int(context, (int)(returnvalue));     nreturnvalues++;   break;
       case XVARIANT_TYPE_XCHAR         :                                                                    break;
-      case XVARIANT_TYPE_FLOAT         :  duk_push_number(context, (duk_double_t)(float)(returnvalue));     nreturnvalues++;   break;
-      case XVARIANT_TYPE_DOUBLE        :  duk_push_number(context, (duk_double_t)(double)(returnvalue));    nreturnvalues++;   break;
+      case XVARIANT_TYPE_FLOAT         :  { XDWORD data = returnvalue;
+
+                                            duk_push_int(context, data);
+                                            nreturnvalues++;
+                                          }
+                                          break;
 
       case XVARIANT_TYPE_STRING        : { XSTRING stringreturnvalue;
 
