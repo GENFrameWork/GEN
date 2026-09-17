@@ -520,10 +520,13 @@ bool XLOGBASE::AddEntry(XLOGLEVEL level, XCHAR* sectionID, bool inmemory, XCHAR*
 
   if(sectionID)
     {
-      if(!PassFilters(level, sectionID))
+      if(sectionID[0])
         {
-          mutex->UnLock();
-          return false;
+          if(!PassFilters(level, sectionID))
+            {
+              mutex->UnLock();
+              return false;
+            }
         }
     }
 

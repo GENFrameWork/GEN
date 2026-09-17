@@ -57,12 +57,13 @@ class SCRIPT_LIB_LOG : public SCRIPT_LIB
     bool                  AddLibraryFunctions     (SCRIPT* script);
 
     XLOGBASE*             GetLog                  ();
+    void                  SetLog                  (XLOGBASE* log);
     
   private:
 
     void                  Clean                   ();
 
-    XLOGBASE              log;
+    XLOGBASE*             log;
 
 
 };

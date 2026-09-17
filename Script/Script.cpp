@@ -118,8 +118,6 @@ SCRIPT::SCRIPT()
   RegisterEvent(SCRIPT_XEVENT_TYPE_BREAK);
 
   thread = CREATEXTHREAD(XTHREADGROUPID_SCRIPT, __L("SCRIPT::SCRIPT"),ThreadFunction,(void*)this);
-
-  AddInternalLibraries();
 }
 
 

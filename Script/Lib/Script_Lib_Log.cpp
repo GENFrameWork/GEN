@@ -83,6 +83,11 @@ SCRIPT_LIB_LOG::SCRIPT_LIB_LOG() : SCRIPT_LIB(SCRIPT_LIB_NAME_LOG)
 * --------------------------------------------------------------------------------------------------------------------*/
 SCRIPT_LIB_LOG::~SCRIPT_LIB_LOG()
 {
+  if(log)
+    {
+      delete log;
+    }
+
   Clean();
 }
 
@@ -125,8 +130,23 @@ bool SCRIPT_LIB_LOG::AddLibraryFunctions(SCRIPT* script)
 * --------------------------------------------------------------------------------------------------------------------*/
 XLOGBASE* SCRIPT_LIB_LOG::GetLog()
 {
-  return &log;
+  return log;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void SCRIPT_LIB_LOG::SetLog(XLOGBASE* log)
+* @brief      set log
+* @ingroup    SCRIPT
+* 
+* @param[in]  log : 
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void SCRIPT_LIB_LOG::SetLog(XLOGBASE* log)
+{
+  this->log = log;
+}   
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -139,9 +159,8 @@ XLOGBASE* SCRIPT_LIB_LOG::GetLog()
 * --------------------------------------------------------------------------------------------------------------------*/
 void SCRIPT_LIB_LOG::Clean()
 {
-  
+  log = NULL;
 }
-
 
 
 
@@ -176,9 +195,13 @@ void Call_Log_Ini(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* param
     }
 
   SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
+
   if(!liblog->GetLog())
-    {
-      return;   
+    { 
+      XLOGBASE* log = new XLOGBASE();
+      if (!log) return;
+
+      liblog->SetLog(log);  
     }
 
   XSTRING  path;
@@ -221,20 +244,18 @@ void Call_Log_CFG_SetLimit(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT
       return;
     }
 
-  SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
-  if(!liblog->GetLog())
-    {
-      return;   
+  SCRIPT_LIB_LOG* liblog            = (SCRIPT_LIB_LOG*)library;
+  int             limit             = 0;
+  int             reductionpercent  = 0;
+  bool            status            = false; 
+
+  if(liblog->GetLog())
+    { 
+      library->GetParamConverted(params->Get(0), limit);
+      library->GetParamConverted(params->Get(1), reductionpercent);
+
+      status = liblog->GetLog()->SetLimit(XLOGTYPELIMIT_SIZE, limit, reductionpercent);
     }
-
-  int     limit             = 0;
-  int     reductionpercent  = 0;
-  bool    status            = false; 
-
-  library->GetParamConverted(params->Get(0), limit);
-  library->GetParamConverted(params->Get(1), reductionpercent);
-
-  status = liblog->GetLog()->SetLimit(XLOGTYPELIMIT_SIZE, limit, reductionpercent);
   
   (*returnvalue) = status;
 }
@@ -267,20 +288,18 @@ void Call_Log_CFG_SetFilters(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIA
       return;
     }
 
-  SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
-  if(!liblog->GetLog())
-    {
-      return;   
+  SCRIPT_LIB_LOG* liblog        = (SCRIPT_LIB_LOG*)library;
+  XSTRING         sectionsID;
+  int             levelmask;
+  bool            status        = false; 
+
+  if(liblog->GetLog())
+    { 
+      library->GetParamConverted(params->Get(0), sectionsID);
+      library->GetParamConverted(params->Get(1), levelmask);
+
+      status = liblog->GetLog()->SetFilters(sectionsID.Get(), levelmask);
     }
-
-  XSTRING sectionsID;
-  int     levelmask;
-  bool    status            = false; 
-
-  library->GetParamConverted(params->Get(0), sectionsID);
-  library->GetParamConverted(params->Get(1), levelmask);
-
-  status = liblog->GetLog()->SetFilters(sectionsID.Get(), levelmask);
   
   (*returnvalue) = status;
 }
@@ -313,23 +332,21 @@ void Call_Log_CFG_SetBackup(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIAN
       return;
     }
 
-  SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
-  if(!liblog->GetLog())
-    {
-      return;   
+  SCRIPT_LIB_LOG* liblog        = (SCRIPT_LIB_LOG*)library;
+  bool            activebackup  = false;
+  int             maxfiles      = 0; 
+  bool            iscompress    = false;
+  bool            status        = false;
+
+  if(liblog->GetLog())
+    {    
+      library->GetParamConverted(params->Get(0), activebackup);
+      library->GetParamConverted(params->Get(1), maxfiles);
+      library->GetParamConverted(params->Get(1), iscompress);
+
+      status = liblog->GetLog()->SetBackup(activebackup, maxfiles, iscompress);     
     }
-
-  bool activebackup  = false;
-  int  maxfiles      = 0; 
-  bool iscompress    = false;
-  bool status        = false;
-
-  library->GetParamConverted(params->Get(0), activebackup);
-  library->GetParamConverted(params->Get(1), maxfiles);
-  library->GetParamConverted(params->Get(1), iscompress);
-
-  status = liblog->GetLog()->SetBackup(activebackup, maxfiles, iscompress);     
-  
+     
   (*returnvalue) = status;
 }
 
@@ -361,15 +378,10 @@ void Call_Log_AddEntry(SCRIPT_LIB* library, SCRIPT* script, XVECTOR<XVARIANT*>* 
       return;
     }
 
-  SCRIPT_LIB_LOG* liblog = (SCRIPT_LIB_LOG*)library;
-  if(!liblog->GetLog())
-    {
-      return;   
-    }
-
-  int       level   = 0;
-  XVARIANT* variant = params->Get(1);
-  XSTRING   section = (*variant);  
+  SCRIPT_LIB_LOG* liblog  = (SCRIPT_LIB_LOG*)library;  
+  int             level   = 0;
+  XVARIANT*       variant = params->Get(1);
+  XSTRING         section = (*variant);  
     
   library->GetParamConverted(params->Get(0), level);
   
