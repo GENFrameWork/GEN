@@ -141,10 +141,12 @@ bool UI_CSSPARSER::ParseFile(XPATH& pathfile, UI_STYLESHEET& out)
 
           currentfiledir  = drive;
           currentfiledir += dir;
+          currentfilepath = pathfile;
 
           status = ParseText(alltext, out);
 
           currentfiledir = savedcurrentfiledir;
+          currentfilepath.Empty();
 
           if(marker)
             {
@@ -185,6 +187,10 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
   int pos        = 0;
   int len        = (int)text.GetSize();
   int ruleindex  = 0;   // 1-based, counts every rule ATTEMPT (kept or discarded) -- Step 11 debug trace only.
+  int rules_kept = 0;
+
+  discarded_rules        = 0;
+  unterminated_comments  = 0;
 
   while(pos < len)
     {
@@ -247,7 +253,12 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
           ResolveLineColumn(text, rulestartcolumn, startline, startcol);
           ResolveLineColumn(text, pos,              endline,   endcol);
           XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d discarded: malformed selector or declaration block (started at line %d, column %d; gave up at line %d, column %d)"), ruleindex, startline, startcol, endline, endcol);
+          if(!currentfilepath.IsEmpty())
+            {
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] file [%s] rule #%d discarded (lines %d:%d .. %d:%d)"), currentfilepath.Get(), ruleindex, startline, startcol, endline, endcol);
+            }
 
+          discarded_rules++;
           GEN_DELETE rule;
           SkipToNextRule(text, pos);
           continue;
@@ -260,7 +271,12 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
           int line, col;
           ResolveLineColumn(text, rulestartcolumn, line, col);
           XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d dropped: parsed with %d selector(s) and %d declaration(s) (started at line %d, column %d)"), ruleindex, (int)rule->GetSelectors().GetSize(), (int)rule->GetDeclarations().GetProperties()->GetSize(), line, col);
+          if(!currentfilepath.IsEmpty())
+            {
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] file [%s] rule #%d empty after parse (line %d, column %d)"), currentfilepath.Get(), ruleindex, line, col);
+            }
 
+          discarded_rules++;
           GEN_DELETE rule;
           continue;
         }
@@ -295,6 +311,7 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
         }
 
       out.Rules_Add(rule);
+      rules_kept++;
     }
 
   // Resolve variable references now -- but ONLY if this ParseText() call is the outermost one, i.e. not itself
@@ -311,6 +328,25 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
   // e.g. by a test or any future direct caller) has importdepth == 0 by construction and keeps expanding
   // immediately, exactly as before.
   if(importdepth == 0) out.ExpandVariables();
+
+  // Phase 0 hygiene: make the "comment */ killed the rest of the file" failure mode impossible to miss.
+  if(importdepth == 0)
+    {
+      if(unterminated_comments > 0)
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[CSS Parse] ERROR: %d unterminated comment(s)%s%s -- rest of stylesheet may be truncated"), unterminated_comments, currentfilepath.IsEmpty() ? __L("") : __L(" in "), currentfilepath.IsEmpty() ? __L("") : currentfilepath.Get());
+        }
+
+      if(discarded_rules > 0)
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] summary: kept %d rule(s), discarded %d%s%s"), rules_kept, discarded_rules, currentfilepath.IsEmpty() ? __L("") : __L(" in "), currentfilepath.IsEmpty() ? __L("") : currentfilepath.Get());
+        }
+
+      if((len > 0) && (rules_kept == 0) && (discarded_rules > 0))
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[CSS Parse] ERROR: non-empty CSS produced ZERO kept rules (%d discarded)%s%s -- check for an early '*/' inside a block comment (prose with asterisk+slash). UI may paint fully transparent."), discarded_rules, currentfilepath.IsEmpty() ? __L("") : __L(" in "), currentfilepath.IsEmpty() ? __L("") : currentfilepath.Get());
+        }
+    }
 
   return true;
 }
@@ -414,15 +450,27 @@ void UI_CSSPARSER::SkipWhitespaceAndComments(XSTRING& text, int& pos)
 
       if(ch == __C('/') && (pos + 1) < len && text[pos + 1] == __C('*'))
         {
+          int commentstart = pos;
           pos += 2;
+          bool closed = false;
           while(pos < len)
             {
               if(text[pos] == __C('*') && (pos + 1) < len && text[pos + 1] == __C('/'))
                 {
                   pos += 2;
+                  closed = true;
                   break;
                 }
               pos++;
+            }
+          if(!closed)
+            {
+              // Unterminated comment: consume to EOF (legacy behaviour) but surface a hard ERROR so authors
+              // notice -- this is the same class of silent truncation as an early */ inside a long header.
+              unterminated_comments++;
+              int line, col;
+              ResolveLineColumn(text, commentstart, line, col);
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[CSS Parse] ERROR: unterminated comment starting at line %d, column %d%s%s"), line, col, currentfilepath.IsEmpty() ? __L("") : __L(" in "), currentfilepath.IsEmpty() ? __L("") : currentfilepath.Get());
             }
           continue;
         }
@@ -1171,5 +1219,8 @@ void UI_CSSPARSER::Clean()
   importstack.DeleteAll();
 
   currentfiledir.Empty();
-  importdepth = 0;
+  currentfilepath.Empty();
+  importdepth             = 0;
+  discarded_rules         = 0;
+  unterminated_comments   = 0;
 }

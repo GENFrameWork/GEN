@@ -56,6 +56,8 @@ class UI_ELEMENT_TEXT : public UI_ELEMENT
 
     XDWORD                            GetMaxSizeText              ();
     void                              SetMaxSizeText              (XDWORD maxsizetext);
+
+    virtual void                      ReapplyStyleVisual          ();
   	
   private:
 

@@ -44,6 +44,7 @@
 
 #include "UI_Property_Scrolleable.h"
 #include "UI_Animation.h"
+#include "UI_Manager.h"
 
 
 
@@ -1048,6 +1049,20 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
   diagskin_visits++;
 
   if(!element) return false;
+
+  // Modal layer (option B): while the opaque offscreen cache is valid, skip layout Draw of the modal root —
+  // Element_DrawModalOnTop blits (and rebuilds offscreen when dirty) after content and chrome.
+  if(GEN_USERINTERFACE.ModalLayer_IsLayoutDrawDeferred(element))
+    {
+      return true;
+    }
+
+  // Content under composed modal or visible custom caption must not paint (punch / title ghosts).
+  if(GEN_USERINTERFACE.Overlay_SuppressesContentDraw(element))
+    {
+      element->SetMustReDraw(false);
+      return true;
+    }
 
   if(!element->IsVisible())
     {

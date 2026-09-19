@@ -248,3 +248,79 @@ bool UI_PROPERTYREGISTRY::ParseBoxShadow(XSTRING& raw, double& outoffsetx, doubl
 
   return valid;
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_PROPERTYREGISTRY::ResolveMarginEdges(UI_STYLE& style, bool use_css_trbl, bool apply_longhands, double out_lrud[4])
+* @brief      Resolve margin shorthand + optional longhands into LEFT/RIGHT/UP/DOWN edges.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  style : Style bag (XML attrs + CSS cascade + inline style already merged).
+* @param[in]  use_css_trbl : true = 4-value shorthand is TOP,RIGHT,BOTTOM,LEFT; false = LEFT,RIGHT,UP,DOWN.
+* @param[in]  apply_longhands : true = honour margin-top/right/bottom/left after the shorthand.
+* @param[out] out_lrud : Receives LEFT, RIGHT, UP, DOWN when any margin key was present.
+*
+* @return     bool : true if at least one margin key was present; otherwise false (out_lrud untouched).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_PROPERTYREGISTRY::ResolveMarginEdges(UI_STYLE& style, bool use_css_trbl, bool apply_longhands, double out_lrud[4])
+{
+  if(!out_lrud) return false;
+
+  double left = 0.0, right = 0.0, up = 0.0, down = 0.0;
+  bool   any  = false;
+
+  XSTRING marginstr;
+  if(style.Get(__L("margin"), marginstr))
+    {
+      any = true;
+
+      double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
+      XDWORD n = TokenizeNumbers(marginstr, vals, 4);
+
+      if(n == 4 && !use_css_trbl)
+        {
+          // Legacy 4-value form (no stylesheet): LEFT, RIGHT, UP, DOWN.
+          left  = vals[0];
+          right = vals[1];
+          up    = vals[2];
+          down  = vals[3];
+        }
+       else
+        {
+          // CSS TRBL: 4 values TOP,RIGHT,BOTTOM,LEFT; 1-3 via ExpandCSSShorthand4 table.
+          double out[4] = { 0.0, 0.0, 0.0, 0.0 };
+          if(n == 4)
+            {
+              out[0] = vals[0]; out[1] = vals[1]; out[2] = vals[2]; out[3] = vals[3];
+            }
+           else
+            {
+              ExpandCSSShorthand4(marginstr, out);
+            }
+
+          up    = out[0];
+          right = out[1];
+          down  = out[2];
+          left  = out[3];
+        }
+    }
+
+  if(apply_longhands)
+    {
+      double mv = 0.0;
+      if(style.Get(__L("margin-left")  , mv)) { left  = mv; any = true; }
+      if(style.Get(__L("margin-right") , mv)) { right = mv; any = true; }
+      if(style.Get(__L("margin-top")   , mv)) { up    = mv; any = true; }
+      if(style.Get(__L("margin-bottom"), mv)) { down  = mv; any = true; }
+    }
+
+  if(!any) return false;
+
+  out_lrud[0] = left;
+  out_lrud[1] = right;
+  out_lrud[2] = up;
+  out_lrud[3] = down;
+  return true;
+}

@@ -452,6 +452,14 @@ class UI_LAYOUTENGINE
     static void                    ApplyRelativeOffset           (UI_LAYOUTBOX* box);
     static void                    ApplyAbsolutePosition         (UI_LAYOUTBOX* box, UI_LAYOUTBOX* containingblock);
     static void                    WriteBackRecursive             (UI_ELEMENT* element, UI_LAYOUTBOX* box);
+    // True if this element or any descendant is a flex/grid container. Used by RunLayout to leave pure
+    // absolute XML trees (UI_Options, etc.) completely untouched -- WriteBack must not rewrite VisibleRect/
+    // BoundaryLine when CSS flow never ran.
+    static bool                    SubtreeUsesCSSFlowLayout       (UI_ELEMENT* element);
+    // Single arrange-then-recurse walk used by RunLayout: flex and/or grid at THIS node, THEN children.
+    // Separate full-tree ApplyFlexLayout/ApplyGridLayout passes break nested flex-inside-grid (and vice versa)
+    // because the second pass moves parents without re-arranging already-finished descendants.
+    static void                    ApplyFlowLayoutRecursive       (UI_LAYOUTBOX* box);
     static void                    ApplyFlexLayoutRecursive       (UI_LAYOUTBOX* box);
     static void                    ArrangeFlexChildren             (UI_LAYOUTBOX* container);
     static void                    ResolveFlexItemSizes            (UI_LAYOUTBOX* container);

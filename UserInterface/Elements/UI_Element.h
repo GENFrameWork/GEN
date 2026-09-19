@@ -42,6 +42,7 @@
 // BuildTree() can copy an element's Flexbox properties onto its mirrored UI_LAYOUTBOX with a plain assignment,
 // no translation table. UI_LayoutBox.h has no dependency on this header, so this include is one-directional.
 #include "UI_LayoutBox.h"
+#include "UI_Style.h"
 
 
 
@@ -170,12 +171,19 @@ class UI_ELEMENT : public XSUBJECT
 
 		void																	SnapshotStyleVisual					();
 
+		// Virtual so typed widgets (Text, Progress, ...) can re-apply subclass keys (sizefont, linecolor, ...)
+		// when a pseudo-class state change re-resolves the stylesheet. Base handles color/bg/border/shadow.
+		// No-op when no stylesheet / no snapshot / no state rules -- XML-only layouts unchanged.
+		virtual void													ReapplyStyleVisual					();
 
+		// Walk compose subtree calling ReapplyStyleVisual() on each node (used when an ancestor's :selected
+		// changes and descendants match combinator rules). Safe no-op per node without state rules.
+		void																	ReapplyStyleVisualRecursive	();
 
-
-		void																	ReapplyStyleVisual					();
-
-
+		// Phase 1: bag captured at end of load (XML < CSS < inline). Used by typed Reapply overrides and
+		// optional re-layout. Empty when no properties were stored (XML-only still works).
+		UI_STYLE*															GetComputedStyle						();
+		void																	StoreComputedStyle					(UI_STYLE& style);
 
 
 		bool																	GetStyleHasStateRules				();
@@ -390,6 +398,24 @@ class UI_ELEMENT : public XSUBJECT
 		UI_ALIGN_SELF													GetAlignSelf								();
 		void																	SetAlignSelf								(UI_ALIGN_SELF alignself);
 
+		// CSS Grid (Phase 3): mirrors UI_LAYOUTBOX grid container/item props. display:grid + templates.
+		bool																	IsGridContainer							();
+		void																	SetGridContainer						(bool isgridcontainer);
+		void																	ClearGridColumnTracks				();
+		void																	AddGridColumnTrack					(UI_GRIDTRACK track);
+		XVECTOR<UI_GRIDTRACK>&									GetGridColumnTracks					();
+		void																	ClearGridRowTracks					();
+		void																	AddGridRowTrack							(UI_GRIDTRACK track);
+		XVECTOR<UI_GRIDTRACK>&									GetGridRowTracks						();
+		XDWORD																GetGridColumnSpan						();
+		void																	SetGridColumnSpan						(XDWORD span);
+		XDWORD																GetGridRowSpan							();
+		void																	SetGridRowSpan							(XDWORD span);
+
+		// Phase 4: pointer-down state (CSS :pressed). Distinct from :active which mirrors GEN isactive/enabled.
+		bool																	IsPressed										();
+		void																	SetPressed									(bool ispressed);
+
 		// Phase 4 ("migracion del ejemplo" -- footer icon/text gap regression fix): the "content size" a flex
 		// item's basis (flex-basis: auto) must be measured from, kept SEPARATE from the item's live BoundaryLine
 		// width/height -- see UI_LayoutEngine.cpp's BuildTree() and UI_Skin.cpp's CalculateBoundaryLine() for
@@ -522,6 +548,17 @@ class UI_ELEMENT : public XSUBJECT
 
 		bool																	snapshot_taken;
 		bool																	style_has_state_rules;
+
+		// Phase 1: load-time cascaded bag (owned). NULL until StoreComputedStyle().
+		UI_STYLE*															computed_style;
+
+		bool																	css_gridcontainer;
+		XVECTOR<UI_GRIDTRACK>									css_gridcolumntracks;
+		XVECTOR<UI_GRIDTRACK>									css_gridrowtracks;
+		XDWORD																css_gridcolumnspan;
+		XDWORD																css_gridrowspan;
+
+		bool																	ispressed;
 };
 
 

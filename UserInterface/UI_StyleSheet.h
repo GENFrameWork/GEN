@@ -145,6 +145,16 @@ class UI_CSSANCESTORPROVIDER
     // the duration of the call -- mirroring UI_ELEMENT::GetTypeString()/GetName()/GetClassNames(), any of
     // which may legitimately come back NULL (no type string, no id, no classes) exactly as they do today.
     virtual bool                    GetAncestor                 (int depth, XSTRING** outtype, XSTRING** outid, XVECTOR<XSTRING*>** outclasses) = 0;
+
+    // Optional: append the ancestor's live pseudo names into `outpseudos` (caller owns any XSTRING* added;
+    // default no-op keeps combinator matching structural-only for test doubles). Real UI_ELEMENT providers
+    // fill from GetActivePseudos() so selectors like `form.nav-row:selected .nav-label` work.
+    virtual bool                    FillAncestorPseudos         (int depth, XVECTOR<XSTRING*>& outpseudos)
+                                      {
+                                        (void)depth;
+                                        (void)outpseudos;
+                                        return false;
+                                      }
 };
 
 
@@ -300,6 +310,8 @@ class UI_STYLESHEET
 
 
     void                            ExpandVariables             ();
+    // Phase 4: expand var(--x[, fallback]) in a single value string against this sheet's :root table.
+    bool                            ExpandValueVars             (XSTRING& in, XSTRING& out);
 
 
 

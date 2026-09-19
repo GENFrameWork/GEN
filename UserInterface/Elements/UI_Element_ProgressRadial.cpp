@@ -36,6 +36,10 @@
 
 #include "UI_Element_ProgressRadial.h"
 
+#include "UI_Layout.h"
+#include "UI_Style.h"
+#include "UI_StyleSheet.h"
+
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -294,6 +298,43 @@ int UI_ELEMENT_PROGRESS_RADIAL::GetGradientMode()
 void UI_ELEMENT_PROGRESS_RADIAL::SetGradientMode(int gradientmode)
 {
   this->gradientmode = gradientmode;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_PROGRESS_RADIAL::ReapplyStyleVisual()
+* @brief      Base visual keys plus radial-typed keys (thickness, gradientcolor, linecolor) when a stylesheet
+*             drives :hover/:selected. No-op without stylesheet / state rules (XML-only unchanged).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_PROGRESS_RADIAL::ReapplyStyleVisual()
+{
+  UI_ELEMENT::ReapplyStyleVisual();
+
+  if(!GetStyleHasStateRules()) return;
+
+  UI_LAYOUT*     layout = GetLayout();
+  UI_STYLESHEET* sheet  = layout ? layout->GetStyleSheet() : NULL;
+  if(!sheet) return;
+
+  UI_STYLE bag;
+  bag.FillFromCSSDeclarations(sheet, this);
+
+  XSTRING v;
+  double  d;
+
+  if(bag.Get(__L("linecolor")    , v)) GetLineColor()->SetFromString(v);
+  if(bag.Get(__L("gradientcolor"), v)) GetGradientColor()->SetFromString(v);
+  if(bag.Get(__L("thickness")    , d) && d > 0.0) SetThickness(d);
+
+  XSTRING gradientmode;
+  if(bag.Get(__L("gradientmode"), gradientmode))
+    {
+      if(!gradientmode.Compare(__L("track"), true)) SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_TRACK);
+      if(!gradientmode.Compare(__L("fill") , true)) SetGradientMode(UI_ELEMENT_PROGRESS_GRADIENTMODE_FILL);
+    }
 }
 
 

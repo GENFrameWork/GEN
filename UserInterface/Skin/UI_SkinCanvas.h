@@ -87,6 +87,10 @@ class UI_SKINCANVAS_REBUILDAREAS : public GRP2DREBUILDAREAS
 
     GRPBITMAP*												GetBitmap																(double x, double y, double width, double height);
     void															PutBitmapNoAlpha												(double x, double y, GRPBITMAP* bitmap);
+
+    // Retarget GetBitmap/PutBitmapNoAlpha for modal offscreen composition (option B).
+    void                              SetTargetCanvas                         (GRP2DCANVAS* newcanvas);
+    GRP2DCANVAS*                      GetTargetCanvas                         ();
   
 		GRP2DREBUILDAREA*									GetRebuildAreaByElement									(UI_ELEMENT* element);					
 
@@ -135,7 +139,9 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		static void												GetScrollViewportSize										(UI_ELEMENT* element, double& width, double& height);
 
 		GRPSCREEN*                        GetScreen																(); 
-		GRP2DCANVAS*                      GetCanvas																(); 
+		GRP2DCANVAS*                      GetCanvas																();
+    // Option B: while rebuilding the modal offscreen buffer, Draw_* must target that canvas.
+    void                              SetCanvasOverride                       (GRP2DCANVAS* override_canvas); 
 		
 		bool															LoadFonts																();
 
@@ -186,6 +192,18 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		// element had been allowed one last real redraw instead of being skipped.
 		virtual bool                      RestoreOnHide														(UI_ELEMENT* element);
 
+		// COMPOSITION-RESET (2026-09): drop EVERY persistent "true backdrop" cache plus the one-shot rebuild
+		// areas. Required whenever the canvas under the widgets is fully rewritten (Layout_PutBackground,
+		// virtual-keyboard modal show/hide, etc.): those caches were captured against the PREVIOUS composition,
+		// and restoring them with PutBitmapNoAlpha after a fresh background paint produces opaque white/stale
+		// rectangles over menus, progress tracks and chrome (reproduced in UI_Options when the virtual keyboard
+		// appears). Next Draw_* will re-capture from the new background. Framework-wide -- not example-specific.
+		void                               InvalidateCompositionCaches							();
+
+		// Diagnostics / unit tests: total entries across every persistent backdrop cache (0 after a successful
+		// InvalidateCompositionCaches). Does not include one-shot rebuild areas.
+		XDWORD                             CompositionCacheCount									();
+
 	  virtual bool                      Draw_Scroll															(UI_ELEMENT* element);
 	  virtual bool                      Draw_Text																(UI_ELEMENT* element);
 		virtual bool											Draw_TextBox														(UI_ELEMENT* element);
@@ -234,6 +252,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
     GRPSCREEN*												screen;
 	  int																viewportindex;
 		XPATH															fontpathfile;
+    GRP2DCANVAS*                      canvas_override;
 
 	private:
 

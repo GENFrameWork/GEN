@@ -46,6 +46,11 @@ enum UI_VIRTUALKEYBOARD_SET
 
 #define UI_VIRTUALKEYBOARD_ELEMENTID   __L("@[VK_KEY]_")
 
+// Top band inside the keyboard form that hosts the live input edit (above the key rows).
+#define UI_VIRTUALKEYBOARD_INPUTBAND_HEIGHT   56
+#define UI_VIRTUALKEYBOARD_INPUT_HEIGHT       40
+#define UI_VIRTUALKEYBOARD_INPUT_NAME         __L("@[VK_INPUT]")
+
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -58,6 +63,7 @@ class UI_SKIN;
 class UI_ANIMATION;
 class UI_ELEMENT;
 class UI_ELEMENT_FORM;
+class UI_ELEMENT_EDITTEXT;
 
 
 class UI_VIRTUALKEYBOARD_KEYINFO
@@ -92,6 +98,11 @@ class UI_VIRTUALKEYBOARD
     bool                          Show                              (bool on, UI_ELEMENT* element_editable = NULL);
 
     UI_ELEMENT*                   GetElementEditable                ();
+    UI_ELEMENT_EDITTEXT*          GetElementInput                   ();
+
+    // True when "element" belongs to the keyboard form (keys or the in-keyboard input edit). Used so selecting
+    // the input field does not reopen another keyboard session on top of itself.
+    bool                          IsOwnElement                      (UI_ELEMENT* element);
 
     bool                          SelectInput                       (UI_ELEMENT* key_select);      
 
@@ -102,8 +113,10 @@ class UI_VIRTUALKEYBOARD
     UI_ANIMATION*                 AddImageCache                     (XCHAR* name, XCHAR* resource);
     GRPBITMAP*                    LoadKeyImage                      (XCHAR* pathimage);
     bool                          AddKeyButton                      (XCHAR* leyend, XCHAR* text, XCHAR* pathbitmap, UI_VIRTUALKEYBOARD_KEYINFO& keyinfo);
+    bool                          CreateInputField                  (double sizewidth, double sizeheight);
     bool                          CreateAllKeys                     (double x, double y);
     bool                          DeleteAllKeys                     ();
+    bool                          CommitInputToEditable             ();
         
     void                          Clean                             ();
 
@@ -112,7 +125,8 @@ class UI_VIRTUALKEYBOARD
     UI_SKIN*                      skin;
     bool                          isshow;
     UI_ELEMENT_FORM*              main_form;
-    UI_ELEMENT*                   element_editable;
+    UI_ELEMENT*                   element_editable;   // layout edit that opened the keyboard (commit target)
+    UI_ELEMENT_EDITTEXT*          element_input;      // live edit inside the keyboard form
     double                        width;
     double                        height;
     UI_VIRTUALKEYBOARD_SET        actualset;
@@ -123,7 +137,6 @@ class UI_VIRTUALKEYBOARD
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
-
 
 
 

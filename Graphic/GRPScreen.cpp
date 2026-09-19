@@ -947,6 +947,18 @@ bool GRPSCREEN::SetCFGChromes(GRPSCREENCFGCHROMES& cfgchromes)
 
   cfgchromesactive = true;
 
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  // Auto-hide enabled: start with the caption HIDDEN. Showing it from frame 0 painted the chrome over the
+  // top band and ChromeCaption_SuppressesContentDraw froze ListBoxMenu / edit until the bar auto-hid
+  // (UI_Options startup: native-looking chrome first, menu+edit missing). Show only when the cursor enters
+  // the caption area (UpdateCFGChromesAutoHide — show is instantaneous).
+  if(!cfgchromes.GetUseNativeChromes() && cfgchromes.GetCustomAutoHide() > 0)
+    {
+      cfgchromesautohidevisible = false;
+      cfgchromesautohidedesired = false;
+    }
+  #endif
+
   return true;
 }
 
@@ -1043,12 +1055,9 @@ bool GRPSCREEN::LoadCFGChromesLayout()
       ((UI_ELEMENT_TEXT*)titleelement)->GetText()->Set(GetTitle()->Get());
     }
 
-  // Sync the caption element's actual visibility to the initial desired state
-  // (cfgchromesautohidevisible == true from Clean()). Without this, an XML
-  // layout that authors the caption with visible="false" (common when auto-hide
-  // is the default behaviour) would start hidden and UpdateCFGChromesAutoHide()
-  // would never have a chance to show it on the GL/EGL path used by KDE native
-  // X11, where keyboard focus may not be granted immediately.
+  // Sync the caption element's actual visibility to the initial desired state. When CustomAutoHide > 0,
+  // SetCFGChromes() already set cfgchromesautohidevisible = false so the first frames show layout content
+  // (menu / edit) without the caption band. When auto-hide is disabled, the default remains visible.
   UI_ELEMENT* captionelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
   if(captionelement)
     {
@@ -1672,9 +1681,43 @@ bool GRPSCREEN::UpdateCFGChromesAutoHide()
       // the caption for GetCustomAutoHide() milliseconds -- that parameter is a HIDE delay only.
       if(cfgchromesautohidedesired || (cfgchromesautohidetimer->GetMeasureMilliSeconds() >= timehidden))
         {
-          cfgchromesautohidevisible = cfgchromesautohidedesired;
+          bool becomingvisible = cfgchromesautohidedesired;
 
-          GRPSCREEN_SetElementVisibleRecursive(captionelement, cfgchromesautohidevisible);
+          UI_SKIN*       skin        = cfgchromeslayout ? cfgchromeslayout->GetSkin() : NULL;
+          UI_SKINCANVAS* skin_canvas = NULL;
+          if(skin && skin->GetDrawMode() == UI_SKIN_DRAWMODE_CANVAS)
+            {
+              skin_canvas = (UI_SKINCANVAS*)skin;
+            }
+
+          if(!becomingvisible)
+            {
+              // HIDE: erase the caption band NOW while the formbackdrop cache is still valid.
+              // BUG (2026-09): invalidating caches BEFORE RestoreOnHide destroyed the only pixels that could
+              // cleanly remove the bar; Draw()'s later RestoreOnHide found nothing, so icon/buttons ghosts
+              // stayed over the top menu (UI_Options ListBoxMenu overlaps y~0..46). Restore while still
+              // "logically visible", then mark invisible, then drop caches so Draw does not blit twice.
+              if(skin) skin->RestoreOnHide(captionelement);
+
+              cfgchromesautohidevisible = false;
+              GRPSCREEN_SetElementVisibleRecursive(captionelement, false);
+
+              if(skin_canvas) skin_canvas->InvalidateCompositionCaches();
+
+              // Content under the band must repaint (absolute options menu sits in the caption strip).
+              GEN_USERINTERFACE.Elements_SetToRedrawForScreen(this, true /* exclude_chrome */);
+            }
+           else
+            {
+              // SHOW: content redraws first next frame, then chrome Draw_Form re-captures under the bar.
+              cfgchromesautohidevisible = true;
+              GRPSCREEN_SetElementVisibleRecursive(captionelement, true);
+
+              if(skin_canvas) skin_canvas->InvalidateCompositionCaches();
+
+              GEN_USERINTERFACE.Elements_SetToRedrawForScreen(this, true /* exclude_chrome */);
+              if(cfgchromeslayout) cfgchromeslayout->Elements_SetToRedraw();
+            }
         }
     }
 
@@ -1741,6 +1784,9 @@ bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
     }
 
   cfgchromesbuttonsshift = shift;
+
+  // Selective chrome dirty (no per-frame force redraw): buttons moved → repaint chrome only.
+  if(cfgchromeslayout) cfgchromeslayout->Elements_SetToRedraw();
 
   return true;
 }
@@ -1912,8 +1958,27 @@ bool GRPSCREEN::UpdateViewports()
   // nothing because the tick recomputes an absolute target and skips the platform call when it has not
   // changed.
   UpdateCFGChromesDrag();
+
+  // ROOT CAUSE (UI_Options video 2026-09-19): AutoHide used to run HERE after the app's DrawFrame() had
+  // already composed content → chrome → modal. Hiding then called RestoreOnHide() on the caption and wrote
+  // straight into the canvas that was about to be presented — after Element_DrawModalOnTop — so ListBoxMenu /
+  // title ghosts and keyboard punches came back in the same frame. Showing dirtied content without a second
+  // compose before CopyBuffer. Re-compose when visibility actually flips, then present.
+  bool chrome_was_visible = cfgchromesautohidevisible;
   UpdateCFGChromesAutoHide();
+  bool chrome_toggled = (chrome_was_visible != cfgchromesautohidevisible);
+
   UpdateCFGChromesButtonsPosition();
+
+  if(chrome_toggled)
+    {
+      // Drop modal_layer_valid for this recompose so ClearIntersectingContentDirt does not freeze
+      // ListBoxMenu under the caption band — content must repaint after RestoreOnHide / show, then
+      // Element_DrawModalOnTop rebuilds the keyboard on top in the same Update().
+      GEN_USERINTERFACE.ModalLayer_Invalidate();
+      GEN_USERINTERFACE.Elements_RebuildDrawAreas();
+      GEN_USERINTERFACE.Update();
+    }
   #endif
 
   for(XDWORD c=0; c<viewports.GetSize(); c++)
@@ -2137,7 +2202,7 @@ void GRPSCREEN::Clean()
   cfgchromesdragstartscreenx = 0;
   cfgchromesdragstartscreeny = 0;
 
-  cfgchromesautohidevisible  = true;      // starts shown, matching a freshly loaded/unaffected layout
+  cfgchromesautohidevisible  = true;      // default when auto-hide is off; SetCFGChromes() forces false if AutoHide > 0
   cfgchromesautohidedesired  = true;
   cfgchromesautohidetimer    = NULL;      // created lazily, on first actual use (see UpdateCFGChromesAutoHide())
 

@@ -57,6 +57,7 @@
 #include "GRP2DCanvas.h"
 #include "GRP2DColor.h"
 #include "GRPBitmapFile.h"
+#include "GRPBitmap.h"
 #include "GRPFactory.h"
 #include "GRPVectorFile.h"
 #include "GRP2DVectorFileRenderAGG.h"
@@ -99,6 +100,8 @@
 #include "UI_Skin.h"
 #include "UI_SkinCanvas.h"
 #include "UI_SkinCanvas_Flat.h"
+#include "UI_BoundaryLine.h"
+#include "GRP2DRebuildAreas.h"
 
 
 
@@ -624,6 +627,20 @@ bool UI_MANAGER::Layout_PutBackground(XCHAR* layoutname)
       status = Layout_PutBackgroundColor(layoutname);
     }
 
+  // COMPOSITION-RESET (2026-09): wipe every canvas skin on this screen (content + custom chrome). Chrome
+  // shares the same GRP2DCANVAS; invalidating only the content layout left chrome's formbackdrop stale so
+  // auto-hide / keyboard transitions could ghost the caption over the top menu (UI_Options).
+  if(layout)
+    {
+      GRPSCREEN* screen = NULL;
+      UI_SKIN* skin = layout->GetSkin();
+      if(skin && skin->GetDrawMode() == UI_SKIN_DRAWMODE_CANVAS)
+        {
+          screen = ((UI_SKINCANVAS*)skin)->GetScreen();
+        }
+      InvalidateCompositionCachesForScreen(screen);
+    }
+
   return true;
 }
 
@@ -836,7 +853,85 @@ bool UI_MANAGER::Layout_PutBackground(bool scale)
       status = Layout_PutBackgroundColor();
     }
 
+  // COMPOSITION-RESET (2026-09): every layout on every screen that was wiped — including custom chrome skins
+  // that share the same canvas as content layouts.
+  for(XDWORD c=0; c<Layouts_GetAll()->GetSize(); c++)
+    {
+      UI_LAYOUT* layout = Layouts_Get(c);
+      if(!layout) continue;
+
+      UI_SKIN* skin = layout->GetSkin();
+      if(skin && skin->GetDrawMode() == UI_SKIN_DRAWMODE_CANVAS)
+        {
+          UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)skin;
+          if(skin_canvas) skin_canvas->InvalidateCompositionCaches();
+        }
+    }
+
   return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::InvalidateCompositionCachesForScreen(GRPSCREEN* screen)
+* @brief      Drop persistent true-backdrop caches for every canvas skin drawn on "screen".
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::InvalidateCompositionCachesForScreen(GRPSCREEN* screen)
+{
+  if(!screen) return;
+
+  for(XDWORD c=0; c<Layouts_GetAll()->GetSize(); c++)
+    {
+      UI_LAYOUT* layout = Layouts_Get(c);
+      if(!layout) continue;
+
+      UI_SKIN* skin = layout->GetSkin();
+      if(!skin || skin->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) continue;
+
+      UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)skin;
+      if(!skin_canvas || skin_canvas->GetScreen() != screen) continue;
+
+      skin_canvas->InvalidateCompositionCaches();
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::Elements_SetToRedrawForScreen(GRPSCREEN* screen, bool exclude_chrome)
+* @brief      Mark layouts on "screen" dirty so overlapping content under the caption bar redraws after chrome
+*             auto-hide show/hide (UI_Options menu top sits under the chrome band).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::Elements_SetToRedrawForScreen(GRPSCREEN* screen, bool exclude_chrome)
+{
+  if(!screen) return;
+
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  UI_LAYOUT* chromelayout = screen->GetCFGChromesLayout();
+  #else
+  UI_LAYOUT* chromelayout = NULL;
+  #endif
+
+  for(XDWORD c=0; c<Layouts_GetAll()->GetSize(); c++)
+    {
+      UI_LAYOUT* layout = Layouts_Get(c);
+      if(!layout) continue;
+
+      UI_SKIN* skin = layout->GetSkin();
+      if(!skin || skin->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) continue;
+
+      UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)skin;
+      if(!skin_canvas || skin_canvas->GetScreen() != screen) continue;
+
+      if(exclude_chrome && chromelayout && layout == chromelayout) continue;
+
+      layout->Elements_SetToRedraw();
+    }
 }
 
 
@@ -1087,6 +1182,14 @@ bool UI_MANAGER::Update(UI_LAYOUT* layout)
 
   ChangeTextElementValue(layout);
 
+  // Keep the modal last in this layout's root walk so its in-pass draw already sits above content siblings.
+  // Screen-level topmost (after ALL content layouts, before chrome) is Element_DrawModalOnTop in Update().
+  if(element_modal && element_modal->IsVisible())
+    {
+      UI_LAYOUT* modal_layout = Element_GetLayout(element_modal);
+      if(modal_layout == layout) Element_PutToLastPositionLayout(element_modal);
+    }
+
   status = layout->Update();  
   if(status)
     {         
@@ -1098,24 +1201,11 @@ bool UI_MANAGER::Update(UI_LAYOUT* layout)
               return false;          
             }                   
         }
-
-      if(element_modal)
-        {
-          if(xmutex_modal) xmutex_modal->Lock(); 
-          
-          Elements_SetToRedraw(element_modal);
-        
-          if(xmutex_modal) xmutex_modal->UnLock(); 
-        }
     }
 
-  if(virtualkeyboard) 
-    {
-      if(virtualkeyboard->IsShow())
-        {
-          Elements_SetToRedraw(virtualkeyboard->GetElementEditable());
-        }
-    }
+  // Do NOT mark the editable dirty every frame while the keyboard is open. That forced a perpetual
+  // Rebuild/Draw of the edit into the keyboard AABB (UI_Options punch). Text changes still dirty via
+  // SelectInput; while the modal layer is valid, ModalLayer_ClearIntersectingContentDirt freezes that dirt.
 
   ChangeTextElementValue(layout);
 
@@ -1145,41 +1235,7 @@ bool UI_MANAGER::Update(XCHAR* layoutname)
       return false;
     }
 
-  ChangeTextElementValue(layout);
-
-  status = layout->Update();  
-  if(status)
-    {         
-      if(layout_commonindex != UI_MANAGER_LAYOUT_NOTFOUND)
-        {         
-          layout = Layouts_Get(layout_commonindex);
-          if(!layout) 
-            {
-              return false;          
-            }                   
-        }
-
-      if(element_modal)
-        {
-          if(xmutex_modal) xmutex_modal->Lock(); 
-          
-          Elements_SetToRedraw(element_modal);
-        
-          if(xmutex_modal) xmutex_modal->UnLock(); 
-        }
-    }
-
-  if(virtualkeyboard) 
-    {
-      if(virtualkeyboard->IsShow())
-        {
-          Elements_SetToRedraw(virtualkeyboard->GetElementEditable());
-        }
-    }
-
-  ChangeTextElementValue(layout);
-
-  return status;
+  return Update(layout);
 }
 
 
@@ -1198,6 +1254,8 @@ bool UI_MANAGER::Update()
 
   #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
 
+  // Screen layers: content → chrome → modal (opaque offscreen blit last). See UI_Manager.h.
+
   for(XDWORD c=0; c<layouts.GetSize(); c++)
     {
       UI_LAYOUT* layout = layouts.Get(c);
@@ -1214,11 +1272,17 @@ bool UI_MANAGER::Update()
       if(!layout)                     continue;
       if(!IsCFGChromesLayout(layout)) continue;
 
-  
       status = Update(layout);
-      if(!status) return status; 
+      if(!status) return status;
+      // Do NOT force Elements_SetToRedraw() every frame: that re-captured chrome over content ghosts and
+      // burned FPS. Chrome is dirtied on auto-hide show/hide, button shift, and cross-skin overlap propagate.
+    }
 
-      layout->Elements_SetToRedraw();
+  // Modal layer (option B well-done): after content AND chrome — blit opaque offscreen cache so neither
+  // ListBoxMenu formbackdrop nor chrome caption can remain in the modal AABB.
+  if(element_modal && element_modal->IsVisible())
+    {
+      Element_DrawModalOnTop();
     }
 
   #else
@@ -1234,7 +1298,12 @@ bool UI_MANAGER::Update()
               break;
             }
         }
-    } 
+    }
+
+  if(status && element_modal && element_modal->IsVisible())
+    {
+      Element_DrawModalOnTop();
+    }
 
   #endif
 
@@ -1540,34 +1609,17 @@ bool UI_MANAGER::Element_PutToLastPositionLayout(UI_ELEMENT* element)
     {
       return false;
     }
-  
-  bool   found = false;
-  XDWORD index = 0;
 
-  do{ UI_ELEMENT* _element = layout_elements->Get(index);
-      if(_element) 
-        {
-          if(_element == element) 
-            {
-              found = true;
-              break;
-            }
-        } 
+  if(layout_elements->IsEmpty()) return false;
 
-       index++;
+  // Already last: nothing to do. (Avoid a no-op delete/re-add.)
+  if(layout_elements->Get(layout_elements->GetSize()-1) == element) return true;
 
-    } while(index < layout_elements->GetSize());
-
-  if(!found) 
-    {
-      return false;  
-    }
-
-  UI_ELEMENT* sustitute_element =  layout_elements->Get(layout_elements->GetSize()-1);
-  if(!sustitute_element) return false;
-
-  layout_elements->Set(layout_elements->GetSize()-1, layout_elements->Get(index));
-  layout_elements->Set(index, sustitute_element);         
+  // Move to end without swapping another root into the modal's old slot. Swap left an unrelated sibling in the
+  // middle of the list; delete+add keeps relative order of everyone else and guarantees the modal is drawn last
+  // in UI_LAYOUT::Update()'s linear walk.
+  if(!layout_elements->Delete(element)) return false;
+  layout_elements->Add(element);
 
   return true;
 }
@@ -1676,6 +1728,11 @@ bool UI_MANAGER::Element_SetModal(UI_ELEMENT* element_modal)
       xmutex_modal->Lock();
     }
 
+  if(this->element_modal != element_modal)
+    {
+      ModalLayer_Invalidate();
+    }
+
   if(element_modal) 
     {
       Element_PutToLastPositionLayout(element_modal);
@@ -1687,6 +1744,501 @@ bool UI_MANAGER::Element_SetModal(UI_ELEMENT* element_modal)
     {
       xmutex_modal->UnLock();
     }
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         UI_ELEMENT* UI_MANAGER::Element_GetModal()
+* @brief      Element get modal
+* @ingroup    USERINTERFACE
+*
+* @return     UI_ELEMENT* : Current modal element, or NULL.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT* UI_MANAGER::Element_GetModal()
+{
+  return element_modal;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::ModalLayer_Invalidate()
+* @brief      Drop the cached modal composition bitmap (next composite pass will Draw+capture again).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::ModalLayer_Invalidate()
+{
+  ModalLayer_Release();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ModalLayer_IsLayoutDrawDeferred(UI_ELEMENT* element)
+* @brief      When the modal layer cache is valid, skip drawing the modal root during layout Update — the
+*             composite pass will blit the opaque cache after all content. While rebuilding the cache,
+*             modal_layer_compositing is set so Draw is allowed.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ModalLayer_IsLayoutDrawDeferred(UI_ELEMENT* element)
+{
+  if(!element) return false;
+  if(!element_modal || element != element_modal) return false;
+  if(!element_modal->IsVisible()) return false;
+  if(!modal_layer_valid) return false;
+  if(modal_layer_compositing) return false;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ModalLayer_IsCompositing()
+* @brief      True while the modal tree is being drawn onto the offscreen composition canvas.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ModalLayer_IsCompositing()
+{
+  return modal_layer_compositing;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ModalLayer_IsRebuildProtected(UI_ELEMENT* element)
+* @brief      While the modal offscreen cache is valid, do not peel the modal subtree on the shared canvas.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ModalLayer_IsRebuildProtected(UI_ELEMENT* element)
+{
+  if(!element) return false;
+  if(!element_modal || !element_modal->IsVisible()) return false;
+  if(!modal_layer_valid) return false;
+  if(modal_layer_compositing) return false;
+
+  UI_ELEMENT* walk = element;
+  while(walk)
+    {
+      if(walk == element_modal) return true;
+      walk = walk->GetFather();
+    }
+
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ModalLayer_SuppressesContentDraw(UI_ELEMENT* element)
+* @brief      True when a non-modal element must not paint: it intersects the composed modal AABB.
+* @note       ROOT CAUSE of ListBoxMenu / Edit punch-through (UI_Options video 2026-09-19): after the modal
+*             was painted last, the next frame's Rebuild restored those elements' areas with PutBitmapNoAlpha
+*             (parchment / menu / edit) straight into the keyboard, then Draw painted them again. Option B's
+*             final DrawModalOnTop could not win against a continuous dirty cycle. Once modal_layer_valid, skip
+*             that content until the modal is dismissed or invalidated.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ModalLayer_SuppressesContentDraw(UI_ELEMENT* element)
+{
+  if(!element) return false;
+  if(!element_modal || !element_modal->IsVisible()) return false;
+  if(!modal_layer_valid) return false;
+  if(modal_layer_compositing) return false;
+
+  UI_ELEMENT* walk = element;
+  while(walk)
+    {
+      if(walk == element_modal) return false;
+      walk = walk->GetFather();
+    }
+
+  if(!element->GetBoundaryLine()) return false;
+
+  double mx = 0.0;
+  double my = 0.0;
+  double mw = 0.0;
+  double mh = 0.0;
+  if(!ModalLayer_Rect(element_modal, mx, my, mw, mh)) return false;
+
+  double ew = element->GetBoundaryLine()->width;
+  double eh = element->GetBoundaryLine()->height;
+  if(ew <= 0.0 || eh <= 0.0) return false;
+
+  double ex = UI_BOUNDARYLINE_EdgeLeft(element->GetXPosition(), ew);
+  double ey = UI_BOUNDARYLINE_EdgeTop (element->GetYPosition(), eh);
+
+  return (ex < mx + mw) && (ex + ew > mx) && (ey < my + mh) && (ey + eh > my);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ChromeCaption_SuppressesContentDraw(UI_ELEMENT* element)
+* @brief      True when content intersects the visible custom-chrome caption band.
+* @note       Content paints before chrome. A translucent caption (black,25) then shows ListBoxMenu / edit
+*             through the title bar — the "chrome ghost" in UI_Options when the bar is visible. While the
+*             caption is visible, content must not ink that band; chrome owns those pixels.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ChromeCaption_SuppressesContentDraw(UI_ELEMENT* element)
+{
+  #ifndef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  (void)element;
+  return false;
+  #else
+  if(!element || !element->GetBoundaryLine()) return false;
+
+  UI_LAYOUT* layout = Element_GetLayout(element);
+  if(!layout) return false;
+  if(IsCFGChromesLayout(layout)) return false;
+
+  UI_SKIN* skin = layout->GetSkin();
+  if(!skin || skin->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return false;
+
+  GRPSCREEN* screen = ((UI_SKINCANVAS*)skin)->GetScreen();
+  if(!screen || !screen->IsCFGChromesActive()) return false;
+  if(screen->GetCFGChromes() && screen->GetCFGChromes()->GetUseNativeChromes()) return false;
+
+  UI_LAYOUT* chromelayout = screen->GetCFGChromesLayout();
+  if(!chromelayout) return false;
+
+  UI_ELEMENT* caption = chromelayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
+  if(!caption || !caption->IsVisible() || !caption->GetBoundaryLine()) return false;
+
+  double cw = caption->GetBoundaryLine()->width;
+  double ch = caption->GetBoundaryLine()->height;
+  if(cw <= 0.0 || ch <= 0.0) return false;
+
+  double cx = UI_BOUNDARYLINE_EdgeLeft(caption->GetXPosition(), cw);
+  double cy = UI_BOUNDARYLINE_EdgeTop (caption->GetYPosition(), ch);
+
+  double ew = element->GetBoundaryLine()->width;
+  double eh = element->GetBoundaryLine()->height;
+  if(ew <= 0.0 || eh <= 0.0) return false;
+
+  double ex = UI_BOUNDARYLINE_EdgeLeft(element->GetXPosition(), ew);
+  double ey = UI_BOUNDARYLINE_EdgeTop (element->GetYPosition(), eh);
+
+  return (ex < cx + cw) && (ex + ew > cx) && (ey < cy + ch) && (ey + eh > cy);
+  #endif
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::Overlay_SuppressesContentDraw(UI_ELEMENT* element)
+* @brief      Content must not paint under the composed modal or the visible custom caption.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::Overlay_SuppressesContentDraw(UI_ELEMENT* element)
+{
+  return ModalLayer_SuppressesContentDraw(element) || ChromeCaption_SuppressesContentDraw(element);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::Overlay_ClearSuppressedContentDirt()
+* @brief      Drop MustReDraw on content that would peel/punch overlay bands before RebuildAllAreas.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::Overlay_ClearSuppressedContentDirt()
+{
+  for(XDWORD c=0; c<layouts.GetSize(); c++)
+    {
+      UI_LAYOUT* layout = layouts.Get(c);
+      if(!layout) continue;
+
+      #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+      if(IsCFGChromesLayout(layout)) continue;
+      #endif
+
+      XVECTOR<UI_ELEMENT*>* roots = layout->Elements_Get();
+      if(!roots) continue;
+
+      XVECTOR<UI_ELEMENT*> stack;
+      for(XDWORD i=0; i<roots->GetSize(); i++)
+        {
+          UI_ELEMENT* root = roots->Get(i);
+          if(root) stack.Add(root);
+        }
+
+      while(!stack.IsEmpty())
+        {
+          UI_ELEMENT* el = stack.Get(stack.GetSize() - 1);
+          stack.DeleteLast();
+          if(!el) continue;
+
+          XVECTOR<UI_ELEMENT*>* kids = el->GetComposeElements();
+          if(kids)
+            {
+              for(XDWORD k=0; k<kids->GetSize(); k++)
+                {
+                  UI_ELEMENT* kid = kids->Get(k);
+                  if(kid) stack.Add(kid);
+                }
+            }
+
+          if(!Overlay_SuppressesContentDraw(el)) continue;
+
+          el->SetMustReDraw(false);
+
+          UI_SKIN* skin = layout->GetSkin();
+          if(skin && skin->GetDrawMode() == UI_SKIN_DRAWMODE_CANVAS)
+            {
+              UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)skin;
+              GRP2DREBUILDAREA* area = skin_canvas->GetRebuildAreaByElement(el);
+              if(area)
+                {
+                  skin_canvas->GetRebuildAreas()->Delete(area);
+                  GEN_DELETE area;
+                }
+            }
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::ModalLayer_Release()
+* @brief      Free modal layer bitmap and clear validity.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::ModalLayer_Release()
+{
+  if(modal_layer_bitmap)
+    {
+      GEN_DELETE modal_layer_bitmap;
+      modal_layer_bitmap = NULL;
+    }
+
+  modal_layer_valid = false;
+  modal_layer_x     = 0.0;
+  modal_layer_y     = 0.0;
+  modal_layer_w     = 0.0;
+  modal_layer_h     = 0.0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ModalLayer_Rect(UI_ELEMENT* modal, double& x, double& y, double& w, double& h)
+* @brief      Screen AABB of the modal in the same (left, top, w, h) convention as rebuild areas / GetBitmap.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ModalLayer_Rect(UI_ELEMENT* modal, double& x, double& y, double& w, double& h)
+{
+  if(!modal || !modal->GetBoundaryLine()) return false;
+
+  // Prefer VisibleRect when it matches resolved layout (Draw_Form fills it). VirtualKeyboard syncs
+  // VisibleRect after CalculeBoundaryLine. Fallback: GetXPosition + BoundaryLine (PreDraw convention).
+  if(modal->GetType() == UI_ELEMENT_TYPE_FORM || modal->GetType() == UI_ELEMENT_TYPE_MENU)
+    {
+      UI_ELEMENT_FORM* form = (UI_ELEMENT_FORM*)modal;
+      UI_BOUNDARYLINE* vis  = form->GetVisibleRect();
+      if(vis && vis->width > 0.0 && vis->height > 0.0)
+        {
+          w = vis->width;
+          h = vis->height;
+          x = UI_BOUNDARYLINE_EdgeLeft(vis->x, w);
+          y = UI_BOUNDARYLINE_EdgeTop (vis->y, h);
+          return true;
+        }
+    }
+
+  w = modal->GetBoundaryLine()->width;
+  h = modal->GetBoundaryLine()->height;
+  if(w <= 0.0 || h <= 0.0) return false;
+
+  x = UI_BOUNDARYLINE_EdgeLeft(modal->GetXPosition(), w);
+  y = UI_BOUNDARYLINE_EdgeTop (modal->GetYPosition(), h);
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ModalLayer_RebuildOffscreen(UI_SKINCANVAS* skin_canvas, UI_ELEMENT* modal)
+* @brief      Draw the modal tree onto a dedicated offscreen canvas and store that AABB as modal_layer_bitmap.
+* @note       Never snapshots the shared screen canvas — that was the failure mode of the first option-B pass
+*             (ListBoxMenu formbackdrop already punched into the keyboard rect before capture).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ModalLayer_RebuildOffscreen(UI_SKINCANVAS* skin_canvas, UI_ELEMENT* modal)
+{
+  if(!skin_canvas || !modal) return false;
+
+  GRPSCREEN*   screen = skin_canvas->GetScreen();
+  GRP2DCANVAS* live   = skin_canvas->GetCanvas();
+  if(!screen || !live) return false;
+
+  double x = 0.0;
+  double y = 0.0;
+  double w = 0.0;
+  double h = 0.0;
+  if(!ModalLayer_Rect(modal, x, y, w, h)) return false;
+
+  XDWORD sw = screen->GetWidth();
+  XDWORD sh = screen->GetHeight();
+  if(!sw || !sh) return false;
+
+  GRPPROPERTIES properties;
+  properties.CopyPropertysFrom(live);
+  properties.SetPosition(0, 0);
+  properties.SetSize(sw, sh);
+
+  GRP2DCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
+  if(!offscreen) return false;
+
+  offscreen->SetWidth((double)sw);
+  offscreen->SetHeight((double)sh);
+
+  bool ok = false;
+
+  if(offscreen->Buffer_Create())
+    {
+      offscreen->VectorFont_CopyFrom(live);
+
+      // Opaque clear: holes in the modal AABB must not stay "transparent" when blitted with PutBitmapNoAlpha.
+      GRP2DCOLOR_RGBA8 clearcolor(0, 0, 0, 255);
+      offscreen->Clear(&clearcolor);
+
+      GRP2DCANVAS* saved_rebuild_canvas = skin_canvas->GetTargetCanvas();
+
+      modal_layer_compositing = true;
+      skin_canvas->SetCanvasOverride(offscreen);
+      skin_canvas->SetTargetCanvas(offscreen);
+
+      Elements_SetToRedraw(modal);
+      skin_canvas->Draw(modal);
+
+      skin_canvas->SetCanvasOverride(NULL);
+      if(saved_rebuild_canvas) skin_canvas->SetTargetCanvas(saved_rebuild_canvas);
+      modal_layer_compositing = false;
+
+      GRPBITMAP* snapshot = offscreen->GetBitmap(x, y, w, h);
+      if(snapshot)
+        {
+          if(modal_layer_bitmap)
+            {
+              GEN_DELETE modal_layer_bitmap;
+              modal_layer_bitmap = NULL;
+            }
+
+          modal_layer_bitmap = snapshot;
+          modal_layer_x      = x;
+          modal_layer_y      = y;
+          modal_layer_w      = w;
+          modal_layer_h      = h;
+          modal_layer_valid  = true;
+          ok = true;
+        }
+    }
+
+  GEN_GRPFACTORY.DeleteCanvas(offscreen);
+  return ok;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::Element_DrawModalOnTop()
+* @brief      Modal composition layer (option B): paint the modal tree LAST on the live shared canvas.
+* @note       Content and chrome may freely punch the modal AABB earlier in the frame. This pass forces a full
+*             Draw of the modal on top (formbackdrop/optionbackdrop skipped via ModalLayer_IsCompositing) so the
+*             modal always wins without depending on an offscreen GetBitmap cache.
+* @ingroup    USERINTERFACE
+*
+* @return     bool : true if the modal was painted on top.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::Element_DrawModalOnTop()
+{
+  if(!element_modal) return false;
+  if(!element_modal->IsVisible())
+    {
+      ModalLayer_Release();
+      return false;
+    }
+
+  UI_LAYOUT* layout = Element_GetLayout(element_modal);
+  if(!layout || !layout->GetSkin()) return false;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return false;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  if(!skin_canvas) return false;
+
+  GRP2DCANVAS* live = skin_canvas->GetCanvas();
+  if(!live) return false;
+
+  if(xmutex_modal) xmutex_modal->Lock();
+
+  double x = 0.0;
+  double y = 0.0;
+  double w = 0.0;
+  double h = 0.0;
+  if(ModalLayer_Rect(element_modal, x, y, w, h))
+    {
+      modal_layer_x = x;
+      modal_layer_y = y;
+      modal_layer_w = w;
+      modal_layer_h = h;
+
+      // Opaque wipe of the modal AABB on the LIVE canvas before drawing keys/fill. Guarantees no sibling
+      // formbackdrop/chrome pixels remain in the intersection even if the form fill uses round-rect / alpha.
+      UI_COLOR* fillsrc = NULL;
+      if(element_modal->GetType() == UI_ELEMENT_TYPE_FORM || element_modal->GetType() == UI_ELEMENT_TYPE_MENU)
+        {
+          UI_ELEMENT_FORM* form = (UI_ELEMENT_FORM*)element_modal;
+          fillsrc = form->IsBackgroundColorSet() ? form->GetBackgroundColor() : form->GetColor();
+        }
+      if(!fillsrc) fillsrc = element_modal->GetColor();
+
+      XBYTE fr = fillsrc ? fillsrc->GetRed()   : 200;
+      XBYTE fg = fillsrc ? fillsrc->GetGreen() : 200;
+      XBYTE fb = fillsrc ? fillsrc->GetBlue()  : 200;
+      GRP2DCOLOR_RGBA8 solid(fr, fg, fb, 255);
+      GRP2DCOLOR_RGBA8 noline(0, 0, 0, 0);
+      live->SetFillColor(&solid);
+      live->SetLineColor(&noline);
+      live->SetLineWidth(1.0f);
+      // GEN Rectangle: (x1,y1 bottom-left) (x2,y2 top-right) — same as Draw_Form.
+      live->Rectangle(x, y + h, x + w, y, true);
+    }
+
+  // Paint modal last on the live canvas. Compositing flag skips formbackdrop/optionbackdrop restores that
+  // would re-introduce ListBoxMenu pixels under the keys.
+  modal_layer_compositing = true;
+  Elements_SetToRedraw(element_modal);
+  skin_canvas->Draw(element_modal);
+  modal_layer_compositing = false;
+
+  // Mark cache "valid" only so layout Update defers the modal root (avoids drawing it twice per frame).
+  // The authoritative pixels are always those just painted on the live canvas above — no offscreen bitmap.
+  modal_layer_valid = true;
+  if(modal_layer_bitmap)
+    {
+      GEN_DELETE modal_layer_bitmap;
+      modal_layer_bitmap = NULL;
+    }
+
+  if(xmutex_modal) xmutex_modal->UnLock();
 
   return true;
 }
@@ -1773,6 +2325,196 @@ bool UI_MANAGER::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::PropagateRebuildOverlapDirtAcrossSharedCanvases()
+* @brief      Cross-skin MarkOverlapping for every pair of UI_SKINCANVAS that share the same GRP2DCANVAS.
+* @note       Content and chrome keep separate rebuild-area lists but paint into one viewport. Without this,
+*             restoring/redrawing ListBoxMenu could leave Option text in the chrome title band (and the reverse).
+*             Fixed-point: newly dirtied neighbours may overlap further areas. Also dirties the modal when any
+*             shared-canvas dirty rect intersects its bounds so the screen modal layer repaints the hole.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::PropagateRebuildOverlapDirtAcrossSharedCanvases()
+{
+  XVECTOR<UI_SKINCANVAS*> skins;
+
+  for(XDWORD c=0; c<layouts.GetSize(); c++)
+    {
+      UI_LAYOUT* layout = layouts.Get(c);
+      if(!layout || !layout->GetSkin()) continue;
+      if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) continue;
+
+      UI_SKINCANVAS* skin = (UI_SKINCANVAS*)layout->GetSkin();
+      if(!skin || !skin->GetCanvas()) continue;
+      skins.Add(skin);
+    }
+
+  if(skins.GetSize() < 2 && !(element_modal && element_modal->IsVisible()))
+    {
+      return;
+    }
+
+  bool changed = true;
+  int  guard   = 0;
+
+  while(changed && guard < 8)
+    {
+      changed = false;
+      guard++;
+
+      for(XDWORD a=0; a<skins.GetSize(); a++)
+        {
+          UI_SKINCANVAS* skin_a = skins.Get(a);
+          if(!skin_a) continue;
+
+          XVECTOR<GRP2DREBUILDAREA*>* areas_a = skin_a->GetRebuildAreas();
+          if(!areas_a) continue;
+
+          for(XDWORD ia=0; ia<areas_a->GetSize(); ia++)
+            {
+              GRP2DREBUILDAREA* area_a = areas_a->Get(ia);
+              if(!area_a || !area_a->GetBitmap()) continue;
+
+              UI_ELEMENT* elem_a = (UI_ELEMENT*)area_a->GetExtraData();
+              if(!elem_a) continue;
+              if((!elem_a->MustReDraw()) && elem_a->IsVisible()) continue;
+
+              double ax1 = area_a->GetXPos();
+              double ay1 = area_a->GetYPos();
+              double ax2 = ax1 + (double)area_a->GetBitmap()->GetWidth();
+              double ay2 = ay1 + (double)area_a->GetBitmap()->GetHeight();
+
+              // Modal layer (option B): do NOT mark the modal MustReDraw here. Overlapping content dirty
+              // (ListBoxMenu formbackdrop) every frame would force perpetual Draw+recapture and bake the punch
+              // into the modal layer cache. The composite pass blits the opaque cache after content instead.
+
+              for(XDWORD b=0; b<skins.GetSize(); b++)
+                {
+                  if(a == b) continue;
+
+                  UI_SKINCANVAS* skin_b = skins.Get(b);
+                  if(!skin_b || skin_b->GetCanvas() != skin_a->GetCanvas()) continue;
+
+                  XVECTOR<GRP2DREBUILDAREA*>* areas_b = skin_b->GetRebuildAreas();
+                  if(!areas_b) continue;
+
+                  for(XDWORD ib=0; ib<areas_b->GetSize(); ib++)
+                    {
+                      GRP2DREBUILDAREA* area_b = areas_b->Get(ib);
+                      if(!area_b || !area_b->GetBitmap()) continue;
+
+                      UI_ELEMENT* elem_b = (UI_ELEMENT*)area_b->GetExtraData();
+                      if(!elem_b || elem_b->MustReDraw()) continue;
+
+                      double bx1 = area_b->GetXPos();
+                      double by1 = area_b->GetYPos();
+                      double bx2 = bx1 + (double)area_b->GetBitmap()->GetWidth();
+                      double by2 = by1 + (double)area_b->GetBitmap()->GetHeight();
+
+                      if(ax1 < bx2 && ax2 > bx1 && ay1 < by2 && ay2 > by1)
+                        {
+                          Elements_SetToRedraw(elem_b);
+                          changed = true;
+                        }
+                    }
+                }
+            }
+        }
+
+      // Content dirty without a rebuild area yet can still overlap chrome bounds (e.g. scrolled option text
+      // near y=0). Walk chrome layout roots and dirty them when any dirty content element on the same canvas
+      // intersects their boundary.
+      #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+      for(XDWORD c=0; c<layouts.GetSize(); c++)
+        {
+          UI_LAYOUT* content = layouts.Get(c);
+          if(!content || IsCFGChromesLayout(content)) continue;
+          if(!content->GetSkin() || content->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) continue;
+
+          UI_SKINCANVAS* content_skin = (UI_SKINCANVAS*)content->GetSkin();
+          if(!content_skin || !content_skin->GetCanvas()) continue;
+
+          for(XDWORD d=0; d<layouts.GetSize(); d++)
+            {
+              UI_LAYOUT* chrome = layouts.Get(d);
+              if(!chrome || !IsCFGChromesLayout(chrome)) continue;
+              if(!chrome->GetSkin() || chrome->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) continue;
+
+              UI_SKINCANVAS* chrome_skin = (UI_SKINCANVAS*)chrome->GetSkin();
+              if(!chrome_skin || chrome_skin->GetCanvas() != content_skin->GetCanvas()) continue;
+
+              XVECTOR<UI_ELEMENT*>* chrome_roots = chrome->Elements_Get();
+              if(!chrome_roots) continue;
+
+              // Prefer dirty rebuild areas on content; also scan dirty root elements' bounds.
+              XVECTOR<GRP2DREBUILDAREA*>* careas = content_skin->GetRebuildAreas();
+              for(XDWORD ir=0; ir<chrome_roots->GetSize(); ir++)
+                {
+                  UI_ELEMENT* chrome_el = chrome_roots->Get(ir);
+                  if(!chrome_el || chrome_el->MustReDraw() || !chrome_el->IsVisible()) continue;
+                  if(!chrome_el->GetBoundaryLine()) continue;
+
+                  double cw = chrome_el->GetBoundaryLine()->width;
+                  double ch = chrome_el->GetBoundaryLine()->height;
+                  double cx1 = UI_BOUNDARYLINE_EdgeLeft(chrome_el->GetXPosition(), cw);
+                  double cy1 = UI_BOUNDARYLINE_EdgeTop (chrome_el->GetYPosition(), ch);
+                  double cx2 = cx1 + cw;
+                  double cy2 = cy1 + ch;
+
+                  bool hit = false;
+
+                  if(careas)
+                    {
+                      for(XDWORD ia=0; ia<careas->GetSize() && !hit; ia++)
+                        {
+                          GRP2DREBUILDAREA* area = careas->Get(ia);
+                          if(!area || !area->GetBitmap()) continue;
+                          UI_ELEMENT* ea = (UI_ELEMENT*)area->GetExtraData();
+                          if(!ea || ((!ea->MustReDraw()) && ea->IsVisible())) continue;
+
+                          double ax1 = area->GetXPos();
+                          double ay1 = area->GetYPos();
+                          double ax2 = ax1 + (double)area->GetBitmap()->GetWidth();
+                          double ay2 = ay1 + (double)area->GetBitmap()->GetHeight();
+                          if(ax1 < cx2 && ax2 > cx1 && ay1 < cy2 && ay2 > cy1) hit = true;
+                        }
+                    }
+
+                  if(!hit)
+                    {
+                      XVECTOR<UI_ELEMENT*>* croots = content->Elements_Get();
+                      if(croots)
+                        {
+                          for(XDWORD ie=0; ie<croots->GetSize() && !hit; ie++)
+                            {
+                              UI_ELEMENT* el = croots->Get(ie);
+                              if(!el || !el->MustReDraw() || !el->IsVisible() || !el->GetBoundaryLine()) continue;
+                              double ew = el->GetBoundaryLine()->width;
+                              double eh = el->GetBoundaryLine()->height;
+                              double ax1 = UI_BOUNDARYLINE_EdgeLeft(el->GetXPosition(), ew);
+                              double ay1 = UI_BOUNDARYLINE_EdgeTop (el->GetYPosition(), eh);
+                              double ax2 = ax1 + ew;
+                              double ay2 = ay1 + eh;
+                              if(ax1 < cx2 && ax2 > cx1 && ay1 < cy2 && ay2 > cy1) hit = true;
+                            }
+                        }
+                    }
+
+                  if(hit)
+                    {
+                      Elements_SetToRedraw(chrome_el);
+                      changed = true;
+                    }
+                }
+            }
+        }
+      #endif
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_MANAGER::Elements_RebuildDrawAreas()
 * @brief      Elements rebuild draw areas
@@ -1784,6 +2526,14 @@ bool UI_MANAGER::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 bool UI_MANAGER::Elements_RebuildDrawAreas()
 {  
   bool status = false; 
+
+  // Cross-skin dirty closure BEFORE any PutBitmapNoAlpha restore, so chrome/content/modal overlaps are
+  // peeled and redrawn in the same frame (screen composition layers).
+  PropagateRebuildOverlapDirtAcrossSharedCanvases();
+
+  // After the modal has been composed once / while caption is visible: freeze content that would peel
+  // those overlay bands (keyboard punch-through, title-bar ghosts). See Overlay_SuppressesContentDraw.
+  Overlay_ClearSuppressedContentDirt();
 
   for(XDWORD c=0; c<layouts.GetSize(); c++)
     {
@@ -1842,6 +2592,11 @@ bool UI_MANAGER::Elements_RebuildDrawAreas(UI_LAYOUT* layout)
     }
 
   UnSelectedElement();  
+
+  // Same cross-skin closure as the global rebuild: a single-layout rebuild can still wipe pixels owned by
+  // another skin on the shared canvas (content vs chrome).
+  PropagateRebuildOverlapDirtAcrossSharedCanvases();
+  Overlay_ClearSuppressedContentDirt();
 
   switch(layout->GetSkin()->GetDrawMode())
     {
@@ -2838,6 +3593,8 @@ UI_MANAGER::~UI_MANAGER()
 
   DeleteVirtualKeyboard();
 
+  ModalLayer_Release();
+
   Layouts_DeleteAll(); 
   
   if(unzipfile)
@@ -3076,6 +3833,20 @@ bool UI_MANAGER::GetParentSizeFont(XFILEXMLELEMENT* node, double& sizefont)
 bool UI_MANAGER::ResolvePercentValue(XSTRING& valuestr, double basis, double& out)
 {
   if(valuestr.IsEmpty()) return false;
+
+  // Phase 4: "Nem" resolves against `basis` as the font-size (em). Callers that want em must pass sizefont.
+  if(valuestr.Find(__L("em"), true) != XSTRING_NOTFOUND && valuestr.Find(__L("%"), true) == XSTRING_NOTFOUND)
+    {
+      XSTRING number = valuestr;
+      number.DeleteCharacter(__C('e'));
+      number.DeleteCharacter(__C('E'));
+      number.DeleteCharacter(__C('m'));
+      number.DeleteCharacter(__C('M'));
+      number.DeleteNoCharacters(__L(" \t\r\n"));
+      out = basis * number.ConvertToDouble();
+      return true;
+    }
+
   if(valuestr.Find(__L("%"), true) == XSTRING_NOTFOUND) return false;
 
   XSTRING number = valuestr;
@@ -3160,7 +3931,8 @@ bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout,
   XSTRING inlinestyle;
   if(outstyle.Get(__L("style"), inlinestyle) && !inlinestyle.IsEmpty())
     {
-      outstyle.FillFromInlineStyle(inlinestyle);
+      UI_STYLESHEET* sheet = layout ? layout->GetStyleSheet() : NULL;
+      outstyle.FillFromInlineStyle(inlinestyle, sheet);
     }
 
   XSTRING fathertagname;
@@ -3216,13 +3988,30 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   double fatherwidth  = element->GetFather() ? element->GetFather()->GetBoundaryLine()->width  : 0.0;
   double fatherheight = element->GetFather() ? element->GetFather()->GetBoundaryLine()->height : 0.0;
 
+  // Phase 4 em basis: father's sizefont when father is text; else try computed sizefont on father; else 16.
+  double fatherem = 16.0;
+  if(element->GetFather())
+    {
+      UI_ELEMENT_TEXT* ftext = dynamic_cast<UI_ELEMENT_TEXT*>(element->GetFather());
+      if(ftext && ftext->GetSizeFont() > 0) fatherem = (double)ftext->GetSizeFont();
+      else if(element->GetFather()->GetComputedStyle())
+        {
+          double sf = 0.0;
+          if(element->GetFather()->GetComputedStyle()->Get(__L("sizefont"), sf) && sf > 0.0) fatherem = sf;
+        }
+    }
+
   XSTRING position;
   if(style.Get(__L("xpos"), position))
     {
       if(!position.Compare(__L("left"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_LEFT;
         else if(!position.Compare(__L("right"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_RIGHT;
           else if(!position.Compare(__L("center"), true)) xpos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else if(!ResolvePercentValue(position, fatherwidth, xpos)) style.Get(__L("xpos"), xpos);
+            else
+              {
+                double basis = (position.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherwidth;
+                if(!ResolvePercentValue(position, basis, xpos)) style.Get(__L("xpos"), xpos);
+              }
     }
 
   if(style.Get(__L("ypos"), position))
@@ -3230,7 +4019,11 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
       if(!position.Compare(__L("up"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_UP;
         else if(!position.Compare(__L("down"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_DOWN;
           else if(!position.Compare(__L("center"), true)) ypos = UI_ELEMENT_TYPE_ALIGN_CENTER;
-            else if(!ResolvePercentValue(position, fatherheight, ypos)) style.Get(__L("ypos"), ypos);
+            else
+              {
+                double basis = (position.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherheight;
+                if(!ResolvePercentValue(position, basis, ypos)) style.Get(__L("ypos"), ypos);
+              }
     }
 
 
@@ -3239,7 +4032,11 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  width = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  width = UI_ELEMENT_TYPE_ALIGN_AUTO;
-          else if(!ResolvePercentValue(size, fatherwidth, width)) style.Get(__L("width"), width);
+          else
+            {
+              double basis = (size.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherwidth;
+              if(!ResolvePercentValue(size, basis, width)) style.Get(__L("width"), width);
+            }
     }
    else
     {
@@ -3253,7 +4050,11 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  height = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  height = UI_ELEMENT_TYPE_ALIGN_AUTO;
-          else if(!ResolvePercentValue(size, fatherheight, height)) style.Get(__L("height"), height);
+          else
+            {
+              double basis = (size.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherheight;
+              if(!ResolvePercentValue(size, basis, height)) style.Get(__L("height"), height);
+            }
     }
    else
     {
@@ -3275,14 +4076,14 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
         else if(!directionstr.Compare(__L("vertical"), true))  element->SetDirection(UI_ELEMENT_TYPE_DIRECTION_VERTICAL);
     }
 
-  // Flexbox: CSS Lite wiring (Phase 4, "migración del ejemplo", first sub-step -- see UI_LayoutEngine.h's
-  // RunLayout()/BuildTree() SCOPE ADDENDUM). "display: flex" is the only recognized "display" value today;
-  // anything else, or its absence, leaves IsFlexContainer() at its default "false" -- so this whole block is a
-  // no-op, and every property below keeps its UI_ELEMENT default, for every layout authored before it existed.
+  // Flexbox / Grid: CSS Lite wiring. "display: flex" | "display: grid". Absence leaves defaults (false).
   XSTRING displaystr;
   if(style.Get(__L("display"), displaystr))
     {
-      element->SetFlexContainer(!displaystr.Compare(__L("flex"), true));
+      bool isflex = !displaystr.Compare(__L("flex"), true);
+      bool isgrid = !displaystr.Compare(__L("grid"), true);
+      element->SetFlexContainer(isflex);
+      element->SetGridContainer(isgrid);
     }
 
   XSTRING flexdirectionstr;
@@ -3468,46 +4269,21 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   style.Get(__L("extra"), extra);
   element->GetExtra()->Set(extra);
 
-  // "margin": historically a FIXED 4-number shorthand only, order LEFT,RIGHT,UP,DOWN (UnFormat("%d,%d,%d,%d")) --
-  // note this is NOT the CSS TOP/RIGHT/BOTTOM/LEFT order that "padding"/"border-radius" already use below, so a
-  // 4-value "margin" keeps its exact historical meaning here (no existing layout that authored 4 values can
-  // silently change shape). What was missing, and is what the UI/CSS analysis report's Phase 1 asks for, is the
-  // same CSS 1-to-3-value shorthand padding/border-radius already accept: those counts had no defined legacy
-  // behaviour (UnFormat() with fewer than 4 comma-values just left the rest at 0), so giving them real CSS
-  // expansion semantics adds capability without changing any authored layout's rendered result.
-  XSTRING marginstr;
-  if(style.Get(__L("margin"), marginstr))
-    {
-      double vals[UI_ELEMENT_MARGIN_MAX] = { 0.0, 0.0, 0.0, 0.0 };
-      XDWORD n = UI_PROPERTYREGISTRY::TokenizeNumbers(marginstr, vals, UI_ELEMENT_MARGIN_MAX);
+  // "margin": resolved via UI_PROPERTYREGISTRY::ResolveMarginEdges so load-time and unit tests share one
+  // implementation. 4-value shorthand: layouts WITH a stylesheet use CSS TRBL; WITHOUT keep LEFT,RIGHT,UP,DOWN.
+  // Longhands (margin-top/...) apply only when a stylesheet is present -- ignored on XML-only layouts.
+  {
+    bool   use_css = (layout && layout->GetStyleSheet());
+    double edges[4] = { 0.0, 0.0, 0.0, 0.0 };   // LEFT, RIGHT, UP, DOWN
 
-      if(n == UI_ELEMENT_MARGIN_MAX)
-        {
-          // Legacy 4-value form: LEFT, RIGHT, UP, DOWN, unchanged from the historical UnFormat() behaviour.
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT   , vals[0]);
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT  , vals[1]);
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , vals[2]);
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , vals[3]);
-        }
-       else
-        {
-          // New 1-to-3-value CSS shorthand: TOP, RIGHT, BOTTOM, LEFT expansion, same as "padding" below.
-          double m_top = 0.0, m_right = 0.0, m_bottom = 0.0, m_left = 0.0;
-
-          switch(n)
-            {
-              case 1  : m_top = m_right = m_bottom = m_left = vals[0];                              break;
-              case 2  : m_top = m_bottom = vals[0]; m_left = m_right = vals[1];                      break;
-              case 3  : m_top = vals[0]; m_left = m_right = vals[1]; m_bottom = vals[2];              break;
-              default : break;                                                                        // 0 values: no-op
-            }
-
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT   , m_left);
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT  , m_right);
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP     , m_top);
-          element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN   , m_bottom);
-        }
-    }
+    if(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, use_css, use_css, edges))
+      {
+        element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT , edges[0]);
+        element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT, edges[1]);
+        element->SetMargin(UI_ELEMENT_TYPE_ALIGN_UP   , edges[2]);
+        element->SetMargin(UI_ELEMENT_TYPE_ALIGN_DOWN , edges[3]);
+      }
+  }
 
   // --- Step 4: box-model additions --------------------------------------------------------------------------------
   // Padding shorthand accepts 1..4 numbers separated by comma or whitespace, using CSS ordering:
@@ -3592,6 +4368,98 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
           element->SetBoxShadowSet(true);
         }
     }
+
+  // CSS Grid templates (Phase 3): simple whitespace-separated track list (px / % / fr).
+  {
+    XSTRING gridcols;
+    if(style.Get(__L("grid-template-columns"), gridcols) && !gridcols.IsEmpty())
+      {
+        element->ClearGridColumnTracks();
+        XDWORD len = gridcols.GetSize();
+        XDWORD p   = 0;
+        while(p < len)
+          {
+            while(p < len && (gridcols[(int)p] == __C(' ') || gridcols[(int)p] == __C('\t') || gridcols[(int)p] == __C(','))) p++;
+            if(p >= len) break;
+            XDWORD start = p;
+            while(p < len && gridcols[(int)p] != __C(' ') && gridcols[(int)p] != __C('\t') && gridcols[(int)p] != __C(',')) p++;
+            XSTRING tok;
+            gridcols.Copy((int)start, (int)p, tok);
+            if(tok.IsEmpty()) continue;
+            UI_GRIDTRACK track;
+            track.isminmax = false;
+            if(tok.Find(__L("fr"), true) != XSTRING_NOTFOUND)
+              {
+                track.unit = UI_GRID_TRACK_UNIT_FR;
+                tok.DeleteCharacter(__C('f'));
+                tok.DeleteCharacter(__C('r'));
+                tok.DeleteCharacter(__C('F'));
+                tok.DeleteCharacter(__C('R'));
+                track.value = tok.ConvertToDouble();
+              }
+            else if(tok.Find(__L("%"), true) != XSTRING_NOTFOUND)
+              {
+                track.unit = UI_GRID_TRACK_UNIT_PERCENT;
+                tok.DeleteCharacter(__C('%'));
+                track.value = tok.ConvertToDouble();
+              }
+             else
+              {
+                track.unit  = UI_GRID_TRACK_UNIT_PX;
+                track.value = tok.ConvertToDouble();
+              }
+            element->AddGridColumnTrack(track);
+          }
+      }
+
+    XSTRING gridrows;
+    if(style.Get(__L("grid-template-rows"), gridrows) && !gridrows.IsEmpty())
+      {
+        element->ClearGridRowTracks();
+        XDWORD len = gridrows.GetSize();
+        XDWORD p   = 0;
+        while(p < len)
+          {
+            while(p < len && (gridrows[(int)p] == __C(' ') || gridrows[(int)p] == __C('\t') || gridrows[(int)p] == __C(','))) p++;
+            if(p >= len) break;
+            XDWORD start = p;
+            while(p < len && gridrows[(int)p] != __C(' ') && gridrows[(int)p] != __C('\t') && gridrows[(int)p] != __C(',')) p++;
+            XSTRING tok;
+            gridrows.Copy((int)start, (int)p, tok);
+            if(tok.IsEmpty()) continue;
+            UI_GRIDTRACK track;
+            track.isminmax = false;
+            if(tok.Find(__L("fr"), true) != XSTRING_NOTFOUND)
+              {
+                track.unit = UI_GRID_TRACK_UNIT_FR;
+                tok.DeleteCharacter(__C('f'));
+                tok.DeleteCharacter(__C('r'));
+                tok.DeleteCharacter(__C('F'));
+                tok.DeleteCharacter(__C('R'));
+                track.value = tok.ConvertToDouble();
+              }
+            else if(tok.Find(__L("%"), true) != XSTRING_NOTFOUND)
+              {
+                track.unit = UI_GRID_TRACK_UNIT_PERCENT;
+                tok.DeleteCharacter(__C('%'));
+                track.value = tok.ConvertToDouble();
+              }
+             else
+              {
+                track.unit  = UI_GRID_TRACK_UNIT_PX;
+                track.value = tok.ConvertToDouble();
+              }
+            element->AddGridRowTrack(track);
+          }
+      }
+
+    double gspan = 0.0;
+    if(style.Get(__L("grid-column-span"), gspan) && gspan >= 1.0) element->SetGridColumnSpan((XDWORD)gspan);
+    if(style.Get(__L("grid-row-span"), gspan) && gspan >= 1.0)    element->SetGridRowSpan((XDWORD)gspan);
+  }
+
+  // Phase 1: persist cascaded bag for typed Reapply / re-layout.
+  element->StoreComputedStyle(style);
 
   return true;
 }
@@ -5923,9 +6791,17 @@ UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
           preselect = bline.IsWithin(x, y);
           if(preselect)
             {
-              if(element->IsSelected()) 
+              // Phase 2: allow :selected:hover when a stylesheet drives state visuals. Without a stylesheet
+              // (UI_Options XML-only), keep historical behaviour: selected items are not preselected.
+              bool allow_selected_hover = false;
+              if(element->GetLayout() && element->GetLayout()->GetStyleSheet() && element->GetStyleHasStateRules())
                 {
-                  preselect = false;                        
+                  allow_selected_hover = true;
+                }
+
+              if(element->IsSelected() && !allow_selected_hover)
+                {
+                  preselect = false;
                 }
             }
 
@@ -6104,7 +6980,14 @@ bool UI_MANAGER::SelectedElement(UI_ELEMENT* element)
 
   if(dynamic_cast<UI_PROPERTY_EDITABLE*>(element))        
     {
-      if(virtualkeyboard) virtualkeyboard->Show(true, element);
+      if(virtualkeyboard)
+        {
+          // Do not reopen the keyboard when the user taps the in-keyboard input edit itself.
+          if(!(virtualkeyboard->IsShow() && virtualkeyboard->IsOwnElement(element)))
+            {
+              virtualkeyboard->Show(true, element);
+            }
+        }
     }
 
   if(element->GetType() == UI_ELEMENT_TYPE_CHECKBOX)
@@ -6592,6 +7475,9 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
                                                         int scrollbar_y = event->GetYPos();
                                                         if(SelectScrollBar(scrollbar_x, scrollbar_y)) break;   // consumed by an interactive scrollbar
 
+                                                        // Phase 4: :pressed mirrors pointer-down on the hovered selectable.
+                                                        if(preselect_element) preselect_element->SetPressed(true);
+
                                                         if(element_modal)
                                                           { 
                                                             if(xmutex_modal) 
@@ -6627,6 +7513,8 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
                                                                   }
                                                               }
                                                           }
+
+                                                        if(preselect_element) preselect_element->SetPressed(false);
                                                       }
                                                       break;      
     }
@@ -6694,6 +7582,24 @@ class UI_MANAGER_ELEMENTANCESTORPROVIDER : public UI_CSSANCESTORPROVIDER
       if(outid)      *outid      = current->GetName();
       if(outclasses) *outclasses = current->GetClassNames();
 
+      return true;
+    }
+
+    virtual bool FillAncestorPseudos(int depth, XVECTOR<XSTRING*>& outpseudos)
+    {
+      if(!startelement) return false;
+
+      UI_ELEMENT* current = startelement->GetFather();
+
+      for(int d=0; d<depth; d++)
+        {
+          if(!current) return false;
+          current = current->GetFather();
+        }
+
+      if(!current) return false;
+
+      current->GetActivePseudos(outpseudos);
       return true;
     }
 
@@ -6862,6 +7768,14 @@ void UI_MANAGER::Clean()
 
   xmutex_modal        = NULL;
   element_modal       = NULL;
+
+  modal_layer_bitmap       = NULL;
+  modal_layer_x            = 0.0;
+  modal_layer_y            = 0.0;
+  modal_layer_w            = 0.0;
+  modal_layer_h            = 0.0;
+  modal_layer_valid        = false;
+  modal_layer_compositing  = false;
 
   xmutex_UIevent      = NULL;
 

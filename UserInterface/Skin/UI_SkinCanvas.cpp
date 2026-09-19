@@ -662,6 +662,107 @@ static bool UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, doubl
 }
 
 
+// RADIAL HALO (2026-09, UI_System ring-cpu / ring-ram): a progressradial's CSS "box-shadow" must read as a soft
+// glow AROUND the ring, not as a filled AABB/disc soft-shadow. DrawElementBoxShadow() rasterises a filled
+// rounded-rect silhouette; with blur>0 that still leaves a near-opaque wash across the WHOLE widget box --
+// including the hollow centre where the "%" caption sits. TextBackdrop then captures that wash under a
+// text-sized rectangle and PutBitmapNoAlpha-restores it as a hard blue/purple block behind "9%" (confirmed
+// against the Monitor del Sistema prototype vs live capture). This helper fills ONLY an annular band
+// (inner_r..outer_r), blurs it with the same AGG path, and composites it -- centre stays the card backdrop.
+static bool UI_SkinCanvas_DrawSoftRingGlow(GRP2DCANVAS* canvas, double cx, double cy,
+                                          double outer_r, double inner_r,
+                                          UI_COLOR* shadow_color, int blur_radius)
+{
+  if(!canvas || !shadow_color)        return false;
+  if(blur_radius <= 0)                return false;
+  if(outer_r <= 1.0)                  return false;
+  if(inner_r < 0.0)                   inner_r = 0.0;
+  if(inner_r >= outer_r)              inner_r = outer_r * 0.5;
+
+  int shape_w = (int)(outer_r * 2.0 + 0.5);
+  int shape_h = shape_w;
+  if(shape_w <= 0) return false;
+
+  int pad = UI_SKINCANVAS_SHADOW_BLURPADDING(blur_radius);
+  int bw  = shape_w + (2 * pad);
+  int bh  = shape_h + (2 * pad);
+
+  GRPBITMAP* bitmap = GRPFACTORY::GetInstance().CreateBitmap(bw, bh, GRPPROPERTYMODE_32_RGBA_8888);
+  if(!bitmap)         return false;
+  if(!bitmap->IsValid())
+    {
+      GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
+      return false;
+    }
+
+  XBYTE* buf = bitmap->GetBuffer();
+  if(!buf)
+    {
+      GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
+      return false;
+    }
+
+  const int r_off = 0;
+  const int g_off = 1;
+  const int b_off = 2;
+  const int a_off = 3;
+
+  XBYTE sr = (XBYTE)shadow_color->GetRed();
+  XBYTE sg = (XBYTE)shadow_color->GetGreen();
+  XBYTE sb = (XBYTE)shadow_color->GetBlue();
+  XBYTE sa = (XBYTE)shadow_color->GetAlpha();
+
+  double mid = outer_r;   // silhouette centre in shape-local coords (top-left origin)
+  double out2 = outer_r * outer_r;
+  double in2  = inner_r * inner_r;
+
+  for(int y = 0; y < bh; y++)
+    {
+      XBYTE* row = buf + (y * bw * 4);
+      for(int x = 0; x < bw; x++)
+        {
+          int off = x * 4;
+          row[off + r_off] = sr;
+          row[off + g_off] = sg;
+          row[off + b_off] = sb;
+          row[off + a_off] = 0;
+        }
+    }
+
+  for(int y = 0; y < shape_h; y++)
+    {
+      XBYTE* row = buf + ((y + pad) * bw * 4);
+      for(int x = 0; x < shape_w; x++)
+        {
+          double dx = ((double)x + 0.5) - mid;
+          double dy = ((double)y + 0.5) - mid;
+          double d2 = dx * dx + dy * dy;
+
+          if(d2 <= out2 && d2 >= in2)
+            {
+              row[((x + pad) * 4) + a_off] = sa;
+            }
+        }
+    }
+
+  {
+    agg::rendering_buffer rbuf;
+    rbuf.attach(buf, (unsigned)bw, (unsigned)bh, bw * 4);
+    agg::pixfmt_rgba32 pixf(rbuf);
+    agg::stack_blur_rgba32(pixf, (unsigned)blur_radius, (unsigned)blur_radius);
+  }
+
+  double minx = cx - outer_r;
+  double miny = cy - outer_r;   // EdgeTop convention: smaller y is the top of the box
+
+  UI_SkinCanvas_CompositeSoftShadowBitmap(canvas, bitmap, minx, miny, blur_radius);
+  GRPFACTORY::GetInstance().DeleteBitmap(bitmap);
+
+  diagskin_shadowcalls++;
+  return true;
+}
+
+
 // Box-shadow entry point used ONLY by Draw_Form (the one path dashboard.css actually exercises -- "form.card"
 // is the sole "box-shadow" rule in the stylesheet, per the 2026-09 investigation). Reuses the already-blurred
 // bitmap cached on "element_form" when the shadow's appearance (size/corner-radii/blur/colour) has not changed
@@ -951,6 +1052,11 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
           UI_ELEMENT* element = (UI_ELEMENT*)area->GetExtraData();
           if(!element || ((!element->MustReDraw()) && element->IsVisible())) continue;
 
+          // Do not let a stuck-dirty modal propagate MustReDraw onto ListBoxMenu / other siblings: the
+          // modal composite layer will blit over the intersection; peeling neighbours for the modal's
+          // sake recreates the punch-through cycle.
+          if(GEN_USERINTERFACE.ModalLayer_IsRebuildProtected(element)) continue;
+
           GRPBITMAP* bitmap = area->GetBitmap();
           if(bitmap) MarkOverlappingAreasDirty(area, bitmap, (int)c);
         }
@@ -988,6 +1094,9 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
   // Level zero is a real paint layer, not a sentinel. Every fatherless element keeps the default z_level=0,
   // including the cards and menu hit targets in UI_System. The old `level>0` loop never restored or deleted
   // those areas, so each redraw composited transparency and shadows over stale pixels indefinitely.
+  //
+  // CONTRACT: z_level orders RESTORE only (this loop). Paint order across layouts is screen composition
+  // layers in UI_MANAGER::Update() (content → modal → chrome), not z_level.
   for(int level=(int)max_z_level; level>=0; level--)
     {
       nareas = areas.GetSize();  
@@ -1004,6 +1113,15 @@ bool UI_SKINCANVAS_REBUILDAREAS::RebuildAllAreas()
                     {
                       if(element->GetZLevel() == (XDWORD)level)
                         {
+                          // Modal layer owns these pixels on the shared canvas: drop the area WITHOUT restoring
+                          // and WITHOUT clearing MustReDraw (composite offscreen rebuild consumes that flag).
+                          if(GEN_USERINTERFACE.ModalLayer_IsRebuildProtected(element))
+                            {
+                              areas.Delete(area);
+                              GEN_DELETE area;
+                              continue;
+                            }
+
                           // XTRACE_PRINTCOLOR(XTRACE_COLOR_PURPLE, __L("Del area level [%d] [%s] "), element->GetZLevel(), element->GetName()->Get());
                           GRPBITMAP* bitmap = area->GetBitmap();
                           if(bitmap) PutBitmapNoAlpha(area->GetXPos(), area->GetYPos(), bitmap);
@@ -1147,6 +1265,7 @@ void UI_SKINCANVAS_REBUILDAREAS::MarkOverlappingAreasDirty(GRP2DREBUILDAREA* are
       // children is exactly the "empty card" blank-flash defect (the container's own redraw repaints over its
       // children, and those children never redraw back because nothing marked THEM dirty).
       UI_ELEMENT* neighborelement = (UI_ELEMENT*)neighborarea->GetExtraData();
+      if(neighborelement && GEN_USERINTERFACE.ModalLayer_IsRebuildProtected(neighborelement)) continue;
       if(neighborelement) MarkElementSubtreeDirty(neighborelement);
     }
 }
@@ -1314,6 +1433,32 @@ void UI_SKINCANVAS_REBUILDAREAS::PutBitmapNoAlpha(double x, double y, GRPBITMAP*
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_SKINCANVAS_REBUILDAREAS::SetTargetCanvas(GRP2DCANVAS* newcanvas)
+* @brief      Retarget rebuild-area GetBitmap/PutBitmapNoAlpha (modal offscreen composition).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS_REBUILDAREAS::SetTargetCanvas(GRP2DCANVAS* newcanvas)
+{
+  if(newcanvas) canvas = newcanvas;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRP2DCANVAS* UI_SKINCANVAS_REBUILDAREAS::GetTargetCanvas()
+* @brief      Canvas currently used by rebuild-area capture/restore.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRP2DCANVAS* UI_SKINCANVAS_REBUILDAREAS::GetTargetCanvas()
+{
+  return canvas;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         GRP2DREBUILDAREA* UI_SKINCANVAS_REBUILDAREAS::GetRebuildAreaByElement(UI_ELEMENT* element)
 * @brief      Get rebuild area by element
@@ -1462,6 +1607,8 @@ GRPSCREEN* UI_SKINCANVAS::GetScreen()
 * --------------------------------------------------------------------------------------------------------------------*/
 GRP2DCANVAS* UI_SKINCANVAS::GetCanvas()
 {
+  if(canvas_override) return canvas_override;
+
   if(!screen)                   
     {
       return NULL;
@@ -1473,6 +1620,19 @@ GRP2DCANVAS* UI_SKINCANVAS::GetCanvas()
     }
 
   return screen->GetViewport(viewportindex)->GetCanvas();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_SKINCANVAS::SetCanvasOverride(GRP2DCANVAS* override_canvas)
+* @brief      Redirect GetCanvas() during modal offscreen composition (NULL = viewport canvas).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS::SetCanvasOverride(GRP2DCANVAS* override_canvas)
+{
+  canvas_override = override_canvas;
 }
 	
 
@@ -3186,6 +3346,64 @@ bool UI_SKINCANVAS::RestoreOnHide(UI_ELEMENT* element)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         void UI_SKINCANVAS::InvalidateCompositionCaches()
+* @brief      COMPOSITION-RESET (2026-09): drop every persistent true-backdrop cache and the one-shot rebuild
+*             areas after the canvas under the widgets has been fully rewritten (Layout_PutBackground, virtual
+*             keyboard modal show/hide, etc.). Without this, Draw_* restores bitmaps captured against the
+*             previous composition with PutBitmapNoAlpha and paints opaque white/stale rectangles over menus
+*             and chrome. Next Draw_* re-captures from the fresh background. Framework-wide, not example-specific.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS::InvalidateCompositionCaches()
+{
+  DeleteAllRebuildAreas();
+
+  progressbackdrops.DeleteContents();
+  progressbackdrops.DeleteAll();
+
+  progressbarlastbounds.DeleteContents();
+  progressbarlastbounds.DeleteAll();
+
+  formbackdrops.DeleteContents();
+  formbackdrops.DeleteAll();
+
+  radialbackdrops.DeleteContents();
+  radialbackdrops.DeleteAll();
+
+  textbackdrops.DeleteContents();
+  textbackdrops.DeleteAll();
+
+  optionbackdrops.DeleteContents();
+  optionbackdrops.DeleteAll();
+
+  // Pointers only (elements owned by the layout); after a full composition reset the "was hidden" hint is
+  // meaningless because every form/menu will re-capture from the new background on the next Draw_Form.
+  formhiddentracked.DeleteAll();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XDWORD UI_SKINCANVAS::CompositionCacheCount()
+* @brief      Count persistent true-backdrop cache entries (for tests / diagnostics).
+* @ingroup    USERINTERFACE
+*
+* @return     XDWORD : Sum of form/option/text/progress/radial backdrop entries.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD UI_SKINCANVAS::CompositionCacheCount()
+{
+  return formbackdrops.GetSize()
+       + optionbackdrops.GetSize()
+       + textbackdrops.GetSize()
+       + progressbackdrops.GetSize()
+       + radialbackdrops.GetSize();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_SKINCANVAS::Draw_Scroll(UI_ELEMENT* element)
 * @brief      Draw scroll
 * @ingroup    USERINTERFACE
@@ -3677,7 +3895,7 @@ bool UI_SKINCANVAS::Draw_Option(UI_ELEMENT* element)
       // kept forever would go stale against that; re-capturing fresh at the start of every new episode always
       // picks up whatever those siblings currently show.
       GRP2DREBUILDAREA* ownarea_bg = GetRebuildAreaByElement(element_option);
-      if(ownarea_bg)
+      if(ownarea_bg && !GEN_USERINTERFACE.ModalLayer_IsCompositing())
         {
           GRP2DREBUILDAREA* optionbackdrop = OptionBackdrop_Find(element_option);
 
@@ -3971,8 +4189,6 @@ bool UI_SKINCANVAS::Draw_EditText(UI_ELEMENT* element)
                              element_edittext->IsPreSelect()?element->GetBackgroundColor()->GetAlpha()/2:element->GetBackgroundColor()->GetAlpha());
 
   GRP2DCOLOR_RGBA8  linecolor;
-
-  GRP2DCOLOR_RGBA8  colorwhite(255, 255, 255, 255);
  
   if(element->MustReDraw()) 
     {
@@ -4018,8 +4234,10 @@ bool UI_SKINCANVAS::Draw_EditText(UI_ELEMENT* element)
             {
               int cursor_size = 3;
 
-              canvas->SetLineColor(&colorwhite);
-              canvas->SetFillColor(&colorwhite);
+              // Cursor follows the edit text colour so it stays visible on both light (e.g. virtual-keyboard
+              // input on white) and dark edit backgrounds — never hard-code white.
+              canvas->SetLineColor(&color);
+              canvas->SetFillColor(&color);
 
               canvas->Rectangle( x_position + cursor_xpos , 
                                  y_position + UI_SKINCANVAS_EDIT_MAXEDGE - 4  ,
@@ -4146,7 +4364,22 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
       double  vr_maxx = element_form->GetVisibleRect()->x + element_form->GetVisibleRect()->width;
       double  vr_maxy = element_form->GetVisibleRect()->y;
 
-      if(haspaintable)
+      // Phase 4: padding as paint inset for the fill/stroke content box (layout still uses padding for children).
+      double pad_L = element_form->GetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT);
+      double pad_R = element_form->GetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT);
+      double pad_T = element_form->GetPadding(UI_ELEMENT_TYPE_ALIGN_UP);
+      double pad_B = element_form->GetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN);
+      if(pad_L > 0.0 || pad_R > 0.0 || pad_T > 0.0 || pad_B > 0.0)
+        {
+          vr_minx += pad_L;
+          vr_maxx -= pad_R;
+          vr_miny += pad_T;
+          vr_maxy -= pad_B;
+          if(vr_maxx < vr_minx) vr_maxx = vr_minx;
+          if(vr_maxy < vr_miny) vr_maxy = vr_miny;
+        }
+
+      if(haspaintable && !GEN_USERINTERFACE.ModalLayer_IsCompositing())
         {
           // ACCENT-BAR TRAIL FIX (2026-09): root cause of "quedan rastros de la barra azul en la opcion
           // previamente seleccionada". Prefer "ownarea" (already expanded for the box-shadow/edge footprint)
@@ -4173,9 +4406,9 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
           double bd_w = ownarea ? (double)ownarea->GetBitmap()->GetWidth()  : (vr_maxx - vr_minx);
           double bd_h = ownarea ? (double)ownarea->GetBitmap()->GetHeight() : (vr_maxy - vr_miny);
 
-          GRP2DREBUILDAREA* formbackdrop = FormBackdrop_Find(element);
+      GRP2DREBUILDAREA* formbackdrop = FormBackdrop_Find(element);
 
-          // ACCENT-BAR TRAIL FIX (2026-09), continued: see FormBackdrop_MatchesArea()'s own header comment.
+      // ACCENT-BAR TRAIL FIX (2026-09), continued: see FormBackdrop_MatchesArea()'s own header comment.
           // The cached box can be smaller than THIS tick's actual backdrop box (confirmed live: the very first
           // capture of "nav-<section>-hl"/"-bar" measured smaller than a later ownarea-based redraw's own
           // padded box) -- restoring it as-is would leave the extra margin permanently un-erased. Erase the
@@ -5029,6 +5262,31 @@ bool UI_SKINCANVAS::Draw_ProgressBar(UI_ELEMENT* element)
                 }
             }
 
+          // STALE %-CAPTION BACKDROP (2026-09): the fill amount changes every value tick, but the caption's
+          // TextBackdrop was captured against a PREVIOUS fill (or against blue,30 under a CENTER/%-on-track
+          // label). Draw_Text() then PutBitmapNoAlpha-restores that stale rectangle — a solid light-blue box
+          // behind "6%" — before blending the new glyphs (UI_Options progressbar3, intermittent). Drop any
+          // text backdrop that overlaps the track (and the caption box) so Draw(element_text) below re-captures
+          // from the track+fill just painted.
+          if(element_text)
+            {
+              double trx = element_progressrect->GetXPosition();
+              double trw = element_progressrect->GetBoundaryLine()->width;
+              double trh = element_progressrect->GetBoundaryLine()->height;
+              double trt = UI_BOUNDARYLINE_EdgeTop(element_progressrect->GetYPosition(), trh);
+
+              TextBackdrop_InvalidateOverlapping(trx, trt, trw, trh);
+
+              double tx = element_text->GetXPosition();
+              double tw = element_text->GetBoundaryLine()->width;
+              double th = element_text->GetBoundaryLine()->height;
+              double tt = UI_BOUNDARYLINE_EdgeTop(element_text->GetYPosition(), th);
+
+              TextBackdrop_InvalidateOverlapping(tx, tt, tw, th);
+
+              element_text->SetMustReDraw(true);
+            }
+
           // ROOT-CAUSE FIX (2026-09, confirmed live pixel-by-pixel against progressbar3/progressbar0/
           // progressbar4 in UI_Options' example.xml -- see PreDrawFunction() above in this same file): for
           // every allocationtext mode except NONE/CENTER, element_text's own box sits OUTSIDE
@@ -5198,6 +5456,40 @@ bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
       double r      = outer - (thick / 2.0) - 1.0;                       // radius to the ring centerline
       if(r < 1.0) r = 1.0;
 
+      // Soft glow / box-shadow (CSS Lite): annular halo around the ring -- NOT DrawElementBoxShadow()'s filled
+      // AABB/disc (that washed the hollow centre and TextBackdrop froze it as a hard blue block behind "%").
+      // Only runs when the element authored box-shadow; XML-only layouts without it are untouched.
+      if(element->IsBoxShadowSet())
+        {
+          double sh_blur = element->GetShadowBlur();
+          double glow_cx = cx + element->GetShadowOffsetX();
+          double glow_cy = cy + element->GetShadowOffsetY();
+          double band_outer = r + (thick / 2.0) + 2.0;
+          double band_inner = r - (thick / 2.0) - 2.0;
+          if(band_inner < 0.0) band_inner = 0.0;
+          if(band_outer > outer) band_outer = outer;
+
+          bool soft_ok = false;
+          if(sh_blur > 0.0)
+            {
+              soft_ok = UI_SkinCanvas_DrawSoftRingGlow(canvas, glow_cx, glow_cy,
+                                                      band_outer, band_inner,
+                                                      element->GetShadowColor(), (int)sh_blur);
+            }
+
+          if(!soft_ok)
+            {
+              // Hard fallback: stroke the ring band only -- never fill the disc (would recreate the blue box).
+              GRP2DCOLOR_RGBA8 glow_col(element->GetShadowColor()->GetRed(),
+                                        element->GetShadowColor()->GetGreen(),
+                                        element->GetShadowColor()->GetBlue(),
+                                        element->GetShadowColor()->GetAlpha());
+              canvas->SetLineWidth(thick);
+              canvas->SetLineColor(&glow_col);
+              canvas->Circle(glow_cx, glow_cy, r, false);
+            }
+        }
+
       double start  = element_progress->GetStartAngle();
       double sweep  = element_progress->GetSweepAngle();
 
@@ -5339,7 +5631,22 @@ bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
         }
 
       // ---- 3) centered caption (e.g. "37%") --------------------------------------------------------------------------
-      if(element_text) Draw(element_text);
+      // STALE %-CAPTION BACKDROP (2026-09): RadialBackdrop restore wiped the previous glow/ring, then we
+      // repainted a (possibly different) annular halo. Any TextBackdrop captured under the old wash must not
+      // PutBitmapNoAlpha back as a hard rect behind the digits -- drop overlapping text caches and force a
+      // pristine re-capture from the pixels just painted (card + ring glow, centre clear).
+      if(element_text)
+        {
+          double tx = element_text->GetXPosition();
+          double tw = element_text->GetBoundaryLine()->width;
+          double th = element_text->GetBoundaryLine()->height;
+          double tt = UI_BOUNDARYLINE_EdgeTop(element_text->GetYPosition(), th);
+
+          TextBackdrop_InvalidateOverlapping(tx, tt, tw, th);
+          element_text->SetMustReDraw(true);
+
+          Draw(element_text);
+        }
 
       canvas->SetLineWidth(1.0);                                                       // reset shared line width so it doesn't leak to the next element
     }
@@ -5659,7 +5966,8 @@ bool UI_SKINCANVAS::PreDrawFunction(UI_ELEMENT* element, GRP2DCANVAS* canvas, XR
   bool createarea = false;
   if(element->MustReDraw())
     {
-      createarea = true;
+      // Modal offscreen rebuild must not register shared-canvas rebuild areas (wrong target / peel noise).
+      createarea = !GEN_USERINTERFACE.ModalLayer_IsCompositing();
       if(GetRebuildAreaByElement(element)) createarea = false;
 
       // A descendant of an element that is already going to be redrawn must NOT own another rebuild area.
@@ -6711,6 +7019,7 @@ void UI_SKINCANVAS::Clean()
   fontsize        = 0;
   screen          = NULL;
   viewportindex   = 0;
+  canvas_override = NULL;
 }
 
 

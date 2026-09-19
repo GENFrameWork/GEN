@@ -35,6 +35,7 @@
 
 #include "UI_LayoutEngine.h"
 #include "UI_CSSAdapter.h"
+#include "UI_Element_Form.h"
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -123,6 +124,17 @@ UI_LAYOUTBOX* UI_LAYOUTENGINE::BuildTree(UI_ELEMENT* root)
 
   box->SetAlignSelf(root->GetAlignSelf());
 
+  // CSS Grid: mirror tracks/spans onto the layout box (Phase 3 wiring).
+  box->SetGridContainer(root->IsGridContainer());
+  {
+    XVECTOR<UI_GRIDTRACK>& cols = root->GetGridColumnTracks();
+    for(XDWORD t=0; t<cols.GetSize(); t++) box->AddGridColumnTrack(cols.Get(t));
+    XVECTOR<UI_GRIDTRACK>& rows = root->GetGridRowTracks();
+    for(XDWORD t=0; t<rows.GetSize(); t++) box->AddGridRowTrack(rows.Get(t));
+    box->SetGridColumnSpan(root->GetGridColumnSpan());
+    box->SetGridRowSpan(root->GetGridRowSpan());
+  }
+
   XVECTOR<UI_ELEMENT*>* childelements = root->GetComposeElements();
   if(childelements)
     {
@@ -130,6 +142,8 @@ UI_LAYOUTBOX* UI_LAYOUTENGINE::BuildTree(UI_ELEMENT* root)
         {
           UI_ELEMENT* childelement = childelements->Get(c);
           if(!childelement) continue;
+          // Phase 3: invisible children must not consume flex/grid slots (badge_ok/ko, etc.).
+          if(!childelement->IsVisible()) continue;
 
           UI_LAYOUTBOX* childbox = BuildTree(childelement);
           if(childbox) box->AddChild(childbox);
@@ -304,6 +318,34 @@ void UI_LAYOUTENGINE::WriteBackRecursive(UI_ELEMENT* element, UI_LAYOUTBOX* box)
 
   UI_CSSBox_Set(element, cssbox);
 
+  // Forms/menus paint fills from VisibleRect, which is NOT updated by UI_CSSBox_Set (BoundaryLine/X/Y only).
+  // After RunLayout moves a CSS-flow form (flex/grid card, etc.), sync VisibleRect to the new content box
+  // or Draw_Form keeps filling the load-time rectangle while children sit at the new one.
+  //
+  // REGRESSION GUARD (UI_Options menu_horz): absolute XML forms often author visiblerect larger than their
+  // auto-fit content (e.g. "0,0,550,70"). Unconditionally rewriting VisibleRect from the content box undoes
+  // that authored window and changes the painted menu size. Only sync when THIS form is itself a flex/grid
+  // container, or its father is (CSS flow owns the geometry). Pure absolute forms keep load-time VisibleRect.
+  bool css_flow_owns_geometry = element->IsFlexContainer() || element->IsGridContainer();
+  if(!css_flow_owns_geometry && element->GetFather())
+    {
+      css_flow_owns_geometry = element->GetFather()->IsFlexContainer() || element->GetFather()->IsGridContainer();
+    }
+
+  if(css_flow_owns_geometry &&
+     (element->GetType() == UI_ELEMENT_TYPE_FORM || element->GetType() == UI_ELEMENT_TYPE_MENU))
+    {
+      UI_ELEMENT_FORM* form = (UI_ELEMENT_FORM*)element;
+      UI_BOUNDARYLINE* vr   = form->GetVisibleRect();
+      if(vr)
+        {
+          vr->x      = cssbox.left;
+          vr->y      = cssbox.top + cssbox.height;   // GEN bottom-edge storage
+          vr->width  = cssbox.width;
+          vr->height = cssbox.height;
+        }
+    }
+
   XVECTOR<UI_ELEMENT*>* elementchildren = element->GetComposeElements();
   if(!elementchildren) return;
 
@@ -317,10 +359,39 @@ void UI_LAYOUTENGINE::WriteBackRecursive(UI_ELEMENT* element, UI_LAYOUTBOX* box)
     {
       UI_ELEMENT* childelement = elementchildren->Get(c);
       if(!childelement) continue;
+      // Must match BuildTree()'s visibility skip so element/box child lists stay paired.
+      if(!childelement->IsVisible()) continue;
 
       WriteBackRecursive(childelement, boxchildren.Get(boxindex));
       boxindex++;
     }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_LAYOUTENGINE::SubtreeUsesCSSFlowLayout(UI_ELEMENT* element)
+* @brief      True if element or any compose-descendant is a flex or grid container.
+* @note       INTERNAL / STATIC
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_LAYOUTENGINE::SubtreeUsesCSSFlowLayout(UI_ELEMENT* element)
+{
+  if(!element) return false;
+
+  if(element->IsFlexContainer() || element->IsGridContainer()) return true;
+
+  XVECTOR<UI_ELEMENT*>* children = element->GetComposeElements();
+  if(!children) return false;
+
+  for(XDWORD c=0; c<children->GetSize(); c++)
+    {
+      UI_ELEMENT* child = children->Get(c);
+      if(child && SubtreeUsesCSSFlowLayout(child)) return true;
+    }
+
+  return false;
 }
 
 
@@ -340,17 +411,22 @@ void UI_LAYOUTENGINE::RunLayout(UI_ELEMENT* root, UI_LAYOUTSTRATEGY strategy)
   if(!root) return;
   if(strategy != UI_LAYOUTSTRATEGY_CSS) return;   // LEGACY: existing geometry stands untouched, by design
 
+  // Compat descendente: CreateLayouts() calls RunLayout on every top-level element. Trees with no
+  // display:flex/grid (UI_Options absolute XML, virtual-keyboard keys, etc.) must not enter BuildTree/
+  // WriteBack at all -- WriteBack was rewriting Form VisibleRect and BoundaryLine and visibly changed
+  // menu_horz / chrome sizes even though ArrangeFlex never ran.
+  if(!SubtreeUsesCSSFlowLayout(root)) return;
+
   UI_LAYOUTBOX* tree = BuildTree(root);
   if(!tree) return;
 
-  // Flexbox: CSS Lite wiring -- runs BEFORE ApplyPositioning(), exactly CSS's own order: normal-flow placement
-  // (flex, here; grid is not wired into RunLayout() yet -- see this file's SCOPE ADDENDUM) settles every box's
-  // position first, and RELATIVE/ABSOLUTE positioning then applies its own offset on top of that already-placed
-  // box, not the other way round. ApplyFlexLayout() recurses through the whole tree by itself (see its own
-  // banner), so one call here is enough for arbitrarily nested flex containers; it is a no-op wherever
-  // IsFlexContainer() is false, which is every box until an element actually opts in via "display: flex", so
-  // this is behaviour-preserving for every layout authored before this wiring existed.
-  ApplyFlexLayout(tree);
+  // Normal flow: ONE arrange-then-recurse walk for flex and grid together. A separate full-tree
+  // ApplyFlexLayout() followed by ApplyGridLayout() placed grid items AFTER flex had already finished
+  // arranging their descendants against pre-grid geometry -- nested texts inside grid cells (e.g. uptime
+  // tiles) stayed at CalculePosition coords and painted as clipped green fragments. Same risk for
+  // flex-inside-grid the other way. ApplyFlowLayoutRecursive arranges THIS node (flex and/or grid), then
+  // recurses so children see the parent's final content box.
+  ApplyFlowLayoutRecursive(tree);
 
   ApplyPositioning(tree);
   WriteBackTree(root, tree);
@@ -374,6 +450,34 @@ void UI_LAYOUTENGINE::ApplyFlexLayout(UI_LAYOUTBOX* root)
   if(!root) return;
 
   ApplyFlexLayoutRecursive(root);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_LAYOUTENGINE::ApplyFlowLayoutRecursive(UI_LAYOUTBOX* box)
+* @brief      Apply flex and/or grid at this node, then recurse (single normal-flow pass for RunLayout).
+* @note       INTERNAL / STATIC
+* @ingroup    USERINTERFACE
+*
+* @param[in]  box : Node being visited.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_LAYOUTENGINE::ApplyFlowLayoutRecursive(UI_LAYOUTBOX* box)
+{
+  if(!box) return;
+
+  // A node is never both flex and grid in authored CSS Lite today; if both flags were set, flex then grid
+  // would still be wrong -- grid wins as the last arrange on this node before children run.
+  if(box->IsFlexContainer()) ArrangeFlexChildren(box);
+  if(box->IsGridContainer()) ArrangeGridChildren(box);
+
+  XVECTOR<UI_LAYOUTBOX*>& children = box->GetChildren();
+  for(XDWORD c=0; c<children.GetSize(); c++)
+    {
+      UI_LAYOUTBOX* child = children.Get(c);
+      if(child) ApplyFlowLayoutRecursive(child);
+    }
 }
 
 

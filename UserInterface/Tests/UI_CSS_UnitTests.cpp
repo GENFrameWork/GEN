@@ -301,10 +301,23 @@ class UI_CSS_UnitTests_FakeAncestors : public UI_CSSANCESTORPROVIDER
         }
 
       classlists.DeleteAll();
+
+      for(XDWORD c=0; c<pseudolists.GetSize(); c++)
+        {
+          XVECTOR<XSTRING*>* plist = pseudolists.Get(c);
+          if(plist)
+            {
+              plist->DeleteContents();
+              plist->DeleteAll();
+              GEN_DELETE plist;
+            }
+        }
+
+      pseudolists.DeleteAll();
     }
 
     // Appends one more ancestor, one level further out than whatever was added before.
-    void AddAncestor(XCHAR* type, XCHAR* singleclass = NULL)
+    void AddAncestor(XCHAR* type, XCHAR* singleclass = NULL, XCHAR* singlepseudo = NULL)
     {
       types.Add(UI_CSS_UnitTests_NewStr(type));
       ids.Add(UI_CSS_UnitTests_NewStr(__L("")));
@@ -312,6 +325,10 @@ class UI_CSS_UnitTests_FakeAncestors : public UI_CSSANCESTORPROVIDER
       XVECTOR<XSTRING*>* classlist = GEN_NEW XVECTOR<XSTRING*>();
       if(classlist && singleclass) classlist->Add(UI_CSS_UnitTests_NewStr(singleclass));
       classlists.Add(classlist);
+
+      XVECTOR<XSTRING*>* plist = GEN_NEW XVECTOR<XSTRING*>();
+      if(plist && singlepseudo) plist->Add(UI_CSS_UnitTests_NewStr(singlepseudo));
+      pseudolists.Add(plist);
     }
 
     virtual bool GetAncestor(int depth, XSTRING** outtype, XSTRING** outid, XVECTOR<XSTRING*>** outclasses)
@@ -325,11 +342,30 @@ class UI_CSS_UnitTests_FakeAncestors : public UI_CSSANCESTORPROVIDER
       return true;
     }
 
+    virtual bool FillAncestorPseudos(int depth, XVECTOR<XSTRING*>& outpseudos)
+    {
+      if(depth < 0 || (XDWORD)depth >= pseudolists.GetSize()) return false;
+
+      XVECTOR<XSTRING*>* plist = pseudolists.Get(depth);
+      if(!plist) return false;
+
+      for(XDWORD i=0; i<plist->GetSize(); i++)
+        {
+          XSTRING* src = plist->Get(i);
+          if(!src) continue;
+          XSTRING* copy = UI_CSS_UnitTests_NewStr(src->Get());
+          if(copy) outpseudos.Add(copy);
+        }
+
+      return true;
+    }
+
   private:
 
     XVECTOR<XSTRING*>            types;
     XVECTOR<XSTRING*>            ids;
     XVECTOR<XVECTOR<XSTRING*>*>  classlists;
+    XVECTOR<XVECTOR<XSTRING*>*>  pseudolists;
 };
 
 
@@ -1490,6 +1526,120 @@ TEST(UI_PropertyRegistry, ExpandCSSShorthand4WithFourValuesAssignsEachSlotInOrde
   UI_PROPERTYREGISTRY::ExpandCSSShorthand4(text, out);
 
   EXPECT_EQ(out[0], 1.0); EXPECT_EQ(out[1], 2.0); EXPECT_EQ(out[2], 3.0); EXPECT_EQ(out[3], 4.0);
+}
+
+
+// Phase 0: margin 4-value CSS TRBL expansion (used when a layout has a stylesheet).
+TEST(UI_PropertyRegistry, MarginFourValueTRBLExpansionMatchesPaddingOrder)
+{
+  XSTRING text(__L("10 20 30 40"));
+  double  out[4] = { -1.0, -1.0, -1.0, -1.0 };
+
+  UI_PROPERTYREGISTRY::ExpandCSSShorthand4(text, out);
+
+  // TOP, RIGHT, BOTTOM, LEFT
+  EXPECT_EQ(out[0], 10.0);
+  EXPECT_EQ(out[1], 20.0);
+  EXPECT_EQ(out[2], 30.0);
+  EXPECT_EQ(out[3], 40.0);
+}
+
+
+// Phase C: ResolveMarginEdges -- stylesheet gate (TRBL + longhands) vs XML-only (LEFT,RIGHT,UP,DOWN, no longhands).
+TEST(UI_PropertyRegistry, ResolveMarginEdgesLegacyFourValueKeepsLeftRightUpDownOrder)
+{
+  UI_STYLE style;
+  style.Set(__L("margin"), __L("10,20,30,40"));   // LEFT,RIGHT,UP,DOWN when use_css_trbl=false
+
+  double edges[4] = { -1.0, -1.0, -1.0, -1.0 };
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, false, false, edges));
+
+  EXPECT_EQ(edges[0], 10.0);   // LEFT
+  EXPECT_EQ(edges[1], 20.0);   // RIGHT
+  EXPECT_EQ(edges[2], 30.0);   // UP
+  EXPECT_EQ(edges[3], 40.0);   // DOWN
+}
+
+
+TEST(UI_PropertyRegistry, ResolveMarginEdgesWithStylesheetUsesCssTrblOrder)
+{
+  UI_STYLE style;
+  style.Set(__L("margin"), __L("10,20,30,40"));   // TOP,RIGHT,BOTTOM,LEFT when use_css_trbl=true
+
+  double edges[4] = { -1.0, -1.0, -1.0, -1.0 };
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, true, true, edges));
+
+  EXPECT_EQ(edges[0], 40.0);   // LEFT  = TRBL slot 3
+  EXPECT_EQ(edges[1], 20.0);   // RIGHT = TRBL slot 1
+  EXPECT_EQ(edges[2], 10.0);   // UP    = TRBL slot 0
+  EXPECT_EQ(edges[3], 30.0);   // DOWN  = TRBL slot 2
+}
+
+
+TEST(UI_PropertyRegistry, ResolveMarginEdgesLonghandsOverrideShorthandOnlyWhenEnabled)
+{
+  UI_STYLE style;
+  style.Set(__L("margin"), __L("0,0,0,24"));          // CSS TRBL: left=24
+  style.Set(__L("margin-top"), __L("12"));
+  style.Set(__L("margin-left"), __L("8"));
+
+  double with_lh[4] = { -1.0, -1.0, -1.0, -1.0 };
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, true, true, with_lh));
+  EXPECT_EQ(with_lh[0], 8.0);    // margin-left wins
+  EXPECT_EQ(with_lh[2], 12.0);   // margin-top wins
+  EXPECT_EQ(with_lh[1], 0.0);
+  EXPECT_EQ(with_lh[3], 0.0);
+
+  double no_lh[4] = { -1.0, -1.0, -1.0, -1.0 };
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, true, false, no_lh));
+  EXPECT_EQ(no_lh[0], 24.0);     // shorthand left only -- longhands ignored
+  EXPECT_EQ(no_lh[2], 0.0);
+}
+
+
+TEST(UI_PropertyRegistry, ResolveMarginEdgesIgnoresLonghandsOnLegacyPathEvenIfPresent)
+{
+  // XML-only layouts must not honour margin-* keys (isolation contract for UI_Options).
+  UI_STYLE style;
+  style.Set(__L("margin"), __L("5,6,7,8"));           // legacy L,R,U,D
+  style.Set(__L("margin-top"), __L("99"));
+  style.Set(__L("margin-left"), __L("88"));
+
+  double edges[4] = { -1.0, -1.0, -1.0, -1.0 };
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, false, false, edges));
+
+  EXPECT_EQ(edges[0], 5.0);
+  EXPECT_EQ(edges[1], 6.0);
+  EXPECT_EQ(edges[2], 7.0);
+  EXPECT_EQ(edges[3], 8.0);
+}
+
+
+TEST(UI_PropertyRegistry, ResolveMarginEdgesLonghandsAloneWorkWithoutShorthand)
+{
+  UI_STYLE style;
+  style.Set(__L("margin-top"), __L("12"));
+  style.Set(__L("margin-left"), __L("24"));
+
+  double edges[4] = { -1.0, -1.0, -1.0, -1.0 };
+  ASSERT_TRUE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, true, true, edges));
+
+  EXPECT_EQ(edges[0], 24.0);
+  EXPECT_EQ(edges[1], 0.0);
+  EXPECT_EQ(edges[2], 12.0);
+  EXPECT_EQ(edges[3], 0.0);
+}
+
+
+TEST(UI_PropertyRegistry, ResolveMarginEdgesReturnsFalseWhenNoMarginKeysPresent)
+{
+  UI_STYLE style;
+  style.Set(__L("color"), __L("255,0,0"));
+
+  double edges[4] = { 1.0, 2.0, 3.0, 4.0 };
+  EXPECT_FALSE(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, true, true, edges));
+  EXPECT_EQ(edges[0], 1.0);   // untouched
+  EXPECT_EQ(edges[3], 4.0);
 }
 
 
@@ -3747,6 +3897,58 @@ TEST(UI_LayoutEngine, ApplyGridLayoutPlacesChildrenInRowMajorOrderAcrossFixedPxC
 }
 
 
+TEST(UI_LayoutEngine, RunLayoutArrangesNestedFlexInsideGridItemsAgainstPlacedColumnBoxes)
+{
+  // Reproduces the uptime-tiles failure mode: grid places columns, then nested flex must pack texts
+  // against the POST-grid column box (not CalculePosition leftovers). Separate Flex-then-Grid full
+  // passes left texts at stale Y; ApplyFlowLayoutRecursive fixes that.
+  UI_ELEMENT* grid = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* col  = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* label = GEN_NEW UI_ELEMENT();
+  UI_ELEMENT* value = GEN_NEW UI_ELEMENT();
+
+  UI_CSS_UnitTests_SetElementBox(grid, 100.0, 200.0, 200.0, 100.0);
+  UI_CSS_UnitTests_SetElementBox(col,  0.0, 0.0, 50.0, 100.0);     // pre-layout junk position
+  UI_CSS_UnitTests_SetElementBox(label, 5.0, 5.0, 40.0, 20.0);
+  UI_CSS_UnitTests_SetElementBox(value, 5.0, 40.0, 40.0, 30.0);
+
+  grid->SetGridContainer(true);
+  UI_GRIDTRACK track;
+  track.unit  = UI_GRID_TRACK_UNIT_FR;
+  track.value = 1.0;
+  grid->AddGridColumnTrack(track);
+  grid->AddGridColumnTrack(track);
+
+  col->SetFlexContainer(true);
+  col->SetFlexDirection(UI_FLEX_DIRECTION_COLUMN);
+  col->SetAlignItems(UI_ALIGN_ITEMS_CENTER);
+
+  col->SetFather(grid);
+  label->SetFather(col);
+  value->SetFather(col);
+  grid->GetComposeElements()->Add(col);
+  col->GetComposeElements()->Add(label);
+  col->GetComposeElements()->Add(value);
+
+  UI_LAYOUTENGINE::RunLayout(grid, UI_LAYOUTSTRATEGY_CSS);
+
+  UI_CSSBOX colbox   = UI_CSSBox_Get(col);
+  UI_CSSBOX labelbox = UI_CSSBox_Get(label);
+  UI_CSSBOX valuebox = UI_CSSBox_Get(value);
+
+  EXPECT_EQ(colbox.left, 100.0);
+  EXPECT_EQ(colbox.top, 200.0);
+  EXPECT_EQ(colbox.width, 100.0);   // 1fr of 200
+
+  // Label sits at the top of the placed column, not at the pre-layout (5,5) junk coords.
+  EXPECT_EQ(labelbox.top, colbox.top);
+  EXPECT_GE(valuebox.top, labelbox.top + labelbox.height - 0.01);
+  EXPECT_LE(valuebox.top + valuebox.height, colbox.top + colbox.height + 0.01);
+
+  GEN_DELETE grid;
+}
+
+
 TEST(UI_LayoutEngine, ApplyGridLayoutResolvesPercentTracksRelativeToTheContainersContentSize)
 {
   UI_LAYOUTBOX* container = GEN_NEW UI_LAYOUTBOX();
@@ -5239,6 +5441,39 @@ TEST(UI_LayoutEngine, RunLayoutReproducesDashboardXmlsCard3BodyRingPlusColumnWit
   EXPECT_EQ(scale100box.left, scalerowbox.left + scalerowbox.width - scale100box.width);
 
   GEN_DELETE card;
+}
+
+
+TEST(UI_StyleSheet, AncestorSelectedCombinatorRestylesDescendantWhenAncestorHasSelectedPseudo)
+{
+  // Framework capability: form.nav-row:selected .nav-label { color: ... } without C++ color hacks.
+  UI_CSSPARSER  parser;
+  UI_STYLESHEET sheet;
+  XSTRING       text;
+
+  text.Set(__L("form.nav-row:selected .nav-label { color: 88,166,255,255; }\n"
+               ".nav-label { color: 139,148,158,255; }\n"));
+
+  EXPECT_TRUE(parser.ParseText(text, sheet));
+
+  UI_CSS_UnitTests_FakeAncestors ancestors;
+  ancestors.AddAncestor(__L("form"), __L("nav-row"), __L("selected"));
+
+  XSTRING           etype(__L("text"));
+  XSTRING           eid(__L("nav-resumen-text"));
+  XVECTOR<XSTRING*> eclasses;
+  XSTRING           c_label(__L("nav-label"));
+  eclasses.Add(&c_label);
+  XVECTOR<XSTRING*> emptypseudos;
+
+  UI_STYLE bag;
+  EXPECT_TRUE(sheet.Resolve(etype, eid, eclasses, emptypseudos, bag, &ancestors));
+
+  XSTRING color;
+  EXPECT_TRUE(bag.Get(__L("color"), color));
+  EXPECT_TRUE(color.Find(__L("88"), true) != NOTFOUND);
+
+  EXPECT_TRUE(sheet.HasPseudoRulesFor(etype, eid, eclasses, &ancestors));
 }
 
 

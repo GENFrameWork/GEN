@@ -294,6 +294,24 @@ class UI_STYLE_ELEMENTANCESTORPROVIDER : public UI_CSSANCESTORPROVIDER
       return true;
     }
 
+    virtual bool FillAncestorPseudos(int depth, XVECTOR<XSTRING*>& outpseudos)
+    {
+      if(!startelement) return false;
+
+      UI_ELEMENT* current = startelement->GetFather();
+
+      for(int d=0; d<depth; d++)
+        {
+          if(!current) return false;
+          current = current->GetFather();
+        }
+
+      if(!current) return false;
+
+      current->GetActivePseudos(outpseudos);
+      return true;
+    }
+
   private:
 
     UI_ELEMENT* startelement;
@@ -369,6 +387,12 @@ bool UI_STYLE::FillFromCSSDeclarations(UI_STYLESHEET* sheet, UI_ELEMENT* element
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_STYLE::FillFromInlineStyle(XSTRING& styletext)
 {
+  return FillFromInlineStyle(styletext, NULL);
+}
+
+
+bool UI_STYLE::FillFromInlineStyle(XSTRING& styletext, UI_STYLESHEET* expandvarsfrom)
+{
   if(styletext.IsEmpty()) return false;
 
   UI_STYLE     inlinedeclarations;
@@ -382,7 +406,19 @@ bool UI_STYLE::FillFromInlineStyle(XSTRING& styletext)
   for(XDWORD c=0; c<properties->GetSize(); c++)
     {
       UI_STYLEPROPERTY* property = properties->Get(c);
-      if(property) Set(property->GetKey().Get(), property->GetValue());
+      if(!property) continue;
+
+      if(expandvarsfrom)
+        {
+          XSTRING expanded;
+          if(expandvarsfrom->ExpandValueVars(property->GetValue(), expanded))
+            {
+              Set(property->GetKey().Get(), expanded);
+              continue;
+            }
+        }
+
+      Set(property->GetKey().Get(), property->GetValue());
     }
 
   return true;

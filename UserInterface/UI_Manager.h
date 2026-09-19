@@ -63,6 +63,7 @@
 class GRPSCREEN;
 class GRPCONTEXT;
 class GRP2DCANVAS;
+class GRPBITMAP;
 class INPCURSORMOTION;
 class UI_ANIMATION;
 class UI_ELEMENT_TEXT;
@@ -71,6 +72,7 @@ class UI_VIRTUALKEYBOARD;
 class UI_STYLE;
 class UI_STYLESHEET;
 class UI_COMPUTEDSTYLE;
+class UI_SKINCANVAS;
 
 
 class UI_MANAGER : public XOBSERVER, public XSUBJECT
@@ -98,6 +100,33 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            Layouts_DeleteAll                         ();     
     UI_LAYOUT*                      Layouts_GetCommonLayout                   ();
            
+    // -------------------------------------------------------------------------
+    // SCREEN COMPOSITION LAYERS (dirty-rect, NOT full-frame Z)
+    // -------------------------------------------------------------------------
+    // Per GRPSCREEN / shared viewport canvas the paint order is fixed:
+    //   1) Background (Layout_PutBackground)
+    //   2) Content layouts (non-chrome)
+    //   3) Chrome layout (CFG caption / window buttons)
+    //   4) Modal layer — Draw the modal tree LAST on the live canvas (opaque AABB wipe + paint). Layout
+    //      skips the modal root while modal_layer_valid so it is not painted twice. This is option B:
+    //      the modal always wins the intersection without full-frame Z and without capturing a punched
+    //      shared-canvas snapshot.
+    //
+    // GetZLevel() only orders RESTORE inside one skin's RebuildAllAreas (erase high→low).
+    // It does NOT define paint order across layouts.
+    // -------------------------------------------------------------------------
+
+    // Layout_PutBackground* rewrite the canvas under widgets. Both entry points then call
+    // InvalidateCompositionCachesForScreen() so EVERY canvas skin on that screen (content layouts AND the
+    // custom window-chrome layout) drops persistent backdrop caches. Without the screen-wide wipe, chrome
+    // kept a stale formbackdrop after the virtual keyboard PutBackground and could bake itself into its own
+    // cache / leave ghosts over the top menu when auto-hide toggles.
+    //
+    // AUTHORING CONTRACT (compat descendente): layouts WITHOUT a <stylesheet> keep the historical XML-only
+    // path (no CSS cascade, no ReapplyStyleVisual). CSS Lite is opt-in per layout. Absolute xpos/ypos layouts
+    // (e.g. UI_Options) must remain pixel-identical when no stylesheet is present.
+    // Margin: no sheet -> 4-value LEFT,RIGHT,UP,DOWN and margin-* longhands ignored; with sheet -> CSS TRBL
+    // plus margin-top/right/bottom/left (see UI_PROPERTYREGISTRY::ResolveMarginEdges).
     bool                            Layout_PutBackground                      (XCHAR* layoutname);    
     bool                            Layout_PutBackgroundColor                 (XCHAR* layoutname);    
     bool                            Layout_PutBackgroundImage                 (XCHAR* layoutname);    
@@ -106,7 +135,12 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            Layout_PutBackground                      (bool scale = false);    
     bool                            Layout_PutBackgroundColor                 ();    
     bool                            Layout_PutBackgroundImage                 (bool scale = false);    
-    bool                            Layout_PutBackgroundSeamlessPattern       ();    
+    bool                            Layout_PutBackgroundSeamlessPattern       ();
+
+    // Drop composition caches for every UI_SKINCANVAS whose GetScreen() is "screen" (content + chrome).
+    void                            InvalidateCompositionCachesForScreen     (GRPSCREEN* screen);
+    // Mark every layout on "screen" dirty. exclude_chrome: skip the CFG chromes layout (content-only redraw).
+    void                            Elements_SetToRedrawForScreen             (GRPSCREEN* screen, bool exclude_chrome = false);    
 
     bool                            Update                                    (UI_LAYOUT* layout);
     bool                            Update                                    (XCHAR* layoutname);
@@ -125,9 +159,33 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            Element_PutToLastPositionLayout           (XCHAR* name, UI_ELEMENT_TYPE type = UI_ELEMENT_TYPE_UNKNOWN);      
     bool                            Element_PutToLastPositionLayout           (XSTRING& name, UI_ELEMENT_TYPE type = UI_ELEMENT_TYPE_UNKNOWN);    
     
-    bool                            Element_SetModal                          (UI_ELEMENT* element_modal);  
+    bool                            Element_SetModal                          (UI_ELEMENT* element_modal);
+    UI_ELEMENT*                     Element_GetModal                          ();
+    // Modal composition layer (option B): after content AND chrome, blit an opaque cache built on an
+    // offscreen canvas (Draw of the modal tree only — never a snapshot of the shared screen). Layout Draw
+    // of the modal root is deferred while the cache is valid (see ModalLayer_IsLayoutDrawDeferred).
+    bool                            Element_DrawModalOnTop                    ();
+    void                            ModalLayer_Invalidate                     ();
+    bool                            ModalLayer_IsLayoutDrawDeferred           (UI_ELEMENT* element);
+    bool                            ModalLayer_IsCompositing                  ();
+    // While the modal cache is valid, RebuildAllAreas must not peel the modal subtree (its PreDraw
+    // snapshot on the shared canvas is meaningless; the offscreen layer owns those pixels).
+    bool                            ModalLayer_IsRebuildProtected             (UI_ELEMENT* element);
+    // After the modal layer has been composed once (modal_layer_valid): content whose AABB intersects the
+    // modal must not Keep MustReDraw / rebuild-peel — that PutBitmapNoAlpha restores parchment/ListBoxMenu/
+    // Edit into the keyboard every frame (UI_Options punch-through). Modal tree itself is excluded.
+    // Also suppresses content under a visible custom-chrome caption (translucent caption otherwise shows
+    // ListBoxMenu/title ghosts in the title band).
+    bool                            ModalLayer_SuppressesContentDraw          (UI_ELEMENT* element);
+    bool                            ChromeCaption_SuppressesContentDraw       (UI_ELEMENT* element);
+    bool                            Overlay_SuppressesContentDraw             (UI_ELEMENT* element);
+    void                            Overlay_ClearSuppressedContentDirt        ();
 
-    bool                            Elements_SetToRedraw                      (); 
+    // Before RebuildAllAreas: if two canvas skins share the same GRP2DCANVAS, propagate MustReDraw across
+    // overlapping rebuild areas so content/chrome/modal cannot leave ghosts in each other's bands.
+    void                            PropagateRebuildOverlapDirtAcrossSharedCanvases();
+
+    bool                            Elements_SetToRedraw                      ();
     bool                            Elements_SetToRedraw                      (UI_ELEMENT* element, bool recursive = true);
 
     bool                            Elements_RebuildDrawAreas                 ();
@@ -235,6 +293,10 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     
     void                            Clean                                     ();   
 
+    void                            ModalLayer_Release                        ();
+    bool                            ModalLayer_RebuildOffscreen               (UI_SKINCANVAS* skin_canvas, UI_ELEMENT* modal);
+    bool                            ModalLayer_Rect                           (UI_ELEMENT* modal, double& x, double& y, double& w, double& h);
+
     static UI_MANAGER*              instance; 
 
     bool                            iszippedfile;
@@ -247,6 +309,15 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
    
     XMUTEX*                         xmutex_modal;
     UI_ELEMENT*                     element_modal;
+
+    // Option B modal layer cache (opaque snapshot blitted after content).
+    GRPBITMAP*                      modal_layer_bitmap;
+    double                          modal_layer_x;
+    double                          modal_layer_y;
+    double                          modal_layer_w;
+    double                          modal_layer_h;
+    bool                            modal_layer_valid;
+    bool                            modal_layer_compositing;  // true while Composite rebuilds via Draw
 
     XMUTEX*                         xmutex_UIevent;
     

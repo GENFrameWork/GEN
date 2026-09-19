@@ -321,7 +321,6 @@ bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XST
 
       XSTRING            emptystr;
       XVECTOR<XSTRING*>  emptyclasses;
-      XVECTOR<XSTRING*>  emptypseudos;   // ancestor compounds never see live pseudo state -- see the class banner
 
       for(XDWORD c=0; c<ancestorsteps.GetSize(); c++)
         {
@@ -342,7 +341,15 @@ bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XST
               XSTRING&            ai = aid      ? *aid      : emptystr;
               XVECTOR<XSTRING*>&  ac = aclasses ? *aclasses : emptyclasses;
 
-              if(!step->compound->Match(at, ai, ac, emptypseudos)) return false;
+              // Live ancestor pseudos (opt-in via FillAncestorPseudos). Without them, :selected/:hover on an
+              // ancestor compound can never match -- that blocked the recommended nav pattern
+              // `form.nav-row:selected .nav-label` while force-pushing C++ color hacks in examples.
+              XVECTOR<XSTRING*> apseudos;
+              ancestors->FillAncestorPseudos(trydepth, apseudos);
+              bool matched = step->compound->Match(at, ai, ac, apseudos);
+              apseudos.DeleteContents();
+              apseudos.DeleteAll();
+              if(!matched) return false;
 
               referencedepth = trydepth;
             }
@@ -363,7 +370,13 @@ bool UI_CSSSELECTOR::Match(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XST
                   XSTRING&            ai = aid      ? *aid      : emptystr;
                   XVECTOR<XSTRING*>&  ac = aclasses ? *aclasses : emptyclasses;
 
-                  if(step->compound->Match(at, ai, ac, emptypseudos))
+                  XVECTOR<XSTRING*> apseudos;
+                  ancestors->FillAncestorPseudos(trydepth, apseudos);
+                  bool matched = step->compound->Match(at, ai, ac, apseudos);
+                  apseudos.DeleteContents();
+                  apseudos.DeleteAll();
+
+                  if(matched)
                     {
                       found          = true;
                       referencedepth = trydepth;
@@ -1027,6 +1040,12 @@ void UI_STYLESHEET::ExpandVariables()
 }
 
 
+bool UI_STYLESHEET::ExpandValueVars(XSTRING& in, XSTRING& out)
+{
+  return SubstituteVars(in, out);
+}
+
+
 /**-------------------------------------------------------------------------------------------------------------------
 *
 * @fn         bool UI_STYLESHEET::SubstituteVars(XSTRING& in, XSTRING& out)
@@ -1171,6 +1190,7 @@ bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, 
   XSTRING           s_active     (__L("active"));
   XSTRING           s_disabled   (__L("disabled"));
   XSTRING           s_hover      (__L("hover"));
+  XSTRING           s_pressed    (__L("pressed"));
 
   allpseudos.Add(&s_root);
   allpseudos.Add(&s_preselect);
@@ -1178,6 +1198,43 @@ bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, 
   allpseudos.Add(&s_active);
   allpseudos.Add(&s_disabled);
   allpseudos.Add(&s_hover);
+  allpseudos.Add(&s_pressed);
+
+  // Probe wrapper: ancestor compounds with :selected/:hover must also see the full pseudo set, otherwise
+  // `form.row:selected .label` would never mark the label as style_has_state_rules at load time.
+  class UI_CSS_PROBEANCESTORPROVIDER : public UI_CSSANCESTORPROVIDER
+  {
+    public:
+      UI_CSS_PROBEANCESTORPROVIDER(UI_CSSANCESTORPROVIDER* inner, XVECTOR<XSTRING*>* probe)
+        { this->inner = inner; this->probe = probe; }
+
+      virtual bool GetAncestor(int depth, XSTRING** outtype, XSTRING** outid, XVECTOR<XSTRING*>** outclasses)
+        {
+          if(!inner) return false;
+          return inner->GetAncestor(depth, outtype, outid, outclasses);
+        }
+
+      virtual bool FillAncestorPseudos(int depth, XVECTOR<XSTRING*>& outpseudos)
+        {
+          (void)depth;
+          if(!probe) return false;
+          for(XDWORD i=0; i<probe->GetSize(); i++)
+            {
+              XSTRING* src = probe->Get(i);
+              if(!src) continue;
+              XSTRING* copy = GEN_NEW XSTRING();
+              if(copy) { copy->Set(src->Get()); outpseudos.Add(copy); }
+            }
+          return true;
+        }
+
+    private:
+      UI_CSSANCESTORPROVIDER* inner;
+      XVECTOR<XSTRING*>*      probe;
+  };
+
+  UI_CSS_PROBEANCESTORPROVIDER probeancestors(ancestors, &allpseudos);
+  UI_CSSANCESTORPROVIDER*      matchancestors = ancestors ? (UI_CSSANCESTORPROVIDER*)&probeancestors : NULL;
 
   // Phase 2 ("índice de reglas por id/tipo/clase"): same superset-candidate optimization as Resolve(), see
   // CollectCandidateRules()'s doc comment.
@@ -1195,13 +1252,23 @@ bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, 
         {
           UI_CSSSELECTOR* sel = sels.Get(d);
           if(!sel) continue;
-          if(!sel->HasPseudos()) continue;
+          if(!sel->HasPseudos() && !sel->HasAncestorSteps()) continue;
 
-          if(sel->Match(elementtype, elementid, elementclasses, allpseudos, ancestors))
+          // Ancestor-only pseudos (pseudo on a parent compound, not the subject) still count as state rules.
+          bool has_any_pseudo = sel->HasPseudos();
+          if(!has_any_pseudo && sel->HasAncestorSteps())
             {
-              // Detach borrowed pointers before returning: XVECTOR::DeleteAll would not free them (we didn't
-              // allocate the XSTRINGs on the heap), but leaving them attached is harmless -- allpseudos is a
-              // local variable and its destructor will not double-free non-owned entries.
+              XVECTOR<UI_CSSANCESTORSTEP*>& steps = sel->GetAncestorSteps();
+              for(XDWORD s=0; s<steps.GetSize(); s++)
+                {
+                  UI_CSSANCESTORSTEP* step = steps.Get(s);
+                  if(step && step->compound && step->compound->HasPseudos()) { has_any_pseudo = true; break; }
+                }
+            }
+          if(!has_any_pseudo) continue;
+
+          if(sel->Match(elementtype, elementid, elementclasses, allpseudos, matchancestors))
+            {
               return true;
             }
         }

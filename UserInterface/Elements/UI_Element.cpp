@@ -41,6 +41,7 @@
 
 #include "UI_Color.h"
 #include "UI_Element_Scroll.h"
+#include "UI_Layout.h"
 #include "UI_Manager.h"
 #include "UI_Style.h"
 #include "UI_StyleSheet.h"
@@ -71,6 +72,7 @@
 * --------------------------------------------------------------------------------------------------------------------*/
 UI_ELEMENT::UI_ELEMENT()    
 { 
+  computed_style = NULL;
   Clean();     
 
   isvisible      = true;  
@@ -117,6 +119,12 @@ UI_ELEMENT::~UI_ELEMENT()
   class_names.DeleteAll();
 
   DeleteAllComposeElements();
+
+  if(computed_style)
+    {
+      GEN_DELETE computed_style;
+      computed_style = NULL;
+    }
 
   Clean();
 }
@@ -1375,7 +1383,25 @@ void UI_ELEMENT::SetSelected(bool isselected)
 
   this->isselected = isselected;
 
-  if(changed) ReapplyStyleVisual();
+  if(changed)
+    {
+      ReapplyStyleVisual();
+
+      // Descendants may match ancestor :selected combinators (e.g. form.nav-row:selected .nav-label).
+      // Only walk when a stylesheet is present -- XML-only layouts stay no-op.
+      if(element_layout && element_layout->GetStyleSheet())
+        {
+          XVECTOR<UI_ELEMENT*>* children = GetComposeElements();
+          if(children)
+            {
+              for(XDWORD c=0; c<children->GetSize(); c++)
+                {
+                  UI_ELEMENT* child = children->Get(c);
+                  if(child) child->ReapplyStyleVisualRecursive();
+                }
+            }
+        }
+    }
 }
 
 
@@ -2210,12 +2236,10 @@ void UI_ELEMENT::SetIntrinsicHeight(double intrinsicheight)
 *             box), so ":hover" and ":preselect" match exactly the same live state and either spelling can be
 *             used in a stylesheet -- authors coming from CSS can write the familiar ":hover", existing rules
 *             written against ":preselect" keep working unchanged.
-* @note       ":active" is a DELIBERATE, PERMANENT divergence from CSS. Here it mirrors GEN's own `isactive`
+* @note       ":active" is a DELIBERATE divergence from CSS. Here it mirrors GEN's own `isactive`
 *             ("this element is enabled / not disabled"), not CSS's `:active` ("the pointer is currently
-*             pressed on this element"). GEN has no press/pointer-down state to expose today, so ":active" /
-*             ":disabled" are kept as the enabled/disabled pair authors already use in existing stylesheets,
-*             and a real CSS-style pointer-press pseudo (":pressed", scoped to GEN's own semantics rather than
-*             reusing ":active" for it) is left for a later phase instead of overloading this name further.
+*             pressed on this element"). Phase 4 exposes ":pressed" for pointer-down (SetPressed), keeping
+*             ":active"/":disabled" as the enabled/disabled pair authors already use.
 * @ingroup    USERINTERFACE
 *
 * @param[out] out : Vector to append pseudo names into.
@@ -2241,6 +2265,12 @@ void UI_ELEMENT::GetActivePseudos(XVECTOR<XSTRING*>& out)
    else
     {
       XSTRING* p = GEN_NEW XSTRING(); if(p) { p->Set(__L("disabled"));  out.Add(p); }
+    }
+
+  // Phase 4: ":pressed" is the CSS-like pointer-down pseudo; ":active" stays GEN enabled (above).
+  if(ispressed)
+    {
+      XSTRING* p = GEN_NEW XSTRING(); if(p) { p->Set(__L("pressed"));   out.Add(p); }
     }
 }
 
@@ -2434,6 +2464,28 @@ void UI_ELEMENT::ReapplyStyleVisual()
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         void UI_ELEMENT::ReapplyStyleVisualRecursive()
+* @brief      ReapplyStyleVisual on this element then every compose descendant (ancestor :selected combinators).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT::ReapplyStyleVisualRecursive()
+{
+  ReapplyStyleVisual();
+
+  XVECTOR<UI_ELEMENT*>* children = GetComposeElements();
+  if(!children) return;
+
+  for(XDWORD c=0; c<children->GetSize(); c++)
+    {
+      UI_ELEMENT* child = children->Get(c);
+      if(child) child->ReapplyStyleVisualRecursive();
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_ELEMENT::GetStyleHasStateRules()
 * @brief      True iff at least one pseudo-carrying rule in the active stylesheet targets this element.
 * @ingroup    USERINTERFACE
@@ -2459,6 +2511,120 @@ bool UI_ELEMENT::GetStyleHasStateRules()
 void UI_ELEMENT::SetStyleHasStateRules(bool has)
 {
   style_has_state_rules = has;
+}
+
+
+UI_STYLE* UI_ELEMENT::GetComputedStyle()
+{
+  return computed_style;
+}
+
+
+void UI_ELEMENT::StoreComputedStyle(UI_STYLE& style)
+{
+  if(computed_style)
+    {
+      GEN_DELETE computed_style;
+      computed_style = NULL;
+    }
+
+  computed_style = GEN_NEW UI_STYLE();
+  if(!computed_style) return;
+
+  XVECTOR<UI_STYLEPROPERTY*>* props = style.GetProperties();
+  if(!props) return;
+
+  for(XDWORD c=0; c<props->GetSize(); c++)
+    {
+      UI_STYLEPROPERTY* prop = props->Get(c);
+      if(prop) computed_style->Set(prop->GetKey().Get(), prop->GetValue());
+    }
+}
+
+
+bool UI_ELEMENT::IsGridContainer()
+{
+  return css_gridcontainer;
+}
+
+
+void UI_ELEMENT::SetGridContainer(bool isgridcontainer)
+{
+  css_gridcontainer = isgridcontainer;
+}
+
+
+void UI_ELEMENT::ClearGridColumnTracks()
+{
+  css_gridcolumntracks.DeleteAll();
+}
+
+
+void UI_ELEMENT::AddGridColumnTrack(UI_GRIDTRACK track)
+{
+  css_gridcolumntracks.Add(track);
+}
+
+
+XVECTOR<UI_GRIDTRACK>& UI_ELEMENT::GetGridColumnTracks()
+{
+  return css_gridcolumntracks;
+}
+
+
+void UI_ELEMENT::ClearGridRowTracks()
+{
+  css_gridrowtracks.DeleteAll();
+}
+
+
+void UI_ELEMENT::AddGridRowTrack(UI_GRIDTRACK track)
+{
+  css_gridrowtracks.Add(track);
+}
+
+
+XVECTOR<UI_GRIDTRACK>& UI_ELEMENT::GetGridRowTracks()
+{
+  return css_gridrowtracks;
+}
+
+
+XDWORD UI_ELEMENT::GetGridColumnSpan()
+{
+  return css_gridcolumnspan;
+}
+
+
+void UI_ELEMENT::SetGridColumnSpan(XDWORD span)
+{
+  css_gridcolumnspan = (span < 1) ? 1 : span;
+}
+
+
+XDWORD UI_ELEMENT::GetGridRowSpan()
+{
+  return css_gridrowspan;
+}
+
+
+void UI_ELEMENT::SetGridRowSpan(XDWORD span)
+{
+  css_gridrowspan = (span < 1) ? 1 : span;
+}
+
+
+bool UI_ELEMENT::IsPressed()
+{
+  return ispressed;
+}
+
+
+void UI_ELEMENT::SetPressed(bool ispressed)
+{
+  bool changed = (this->ispressed != ispressed);
+  this->ispressed = ispressed;
+  if(changed) ReapplyStyleVisual();
 }
 
 
@@ -2542,6 +2708,9 @@ void UI_ELEMENT::Clean()
   snapshot_taken          = false;
   style_has_state_rules   = false;
 
+  // computed_style ownership: deleted in destructor / StoreComputedStyle replace; Clean only nulls.
+  computed_style          = NULL;
+
   // --- Flexbox: CSS Lite wiring -- same defaults as the mirrored UI_LAYOUTBOX properties (UI_LayoutBox.cpp's own
   //     constructor), so an element that never sets any of these behaves exactly like a freshly-built UI_LAYOUTBOX.
   css_flexcontainer       = false;
@@ -2558,6 +2727,14 @@ void UI_ELEMENT::Clean()
   css_flexbasis.specified = false;
   css_flexbasis.value     = 0.0;
   css_alignself           = UI_ALIGN_SELF_AUTO;
+
+  css_gridcontainer       = false;
+  css_gridcolumntracks.DeleteAll();
+  css_gridrowtracks.DeleteAll();
+  css_gridcolumnspan      = 1;
+  css_gridrowspan         = 1;
+
+  ispressed               = false;
 
   intrinsic_width         = -1.0;    // unset -- see GetIntrinsicWidth()'s own comment
   intrinsic_height        = -1.0;

@@ -97,6 +97,8 @@ class UI_ELEMENT_PROGRESS_RADIAL : public UI_ELEMENT_OPTION
     int                     GetGradientMode             ();
     void                    SetGradientMode             (int gradientmode);
 
+    virtual void            ReapplyStyleVisual          ();
+
   private:
 
     void                    Clean                       ();

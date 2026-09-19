@@ -102,6 +102,16 @@ class UI_PROPERTYREGISTRY
     //   two mandatory offsets and a colour were found -- same "only latch on a valid parse" rule the original
     //   inline version used.
     static bool                    ParseBoxShadow               (XSTRING& raw, double& outoffsetx, double& outoffsety, double& outblur, XSTRING& outcolor);
+
+    // Resolves "margin" shorthand + optional margin-top/right/bottom/left longhands into out_lrud[4] =
+    // LEFT, RIGHT, UP, DOWN (same slot order UI_ELEMENT::SetMargin uses).
+    //   use_css_trbl     : 4-value shorthand is CSS TOP,RIGHT,BOTTOM,LEFT; false keeps historical
+    //                      LEFT,RIGHT,UP,DOWN (XML-only layouts / UI_Options).
+    //   apply_longhands  : when true, margin-* longhands override the shorthand last (CSS Lite only;
+    //                      pass false with use_css_trbl=false so unknown longhand keys cannot perturb
+    //                      a legacy layout).
+    // Returns true if any margin key was present (caller should SetMargin); false leaves out_lrud untouched.
+    static bool                    ResolveMarginEdges           (UI_STYLE& style, bool use_css_trbl, bool apply_longhands, double out_lrud[4]);
 };
 
 

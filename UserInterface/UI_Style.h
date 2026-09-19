@@ -110,6 +110,7 @@ class UI_STYLE
     // so it wins over both -- an exact match of HTML's own inline-style precedence -- without requiring a
     // one-off class in the .css just to tweak a single element.
     bool                            FillFromInlineStyle         (XSTRING& styletext);
+    bool                            FillFromInlineStyle         (XSTRING& styletext, UI_STYLESHEET* expandvarsfrom);
 
   private:
 

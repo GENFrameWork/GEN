@@ -35,6 +35,10 @@
 /*---- INCLUDES ------------------------------------------------------------------------------------------------------*/
 
 #include "UI_Element_Text.h"
+#include "UI_Style.h"
+#include "UI_StyleSheet.h"
+#include "UI_Layout.h"
+#include "UI_LayoutEngine.h"
 
 
 
@@ -169,6 +173,39 @@ XDWORD UI_ELEMENT_TEXT::GetMaxSizeText()
 void UI_ELEMENT_TEXT::SetMaxSizeText(XDWORD maxsizetext)
 {
   this->maxsizetext = maxsizetext;
+}
+
+
+void UI_ELEMENT_TEXT::ReapplyStyleVisual()
+{
+  XDWORD oldsize = sizefont;
+
+  UI_ELEMENT::ReapplyStyleVisual();
+
+  if(!GetStyleHasStateRules()) return;
+
+  UI_LAYOUT* layout = GetLayout();
+  UI_STYLESHEET* sheet = layout ? layout->GetStyleSheet() : NULL;
+  if(!sheet) return;
+
+  UI_STYLE bag;
+  bag.FillFromCSSDeclarations(sheet, this);
+
+  double sf = 0.0;
+  if(bag.Get(__L("sizefont"), sf) && sf > 0.0)
+    {
+      SetSizeFont((XDWORD)sf);
+    }
+
+  // Phase 3.3: if sizefont changed inside a flex/grid father, re-run local layout.
+  if(sizefont != oldsize)
+    {
+      UI_ELEMENT* father = GetFather();
+      if(father && (father->IsFlexContainer() || father->IsGridContainer()))
+        {
+          UI_LAYOUTENGINE::RunLayout(father, UI_LAYOUTSTRATEGY_CSS);
+        }
+    }
 }
 
 

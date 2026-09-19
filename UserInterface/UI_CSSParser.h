@@ -154,6 +154,7 @@ class UI_CSSPARSER
     void                            Clean                       ();
 
     XPATH                           currentfiledir;   // directory of the file ParseText() is currently inside of (ParseFile()-driven parses only); base for resolving a relative @import URL.
+    XPATH                           currentfilepath;  // full path of the file currently being parsed (ParseFile only); included in ERROR/WARNING diagnostics so a silent transparent UI is diagnosable.
     XVECTOR<XPATH*>                 importstack;      // files currently open along this ParseFile() call's @import chain; cycle guard, see ParseFile().
 
     // Phase 2 ("cerrar el caso residual de variables"): depth of @import recursion this parser is currently
@@ -162,6 +163,12 @@ class UI_CSSPARSER
     // for the full rationale (the residual bug: an imported file's var() references used to be substituted
     // before the IMPORTING file had parsed its own later ":root" block, permanently losing any override).
     int                             importdepth;
+
+    // Phase 0 hygiene: counts rules discarded during the current ParseText() (malformed / empty). Used to emit
+    // a visible ERROR summary when a non-empty source produced zero kept rules -- the classic "comment closed
+    // early by */ in prose, everything after is garbage" failure mode that used to leave the UI fully transparent.
+    int                             discarded_rules;
+    int                             unterminated_comments;
 };
 
 
