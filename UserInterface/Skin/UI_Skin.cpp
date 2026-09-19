@@ -36,7 +36,7 @@
 
 #include "UI_Skin.h"
 
-#include "XTimer.h" 
+#include "XTimer.h"
 
 #include "GRPScreen.h"
 #include "GRPBitmap.h"
@@ -45,8 +45,6 @@
 #include "UI_Property_Scrolleable.h"
 #include "UI_Animation.h"
 
-#include "XDiagLog.h"    // TEMPORARY diagnostics -- see XDiagLog.h. Delete along with the counters below once root-caused.
-
 
 
 /*---- PRECOMPILATION INCLUDES ---------------------------------------------------------------------------------------*/
@@ -54,12 +52,11 @@
 #include "GEN_Control.h"
 
 
-/*---- TEMPORARY DIAGNOSTIC COUNTERS ------------------------------------------------------------------------------------
+/*---- DIAGNOSTIC COUNTERS ------------------------------------------------------------------------------------------
 *  Counts every UI_SKIN::Draw() call THIS FRAME -- top-level AND every recursive descendant call made from
 *  Draw_Form()/Draw_Menu() etc, since those re-enter this exact same Draw() dispatcher for each child. Read and
-*  reset once per frame from UI_SYSTEM::DrawFrame() (extern-declared there, no header change needed). This is
-*  what tells us whether a ~36ms frame with nothing dirty is walking a handful of elements (-> per-element cost is
-*  anomalously high) or thousands of them (-> the tree itself is larger than expected).
+*  reset once per frame from UI_SYSTEM::DrawFrame() (extern-declared there, no header change needed) -- kept here
+*  (rather than removed outright) because that external reader still exists.
 * --------------------------------------------------------------------------------------------------------------------*/
 XDWORD diagskin_visits  = 0;      // every Draw() call, including invisible elements that bail out immediately
 XDWORD diagskin_visible = 0;      // calls where IsVisible() was true (i.e. did real administrative work)
@@ -1048,14 +1045,49 @@ bool UI_SKIN::Elements_SetToRedraw(UI_ELEMENT* element, bool recursive)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw(UI_ELEMENT* element)
 {
-  diagskin_visits++;                               // TEMPORARY diagnostics -- see XDiagLog.h
+  diagskin_visits++;
 
   if(!element) return false;
 
-  if(!element->IsVisible())  return false;
+  if(!element->IsVisible())
+    {
+      // HIDE-RESTORE FIX (2026-09): an element that just turned invisible (SetVisible(false), e.g.
+      // UI_SYSTEM::UserInterface_SelectSection() hiding the PREVIOUS sidebar entry's selection band) is marked
+      // dirty (MustReDraw()) by SetVisible() itself, but this early "invisible -> skip" return meant NEITHER
+      // Draw_Form() (or any other Draw_XXX()) NOR its PostDrawFunction() ever ran again for it -- so its own
+      // MustReDraw() flag was never cleared (confirmed live: logged dirty=true on EVERY single frame, forever,
+      // after being hidden -- a permanent, harmless-but-wasteful poll) and, more importantly, its own generic
+      // per-tick rebuild area (UI_SKINCANVAS_REBUILDAREAS) is never restored either, because that area is only
+      // ever restored/deleted by code paths reached FROM this same Draw() call (PreDrawFunction()/
+      // PostDrawFunction() inside Draw_Form() etc.), none of which run once we bail out here.
+      //
+      // That would still self-heal on its own IF the element's generic per-tick area happened to still exist
+      // at the moment it was hidden -- but a nav-band that has been sitting selected and otherwise idle for a
+      // while (the normal case: the user does not switch sections every frame) has long since had that area
+      // ORPHAN-DISCARDED by RebuildAllAreas() (see its own orphan-discard comment: correct for an element that
+      // stays VISIBLE, since its on-screen content remains correct -- but not accounted for the element then
+      // being told to disappear entirely). Confirmed live on UI_System's sidebar: clicking "CPU" correctly
+      // hides "nav-resumen-hl" (SetVisible(false) runs, MustReDraw() becomes true) and correctly shows the new
+      // selection, but the OLD blue selection band stays painted on screen indefinitely -- nothing ever restores
+      // the true panel background underneath it, because nothing ever runs the code that would.
+      //
+      // Fix: give the concrete skin (UI_SKINCANVAS below) one chance, right here, to restore its OWN persistent
+      // "true backdrop" cache for this element -- the SAME cache (formbackdrops, for a "form") that Draw_Form()
+      // itself already restores from on every ordinary VISIBLE redraw (see its own ALPHA-DARKENING FIX) -- and
+      // do it only once, clearing MustReDraw() immediately after so this element stops polling every frame.
+      // RestoreOnHide() defaults to a no-op (returns false) for any skin/element combination with no such cache,
+      // so nothing changes for those -- this only activates the exact case that was silently broken.
+      if(element->MustReDraw())
+        {
+          RestoreOnHide(element);
+          element->SetMustReDraw(false);
+        }
 
-  diagskin_visible++;                              // TEMPORARY diagnostics
-  if(element->MustReDraw()) diagskin_dirty++;       // TEMPORARY diagnostics
+      return false;
+    }
+
+  diagskin_visible++;
+  if(element->MustReDraw()) diagskin_dirty++;
 
   if(element->IsBlinking())
     {
@@ -1103,11 +1135,32 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
     }
 
   return status;
-} 
+}
 
 
 /**-------------------------------------------------------------------------------------------------------------------
-* 
+*
+* @fn         bool UI_SKIN::RestoreOnHide(UI_ELEMENT* element)
+* @brief      HIDE-RESTORE FIX (2026-09): default, no-op hook -- see the call site in Draw() just above and the
+*             UI_SKINCANVAS override in UI_SkinCanvas.cpp for the full rationale (restoring an element's own
+*             persistent "true backdrop" cache, if it has one, the moment it turns invisible). A base UI_SKIN
+*             (and any DRAWMODE_CONTEXT-style skin that does not maintain such a cache) has nothing to restore,
+*             so this simply reports "nothing done" and Draw()'s caller proceeds exactly as it always did.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  element : Element that just turned invisible.
+*
+* @return     bool : true if a persistent backdrop was found and restored; false otherwise (never an error).
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKIN::RestoreOnHide(UI_ELEMENT* element)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_SKIN::Draw_Scroll(UI_ELEMENT* element)
 * @brief      Draw scroll
 * @ingroup    USERINTERFACE

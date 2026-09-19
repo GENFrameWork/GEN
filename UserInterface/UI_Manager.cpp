@@ -43,7 +43,6 @@
 
 #include "XFactory.h"
 #include "XThread.h"
-#include "XDiagLog.h"                        // TEMPORARY diagnostic-only, see XDiagLog.h -- remove with it
 #include "XTimer.h"
 #include "XPath.h"
 #include "XFile.h"
@@ -1706,11 +1705,6 @@ bool UI_MANAGER::Elements_SetToRedraw()
 {
   bool status = false;
 
-  // TEMPORARY diagnostic-only (see XDiagLog.h): this is the GLOBAL, whole-tree redraw entry point -- fired once
-  // per nav click/section change (UI_SYSTEM::UserInterface_SelectSection()) and suspected of being the trigger
-  // for the multi-second blank-freeze under investigation. Logged once per call (not per-layout/per-element).
-  XDIAGLOG_WRITE("GLOBALREDRAW", "UI_MANAGER::Elements_SetToRedraw() BEGIN nlayouts=%u", (unsigned)layouts.GetSize());
-
   for(XDWORD c=0; c<layouts.GetSize(); c++)
     {
       UI_LAYOUT* layout = layouts.Get(c);
@@ -1719,8 +1713,6 @@ bool UI_MANAGER::Elements_SetToRedraw()
           status = layout->Elements_SetToRedraw();
         }
     }
-
-  XDIAGLOG_WRITE("GLOBALREDRAW", "UI_MANAGER::Elements_SetToRedraw() END");
 
   return status;
 }

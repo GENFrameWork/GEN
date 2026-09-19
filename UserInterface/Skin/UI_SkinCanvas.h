@@ -176,7 +176,16 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 
 
 		virtual bool                      SetElementPosition											(UI_ELEMENT* element, double x_position, double y_position);
-		        
+
+		// HIDE-RESTORE FIX (2026-09): see UI_Skin.h/.cpp for the full rationale (Draw()'s own "invisible -> skip"
+		// early return never gave Draw_Form() a chance to restore its persistent formbackdrops cache once an
+		// element like a sidebar "nav-band" is hidden, so its last-painted pixels stayed on screen forever).
+		// Overrides the no-op base: restores the element's own cached true backdrop (currently: "form"/"menu",
+		// via formbackdrops -- the same cache Draw_Form()'s ALPHA-DARKENING FIX already restores from on every
+		// ordinary visible redraw) when one exists, so hiding it erases it exactly as it would have if the
+		// element had been allowed one last real redraw instead of being skipped.
+		virtual bool                      RestoreOnHide														(UI_ELEMENT* element);
+
 	  virtual bool                      Draw_Scroll															(UI_ELEMENT* element);
 	  virtual bool                      Draw_Text																(UI_ELEMENT* element);
 		virtual bool											Draw_TextBox														(UI_ELEMENT* element);
@@ -277,7 +286,31 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		GRP2DREBUILDAREA*								FormBackdrop_Find												(UI_ELEMENT* element);
 		bool													FormBackdrop_Capture										(UI_ELEMENT* element, double x, double y, double width, double height);
 
+		// ACCENT-BAR TRAIL FIX (2026-09): mirrors TextBackdrop_MatchesArea()/the RESIZE-RECAPTURE FIX in
+		// Draw_Text() -- see the .cpp definition for the full root-cause writeup on why a form's own cached
+		// backdrop box can legitimately differ in size from its CURRENT rebuild area, and why blindly restoring
+		// it anyway (the only thing Draw_Form() did before this fix) leaves a stale, never-erased strip behind.
+		bool													FormBackdrop_MatchesArea								(GRP2DREBUILDAREA* formbackdrop, double x, double y, double width, double height);
+		bool													FormBackdrop_Delete										(UI_ELEMENT* element);
+
+		// SIBLING-CONTAMINATION FIX (2026-09): mirrors OptionBackdrop_FindOverlapping() -- see its own header
+		// comment. Used by Draw_Form()'s first-ever FormBackdrop capture to find an EARLIER-drawn sibling
+		// form/menu element (e.g. "nav-<section>-hl", drawn just before "nav-<section>-bar" in the same frame)
+		// whose own fresh paint already landed in this box, so it can be stripped back out (restored) before
+		// this element bakes in a "true backdrop" snapshot forever.
+		GRP2DREBUILDAREA*								FormBackdrop_FindOverlapping						(double x, double y, double width, double height);
+
 		XVECTOR<GRP2DREBUILDAREA*>				formbackdrops;
+
+		// ACCENT-BAR NEVER APPEARS FIX (2026-09): tracks which "form"/"menu" elements are currently hidden
+		// (RestoreOnHide() ran for them and they have not been drawn visible again since). A form/menu whose
+		// pointer is in this list is, by construction, about to paint genuinely NEW ink the next time it is
+		// drawn visible -- exactly like its very first-ever draw, and unlike an already-visible element that
+		// simply redraws because its OWN content changed (e.g. a live stat card). See the fuller root-cause
+		// writeup at Draw_Form()'s OptionBackdrop_InvalidateOverlapping() call. Small linear list, same
+		// small-cardinality reasoning as optionbackdrops/formbackdrops above (a typical layout has only a
+		// handful of toggled-visibility forms, e.g. UI_System's 16 "nav-<section>-hl"/"-bar" elements).
+		XVECTOR<UI_ELEMENT*>					formhiddentracked;
 
 		// RADIAL CAPTION GHOSTING FIX (2026-09): persistent "true backdrop" cache for a progressradial widget's
 		// own box (Draw_ProgressRadial()) -- same rationale, same real capture/restore primitives (GetBitmap()/
@@ -324,7 +357,92 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		bool													TextBackdrop_Delete										(UI_ELEMENT* element);
 		bool													TextBackdrop_Capture										(UI_ELEMENT* element, double x, double y, double width, double height);
 
+		// STALE CAPTION BACKGROUND FIX (2026-09): discards every cached TextBackdrop entry whose box overlaps the
+		// given rectangle, WITHOUT restoring it first (see the .cpp definition for the full root-cause writeup on
+		// why a restore here would be actively harmful). Called from Draw_Form(), right next to the pre-existing
+		// OptionBackdrop_InvalidateOverlapping() call, for the exact same reason: a form about to paint real ink
+		// of its own (e.g. a "nav-<section>-hl" selection wash) makes any text element's cached "true backdrop"
+		// over that same region stale, even though nothing about the text element itself changed.
+		bool													TextBackdrop_InvalidateOverlapping					(double x, double y, double width, double height);
+
 		XVECTOR<GRP2DREBUILDAREA*>				textbackdrops;
+
+		// HOVER-WASH GHOSTING FIX (2026-09): persistent "true backdrop" cache for an option-family element's own
+		// box (Draw_Option(), shared by Draw_Button()/Draw_CheckBox()/Draw_MultiOption() via delegation) -- same
+		// rationale, same real capture/restore primitives (GetBitmap()/PutBitmapNoAlpha()) as progressbackdrops/
+		// formbackdrops/radialbackdrops/textbackdrops above. DrawBackgroundColor() (called unconditionally by
+		// Draw_Option() on every real redraw) paints the pre-select/selected background wash purely by ALPHA-
+		// BLENDING onto whatever is already on the canvas, with NO backdrop cache of its own -- structurally
+		// identical to the pre-fix state of the other three widget types above. UI_System's sidebar nav buttons
+		// (class="nav-hit") use a CSS ":hover"/":preselect" transition (dashboard.css) that marks the button
+		// MustReDraw() on EVERY tween frame while the mouse is over a row, and again while it fades out after the
+		// mouse leaves -- each such frame blends the current wash color on top of whatever the LAST frame already
+		// painted there instead of on top of the true backdrop, and the generic per-tick rebuild-area system
+		// (UI_SKINCANVAS_REBUILDAREAS) does not help either: once the tween finishes the element goes idle and its
+		// area is ORPHAN-DISCARDED (deleted WITHOUT restoring -- see RebuildAllAreas()'s own orphan-discard
+		// comment), so the wash's last-painted pixels are never erased. Confirmed live on UI_System's sidebar:
+		// hovering "Memoria" then moving on to "Red" (and beyond) leaves "Memoria" permanently highlighted --
+		// exactly Abraham's reported "no se borra... se van seleccionando todas". Captured once, the first time a
+		// given option-family element is ever drawn (before its own background wash/selection ring/animation/
+		// caption have painted anything), and restored immediately before every later real redraw.
+		//
+		// UNLIKE formbackdrops/radialbackdrops/textbackdrops above, this cache must NOT be kept forever: an
+		// option-family element's own box can OVERLAP a sibling's independently-changing visuals -- concretely,
+		// UI_System's "nav-<section>-btn" is deliberately painted with a fully transparent base background
+		// (alpha 0) directly ON TOP of its row's separate "nav-<section>-hl"/"-bar" selection-band elements (see
+		// UI_System.cpp's UserInterface_SelectSection(), and dashboard.xml's own comments on why hl/bar/btn are
+		// kept as top-level siblings instead of nesting btn's content inside hl), specifically so the blue
+		// selection band shows through whenever the button itself has nothing to paint. A one-time-forever
+		// capture taken while that band happened to be visible (e.g. "Resumen" is the default-active section at
+		// startup, so nav-resumen-btn's very first draw captures the blue band as its "true" backdrop) would
+		// permanently re-paint that stale band every time the button is later hovered, even long after the row
+		// was correctly deselected by RestoreOnHide() -- confirmed live: hovering "Resumen" after clicking away
+		// to a different section reintroduced a ghost blue band that UserInterface_SelectSection() had already
+		// correctly cleared. Fix: forget (OptionBackdrop_Delete()) the captured anchor every time this element
+		// finishes a redraw with nothing of its own left on screen -- background-color alpha 0 AND neither
+		// selected nor preselected (see the caller in Draw_Option(), right after the selection/preselect ring
+		// block) -- which UI_ELEMENT::UpdateTransition() guarantees eventually happens exactly once at the tail
+		// of every hover fade (it snaps to the exact target value, never leaving the tween short of it). This
+		// keeps the anchor alive only WITHIN a single active hover/selection transition (still preventing the
+		// originally reported multi-frame compounding), while guaranteeing every NEW transition re-captures from
+		// whatever is truly on screen at that moment -- correctly picking up any sibling change that happened
+		// while this element was idle, instead of trusting a possibly ancient snapshot.
+		//
+		// MID-EPISODE STALENESS GAP (2026-09): the idle-discard above only re-validates the cache at the START
+		// of a NEW hover/selection episode for THIS element -- it does not protect against a sibling changing
+		// WHILE this element's own episode is still active (never idle in between), which is exactly what
+		// happens on a plain click: the mouse is already hovering "nav-cpu-btn" (an ongoing, non-idle episode,
+		// so no re-capture happens) at the moment the click also flips "nav-cpu-hl"/"nav-cpu-bar" to visible
+		// (see UI_System.cpp's UserInterface_SelectSection()) -- both siblings occupy this button's own box.
+		// "nav-cpu-hl" paints its new selection band, then, still the SAME tick (this button is drawn AFTER the
+		// band in z-order, see dashboard.xml), Draw_Option() restores this button's OWN cached backdrop --
+		// captured earlier, BEFORE the click, with no band -- straight over the just-painted band, and nothing
+		// ever repaints it afterwards (the band element's own MustReDraw() already cleared). Confirmed live via
+		// OPTBACKDROP-RESTORE tracing: this is Abraham's second reported symptom, "cuando se selecciona la
+		// opcion no se hace" -- the click's own visual effect is wiped by the very button that was clicked.
+		// Fix: Draw_Form() calls OptionBackdrop_InvalidateOverlapping() right before it paints any real ink of
+		// its own (see the ALPHA-DARKENING FIX block), passing the exact box it is about to repaint. Any cached
+		// OptionBackdrop entry whose box overlaps that rectangle is discarded there and then -- geometric, not
+		// name-based, so it also protects any future option-family element sharing a box with a form/menu this
+		// way, not just today's nav-<section>-btn/-hl/-bar triple. The discarded element simply falls back to
+		// its normal "no cache yet" path (OptionBackdrop_Find() returns NULL) on its own next redraw, which
+		// re-captures fresh from whatever the form just painted -- exactly the same, already-proven-correct
+		// first-capture logic used at the start of every episode, just re-triggered mid-episode this time.
+		GRP2DREBUILDAREA*								OptionBackdrop_Find											(UI_ELEMENT* element);
+		bool													OptionBackdrop_Delete										(UI_ELEMENT* element);
+		bool													OptionBackdrop_Capture									(UI_ELEMENT* element, double x, double y, double width, double height);
+		// ACCENT-BAR NEVER APPEARS FIX (2026-09): "force" (default false, see UI_SkinCanvas.cpp) is passed true
+		// only when the caller is a form/menu being drawn for the very first time in its life (e.g. UI_System's
+		// "nav-<section>-bar", invisible until first selected). The REGRESSION FIX "busy" guard below is correct
+		// for an ONGOING episode (an unrelated neighbour's incidental overlap must not discard a still-valid,
+		// currently-painted cache) but wrong here: an option's cached backdrop cannot possibly already reflect
+		// ink from an element that, by definition, has never painted anything before this exact call, no matter
+		// how "busy" that option currently is. force=true skips the busy check entirely so the stale cache is
+		// always discarded in that one specific case.
+		bool													OptionBackdrop_InvalidateOverlapping					(double x, double y, double width, double height, bool force = false);
+		GRP2DREBUILDAREA*								OptionBackdrop_FindOverlapping							(double x, double y, double width, double height);
+
+		XVECTOR<GRP2DREBUILDAREA*>				optionbackdrops;
 };
 
 

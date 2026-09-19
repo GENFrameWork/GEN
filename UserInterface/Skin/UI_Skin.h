@@ -155,7 +155,14 @@ class UI_SKIN
     virtual bool                      SetElementPosition                    (UI_ELEMENT* element, double x_position, double y_position);
     bool                              Elements_SetToRedraw                  (UI_ELEMENT* element, bool recursive = true);
 
-    bool                              Draw                                  (UI_ELEMENT* element);    
+    bool                              Draw                                  (UI_ELEMENT* element);
+
+    // HIDE-RESTORE FIX (2026-09): hook Draw() calls the moment an element is found invisible, instead of
+    // simply skipping it -- see the call site in UI_Skin.cpp's Draw() and the UI_SKINCANVAS override in
+    // UI_SkinCanvas.cpp for the full rationale. Default no-op here (a skin with no persistent backdrop cache
+    // of its own has nothing useful to do): every concrete skin keeps behaving exactly as before this fix
+    // unless it overrides this hook.
+    virtual bool                      RestoreOnHide                         (UI_ELEMENT* element);
 	  
     virtual bool                      Draw_Scroll                           (UI_ELEMENT* element);
 	  virtual bool                      Draw_Text		                          (UI_ELEMENT* element);	
