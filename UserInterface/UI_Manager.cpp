@@ -4336,6 +4336,13 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
       element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_TR, out[1]);
       element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BR, out[2]);
       element->SetBorderRadius(UI_ELEMENT_BORDER_CORNER_BL, out[3]);
+
+      // Keep uniform roundrect in sync so Draw_Form / soft-shadow can take the AGG rounded_rect fast path
+      // when all four corners match (avoids Path+miter corner spikes on cards).
+      if((out[0] == out[1]) && (out[1] == out[2]) && (out[2] == out[3]) && (out[0] > 0.0))
+        {
+          element->SetRoundRect((XDWORD)out[0]);
+        }
     }
 
   double rv;

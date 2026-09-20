@@ -2431,6 +2431,14 @@ void UI_ELEMENT::ReapplyStyleVisual()
 
   for(int c=0; c<UI_ELEMENT_BORDER_CORNER_MAX; c++) border_radius[c] = targetborderradius[c];
 
+  // Uniform CSS border-radius keeps roundrect in sync so Draw_Form can use AGG rounded_rect (no Path miters).
+  if((border_radius[0] >= 0.0) &&
+     (border_radius[0] == border_radius[1]) && (border_radius[1] == border_radius[2]) &&
+     (border_radius[2] == border_radius[3]) && (border_radius[0] > 0.0))
+    {
+      roundrect = (XDWORD)border_radius[0];
+    }
+
   box_shadow_set  = targetboxshadowset;
   shadow_offset_x = targetshadowoffsetx;
   shadow_offset_y = targetshadowoffsety;

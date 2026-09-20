@@ -335,7 +335,7 @@ void UI_SKINCANVAS::AppendRoundRectPathPerCorner(GRP2DPATH& path, double minx, d
       return;
     }
 
-  const int STEPS = 6;
+  const int STEPS = 16;
   bool      first = true;
 
   // Traversal order (clockwise, starting at the top edge between the two top corners):
@@ -563,6 +563,64 @@ static GRPBITMAP* UI_SkinCanvas_BuildSoftShadowBitmap(int shape_w, int shape_h, 
 
     agg::stack_blur_rgba32(pixf, (unsigned)blur_radius, (unsigned)blur_radius);
   }
+
+  // CORNER SPIKES FIX (2026-09, UI_System cards): stack blur spreads alpha into (1) the four AABB corner
+  // cutouts inside the shape rect and (2) the PAD pixels that sit in the same corner quadrants just
+  // outside the AABB -- both read as sharp black "puntas" once the rounded fill is painted. Zero any
+  // pixel that is outside the rounded silhouette (shape + pad), not only the in-AABB cutouts.
+  for(int y = 0; y < bh; y++)
+    {
+      XBYTE* row = buf + (y * bw * 4);
+      for(int x = 0; x < bw; x++)
+        {
+          int sx = x - pad;
+          int sy = y - pad;
+          // Inside the shape rect: keep only rounded-interior pixels. Outside (pad): keep only pixels
+          // that are still within an expanded rounded test -- i.e. drop corner-quadrant pad tips.
+          // For pad, treat coordinates relative to shape; outside shape AABB use circle tests per corner.
+          if(sx >= 0 && sy >= 0 && sx < shape_w && sy < shape_h)
+            {
+              if(!UI_SkinCanvas_RoundedRectInside(sx, sy, shape_w, shape_h, rTL, rTR, rBR, rBL))
+                {
+                  row[(x * 4) + a_off] = 0;
+                }
+            }
+           else
+            {
+              // Pad pixel: clear if it lies in a corner quadrant outside the rounded outline's circle.
+              bool clear = false;
+              double fx = (double)sx + 0.5;
+              double fy = (double)sy + 0.5;
+
+              if(fx < rTL && fy < rTL)
+                {
+                  double dx = fx - rTL;
+                  double dy = fy - rTL;
+                  if((dx * dx + dy * dy) > (rTL * rTL)) clear = true;
+                }
+              if(fx > ((double)shape_w - rTR) && fy < rTR)
+                {
+                  double dx = fx - ((double)shape_w - rTR);
+                  double dy = fy - rTR;
+                  if((dx * dx + dy * dy) > (rTR * rTR)) clear = true;
+                }
+              if(fx > ((double)shape_w - rBR) && fy > ((double)shape_h - rBR))
+                {
+                  double dx = fx - ((double)shape_w - rBR);
+                  double dy = fy - ((double)shape_h - rBR);
+                  if((dx * dx + dy * dy) > (rBR * rBR)) clear = true;
+                }
+              if(fx < rBL && fy > ((double)shape_h - rBL))
+                {
+                  double dx = fx - rBL;
+                  double dy = fy - ((double)shape_h - rBL);
+                  if((dx * dx + dy * dy) > (rBL * rBL)) clear = true;
+                }
+
+              if(clear) row[(x * 4) + a_off] = 0;
+            }
+        }
+    }
 
   // One-shot self-check: the first time a soft shadow renders anywhere in the process, log the parameters
   // so the console confirms the soft path was reached and shows the effective bitmap / blur / colour. Any
@@ -810,6 +868,64 @@ static bool UI_SkinCanvas_DrawSoftShadow_FormCached(GRP2DCANVAS* canvas, UI_ELEM
   diagskin_shadowcalls++;
 
   return true;
+}
+
+
+// CARD / RADIAL NEIGHBOUR WIPE FIX (2026-09, UI_System triage Oleada 1): FormBackdrop / RadialBackdrop restore
+// can blank ink owned by a sibling that is NOT dirty this tick (no rebuild-area registered), so MarkOverlapping-
+// AreasDirty never sees it. Typical case: a progressradial's glow pad (blur*2) overlaps the next card, or two
+// cards share a 22px vertical strip. Walk the layout's fatherless roots and mark every intersecting sibling
+// subtree dirty so this same frame's draw pass repaints them after the wipe.
+static void UI_SkinCanvas_MarkSubtreeDirty(UI_ELEMENT* element)
+{
+  if(!element) return;
+
+  element->SetMustReDraw(true);
+
+  for(XDWORD c=0; c<element->GetComposeElements()->GetSize(); c++)
+    {
+      UI_ELEMENT* subelement = (UI_ELEMENT*)element->GetComposeElements()->Get(c);
+      if(subelement) UI_SkinCanvas_MarkSubtreeDirty(subelement);
+    }
+}
+
+
+static void UI_SkinCanvas_DirtyOverlappingLayoutSiblings(UI_ELEMENT* element, double x, double y, double w, double h)
+{
+  if(!element) return;
+  if(w <= 0.0 || h <= 0.0) return;
+
+  UI_LAYOUT* layout = element->GetLayout();
+  if(!layout) return;
+
+  XVECTOR<UI_ELEMENT*>* roots = layout->Elements_Get();
+  if(!roots) return;
+
+  UI_ELEMENT* selfroot = element;
+  while(selfroot->GetFather()) selfroot = selfroot->GetFather();
+
+  double wipe_r = x + w;
+  double wipe_b = y + h;
+
+  for(XDWORD c=0; c<roots->GetSize(); c++)
+    {
+      UI_ELEMENT* sib = roots->Get(c);
+      if(!sib || sib == selfroot) continue;
+      if(!sib->IsVisible()) continue;
+
+      UI_BOUNDARYLINE* bl = sib->GetBoundaryLine();
+      if(!bl) continue;
+
+      double el = sib->GetXPosition();
+      double eb = sib->GetYPosition();
+      double et = UI_BOUNDARYLINE_EdgeTop(eb, bl->height);
+      double er = el + bl->width;
+
+      bool overlaps = (x < er) && (el < wipe_r) && (y < eb) && (et < wipe_b);
+      if(!overlaps) continue;
+
+      UI_SkinCanvas_MarkSubtreeDirty(sib);
+    }
 }
 
 
@@ -4401,10 +4517,29 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
           // element's OWN capture/restore now runs on every tick it paints, ownarea or not, so a startup tick
           // with no rebuild area still gets its "first genuinely pristine moment" protection instead of silently
           // skipping it.
-          double bd_x = ownarea ? ownarea->GetXPos() : vr_minx;
-          double bd_y = ownarea ? ownarea->GetYPos() : vr_miny;
-          double bd_w = ownarea ? (double)ownarea->GetBitmap()->GetWidth()  : (vr_maxx - vr_minx);
-          double bd_h = ownarea ? (double)ownarea->GetBitmap()->GetHeight() : (vr_maxy - vr_miny);
+          // Prefer ownarea (shadow-expanded) when available -- EXCEPT for forms that author box-shadow: that
+          // expansion (blur*2 per side) routinely overlaps neighbouring cards in UI_System (gap ~22px vs pad
+          // 32 at blur 16). Restoring FormBackdrop from the padded box then blanks sibling ink that has no
+          // rebuild-area this tick. Capture/restore against the visible AABB only; PreDraw/RebuildAllAreas
+          // still cover the shadow footprint. Non-shadow forms keep the ownarea-or-vr_* path (accent-bar fix).
+          double bd_x;
+          double bd_y;
+          double bd_w;
+          double bd_h;
+          if(element_form->IsBoxShadowSet())
+            {
+              bd_x = vr_minx;
+              bd_y = vr_miny;
+              bd_w = vr_maxx - vr_minx;
+              bd_h = vr_maxy - vr_miny;
+            }
+           else
+            {
+              bd_x = ownarea ? ownarea->GetXPos() : vr_minx;
+              bd_y = ownarea ? ownarea->GetYPos() : vr_miny;
+              bd_w = ownarea ? (double)ownarea->GetBitmap()->GetWidth()  : (vr_maxx - vr_minx);
+              bd_h = ownarea ? (double)ownarea->GetBitmap()->GetHeight() : (vr_maxy - vr_miny);
+            }
 
       GRP2DREBUILDAREA* formbackdrop = FormBackdrop_Find(element);
 
@@ -4515,6 +4650,20 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
                   UI_ELEMENT* formchild = (UI_ELEMENT*)element_form->GetComposeElements()->Get(c);
                   if(formchild) formchild->SetMustReDraw(true);
                 }
+
+              // FormBackdrop restore just PutBitmapNoAlpha'd over any overlapping option/text ink (e.g.
+              // sidebar_bg wiping nav icons under nav-*-btn). Selected nav-hit buttons are "busy" so the
+              // later InvalidateOverlapping(force=false) would KEEP a stale OptionBackdrop and re-paint a
+              // blank strip forever (video 2026-09-20: sidebar empty until click). Force-discard now so the
+              // buttons recapture AFTER compose children / later siblings have redrawn this frame.
+              OptionBackdrop_InvalidateOverlapping(bd_x, bd_y, bd_w, bd_h, true);
+              TextBackdrop_InvalidateOverlapping(bd_x, bd_y, bd_w, bd_h);
+
+              // Cards in UI_System overlap each other by ~22px vertically even with AABB-only FormBackdrop;
+              // dirty any layout sibling whose box intersects the restore rect so neighbour ink is redrawn
+              // this frame (see UI_SkinCanvas_DirtyOverlappingLayoutSiblings). Also covers brand_* roots
+              // sitting on the sidebar column when sidebar_bg restores.
+              UI_SkinCanvas_DirtyOverlappingLayoutSiblings(element, bd_x, bd_y, bd_w, bd_h);
             }
         }
 
@@ -4690,11 +4839,13 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
       // via canvas->Path so each corner arcs with its own radius. Otherwise keep the classic single-radius
       // canvas->RoundRect call, which is the fastest path and unchanged from step 4.
       //
-      // NOTE: canvas->Path fills OR strokes depending on the boolean argument (this is the same convention
-      // used by the ProgressBar gradient-fill path at line 405 of this file). RoundRect, in contrast, does
-      // both in a single call. To match RoundRect's behaviour we issue two Path calls, and honour the same
-      // "border-width == 0 -> suppress stroke by pushing a transparent line colour" contract established
-      // above for the RoundRect branch.
+      // CORNER SPIKES FIX (2026-09): CSS "border-radius: N" sets all four per-corner slots, so Draw_Form used
+      // to take the Path branch even when every radius is identical. AppendRoundRectPathPerCorner emits a coarse
+      // polyline (MoveTo/LineTo only); GRP2DCanvasAGG::Path then strokes it with agg::miter_join. Miters on those
+      // chord vertices poke sharp triangular "picos" past the true rounded corner -- exactly the dark tips visible
+      // in the gutters between UI_System cards. When all four radii match, use AGG's native rounded_rect instead
+      // (same path as the classic GetRoundRect() branch). Unequal corners still use Path, but with more arc steps
+      // so miters (if any remain) stay tiny.
       if(element_form->HasAnyPerCornerRadius())
         {
           double rTL = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_TL);
@@ -4702,11 +4853,20 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
           double rBR = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BR);
           double rBL = element_form->GetEffectiveBorderRadius(UI_ELEMENT_BORDER_CORNER_BL);
 
-          GRP2DPATH path;
-          AppendRoundRectPathPerCorner(path, vr_minx, vr_miny, vr_maxx, vr_maxy, rTL, rTR, rBR, rBL);
+          bool uniform = (rTL == rTR) && (rTR == rBR) && (rBR == rBL) && (rTL > 0.0);
 
-          canvas->Path(path, true);       // fill
-          canvas->Path(path, false);      // stroke (transparent line colour when border-width == 0)
+          if(uniform)
+            {
+              canvas->RoundRect(vr_minx, vr_maxy, vr_maxx, vr_miny, rTL, true);
+            }
+           else
+            {
+              GRP2DPATH path;
+              AppendRoundRectPathPerCorner(path, vr_minx, vr_miny, vr_maxx, vr_maxy, rTL, rTR, rBR, rBL);
+
+              canvas->Path(path, true);       // fill
+              canvas->Path(path, false);      // stroke (transparent line colour when border-width == 0)
+            }
         }
        else if(element_form->GetRoundRect())
         {
@@ -5421,12 +5581,40 @@ bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
         {
           GRP2DREBUILDAREA* radialbackdrop = RadialBackdrop_Find(element);
 
+          // Capture/restore against the widget's visible AABB, not the glow-padded ownarea: annular box-shadow
+          // pads (blur*2) bleed into neighbouring cards, and restoring that padded box blanks their ink when
+          // those cards have no rebuild-area this tick. Glow is still covered by PreDraw's rebuild-area.
+          double rdx = x_position;
+          double rdy = UI_BOUNDARYLINE_EdgeTop(y_position, element->GetBoundaryLine()->height);
+          double rdw = element->GetBoundaryLine()->width;
+          double rdh = element->GetBoundaryLine()->height;
+
+          // Drop a stale padded capture (pre-AABB change) so the next branch re-captures at the visible size.
+          if(radialbackdrop && radialbackdrop->GetBitmap() &&
+             (((double)radialbackdrop->GetBitmap()->GetWidth()  != rdw) ||
+              ((double)radialbackdrop->GetBitmap()->GetHeight() != rdh) ||
+              (radialbackdrop->GetXPos() != rdx) ||
+              (radialbackdrop->GetYPos() != rdy)))
+            {
+              PutBitmapNoAlpha(radialbackdrop->GetXPos(), radialbackdrop->GetYPos(), radialbackdrop->GetBitmap());
+              for(XDWORD c=0; c<radialbackdrops.GetSize(); c++)
+                {
+                  GRP2DREBUILDAREA* entry = radialbackdrops.Get(c);
+                  if(entry && (entry->GetExtraData() == (void*)element))
+                    {
+                      radialbackdrops.Delete(entry);
+                      GEN_DELETE entry;
+                      break;
+                    }
+                }
+              radialbackdrop = NULL;
+            }
+
           if(!radialbackdrop)
             {
               // First time this widget is ever drawn: nothing has painted track/arc/caption ink here yet, so
               // this is the one guaranteed-pristine moment to capture the true backdrop.
-              RadialBackdrop_Capture(element, ownarea->GetXPos(), ownarea->GetYPos(),
-                                      (double)ownarea->GetBitmap()->GetWidth(), (double)ownarea->GetBitmap()->GetHeight());
+              RadialBackdrop_Capture(element, rdx, rdy, rdw, rdh);
             }
            else
             {
@@ -5438,6 +5626,13 @@ bool UI_SKINCANVAS::Draw_ProgressRadial(UI_ELEMENT* element)
               // repaints on top of the freshly restored backdrop instead of vanishing (same reasoning as the
               // force-children-dirty step in the Draw_Form() ALPHA-DARKENING FIX above).
               if(element_text) element_text->SetMustReDraw(true);
+
+              // Glow still paints into neighbour AABBs after this restore; dirty overlapping layout siblings
+              // using the padded ownarea so they redraw on top of any bleed this frame.
+              UI_SkinCanvas_DirtyOverlappingLayoutSiblings(element,
+                                                          ownarea->GetXPos(), ownarea->GetYPos(),
+                                                          (double)ownarea->GetBitmap()->GetWidth(),
+                                                          (double)ownarea->GetBitmap()->GetHeight());
             }
         }
 

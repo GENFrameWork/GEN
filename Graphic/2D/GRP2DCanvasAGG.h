@@ -722,7 +722,10 @@ class GRP2DCANVASAGG: public GRP2DCANVAS
 
                                                                                       stroke.width(linewidth);
                                                                                       stroke.line_cap(agg::butt_cap);
-                                                                                      stroke.line_join(agg::miter_join);
+                                                                                      // round_join: miter_join on coarse polyline rounded-rects (UI forms with per-corner
+                                                                                      // border-radius) produced sharp triangular spikes at every chord vertex -- visible as
+                                                                                      // "picos" in the gutters between UI_System cards. Round joins follow the curve.
+                                                                                      stroke.line_join(agg::round_join);
                                                                                   stroke.miter_limit(4.0);
 
                                                                                       ras.add_path(stroke);
