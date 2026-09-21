@@ -62,6 +62,222 @@ XSYSTEM* XSYSTEM::instance            = NULL;
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         XSYSTEM_VOLUMEINFO::XSYSTEM_VOLUMEINFO()
+* @brief      Constructor of class
+* @ingroup    XUTILS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSYSTEM_VOLUMEINFO::XSYSTEM_VOLUMEINFO()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSYSTEM_VOLUMEINFO::~XSYSTEM_VOLUMEINFO()
+* @brief      Destructor of class
+* @note       VIRTUAL
+* @ingroup    XUTILS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSYSTEM_VOLUMEINFO::~XSYSTEM_VOLUMEINFO()
+{
+  Clean();
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* XSYSTEM_VOLUMEINFO::GetName()
+* @brief      Get volume mount name (e.g. "C:\\" or "/")
+* @ingroup    XUTILS
+* 
+* @return     XSTRING* : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* XSYSTEM_VOLUMEINFO::GetName()
+{
+  return &name;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* XSYSTEM_VOLUMEINFO::GetLabel()
+* @brief      Get volume label
+* @ingroup    XUTILS
+* 
+* @return     XSTRING* : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* XSYSTEM_VOLUMEINFO::GetLabel()
+{
+  return &label;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSTRING* XSYSTEM_VOLUMEINFO::GetFileSystem()
+* @brief      Get file system type name (e.g. "NTFS", "ext4")
+* @ingroup    XUTILS
+* 
+* @return     XSTRING* : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* XSYSTEM_VOLUMEINFO::GetFileSystem()
+{
+  return &filesystem;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XSYSTEM_VOLUME_TYPE XSYSTEM_VOLUMEINFO::GetType()
+* @brief      Get volume type
+* @ingroup    XUTILS
+* 
+* @return     XSYSTEM_VOLUME_TYPE : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XSYSTEM_VOLUME_TYPE XSYSTEM_VOLUMEINFO::GetType()
+{
+  return type;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XSYSTEM_VOLUMEINFO::SetType(XSYSTEM_VOLUME_TYPE type)
+* @brief      Set volume type
+* @ingroup    XUTILS
+* 
+* @param[in]  type : Type value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void XSYSTEM_VOLUMEINFO::SetType(XSYSTEM_VOLUME_TYPE type)
+{
+  this->type = type;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XQWORD XSYSTEM_VOLUMEINFO::GetTotalBytes()
+* @brief      Get total capacity in bytes
+* @ingroup    XUTILS
+* 
+* @return     XQWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XQWORD XSYSTEM_VOLUMEINFO::GetTotalBytes()
+{
+  return totalbytes;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XSYSTEM_VOLUMEINFO::SetTotalBytes(XQWORD totalbytes)
+* @brief      Set total capacity in bytes
+* @ingroup    XUTILS
+* 
+* @param[in]  totalbytes : Totalbytes value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void XSYSTEM_VOLUMEINFO::SetTotalBytes(XQWORD totalbytes)
+{
+  this->totalbytes = totalbytes;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XQWORD XSYSTEM_VOLUMEINFO::GetFreeBytes()
+* @brief      Get free capacity in bytes
+* @ingroup    XUTILS
+* 
+* @return     XQWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XQWORD XSYSTEM_VOLUMEINFO::GetFreeBytes()
+{
+  return freebytes;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XSYSTEM_VOLUMEINFO::SetFreeBytes(XQWORD freebytes)
+* @brief      Set free capacity in bytes
+* @ingroup    XUTILS
+* 
+* @param[in]  freebytes : Freebytes value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void XSYSTEM_VOLUMEINFO::SetFreeBytes(XQWORD freebytes)
+{
+  this->freebytes = freebytes;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         XQWORD XSYSTEM_VOLUMEINFO::GetUsedBytes()
+* @brief      Get used capacity in bytes
+* @ingroup    XUTILS
+* 
+* @return     XQWORD : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+XQWORD XSYSTEM_VOLUMEINFO::GetUsedBytes()
+{
+  if(totalbytes <= freebytes) return 0;
+
+  return (totalbytes - freebytes);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         float XSYSTEM_VOLUMEINFO::GetUsedPercent()
+* @brief      Get used capacity as a percent of total
+* @ingroup    XUTILS
+* 
+* @return     float : Requested value.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+float XSYSTEM_VOLUMEINFO::GetUsedPercent()
+{
+  if(!totalbytes) return 0.0f;
+
+  return (float)(((double)GetUsedBytes() / (double)totalbytes) * 100.0);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         void XSYSTEM_VOLUMEINFO::Clean()
+* @brief      Clean the attributes of the class: Default initialize
+* @note       INTERNAL
+* @ingroup    XUTILS
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+void XSYSTEM_VOLUMEINFO::Clean()
+{
+  name.Empty();
+  label.Empty();
+  filesystem.Empty();
+
+  type       = XSYSTEM_VOLUME_TYPE_UNKNOWN;
+  totalbytes = 0;
+  freebytes  = 0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         XSYSTEM::XSYSTEM()
 * @brief      Constructor of class
 * @ingroup    XUTILS
@@ -391,6 +607,28 @@ int XSYSTEM::GetFreeMemoryPercent()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool XSYSTEM::FreeCacheMemory()
 {
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool XSYSTEM::GetVolumesInfo(XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes)
+* @brief      Get mounted storage volumes (fixed, removable, etc.) with capacity and free space.
+* @note       VIRTUAL. Default implementation returns false. Platform subclasses fill `volumes`
+*             with GEN_NEW XSYSTEM_VOLUMEINFO entries; the caller owns them and must
+*             volumes.DeleteContents() when finished. Capacities are in bytes (XQWORD).
+* @ingroup    XUTILS
+* 
+* @param[out] volumes : Vector cleared and filled with one entry per volume.
+* 
+* @return     bool : true if at least one volume was reported; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XSYSTEM::GetVolumesInfo(XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes)
+{
+  volumes.DeleteContents();
+
   return false;
 }
 

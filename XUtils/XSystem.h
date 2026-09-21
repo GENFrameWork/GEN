@@ -34,6 +34,7 @@
 #include "XString.h"
 #include "XPath.h"
 #include "XFileTXT.h"
+#include "XVector.h"
 
 
 
@@ -116,11 +117,57 @@ enum XSYSTEM_CHANGESTATUSTYPE
 };
 
 
+enum XSYSTEM_VOLUME_TYPE
+{
+  XSYSTEM_VOLUME_TYPE_UNKNOWN                   =       0 ,
+  XSYSTEM_VOLUME_TYPE_FIXED                               ,
+  XSYSTEM_VOLUME_TYPE_REMOVABLE                           ,
+  XSYSTEM_VOLUME_TYPE_REMOTE                              ,
+  XSYSTEM_VOLUME_TYPE_CDROM                               ,
+  XSYSTEM_VOLUME_TYPE_RAMDISK
+};
+
+
 #define XSYSTEM_CPUUSAGE_ERROR              -1
 
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
+
+class XSYSTEM_VOLUMEINFO
+{
+  public:
+                                    XSYSTEM_VOLUMEINFO              ();
+    virtual                        ~XSYSTEM_VOLUMEINFO              ();
+
+    XSTRING*                        GetName                         ();
+    XSTRING*                        GetLabel                        ();
+    XSTRING*                        GetFileSystem                   ();
+
+    XSYSTEM_VOLUME_TYPE             GetType                         ();
+    void                            SetType                         (XSYSTEM_VOLUME_TYPE type);
+
+    XQWORD                          GetTotalBytes                   ();
+    void                            SetTotalBytes                   (XQWORD totalbytes);
+
+    XQWORD                          GetFreeBytes                    ();
+    void                            SetFreeBytes                    (XQWORD freebytes);
+
+    XQWORD                          GetUsedBytes                    ();
+    float                           GetUsedPercent                  ();
+
+  private:
+
+    void                            Clean                           ();
+
+    XSTRING                         name;
+    XSTRING                         label;
+    XSTRING                         filesystem;
+    XSYSTEM_VOLUME_TYPE             type;
+    XQWORD                          totalbytes;
+    XQWORD                          freebytes;
+};
+
 
 class XSYSTEM
 {
@@ -152,6 +199,8 @@ class XSYSTEM
     virtual bool                    GetMemoryInfo                   (XDWORD& total,XDWORD& free);
     int                             GetFreeMemoryPercent            ();
     virtual bool                    FreeCacheMemory                 ();
+
+    virtual bool                    GetVolumesInfo                  (XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes);
 
     virtual int                     GetCPUUsageTotal                ();  
     virtual int                     GetCPUUsageForProcessName       (XCHAR* processname);  
@@ -204,6 +253,8 @@ class XSYSTEM
 
 
 /*---- INLINE FUNCTIONS + PROTOTYPES ---------------------------------------------------------------------------------*/
+
+
 
 
 

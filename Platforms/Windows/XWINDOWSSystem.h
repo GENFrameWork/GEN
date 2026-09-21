@@ -438,6 +438,8 @@ class XWINDOWSSYSTEM : public XSYSTEM
 		float																				GetCPUTemperature																	();
 
     bool																				GetMemoryInfo																			(XDWORD& total,XDWORD& free);
+
+    bool																				GetVolumesInfo																		(XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes);
 		
 		int																					GetCPUUsageTotal																	();
     int																					GetCPUUsageForProcessName													(XCHAR* processname);

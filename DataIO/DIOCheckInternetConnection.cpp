@@ -59,14 +59,15 @@
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
-* @fn         DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks)
+* @fn         DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks, bool waitforcheck)
 * @brief      Constructor of class
 * @ingroup    DATAIO
 * 
 * @param[in]  timeconnectionchecks : Timeconnectionchecks value.
+* @param[in]  waitforcheck : If true, block until at least one DNS probe finishes (or timeout).
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
-DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks)
+DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks, bool waitforcheck)
 {
   typedef struct { XCHAR* ipaddr;
                    XCHAR* name;
@@ -106,7 +107,12 @@ DIOCHECKINTERNETCONNECTION::DIOCHECKINTERNETCONNECTION(int timeconnectionchecks)
       checkconnections->Connection_Add(maindns[c].ipaddr, connectionID[c]);
     }
 
-  checkconnections->Connections_WaitToSomeIsChecked(checkconnections->GetTimeConnectionChecks());
+  // Optional: NativeActivity / UI apps should pass waitforcheck=false so AppProc_Ini does not
+  // block the start path on DNS (HardwareInfo / Check() can poll asynchronously instead).
+  if(waitforcheck)
+    {
+      checkconnections->Connections_WaitToSomeIsChecked(checkconnections->GetTimeConnectionChecks());
+    }
 }
 
 

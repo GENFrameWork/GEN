@@ -54,6 +54,7 @@
 #include <cpuid.h>
 #endif
 #include <mntent.h>
+#include <sys/statvfs.h>
 #include <sys/reboot.h>
 #include <sys/types.h>
 #include <sys/param.h>
@@ -611,6 +612,103 @@ bool XLINUXSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XLINUXSYSTEM::GetVolumesInfo(XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes)
+* @brief      Enumerate mounted block volumes with total/free space and file system type.
+* @ingroup    PLATFORM_LINUX
+* 
+* @param[out] volumes : Cleared and filled with GEN_NEW entries (caller DeleteContents).
+* 
+* @return     bool : true if at least one volume was added; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XLINUXSYSTEM::GetVolumesInfo(XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes)
+{
+  volumes.DeleteContents();
+
+  FILE* mounts = setmntent(_PATH_MOUNTED, "r");
+  if(!mounts) mounts = setmntent("/proc/mounts", "r");
+  if(!mounts) return false;
+
+  struct mntent* entry = NULL;
+
+  while((entry = getmntent(mounts)) != NULL)
+    {
+      if(!entry->mnt_fsname || !entry->mnt_dir || !entry->mnt_type) continue;
+
+      // Only real block devices (skip proc, sysfs, cgroup, ...).
+      if(strncmp(entry->mnt_fsname, "/dev/", 5) != 0) continue;
+
+      struct statvfs vfs;
+      memset(&vfs, 0, sizeof(vfs));
+
+      if(statvfs(entry->mnt_dir, &vfs) != 0) continue;
+      if(!vfs.f_blocks || !vfs.f_frsize) continue;
+
+      XQWORD totalbytes = (XQWORD)vfs.f_blocks * (XQWORD)vfs.f_frsize;
+      XQWORD freebytes  = (XQWORD)vfs.f_bavail * (XQWORD)vfs.f_frsize;
+
+      XSYSTEM_VOLUMEINFO* volume = GEN_NEW XSYSTEM_VOLUMEINFO();
+      if(!volume) continue;
+
+      volume->GetName()->Set(entry->mnt_dir);
+      volume->GetFileSystem()->Set(entry->mnt_type);
+      volume->SetTotalBytes(totalbytes);
+      volume->SetFreeBytes(freebytes);
+
+      XSYSTEM_VOLUME_TYPE volumetype = XSYSTEM_VOLUME_TYPE_FIXED;
+      if((strstr(entry->mnt_dir, "/media/") != NULL) ||
+         (strstr(entry->mnt_dir, "/run/media/") != NULL) ||
+         (strstr(entry->mnt_dir, "/mnt/") != NULL))
+        {
+          volumetype = XSYSTEM_VOLUME_TYPE_REMOVABLE;
+        }
+
+      volume->SetType(volumetype);
+
+      // Best-effort volume label from /dev/disk/by-label (symlink basename matches device).
+      DIR* labeldir = opendir("/dev/disk/by-label");
+      if(labeldir)
+        {
+          const char* fsbase = strrchr(entry->mnt_fsname, '/');
+          fsbase = fsbase ? (fsbase + 1) : entry->mnt_fsname;
+
+          struct dirent* de = NULL;
+          while((de = readdir(labeldir)) != NULL)
+            {
+              if(de->d_name[0] == '.') continue;
+
+              char linkpath[512];
+              snprintf(linkpath, sizeof(linkpath), "/dev/disk/by-label/%s", de->d_name);
+
+              char target[512];
+              ssize_t n = readlink(linkpath, target, sizeof(target) - 1);
+              if(n <= 0) continue;
+              target[n] = 0;
+
+              const char* resbase = strrchr(target, '/');
+              resbase = resbase ? (resbase + 1) : target;
+
+              if(fsbase && resbase && !strcmp(fsbase, resbase))
+                {
+                  volume->GetLabel()->Set(de->d_name);
+                  break;
+                }
+            }
+
+          closedir(labeldir);
+        }
+
+      volumes.Add(volume);
+    }
+
+  endmntent(mounts);
+
+  return (!volumes.IsEmpty());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         bool XLINUXSYSTEM::FreeCacheMemory()
 * @brief      Free cache memory
 * @ingroup    PLATFORM_LINUX
@@ -651,7 +749,28 @@ int XLINUXSYSTEM::GetCPUUsageTotal()
   unsigned long long  totaluser, totaluserlow, totalsys, totalidle, total;
      
   file = fopen("/proc/stat", "r");
-  fscanf(file, "cpu %llu %llu %llu %llu", &totaluser, &totaluserlow, &totalsys, &totalidle);
+  if(!file)
+    {
+      if(xmutexcheckCPUusage)
+        {
+          xmutexcheckCPUusage->UnLock();
+        }
+
+      return XSYSTEM_CPUUSAGE_ERROR;
+    }
+
+  if(fscanf(file, "cpu %llu %llu %llu %llu", &totaluser, &totaluserlow, &totalsys, &totalidle) != 4)
+    {
+      fclose(file);
+
+      if(xmutexcheckCPUusage)
+        {
+          xmutexcheckCPUusage->UnLock();
+        }
+
+      return XSYSTEM_CPUUSAGE_ERROR;
+    }
+
   fclose(file);
      
   if(totaluser < lasttotaluser || totaluserlow < lasttotaluserlow || totalsys < lasttotalsys || totalidle < lasttotalidle)

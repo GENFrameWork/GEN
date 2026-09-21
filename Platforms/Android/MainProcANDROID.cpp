@@ -561,21 +561,21 @@ STATUS MAINPROCANDROID::OnStep()
 {
   //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE , __L("[ANDROID Event] INI OnStep"));
 
-  STATUS status = STATUS_OK;
-  
-  if(!screenactived) 
+  // Do NOT treat !screenactived as a fatal error. On real devices APP_CMD_GAINED_FOCUS
+  // (Activate → enabled OnStep loop) can race ahead of a failed/partial OnCreateWindow, or
+  // Create() may still be pending. Returning STATUS_KO here calls ANativeActivity_finish()
+  // with no Java exception — the classic "flash for ~1s then exits silently" symptom that
+  // BlueStacks often hides because its window/focus ordering is more forgiving.
+  if(!screenactived)
     {
-      status = STATUS_KO;
+      return STATUS_OK;
     }
-   else
-    {
-      if(!androidmain.Update()) status = STATUS_KO;
-    }
-  
+
+  if(!androidmain.Update()) return STATUS_KO;
 
   //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE , __L("[ANDROID Event] END OnStep"));
 
-  return status;
+  return STATUS_OK;
 }
 
 
@@ -805,7 +805,11 @@ void MAINPROCANDROID::OnCreateWindow()
   APPFLOWBASE* app = NULL;
   if(androidmain.GetAppMain()) app = androidmain.GetAppMain()->GetApplication();
 
-  if(!app) return;
+  if(!app)
+    {
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[ANDROID Event] OnCreateWindow: application not ready (Ini failed?)"));
+      return;
+    }
 
   APPFLOWGRAPHICS* applicationgrp  = (APPFLOWGRAPHICS*)app;
   if(applicationgrp)
@@ -858,6 +862,7 @@ void MAINPROCANDROID::OnCreateWindow()
           // SCREEN_CANVASCREATING so that CreateViewport() has a fully-initialised screen.
           if(!mainscreen->Create(true))
             {
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_RED, __L("[ANDROID Event] OnCreateWindow: mainscreen->Create failed"));
               return;
             }
 

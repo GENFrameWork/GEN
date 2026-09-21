@@ -435,6 +435,101 @@ static bool UI_SkinCanvas_RoundedRectInside(int px, int py, int w, int h, double
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         static void UI_SkinCanvas_PunchRoundRectCornerTips
+* @brief      Restore true backdrop into the four AABB corner cutouts of a rounded rect.
+* @note       INTERNAL. After RoundRect/Path fill, AGG AA (and occasionally a sharp prior fill) can leave dark
+*             "picos" in the square tips outside the arc. Copy those pixels back from FormBackdrop (or from a
+*             1px sample just outside the AABB when no backdrop exists). Same family as the soft-shadow cutout
+*             clear in UI_SkinCanvas_BuildSoftShadowBitmap.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+static void UI_SkinCanvas_PunchRoundRectCornerTips(GRP2DCANVAS* canvas, GRP2DREBUILDAREA* backdrop,
+                                                   double minx, double miny, double maxx, double maxy,
+                                                   double rTL, double rTR, double rBR, double rBL,
+                                                   const GRP2DCOLOR_RGBA8* parent_override)
+{
+  if(!canvas) return;
+
+  int x0 = (int)minx;
+  int y0 = (int)miny;
+  int w  = (int)(maxx - minx);
+  int h  = (int)(maxy - miny);
+
+  if(w <= 2 || h <= 2) return;
+  if(rTL <= 0.0 && rTR <= 0.0 && rBR <= 0.0 && rBL <= 0.0) return;
+
+  GRPBITMAP* bmp = (backdrop) ? backdrop->GetBitmap() : NULL;
+
+  // Parent ink: override (must be non-black) > FormBackdrop mid-edge > father's CSS bg (passed as override).
+  // Never punch with 0,0,0 — that paints black picos worse than AGG tips.
+  GRP2DCOLOR_RGBA8 parent(0,0,0,255);
+  bool have_parent = false;
+  if(parent_override && parent_override->a > 0 &&
+     (parent_override->r + parent_override->g + parent_override->b) > 8)
+    {
+      parent = *parent_override;
+      have_parent = true;
+    }
+  if(!have_parent && bmp && backdrop && bmp->GetWidth() > 2 && bmp->GetHeight() > 2)
+    {
+      int bdx = (int)backdrop->GetXPos();
+      int bdy = (int)backdrop->GetYPos();
+      int bx = (x0 - bdx) + (w / 2);
+      int by = (y0 - bdy) + 1;
+      if(bx < 0) bx = 1;
+      if(by < 0) by = 1;
+      if(bx >= (int)bmp->GetWidth())  bx = (int)bmp->GetWidth()  / 2;
+      if(by >= (int)bmp->GetHeight()) by = (int)bmp->GetHeight() / 2;
+      GRP2DCOLOR* c = bmp->GetPixel(bx, by);
+      if(c)
+        {
+          GRP2DCOLOR_RGBA8 s = *(GRP2DCOLOR_RGBA8*)c;
+          if(s.a > 0 && (s.r + s.g + s.b) > 8) { parent = s; have_parent = true; }
+        }
+    }
+  if(!have_parent) return;
+
+  int rTLi = (int)rTL; if(rTLi > w) rTLi = w; if(rTLi > h) rTLi = h;
+  int rTRi = (int)rTR; if(rTRi > w) rTRi = w; if(rTRi > h) rTRi = h;
+  int rBRi = (int)rBR; if(rBRi > w) rBRi = w; if(rBRi > h) rBRi = h;
+  int rBLi = (int)rBL; if(rBLi > w) rBLi = w; if(rBLi > h) rBLi = h;
+
+  double ox1 = 0.0, oy1 = 0.0, ox2 = 0.0, oy2 = 0.0;
+  canvas->GetClipBox(ox1, oy1, ox2, oy2);
+  {
+    double cminx = __MIN(ox1, ox2) - 2.0, cmaxx = __MAX(ox1, ox2) + 2.0;
+    double cminy = __MIN(oy1, oy2) - 2.0, cmaxy = __MAX(oy1, oy2) + 2.0;
+    canvas->SetClipBox(cminx, cmaxy, cmaxx, cminy);
+  }
+
+  for(int py = 0; py <= h + 1; py++)
+    {
+      for(int px = 0; px <= w + 1; px++)
+        {
+          bool in_TL = (px <= rTLi) && (py <= rTLi);
+          bool in_TR = (px >= (w - rTRi)) && (py <= rTRi);
+          bool in_BR = (px >= (w - rBRi)) && (py >= (h - rBRi));
+          bool in_BL = (px <= rBLi) && (py >= (h - rBLi));
+          if(!in_TL && !in_TR && !in_BR && !in_BL) continue;
+
+          // Slightly inflate radii for the inside test so we don't erase AGG's AA fringe of the true fill
+          // (pixel (3,3) with r=12 is just outside the strict disc but still part of the painted arc).
+          bool inside_shape = (px >= 0 && py >= 0 && px < w && py < h) &&
+                              UI_SkinCanvas_RoundedRectInside(px, py, w, h,
+                                                              rTL + 0.75, rTR + 0.75,
+                                                              rBR + 0.75, rBL + 0.75);
+          if(inside_shape) continue;
+
+          canvas->PutPixel((double)(x0 + px), (double)(y0 + py), &parent);
+        }
+    }
+
+  canvas->SetClipBox(ox1, oy1, ox2, oy2);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         static void UI_SkinCanvas_DrawSoftShadow(GRP2DCANVAS* canvas, double minx, double miny, double maxx, double maxy, double rTL, double rTR, double rBR, double rBL, UI_COLOR* shadow_color, int blur_radius)
 * @brief      Draw a soft-edged rounded-rect drop shadow. Rasterises the silhouette into an off-screen RGBA
 *             bitmap padded to hold the blur fade, runs agg::stack_blur_rgba32 on it, then composites via
@@ -4495,6 +4590,10 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
           if(vr_maxy < vr_miny) vr_maxy = vr_miny;
         }
 
+      // Kept across the haspaintable/FormBackdrop block so the RoundRect corner-tip punch below can
+      // restore true parent pixels into the AABB cutouts (datetime_box / inner-box "picos").
+      GRP2DREBUILDAREA* formbackdrop_for_punch = NULL;
+
       if(haspaintable && !GEN_USERINTERFACE.ModalLayer_IsCompositing())
         {
           // ACCENT-BAR TRAIL FIX (2026-09): root cause of "quedan rastros de la barra azul en la opcion
@@ -4630,11 +4729,13 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
               // First time this element is ever drawn: nothing has painted shadow/fill/border/children ink
               // here yet, so this is the one guaranteed-pristine moment to capture the true backdrop.
               FormBackdrop_Capture(element, bd_x, bd_y, bd_w, bd_h);
+              formbackdrop_for_punch = FormBackdrop_Find(element);
             }
            else
             {
               // Not the first draw: restore the true backdrop now, before repainting below.
               PutBitmapNoAlpha(formbackdrop->GetXPos(), formbackdrop->GetYPos(), formbackdrop->GetBitmap());
+              formbackdrop_for_punch = formbackdrop;
 
               // Restoring just wiped any ink our own children (an edit field, listbox rows, a scrollbar...)
               // already painted on earlier ticks. The children loop further down in this function already
@@ -4855,6 +4956,25 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
 
           bool uniform = (rTL == rTR) && (rTR == rBR) && (rBR == rBL) && (rTL > 0.0);
 
+          // Father's CSS background is the true parent ink for nested panels (datetime_box on card).
+          GRP2DCOLOR_RGBA8 corner_parent(0,0,0,255);
+          const GRP2DCOLOR_RGBA8* corner_parent_ptr = NULL;
+          {
+            UI_ELEMENT* father = element_form->GetFather();
+            UI_COLOR* fbg = NULL;
+            if(father)
+              {
+                if(father->IsBackgroundColorSet()) fbg = father->GetBackgroundColor();
+                else fbg = father->GetColor();
+              }
+            if(fbg && fbg->GetAlpha() > 0 && (fbg->GetRed() + fbg->GetGreen() + fbg->GetBlue()) > 8)
+              {
+                corner_parent = GRP2DCOLOR_RGBA8((XBYTE)fbg->GetRed(), (XBYTE)fbg->GetGreen(),
+                                                 (XBYTE)fbg->GetBlue(), (XBYTE)fbg->GetAlpha());
+                corner_parent_ptr = &corner_parent;
+              }
+          }
+
           if(uniform)
             {
               canvas->RoundRect(vr_minx, vr_maxy, vr_maxx, vr_miny, rTL, true);
@@ -4867,13 +4987,43 @@ bool UI_SKINCANVAS::Draw_Form(UI_ELEMENT* element)
               canvas->Path(path, true);       // fill
               canvas->Path(path, false);      // stroke (transparent line colour when border-width == 0)
             }
+
+          // CORNER SPIKES FIX: punch AABB cutouts with father/FormBackdrop parent ink.
+          UI_SkinCanvas_PunchRoundRectCornerTips(canvas, formbackdrop_for_punch,
+                                                 vr_minx, vr_miny, vr_maxx, vr_maxy,
+                                                 rTL, rTR, rBR, rBL, corner_parent_ptr);
         }
        else if(element_form->GetRoundRect())
         {
-          canvas->RoundRect(element_form->GetVisibleRect()->x,
-                            element_form->GetVisibleRect()->y,
-                            element_form->GetVisibleRect()->x + element_form->GetVisibleRect()->width,
-                            element_form->GetVisibleRect()->GetTop(), element_form->GetRoundRect(), true);
+          double vx = element_form->GetVisibleRect()->x;
+          double vy = element_form->GetVisibleRect()->y;
+          double vw = element_form->GetVisibleRect()->width;
+          double vtop = element_form->GetVisibleRect()->GetTop();
+
+          GRP2DCOLOR_RGBA8 corner_parent(0,0,0,255);
+          const GRP2DCOLOR_RGBA8* corner_parent_ptr = NULL;
+          {
+            UI_ELEMENT* father = element_form->GetFather();
+            UI_COLOR* fbg = NULL;
+            if(father)
+              {
+                if(father->IsBackgroundColorSet()) fbg = father->GetBackgroundColor();
+                else fbg = father->GetColor();
+              }
+            if(fbg && fbg->GetAlpha() > 0 && (fbg->GetRed() + fbg->GetGreen() + fbg->GetBlue()) > 8)
+              {
+                corner_parent = GRP2DCOLOR_RGBA8((XBYTE)fbg->GetRed(), (XBYTE)fbg->GetGreen(),
+                                                 (XBYTE)fbg->GetBlue(), (XBYTE)fbg->GetAlpha());
+                corner_parent_ptr = &corner_parent;
+              }
+          }
+
+          canvas->RoundRect(vx, vy, vx + vw, vtop, element_form->GetRoundRect(), true);
+
+          double rr = (double)element_form->GetRoundRect();
+          UI_SkinCanvas_PunchRoundRectCornerTips(canvas, formbackdrop_for_punch,
+                                                 vx, vtop, vx + vw, vy,
+                                                 rr, rr, rr, rr, corner_parent_ptr);
         }
        else
         {

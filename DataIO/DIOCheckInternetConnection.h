@@ -55,7 +55,7 @@ class DIOCHECKTCPIPCONNECTIONS;
 class DIOCHECKINTERNETCONNECTION
 {
   public:
-                                            DIOCHECKINTERNETCONNECTION             (int timeconnectionchecks = DIOCHECKINTERNETCONNECTION_DEFAULTTIMECHECK);
+                                            DIOCHECKINTERNETCONNECTION             (int timeconnectionchecks = DIOCHECKINTERNETCONNECTION_DEFAULTTIMECHECK, bool waitforcheck = true);
     virtual                                ~DIOCHECKINTERNETCONNECTION             ();
 
     DIOCHECKTCPIPCONNECTIONS*               GetCheckConnections                    ();

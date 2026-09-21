@@ -616,6 +616,110 @@ bool XWINDOWSSYSTEM::GetMemoryInfo(XDWORD& total,XDWORD& free)
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         bool XWINDOWSSYSTEM::GetVolumesInfo(XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes)
+* @brief      Enumerate logical drives with total/free space, label and file system.
+* @ingroup    PLATFORM_WINDOWS
+* 
+* @param[out] volumes : Cleared and filled with GEN_NEW entries (caller DeleteContents).
+* 
+* @return     bool : true if at least one volume was added; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool XWINDOWSSYSTEM::GetVolumesInfo(XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes)
+{
+  volumes.DeleteContents();
+
+  DWORD buffersize = GetLogicalDriveStrings(0, NULL);
+  if(!buffersize) return false;
+
+  XSTRING drives;
+  drives.AdjustSize((XDWORD)buffersize);
+
+  if(!GetLogicalDriveStrings(buffersize, drives.Get()))
+    {
+      drives.AdjustSize();
+      return false;
+    }
+
+  drives.AdjustSize();
+
+  XCHAR* cursor = drives.Get();
+  if(!cursor) return false;
+
+  while(cursor[0])
+    {
+      XSTRING root;
+      root = cursor;
+
+      UINT drivetype = GetDriveType(root.Get());
+      XSYSTEM_VOLUME_TYPE volumetype = XSYSTEM_VOLUME_TYPE_UNKNOWN;
+
+      switch(drivetype)
+        {
+          case DRIVE_FIXED      : volumetype = XSYSTEM_VOLUME_TYPE_FIXED;     break;
+          case DRIVE_REMOVABLE  : volumetype = XSYSTEM_VOLUME_TYPE_REMOVABLE; break;
+          case DRIVE_REMOTE     : volumetype = XSYSTEM_VOLUME_TYPE_REMOTE;    break;
+          case DRIVE_CDROM      : volumetype = XSYSTEM_VOLUME_TYPE_CDROM;     break;
+          case DRIVE_RAMDISK    : volumetype = XSYSTEM_VOLUME_TYPE_RAMDISK;   break;
+          default               : volumetype = XSYSTEM_VOLUME_TYPE_UNKNOWN;   break;
+        }
+
+      if(volumetype != XSYSTEM_VOLUME_TYPE_UNKNOWN)
+        {
+          ULARGE_INTEGER freebytestocaller;
+          ULARGE_INTEGER totalbytes;
+          ULARGE_INTEGER totalfreebytes;
+
+          freebytestocaller.QuadPart = 0;
+          totalbytes.QuadPart        = 0;
+          totalfreebytes.QuadPart    = 0;
+
+          if(GetDiskFreeSpaceEx(root.Get(), &freebytestocaller, &totalbytes, &totalfreebytes))
+            {
+              XSYSTEM_VOLUMEINFO* volume = GEN_NEW XSYSTEM_VOLUMEINFO();
+              if(volume)
+                {
+                  volume->GetName()->Set(root.Get());
+                  volume->SetType(volumetype);
+                  volume->SetTotalBytes((XQWORD)totalbytes.QuadPart);
+                  volume->SetFreeBytes((XQWORD)freebytestocaller.QuadPart);
+
+                  XSTRING vollabel;
+                  XSTRING volfs;
+
+                  vollabel.AdjustSize(_MAXSTR);
+                  volfs.AdjustSize(_MAXSTR);
+
+                  if(GetVolumeInformation(root.Get(),
+                                          vollabel.Get(), vollabel.GetSize(),
+                                          NULL, NULL, NULL,
+                                          volfs.Get(), volfs.GetSize()))
+                    {
+                      vollabel.AdjustSize();
+                      volfs.AdjustSize();
+                      volume->GetLabel()->Set(vollabel.Get());
+                      volume->GetFileSystem()->Set(volfs.Get());
+                    }
+                   else
+                    {
+                      vollabel.AdjustSize();
+                      volfs.AdjustSize();
+                    }
+
+                  volumes.Add(volume);
+                }
+            }
+        }
+
+      cursor += root.GetSize() + 1;
+    }
+
+  return (!volumes.IsEmpty());
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         int XWINDOWSSYSTEM::GetCPUUsageTotal()
 * @brief      Get CPU usage total
 * @ingroup    PLATFORM_WINDOWS

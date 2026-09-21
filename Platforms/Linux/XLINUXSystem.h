@@ -73,6 +73,8 @@ class XLINUXSYSTEM : public XSYSTEM
     bool                        GetMemoryInfo                 (XDWORD& total,XDWORD& free);
     bool                        FreeCacheMemory               ();
 
+    bool                        GetVolumesInfo                (XVECTOR<XSYSTEM_VOLUMEINFO*>& volumes);
+
     int			                    GetCPUUsageTotal			        ();
     int							            GetCPUUsageForProcessName	    (XCHAR* processname);
     int							            GetCPUUsageForProcessID		    (XDWORD processID);
