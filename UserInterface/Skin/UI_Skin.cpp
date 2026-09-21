@@ -595,8 +595,9 @@ bool UI_SKIN::CalculateBoundaryLine(UI_ELEMENT* element, bool adjustsizemargin)
       case UI_ELEMENT_TYPE_MENU             : status = CalculateBoundaryLine_Menu(element, adjustsizemargin);               break;
       case UI_ELEMENT_TYPE_LISTBOX          : status = CalculateBoundaryLine_ListBox(element, adjustsizemargin);            break;
       case UI_ELEMENT_TYPE_PROGRESSBAR	    : status = CalculateBoundaryLine_ProgressBar(element, adjustsizemargin);        break;
-      case UI_ELEMENT_TYPE_PROGRESSRADIAL  : status = CalculateBoundaryLine_ProgressRadial(element, adjustsizemargin);     break;
-      case UI_ELEMENT_TYPE_PROGRESSIMAGE   : status = CalculateBoundaryLine_ProgressImage(element, adjustsizemargin);      break;
+      case UI_ELEMENT_TYPE_PROGRESSRADIAL    : status = CalculateBoundaryLine_ProgressRadial(element, adjustsizemargin);     break;
+      case UI_ELEMENT_TYPE_PROGRESSIMAGE     : status = CalculateBoundaryLine_ProgressImage(element, adjustsizemargin);      break;
+      case UI_ELEMENT_TYPE_STATISTICSCHART   : status = CalculateBoundaryLine_StatisticsChart(element, adjustsizemargin);    break;
     }
 
   // Phase 4 ("migración del ejemplo" -- footer icon/text gap regression fix). SCOPE ADDENDUM: this is the ONE
@@ -1144,8 +1145,9 @@ bool UI_SKIN::Draw(UI_ELEMENT* element)
       case UI_ELEMENT_TYPE_MENU             : status = Draw_Menu(element);             break;             
       case UI_ELEMENT_TYPE_LISTBOX          : status = Draw_ListBox(element);          break;             
       case UI_ELEMENT_TYPE_PROGRESSBAR      : status = Draw_ProgressBar(element);      break;
-      case UI_ELEMENT_TYPE_PROGRESSRADIAL  : status = Draw_ProgressRadial(element);   break;
-      case UI_ELEMENT_TYPE_PROGRESSIMAGE   : status = Draw_ProgressImage(element);    break;
+      case UI_ELEMENT_TYPE_PROGRESSRADIAL    : status = Draw_ProgressRadial(element);   break;
+      case UI_ELEMENT_TYPE_PROGRESSIMAGE     : status = Draw_ProgressImage(element);    break;
+      case UI_ELEMENT_TYPE_STATISTICSCHART   : status = Draw_StatisticsChart(element);  break;
 
     }
 
@@ -1441,6 +1443,41 @@ bool UI_SKIN::Draw_ProgressRadial(UI_ELEMENT* element)
 * 
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_SKIN::Draw_ProgressImage(UI_ELEMENT* element)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_SKIN::CalculateBoundaryLine_StatisticsChart(UI_ELEMENT* element, bool adjustsizemargin)
+* @brief      Calculate boundary line statistics chart
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : Element to process.
+* @param[in]  adjustsizemargin : Adjustsizemargin value.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKIN::CalculateBoundaryLine_StatisticsChart(UI_ELEMENT* element, bool adjustsizemargin)
+{
+  return false;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_SKIN::Draw_StatisticsChart(UI_ELEMENT* element)
+* @brief      Draw statistics chart
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKIN::Draw_StatisticsChart(UI_ELEMENT* element)
 {
   return false;
 }

@@ -260,6 +260,7 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     UI_ELEMENT*                     GetLayoutElement_ProgressBar              (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_ProgressRadial           (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
     UI_ELEMENT*                     GetLayoutElement_ProgressImage            (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
+    UI_ELEMENT*                     GetLayoutElement_StatisticsChart          (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy = NULL);
 
     UI_ELEMENT*                     CreatePartialLayout                       (XFILEXMLELEMENT* nodeelement, UI_LAYOUT* layout, UI_ELEMENT* father);
     void                            PrepareElementStyleState                  (UI_ELEMENT* element);

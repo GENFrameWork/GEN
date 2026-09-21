@@ -220,6 +220,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		virtual bool											Draw_ProgressBar												(UI_ELEMENT* element);
     virtual bool                      Draw_ProgressRadial											(UI_ELEMENT* element);
     virtual bool                      Draw_ProgressImage											(UI_ELEMENT* element);
+    virtual bool                      Draw_StatisticsChart										(UI_ELEMENT* element);
 
   protected: 
 

@@ -77,6 +77,7 @@
 #include "UI_Element_ProgressBar.h"
 #include "UI_Element_ProgressRadial.h"
 #include "UI_Element_ProgressImage.h"
+#include "UI_Element_StatisticsChart.h"
 #include "UI_Layout.h"
 #include "UI_Manager.h"
 
@@ -3944,6 +3945,63 @@ bool UI_SKINCANVAS::Draw_Image(UI_ELEMENT* element)
 
   PostDrawFunction(element, canvas, clip_rect, x_position, y_position);
     
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
+* @fn         bool UI_SKINCANVAS::Draw_StatisticsChart(UI_ELEMENT* element)
+* @brief      Draw statistics chart
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  element : Element to process.
+* 
+* @return     bool : true if the operation is successful; otherwise false.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_SKINCANVAS::Draw_StatisticsChart(UI_ELEMENT* element)
+{
+  if(!element) return false;
+
+  UI_ELEMENT_STATISTICSCHART* element_chart = (UI_ELEMENT_STATISTICSCHART*)element;
+  GRP2DCANVAS*                canvas       = GetCanvas();
+  double                      x_position   = 0.0f;
+  double                      y_position   = 0.0f;
+  XRECT                       clip_rect;
+
+  if(!canvas) return false;
+
+  if(element_chart->GetNeedsRebuild() || (!element_chart->GetBitmap()))
+    {
+      if(element_chart->HasData())
+        {
+          element_chart->RebuildBitmap(canvas);
+        }
+       else
+        {
+          // Phase 2 empty state: no samples yet -- keep the card blank (no stale bitmap).
+          PreDrawFunction(element, canvas, clip_rect, x_position, y_position);
+          PostDrawFunction(element, canvas, clip_rect, x_position, y_position);
+          return true;
+        }
+    }
+
+  if(!element_chart->GetBitmap()) return false;
+
+  PreDrawFunction(element, canvas, clip_rect, x_position, y_position);
+
+  if(element->MustReDraw())
+    {
+      DrawElementBoxShadow(canvas, element, x_position, y_position);
+
+      canvas->PutBitmapAlpha(x_position ,
+                             y_position - element_chart->GetBitmap()->GetHeight(),
+                             element_chart->GetBitmap(), element_chart->GetAlpha());
+    }
+
+  PostDrawFunction(element, canvas, clip_rect, x_position, y_position);
+
   return true;
 }
 

@@ -147,6 +147,7 @@ class UI_SKIN
     virtual bool                      CalculateBoundaryLine_ProgressBar	    (UI_ELEMENT* element, bool adjustsizemargin = false);  
     virtual bool                      CalculateBoundaryLine_ProgressRadial  (UI_ELEMENT* element, bool adjustsizemargin = false);
     virtual bool                      CalculateBoundaryLine_ProgressImage   (UI_ELEMENT* element, bool adjustsizemargin = false);
+    virtual bool                      CalculateBoundaryLine_StatisticsChart (UI_ELEMENT* element, bool adjustsizemargin = false);
  
     bool											        CalculeBoundaryLine_AllElements			  (UI_ELEMENT* element, bool recursive = true);
       
@@ -180,6 +181,7 @@ class UI_SKIN
     virtual bool                      Draw_ProgressBar                      (UI_ELEMENT* element);  
     virtual bool                      Draw_ProgressRadial                   (UI_ELEMENT* element);    
     virtual bool                      Draw_ProgressImage                    (UI_ELEMENT* element);   
+    virtual bool                      Draw_StatisticsChart                  (UI_ELEMENT* element);
 
   protected:
 

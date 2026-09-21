@@ -94,6 +94,7 @@
 #include "UI_Element_Scroll.h"
 #include "UI_Element_ProgressRadial.h"
 #include "UI_Element_ProgressImage.h"
+#include "UI_Element_StatisticsChart.h"
 
 #include "UI_VirtualKeyboard.h"
 
@@ -5959,6 +5960,79 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_ProgressImage(XFILEXMLELEMENT* node, UI
 
 /**-------------------------------------------------------------------------------------------------------------------
 * 
+* @fn         UI_ELEMENT* UI_MANAGER::GetLayoutElement_StatisticsChart(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+* @brief      Get layout element statistics chart
+* @ingroup    USERINTERFACE
+* 
+* @param[in]  node : Node pointer to use.
+* @param[in]  layout : Layout pointer to use.
+* @param[in]  father : Father pointer to use.
+* @param[in]  element_legacy : Element legacy pointer to use.
+* 
+* @return     UI_ELEMENT* : Pointer to the requested object; NULL if it is not available.
+* 
+* --------------------------------------------------------------------------------------------------------------------*/
+UI_ELEMENT* UI_MANAGER::GetLayoutElement_StatisticsChart(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* father, UI_ELEMENT* element_legacy)
+{
+  UI_ELEMENT_STATISTICSCHART* element_chart = NULL;
+
+  if(element_legacy)
+    {
+      element_chart = (UI_ELEMENT_STATISTICSCHART*)element_legacy;
+    }
+   else
+    {
+      element_chart = GEN_NEW UI_ELEMENT_STATISTICSCHART();
+      if(!element_chart) return NULL;
+    }
+
+  element_chart->SetFather(father);
+
+  UI_COMPUTEDSTYLE outstyle;
+  if(!GetLayoutElement_Base(node, layout, element_chart, outstyle))
+    {
+      GEN_DELETE element_chart;
+      return NULL;
+    }
+
+  SetLevelAuto(element_chart, father);
+
+  double alpha = 0;
+  if(outstyle.Get(__L("alpha"), alpha))
+    {
+      element_chart->SetAlpha((XBYTE)alpha);
+    }
+
+  XSTRING charttypestr;
+  if(outstyle.Get(__L("chart"), charttypestr))
+    {
+      if(!charttypestr.Compare(__L("lines")  , true)) element_chart->SetChartType(UI_ELEMENT_STATISTICSCHART_TYPE_LINES);
+      if(!charttypestr.Compare(__L("columns"), true)) element_chart->SetChartType(UI_ELEMENT_STATISTICSCHART_TYPE_COLUMNS);
+      if(!charttypestr.Compare(__L("area")   , true)) element_chart->SetChartType(UI_ELEMENT_STATISTICSCHART_TYPE_AREA);
+      if(!charttypestr.Compare(__L("bars")   , true)) element_chart->SetChartType(UI_ELEMENT_STATISTICSCHART_TYPE_BARS);
+      if(!charttypestr.Compare(__L("pie")    , true)) element_chart->SetChartType(UI_ELEMENT_STATISTICSCHART_TYPE_PIE);
+    }
+
+  XSTRING titlestr;
+  if(outstyle.Get(__L("title"), titlestr))
+    {
+      element_chart->SetTitle(titlestr.Get());
+    }
+   else if(!node->GetValue().IsEmpty())
+    {
+      element_chart->SetTitle(node->GetValue().Get());
+    }
+
+  element_chart->SetNeedsRebuild(true);
+
+  GetLayoutElement_CalculateBoundaryLine(layout, element_chart);
+
+  return element_chart;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+* 
 * @fn         UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAYOUT* layout, UI_ELEMENT* father)
 * @brief      Create partial layout
 * @ingroup    USERINTERFACE
@@ -6047,9 +6121,14 @@ UI_ELEMENT* UI_MANAGER::CreatePartialLayout(XFILEXMLELEMENT* nodeelement, UI_LAY
           element = GetLayoutElement_ProgressRadial(nodeelement, layout, father);
         }
   
-      if(!value.Compare(__L("progressimage")   , true))
+      if(!value.Compare(__L("progressimage")     , true))
         {
           element = GetLayoutElement_ProgressImage(nodeelement, layout, father);
+        }
+
+      if(!value.Compare(__L("statisticschart")   , true))
+        {
+          element = GetLayoutElement_StatisticsChart(nodeelement, layout, father);
         }
 
     }
