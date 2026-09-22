@@ -37,6 +37,7 @@
 #include "UI_Element_Text.h"
 #include "UI_Style.h"
 #include "UI_StyleSheet.h"
+#include "UI_PropertyRegistry.h"
 #include "UI_Layout.h"
 #include "UI_LayoutEngine.h"
 
@@ -192,9 +193,11 @@ void UI_ELEMENT_TEXT::ReapplyStyleVisual()
   bag.FillFromCSSDeclarations(sheet, this);
 
   double sf = 0.0;
-  if(bag.Get(__L("sizefont"), sf) && sf > 0.0)
+  XSTRING sfstr;
+  if(UI_PROPERTYREGISTRY::GetAliased(bag, __L("sizefont"), __L("font-size"), sfstr) && !sfstr.IsEmpty())
     {
-      SetSizeFont((XDWORD)sf);
+      sf = sfstr.ConvertToDouble();
+      if(sf > 0.0) SetSizeFont((XDWORD)sf);
     }
 
   // Phase 3.3: if sizefont changed inside a flex/grid father, re-run local layout.

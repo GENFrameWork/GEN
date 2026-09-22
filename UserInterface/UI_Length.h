@@ -43,9 +43,9 @@
 *   a vw/vh needs the viewport), so a new UI_LENGTH_CONTEXT bundles that and a new Resolve(UI_LENGTH_CONTEXT&,
 *   double&) overload consumes it; the OLD Resolve(double,double&) deliberately still only understands
 *   NUMBER/PERCENT and returns false for every new type (see its own comment) rather than silently guessing a
-*   context. This increment is deliberately isolated and self-testable: it does not yet wire UI_LENGTH_CONTEXT
-*   into UI_COMPUTEDSTYLE or any builder -- that lands with the layout box/engine increments later in Phase 3,
-*   once there is an actual containing block/font-size/viewport to source the context from.
+*   context. Fase 8 wires UI_LENGTH_CONTEXT into GetLayoutElement_Base() for layouts that own a stylesheet
+*   (xpos/ypos/width/height/padding/margin); XML-only layouts keep ResolvePercentValue / ConvertToDouble.
+*   RunLayout is unchanged in this increment.
 *
 *   calc() parsing note: a malformed calc() (mismatched parentheses, a dangling operator, an empty operand...)
 *   does NOT make Parse() fail -- consistent with this class's existing "always succeeds except for empty input"

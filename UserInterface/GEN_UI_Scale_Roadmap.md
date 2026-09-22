@@ -125,10 +125,12 @@ Contrato dual: **layouts sin stylesheet** (`UI_Options`) no cambian. Solo el cam
 |---|------|-------------|
 | 5.1 | `scale = min(sw/dw, sh/dh)` (fit) o `min`/`max` según política | Unit test con dw×dh fijos y pantallas ficticias |
 | 5.2 | Recalcular al resize de ventana | Captura ventana pequeña vs grande; UI legible |
-| 5.3 | Android (si aplica en el ciclo): mismo design, scale por densidad | Misma checklist + captura dispositivo/emulador |
+| 5.3 | Android (si aplica en el ciclo): mismo design; fit = GLES letterbox (UIScale 1.0) | Checklist `PP_android_notes.md` + captura dispositivo/emulador |
 | 5.4 | UI_Options sigue sin scale automático | Smoke Options: sin stylesheet = comportamiento previo |
 
-**Estado:** `ComputeFitUIScale` + `Layouts_ApplyFitUIScale`. UI_System: `uiscale_autofit` (ini, default sí); `CHANGESIZE` reaplica fit. Zoom `+/-` desactiva autofit. `UpdateSize` redimensiona canvas live. Android (5.3) diferido. UI_Options sin cambios (XML-only = legacy).
+**Estado:** `ComputeFitUIScale` + `Layouts_ApplyFitUIScale`. UI_System: `uiscale_autofit` (ini, default sí); `CHANGESIZE` reaplica fit. Zoom `+/-` desactiva autofit. `UpdateSize` redimensiona canvas live. UI_Options sin cambios (XML-only = legacy).
+
+**5.3 Android (Track P ✅):** design canvas fijo (p.ej. 1440×900); el fit a la superficie nativa lo hace el **letterbox GLES** (`GRPANDROIDBlitGLES` + `MapWindowToCanvas`). `UIScale` permanece en **1.0** (Present identidad) para no doble-escalar. `OnConfigurationChanged` (GLES) conserva el design size y emite `CHANGESIZE` sin `UpdateSize(native)`. Ver Track P en [GEN_UI_CSS_Lite_Roadmap.md](GEN_UI_CSS_Lite_Roadmap.md).
 
 **Criterio de salida:** multi-resolución sin retocar `dashboard.xml`.
 
@@ -160,7 +162,7 @@ Contrato dual: **layouts sin stylesheet** (`UI_Options`) no cambian. Solo el cam
 | 7.2 | Bitmaps: raster al scale actual o @2x si hay pipeline | Captura zoom 2× sin pixelado extremo en SVG |
 | 7.3 | StatisticsChart: rebuild/raster consciente del scale | Chart CPU legible a scale 1.5 |
 
-**Estado:** intento densificar canvas+paint_density **revertido** (rompía resize/redraw). API `GetAssetRasterScale` permanece. Dashboard ya usa SVG. Replantear nitidez sin mutar métricas en paint.
+**Estado:** overlay post-Present seguro (sin mutar BoundaryLine): SVG icons y StatisticsChart se rasterizan a `size×GetUIScale()` y se blitean sobre el live tras el Present. Design paint + hit-test intactos.
 
 **Criterio de salida:** capturas HiDPI/zoom aceptables en UI_System.
 
@@ -172,9 +174,9 @@ Contrato dual: **layouts sin stylesheet** (`UI_Options`) no cambian. Solo el cam
 
 | # | Paso | Comprobable |
 |---|------|-------------|
-| 8.1 | Cablear rem/vw/vh en builders vivos (`GetLayoutElement_Base` / RunLayout) | Unit tests de resolución con `UI_LENGTH_CONTEXT` |
-| 8.2 | Demo puntual en `dashboard.css` (p.ej. un padding en `rem`) | Captura; cambia al variar root font / viewport lógico |
-| 8.3 | Regresión suite CSS | `UnitTests_UserInterface` PASS |
+| 8.1 | Cablear rem/vw/vh en builders vivos (`GetLayoutElement_Base` / RunLayout) | Unit tests de resolución con `UI_LENGTH_CONTEXT` ✅ |
+| 8.2 | Demo puntual en `dashboard.css` (p.ej. un padding en `rem`) | Captura `P8_rem_sidebar.png` ✅ |
+| 8.3 | Regresión suite CSS | `UnitTests_UserInterface` PASS (298) ✅ |
 
 **Criterio de salida:** CSS más expresivo sin romper scale.
 
@@ -211,3 +213,11 @@ Cada PR: build UI_System + capturas en `captures/uiscale/` + `UnitTests_UserInte
 - Zoom manual funciona y el hit-test no se desvía.  
 - Legacy XML-only intacto.  
 - Hay **batería de capturas** reproducible y unit tests de la math de scale.
+
+---
+
+## Continuación: CSS Lite (post Opción A)
+
+Backlog de autoría / layout / responsive / plataforma:  
+**[GEN_UI_CSS_Lite_Roadmap.md](GEN_UI_CSS_Lite_Roadmap.md)** (Tracks D, L, B, P, Q + puerta de producto).
+

@@ -728,7 +728,21 @@ void MAINPROCANDROID::OnConfigurationChanged()
       GRPANDROIDSCREEN* mainscreen = (GRPANDROIDSCREEN*)applicationgrp->GetMainScreen();
       if(mainscreen)
         {
+          // Track P / Fase 5.3: design-resolution screens (UI_System dashboard 1440x900, Canvas2D, etc.)
+          // must NOT be resized to the native window. GLES letterbox + MapWindowToCanvas already fit the
+          // surface. UpdateSize(native) would wipe the design canvas and break touch mapping.
+          // Still fire CHANGESIZE so observers can refresh (UI_System keeps design size + UIScale=1).
+          #ifdef GRP_OPENGL_ACTIVE
+          {
+            XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[ANDROID] OnConfigurationChanged: keep design %dx%d; native surface %dx%d"),
+                              mainscreen->GetWidth(), mainscreen->GetHeight(), maxwidth, maxheight);
+            GRPXEVENT grpevent(this, GRPXEVENT_TYPE_SCREEN_CHANGESIZE);
+            grpevent.SetScreen(mainscreen);
+            applicationgrp->PostEvent(&grpevent);
+          }
+          #else
           mainscreen->UpdateSize(maxwidth, maxheight);
+          #endif
         }
     }
 }

@@ -71,6 +71,7 @@
 #include "UI_PropertyRegistry.h"
 #include "UI_ComputedStyle.h"
 #include "UI_CSSParser.h"
+#include "UI_Length.h"
 #include "UI_Color.h"
 #include "UI_Colors.h"
 #include "UI_Text.h"
@@ -3877,6 +3878,46 @@ bool UI_MANAGER::ResolvePercentValue(XSTRING& valuestr, double basis, double& ou
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         void UI_MANAGER::BuildLengthContext(UI_LAYOUT* layout, double basis, double fontsize, UI_LENGTH_CONTEXT& out)
+* @brief      Fill a UI_LENGTH_CONTEXT from the layout's design viewport and optional --root-font-size theme var.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::BuildLengthContext(UI_LAYOUT* layout, double basis, double fontsize, UI_LENGTH_CONTEXT& out)
+{
+  out.basis         = basis;
+  out.fontsize      = fontsize;
+  out.rootfontsize  = 16.0;
+  out.viewportwidth = layout ? (double)layout->GetDesignWidth()  : 0.0;
+  out.viewportheight= layout ? (double)layout->GetDesignHeight() : 0.0;
+
+  if(layout && layout->GetStyleSheet())
+    {
+      XSTRING rootfs;
+      if(layout->GetStyleSheet()->Variables_Get(__L("--root-font-size"), rootfs) && !rootfs.IsEmpty())
+        {
+          double v = rootfs.ConvertToDouble();
+          if(v > 0.0) out.rootfontsize = v;
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::ResolveStyleLength(XSTRING& valuestr, UI_LENGTH_CONTEXT& context, double& out)
+* @brief      Resolve a style length token (px / % / em / rem / vw / vh / calc) for stylesheet layouts.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::ResolveStyleLength(XSTRING& valuestr, UI_LENGTH_CONTEXT& context, double& out)
+{
+  return UI_PROPERTYREGISTRY::ResolveLengthToken(valuestr, context, out);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         bool UI_MANAGER::GetLayoutElement_Base(XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent)
 * @brief      Get layout element base
 * @ingroup    USERINTERFACE
@@ -4018,12 +4059,22 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
         }
     }
 
+  // Fase 8: rem/vw/vh/%/em via UI_LENGTH only when this layout owns a stylesheet (UI_Options stays on
+  // ResolvePercentValue / ConvertToDouble).
+  const bool use_style_lengths = (layout && layout->GetStyleSheet());
+
   XSTRING position;
   if(style.Get(__L("xpos"), position))
     {
       if(!position.Compare(__L("left"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_LEFT;
         else if(!position.Compare(__L("right"), true))  xpos = UI_ELEMENT_TYPE_ALIGN_RIGHT;
           else if(!position.Compare(__L("center"), true)) xpos = UI_ELEMENT_TYPE_ALIGN_CENTER;
+            else if(use_style_lengths)
+              {
+                UI_LENGTH_CONTEXT ctx;
+                BuildLengthContext(layout, fatherwidth, fatherem, ctx);
+                if(!ResolveStyleLength(position, ctx, xpos)) style.Get(__L("xpos"), xpos);
+              }
             else
               {
                 double basis = (position.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherwidth;
@@ -4036,6 +4087,12 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
       if(!position.Compare(__L("up"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_UP;
         else if(!position.Compare(__L("down"), true))  ypos = UI_ELEMENT_TYPE_ALIGN_DOWN;
           else if(!position.Compare(__L("center"), true)) ypos = UI_ELEMENT_TYPE_ALIGN_CENTER;
+            else if(use_style_lengths)
+              {
+                UI_LENGTH_CONTEXT ctx;
+                BuildLengthContext(layout, fatherheight, fatherem, ctx);
+                if(!ResolveStyleLength(position, ctx, ypos)) style.Get(__L("ypos"), ypos);
+              }
             else
               {
                 double basis = (position.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherheight;
@@ -4049,6 +4106,12 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  width = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  width = UI_ELEMENT_TYPE_ALIGN_AUTO;
+          else if(use_style_lengths)
+            {
+              UI_LENGTH_CONTEXT ctx;
+              BuildLengthContext(layout, fatherwidth, fatherem, ctx);
+              if(!ResolveStyleLength(size, ctx, width)) style.Get(__L("width"), width);
+            }
           else
             {
               double basis = (size.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherwidth;
@@ -4067,6 +4130,12 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
     {
       if(!size.Compare(__L("max"), true))  height = UI_ELEMENT_TYPE_ALIGN_MAX;
         else if(!size.Compare(__L("auto"), true))  height = UI_ELEMENT_TYPE_ALIGN_AUTO;
+          else if(use_style_lengths)
+            {
+              UI_LENGTH_CONTEXT ctx;
+              BuildLengthContext(layout, fatherheight, fatherem, ctx);
+              if(!ResolveStyleLength(size, ctx, height)) style.Get(__L("height"), height);
+            }
           else
             {
               double basis = (size.Find(__L("em"), true) != XSTRING_NOTFOUND) ? fatherem : fatherheight;
@@ -4125,12 +4194,26 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
 
   // "gap" is the shorthand for both axes; "row-gap"/"column-gap" (read afterwards, so they win if present,
   // exactly like the padding/margin longhands elsewhere in this function) override just their own axis.
+  // Track L.2: with a stylesheet, rem/vw/vh/% resolve via UI_LENGTH (same gate as padding/margin).
   double rowgap    = element->GetRowGap();
   double columngap = element->GetColumnGap();
-  double gapvalue  = 0.0;
-  if(style.Get(__L("gap"), gapvalue)) { rowgap = gapvalue; columngap = gapvalue; }
-  if(style.Get(__L("row-gap"), gapvalue))    rowgap    = gapvalue;
-  if(style.Get(__L("column-gap"), gapvalue)) columngap = gapvalue;
+  if(use_style_lengths)
+    {
+      UI_LENGTH_CONTEXT ctx;
+      BuildLengthContext(layout, fatherwidth, fatherem, ctx);
+      XSTRING gapstr;
+      double  gapvalue = 0.0;
+      if(style.Get(__L("gap")       , gapstr) && ResolveStyleLength(gapstr, ctx, gapvalue)) { rowgap = gapvalue; columngap = gapvalue; }
+      if(style.Get(__L("row-gap")   , gapstr) && ResolveStyleLength(gapstr, ctx, gapvalue)) rowgap    = gapvalue;
+      if(style.Get(__L("column-gap"), gapstr) && ResolveStyleLength(gapstr, ctx, gapvalue)) columngap = gapvalue;
+    }
+   else
+    {
+      double gapvalue = 0.0;
+      if(style.Get(__L("gap"), gapvalue)) { rowgap = gapvalue; columngap = gapvalue; }
+      if(style.Get(__L("row-gap"), gapvalue))    rowgap    = gapvalue;
+      if(style.Get(__L("column-gap"), gapvalue)) columngap = gapvalue;
+    }
   element->SetGap(rowgap, columngap);
 
   XSTRING flexwrapstr;
@@ -4171,6 +4254,14 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   if(style.Get(__L("flex-basis"), flexbasisstr))
     {
       if(!flexbasisstr.Compare(__L("auto"), true))  element->SetFlexBasisAuto();
+        else if(use_style_lengths)
+          {
+            UI_LENGTH_CONTEXT ctx;
+            BuildLengthContext(layout, fatherwidth, fatherem, ctx);
+            double bv = 0.0;
+            if(ResolveStyleLength(flexbasisstr, ctx, bv)) element->SetFlexBasis(bv);
+              else element->SetFlexBasis(flexbasisstr.ConvertToDouble());
+          }
         else element->SetFlexBasis(flexbasisstr.ConvertToDouble());
     }
 
@@ -4289,11 +4380,20 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   // "margin": resolved via UI_PROPERTYREGISTRY::ResolveMarginEdges so load-time and unit tests share one
   // implementation. 4-value shorthand: layouts WITH a stylesheet use CSS TRBL; WITHOUT keep LEFT,RIGHT,UP,DOWN.
   // Longhands (margin-top/...) apply only when a stylesheet is present -- ignored on XML-only layouts.
+  // Fase 8: with a stylesheet, rem/vw/vh/% resolve through UI_LENGTH_CONTEXT.
   {
     bool   use_css = (layout && layout->GetStyleSheet());
     double edges[4] = { 0.0, 0.0, 0.0, 0.0 };   // LEFT, RIGHT, UP, DOWN
 
-    if(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, use_css, use_css, edges))
+    UI_LENGTH_CONTEXT  lengthctx;
+    UI_LENGTH_CONTEXT* lengthctx_ptr = NULL;
+    if(use_css)
+      {
+        BuildLengthContext(layout, fatherwidth, fatherem, lengthctx);
+        lengthctx_ptr = &lengthctx;
+      }
+
+    if(UI_PROPERTYREGISTRY::ResolveMarginEdges(style, use_css, use_css, edges, lengthctx_ptr))
       {
         element->SetMargin(UI_ELEMENT_TYPE_ALIGN_LEFT , edges[0]);
         element->SetMargin(UI_ELEMENT_TYPE_ALIGN_RIGHT, edges[1]);
@@ -4309,11 +4409,21 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
   //     3 values: TOP, LEFT-RIGHT, BOTTOM
   //     4 values: TOP, RIGHT, BOTTOM, LEFT
   // Longhand keys ("padding-left" / "-right" / "-top" / "-bottom") override the shorthand and are applied last.
+  // Fase 8: with a stylesheet, each token may be rem/vw/vh/%/em/calc via ExpandCSSShorthand4Lengths.
   XSTRING paddingstr;
   if(style.Get(__L("padding"), paddingstr))
     {
       double out[4] = { 0.0, 0.0, 0.0, 0.0 };
-      UI_PROPERTYREGISTRY::ExpandCSSShorthand4(paddingstr, out);          // out = TOP, RIGHT, BOTTOM, LEFT
+      bool   ok     = false;
+
+      if(use_style_lengths)
+        {
+          UI_LENGTH_CONTEXT ctx;
+          BuildLengthContext(layout, fatherwidth, fatherem, ctx);
+          ok = UI_PROPERTYREGISTRY::ExpandCSSShorthand4Lengths(paddingstr, ctx, out);
+        }
+
+      if(!ok) UI_PROPERTYREGISTRY::ExpandCSSShorthand4(paddingstr, out);   // out = TOP, RIGHT, BOTTOM, LEFT
 
       element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , out[3]);
       element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, out[1]);
@@ -4321,11 +4431,25 @@ bool UI_MANAGER::GetLayoutElement_Base(UI_STYLE& style, XSTRING& fathertagname, 
       element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , out[2]);
     }
 
-  double pv;
-  if(style.Get(__L("padding-left")  , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , pv);
-  if(style.Get(__L("padding-right") , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, pv);
-  if(style.Get(__L("padding-top")   , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP   , pv);
-  if(style.Get(__L("padding-bottom"), pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , pv);
+  if(use_style_lengths)
+    {
+      UI_LENGTH_CONTEXT ctx;
+      BuildLengthContext(layout, fatherwidth, fatherem, ctx);
+      XSTRING pstr;
+      double  pv = 0.0;
+      if(style.Get(__L("padding-left")  , pstr) && ResolveStyleLength(pstr, ctx, pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , pv);
+      if(style.Get(__L("padding-right") , pstr) && ResolveStyleLength(pstr, ctx, pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, pv);
+      if(style.Get(__L("padding-top")   , pstr) && ResolveStyleLength(pstr, ctx, pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP   , pv);
+      if(style.Get(__L("padding-bottom"), pstr) && ResolveStyleLength(pstr, ctx, pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , pv);
+    }
+   else
+    {
+      double pv;
+      if(style.Get(__L("padding-left")  , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_LEFT , pv);
+      if(style.Get(__L("padding-right") , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_RIGHT, pv);
+      if(style.Get(__L("padding-top")   , pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_UP   , pv);
+      if(style.Get(__L("padding-bottom"), pv)) element->SetPadding(UI_ELEMENT_TYPE_ALIGN_DOWN , pv);
+    }
 
   // border-width in pixels. 0 = "no stroke at all" (honoured explicitly); a missing key leaves the element's
   // -1 default so the skin keeps drawing its historical 1-px border for containers.
@@ -4537,14 +4661,19 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Text(XFILEXMLELEMENT* node, UI_LAYOUT* 
 
   SetLevelAuto(element_text, father);
 
-  if(!outstyle.Get(__L("sizefont"), sizefont))
-    {
-      if(!GetParentSizeFont(node->GetFather(), sizefont))
-        {
-          GEN_DELETE element_text;
-          return NULL;
-        }
-    }
+  // Track D.2: sizefont (GEN) or font-size (CSS-natural alias), first-hit-wins via GetAliased.
+  {
+    XSTRING sizefontstr;
+    if(UI_PROPERTYREGISTRY::GetAliased(outstyle, __L("sizefont"), __L("font-size"), sizefontstr) && !sizefontstr.IsEmpty())
+      {
+        sizefont = sizefontstr.ConvertToDouble();
+      }
+     else if(!GetParentSizeFont(node->GetFather(), sizefont))
+      {
+        GEN_DELETE element_text;
+        return NULL;
+      }
+  }
 
   element_text->SetSizeFont((XDWORD)sizefont);
 
@@ -4692,14 +4821,18 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_TextBox(XFILEXMLELEMENT* node, UI_LAYOU
   if(!element_textbox->GetBoundaryLine()->height) return NULL;
 
   double sizefont = 0;
-  if(!outstyle.Get(__L("sizefont"), sizefont))
-    {
-      if(!GetParentSizeFont(node->GetFather(), sizefont))
-        {
-          GEN_DELETE element_textbox;
-          return NULL;
-        }
-    }
+  {
+    XSTRING sizefontstr;
+    if(UI_PROPERTYREGISTRY::GetAliased(outstyle, __L("sizefont"), __L("font-size"), sizefontstr) && !sizefontstr.IsEmpty())
+      {
+        sizefont = sizefontstr.ConvertToDouble();
+      }
+     else if(!GetParentSizeFont(node->GetFather(), sizefont))
+      {
+        GEN_DELETE element_textbox;
+        return NULL;
+      }
+  }
 
   element_textbox->SetSizeFont((XDWORD)sizefont);
 
@@ -7469,6 +7602,9 @@ bool UI_MANAGER::UIScale_Present(UI_LAYOUT* layout)
 
   GEN_DELETE bmp;
 
+  // Fase 7: sharp SVG/chart overlay on the live canvas (design paint stays untouched; no BoundaryLine mutation).
+  UIScale_PresentSharpOverlay(layout, live);
+
   // Scaled present writes the full (or letterboxed) live canvas and wipes anything previously
   // composited there — including the custom-chrome caption painted AFTER content on the previous
   // frame. Chrome only redraws when dirty; without an explicit dirty here the bar vanishes on the
@@ -7549,6 +7685,8 @@ bool UI_MANAGER::UIScale_PrepareLayout(UI_LAYOUT* layout)
       // black Clear in ResetLiveComposition (otherwise sidebar/footer FormBackdrops capture black).
       if(layoutname) Layout_PutBackground(layoutname);
 
+      UIScale_InvalidateSharpOverlays(layout);
+
       layout->Elements_SetToRedraw(true);
       return true;
     }
@@ -7560,6 +7698,8 @@ bool UI_MANAGER::UIScale_PrepareLayout(UI_LAYOUT* layout)
 
   if(layoutname) Layout_PutBackground(layoutname);
 
+  UIScale_InvalidateSharpOverlays(layout);
+
   layout->Elements_SetToRedraw(true);
   UIScale_EndFrame(layout);
   return true;
@@ -7568,35 +7708,43 @@ bool UI_MANAGER::UIScale_PrepareLayout(UI_LAYOUT* layout)
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void UI_MANAGER::UIScale_RefreshDenseAssets(UI_LAYOUT* layout)
-* @brief      Fase 7: rebind SVG images and dirty StatisticsCharts for the current asset density.
+* @fn         void UI_MANAGER::UIScale_PresentSharpOverlay(UI_LAYOUT* layout, GRP2DCANVAS* live)
+* @brief      Fase 7: blit denser SVG icons + StatisticsCharts onto live after scaled Present.
+* @note       Design paint / BoundaryLine / hit-test stay in design px. Overlay only when density ≠ 1.
 * @ingroup    USERINTERFACE
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void UI_MANAGER::UIScale_RefreshDenseAssets(UI_LAYOUT* layout)
+void UI_MANAGER::UIScale_PresentSharpOverlay(UI_LAYOUT* layout, GRP2DCANVAS* live)
 {
-  if(!layout) return;
+  if(!layout || !live) return;
+  if(!layout->IsUIScaleActive()) return;
+
+  double density = layout->GetAssetRasterScale();
+  if(density > (1.0 - UI_LAYOUT_UISCALE_EPSILON) && density < (1.0 + UI_LAYOUT_UISCALE_EPSILON)) return;
 
   XVECTOR<UI_ELEMENT*>* roots = layout->Elements_Get();
   if(!roots) return;
 
   for(XDWORD c=0; c<roots->GetSize(); c++)
     {
-      UIScale_RefreshDenseAssets_Element(layout, roots->Get(c));
+      UIScale_PresentSharpOverlay_Element(layout, roots->Get(c), live, density);
     }
 }
 
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         void UI_MANAGER::UIScale_RefreshDenseAssets_Element(UI_LAYOUT* layout, UI_ELEMENT* element)
-* @brief      Fase 7: recursive SVG rebind + StatisticsChart rebuild mark.
+* @fn         void UI_MANAGER::UIScale_PresentSharpOverlay_Element(UI_LAYOUT* layout, UI_ELEMENT* element, GRP2DCANVAS* live, double density)
+* @brief      Fase 7: recursive sharp overlay for one element tree.
 * @ingroup    USERINTERFACE
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-void UI_MANAGER::UIScale_RefreshDenseAssets_Element(UI_LAYOUT* layout, UI_ELEMENT* element)
+void UI_MANAGER::UIScale_PresentSharpOverlay_Element(UI_LAYOUT* layout, UI_ELEMENT* element, GRP2DCANVAS* live, double density)
 {
-  if(!layout || !element) return;
+  if(!layout || !element || !live) return;
+  if(!element->IsVisible()) return;
+
+  UI_SKIN* skin = layout->GetSkin();
 
   switch(element->GetType())
     {
@@ -7605,32 +7753,31 @@ void UI_MANAGER::UIScale_RefreshDenseAssets_Element(UI_LAYOUT* layout, UI_ELEMEN
           UI_ELEMENT_IMAGE* image = (UI_ELEMENT_IMAGE*)element;
           if(image->GetResource() && !image->GetResource()->IsEmpty() && IsVectorResource(image->GetResource()->Get()))
             {
-              GRPPROPERTYMODE  grppropertymode = GRPPROPERTYMODE_XX_UNKNOWN;
-              UI_SKIN_DRAWMODE drawmode        = UI_SKIN_DRAWMODE_UNKNOWN;
-              GRP2DCANVAS*     referencecanvas = NULL;
-
-              if(layout->GetSkin() && layout->GetSkin()->GetDrawMode() == UI_SKIN_DRAWMODE_CANVAS)
+              double design_w = element->GetBoundaryLine()->width;
+              double design_h = element->GetBoundaryLine()->height;
+              if(design_w > 0.0 && design_h > 0.0)
                 {
-                  UI_SKINCANVAS* skincanvas = (UI_SKINCANVAS*)layout->GetSkin();
-                  if(skincanvas)
+                  GRPPROPERTYMODE  grppropertymode = live->GetMode();
+                  UI_SKIN_DRAWMODE drawmode        = UI_SKIN_DRAWMODE_CANVAS;
+                  double           rw              = design_w * density;
+                  double           rh              = design_h * density;
+
+                  UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), image->GetResource()->Get(), live, rw, rh);
+                  GRPBITMAP*    sharp     = animation ? animation->GetBitmap() : NULL;
+                  if(sharp)
                     {
-                      drawmode        = UI_SKIN_DRAWMODE_CANVAS;
-                      referencecanvas = skincanvas->GetCanvas();
-                      if(referencecanvas) grppropertymode = referencecanvas->GetMode();
+                      double x = element->GetXPosition();
+                      double y = element->GetYPosition();
+                      if(skin && element->GetFather()) skin->GetAddPositionScrollSteps(element->GetFather(), x, y);
+
+                      double sx = 0.0;
+                      double sy = 0.0;
+                      // PutBitmap uses bottom-left of the bitmap in canvas Y-up-from-bottom convention:
+                      // design put is (x, y - height). Map that top edge through DesignToScreen.
+                      layout->DesignToScreen(x, y - design_h, sx, sy);
+                      live->PutBitmapAlpha(sx, sy, sharp, image->GetAlpha());
                     }
                 }
-
-              double width  = image->GetBoundaryLine()->width;
-              double height = image->GetBoundaryLine()->height;
-              double density = layout->GetAssetRasterScale();
-              if(density < (1.0 - UI_LAYOUT_UISCALE_EPSILON) || density > (1.0 + UI_LAYOUT_UISCALE_EPSILON))
-                {
-                  width  *= density;
-                  height *= density;
-                }
-
-              UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), image->GetResource()->Get(), referencecanvas, width, height);
-              if(animation && animation->GetBitmap()) image->SetImage(animation->GetBitmap());
             }
         }
         break;
@@ -7638,7 +7785,22 @@ void UI_MANAGER::UIScale_RefreshDenseAssets_Element(UI_LAYOUT* layout, UI_ELEMEN
       case UI_ELEMENT_TYPE_STATISTICSCHART :
         {
           UI_ELEMENT_STATISTICSCHART* chart = (UI_ELEMENT_STATISTICSCHART*)element;
-          chart->SetNeedsRebuild(true);
+          if(chart->HasData())
+            {
+              if(chart->EnsureSharpBitmap(live, density) && chart->GetSharpBitmap())
+                {
+                  double design_w = element->GetBoundaryLine()->width;
+                  double design_h = element->GetBoundaryLine()->height;
+                  double x = element->GetXPosition();
+                  double y = element->GetYPosition();
+                  if(skin && element->GetFather()) skin->GetAddPositionScrollSteps(element->GetFather(), x, y);
+
+                  double sx = 0.0;
+                  double sy = 0.0;
+                  layout->DesignToScreen(x, y - design_h, sx, sy);
+                  live->PutBitmapAlpha(sx, sy, chart->GetSharpBitmap(), chart->GetAlpha());
+                }
+            }
         }
         break;
 
@@ -7650,7 +7812,55 @@ void UI_MANAGER::UIScale_RefreshDenseAssets_Element(UI_LAYOUT* layout, UI_ELEMEN
     {
       for(XDWORD c=0; c<children->GetSize(); c++)
         {
-          UIScale_RefreshDenseAssets_Element(layout, children->Get(c));
+          UIScale_PresentSharpOverlay_Element(layout, children->Get(c), live, density);
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::UIScale_InvalidateSharpOverlays(UI_LAYOUT* layout)
+* @brief      Fase 7: drop denser chart overlay caches after scale/window change.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::UIScale_InvalidateSharpOverlays(UI_LAYOUT* layout)
+{
+  if(!layout) return;
+
+  XVECTOR<UI_ELEMENT*>* roots = layout->Elements_Get();
+  if(!roots) return;
+
+  for(XDWORD c=0; c<roots->GetSize(); c++)
+    {
+      UIScale_InvalidateSharpOverlays_Element(roots->Get(c));
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::UIScale_InvalidateSharpOverlays_Element(UI_ELEMENT* element)
+* @brief      Fase 7: recursive sharp-overlay invalidation.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::UIScale_InvalidateSharpOverlays_Element(UI_ELEMENT* element)
+{
+  if(!element) return;
+
+  if(element->GetType() == UI_ELEMENT_TYPE_STATISTICSCHART)
+    {
+      ((UI_ELEMENT_STATISTICSCHART*)element)->InvalidateSharpBitmap();
+    }
+
+  XVECTOR<UI_ELEMENT*>* children = element->GetComposeElements();
+  if(children)
+    {
+      for(XDWORD c=0; c<children->GetSize(); c++)
+        {
+          UIScale_InvalidateSharpOverlays_Element(children->Get(c));
         }
     }
 }

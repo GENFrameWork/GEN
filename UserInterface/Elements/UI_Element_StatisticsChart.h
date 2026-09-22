@@ -85,6 +85,11 @@ class UI_ELEMENT_STATISTICSCHART : public UI_ELEMENT
     GRPBITMAP*                          GetBitmap                         ();
     bool                                RebuildBitmap                     (GRP2DCANVAS* referencecanvas);
 
+    // Fase 7: denser raster for post-Present overlay (does not replace design-sized GetBitmap).
+    GRPBITMAP*                          GetSharpBitmap                    ();
+    bool                                EnsureSharpBitmap                 (GRP2DCANVAS* referencecanvas, double density);
+    void                                InvalidateSharpBitmap             ();
+
     XBYTE                               GetAlpha                          ();
     void                                SetAlpha                          (XBYTE alpha);
 
@@ -107,6 +112,8 @@ class UI_ELEMENT_STATISTICSCHART : public UI_ELEMENT
 
     void                                Clean                             ();
     bool                                DeleteBitmap                      ();
+    bool                                DeleteSharpBitmap                 ();
+    bool                                RasterizeChartBitmap              (GRP2DCANVAS* referencecanvas, double density, GRPBITMAP*& out_bitmap);
 
     UI_ELEMENT_STATISTICSCHART_TYPE     charttype;
     XSTRING                             title;
@@ -116,6 +123,8 @@ class UI_ELEMENT_STATISTICSCHART : public UI_ELEMENT
 
     bool                                needsrebuild;
     GRPBITMAP*                          bitmap;
+    GRPBITMAP*                          sharpbitmap;
+    double                              sharp_density;
     XBYTE                               alpha;
 };
 

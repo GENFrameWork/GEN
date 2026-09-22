@@ -44,6 +44,7 @@
 #include "UI_Element.h"
 #include "UI_Skin.h"
 #include "UI_Layout.h"
+#include "UI_Length.h"
 
 
 
@@ -250,6 +251,10 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            GetParentSizeFont                         (XFILEXMLELEMENT* node, double& sizefont);
     bool                            ResolvePercentValue                       (XSTRING& valuestr, double basis, double& out);
 
+    // Fase 8: rem/vw/vh/%/em via UI_LENGTH — only for layouts that own a stylesheet (UI_Options untouched).
+    void                            BuildLengthContext                        (UI_LAYOUT* layout, double basis, double fontsize, UI_LENGTH_CONTEXT& out);
+    bool                            ResolveStyleLength                        (XSTRING& valuestr, UI_LENGTH_CONTEXT& context, double& out);
+
     bool                            GetLayoutElement_Base                     (XFILEXMLELEMENT* node, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);
     bool                            GetLayoutElement_Base                     (UI_STYLE& style, XSTRING& fathertagname, UI_LAYOUT* layout, UI_ELEMENT* element, bool adjusttoparent = false);
 
@@ -310,9 +315,11 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     void                            UIScale_EndFrame                          (UI_LAYOUT* layout);
     // After scale/window change: drop composition caches, clear live canvas, dirty chrome.
     void                            UIScale_ResetLiveComposition              (UI_LAYOUT* layout);
-    // Fase 7: rebind SVG images + mark StatisticsCharts for rebuild at current GetAssetRasterScale().
-    void                            UIScale_RefreshDenseAssets                (UI_LAYOUT* layout);
-    void                            UIScale_RefreshDenseAssets_Element        (UI_LAYOUT* layout, UI_ELEMENT* element);
+    // Fase 7: post-Present sharp overlay for SVG icons + StatisticsCharts (no BoundaryLine mutation).
+    void                            UIScale_PresentSharpOverlay               (UI_LAYOUT* layout, GRP2DCANVAS* live);
+    void                            UIScale_PresentSharpOverlay_Element       (UI_LAYOUT* layout, UI_ELEMENT* element, GRP2DCANVAS* live, double density);
+    void                            UIScale_InvalidateSharpOverlays           (UI_LAYOUT* layout);
+    void                            UIScale_InvalidateSharpOverlays_Element   (UI_ELEMENT* element);
 
     bool                            SelectScrollBar                           (int x, int y);
     bool                            SelectScrollBarInElement                  (UI_ELEMENT* element, int x, int y);

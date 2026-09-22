@@ -122,6 +122,52 @@ XDWORD UI_PROPERTYREGISTRY::TokenizeNumbers(XSTRING& raw, double* outvalues, XDW
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
+* @fn         XDWORD UI_PROPERTYREGISTRY::TokenizeTokens(XSTRING& raw, XSTRING* outtokens, XDWORD maxvalues)
+* @brief      Tokenize length tokens (keep unit suffixes)
+* @ingroup    USERINTERFACE
+*
+* @param[in]  raw : Text to split, e.g. "8 0.5rem 10%".
+* @param[out] outtokens : Receives up to maxvalues tokens, in order.
+* @param[in]  maxvalues : Capacity of outtokens.
+*
+* @return     XDWORD : Count of tokens found.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XDWORD UI_PROPERTYREGISTRY::TokenizeTokens(XSTRING& raw, XSTRING* outtokens, XDWORD maxvalues)
+{
+  XDWORD n   = 0;
+  XDWORD len = raw.GetSize();
+  XDWORD p   = 0;
+
+  if(!outtokens) return 0;
+
+  while((p < len) && (n < maxvalues))
+    {
+      while(p < len)
+        {
+          XCHAR ch = raw[(int)p];
+          if((ch != __C(' ')) && (ch != __C('\t')) && (ch != __C(','))) break;
+          p++;
+        }
+      if(p >= len) break;
+
+      XDWORD start = p;
+      while(p < len)
+        {
+          XCHAR ch = raw[(int)p];
+          if((ch == __C(' ')) || (ch == __C('\t')) || (ch == __C(','))) break;
+          p++;
+        }
+
+      raw.Copy((int)start, (int)p, outtokens[n++]);
+    }
+
+  return n;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
 * @fn         void UI_PROPERTYREGISTRY::ExpandCSSShorthand4(XSTRING& raw, double out[4])
 * @brief      Expand CSS shorthand4
 * @ingroup    USERINTERFACE
@@ -142,6 +188,60 @@ void UI_PROPERTYREGISTRY::ExpandCSSShorthand4(XSTRING& raw, double out[4])
       case 3  : out[0] = vals[0]; out[1] = out[3] = vals[1]; out[2] = vals[2];          break;
       default : out[0] = vals[0]; out[1] = vals[1]; out[2] = vals[2]; out[3] = vals[3]; break;
     }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_PROPERTYREGISTRY::ResolveLengthToken(XSTRING& raw, UI_LENGTH_CONTEXT& context, double& out)
+* @brief      Resolve one CSS length token through UI_LENGTH
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_PROPERTYREGISTRY::ResolveLengthToken(XSTRING& raw, UI_LENGTH_CONTEXT& context, double& out)
+{
+  if(raw.IsEmpty()) return false;
+
+  UI_LENGTH length;
+  if(!length.Parse(raw)) return false;
+
+  UI_LENGTH_TYPE t = length.GetType();
+  if((t == UI_LENGTH_TYPE_UNDEFINED) || (t == UI_LENGTH_TYPE_KEYWORD)) return false;
+
+  return length.Resolve(context, out);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_PROPERTYREGISTRY::ExpandCSSShorthand4Lengths(XSTRING& raw, UI_LENGTH_CONTEXT& context, double out[4])
+* @brief      Expand 1..4 length tokens (rem/vw/vh/%/em/px) into CSS TRBL slots
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_PROPERTYREGISTRY::ExpandCSSShorthand4Lengths(XSTRING& raw, UI_LENGTH_CONTEXT& context, double out[4])
+{
+  if(!out) return false;
+
+  XSTRING toks[4];
+  XDWORD  n = TokenizeTokens(raw, toks, 4);
+  if(n == 0) return false;
+
+  double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
+  for(XDWORD i = 0; i < n; i++)
+    {
+      if(!ResolveLengthToken(toks[i], context, vals[i])) return false;
+    }
+
+  switch(n)
+    {
+      case 1  : out[0] = out[1] = out[2] = out[3] = vals[0];                            break;
+      case 2  : out[0] = out[2] = vals[0]; out[1] = out[3] = vals[1];                   break;
+      case 3  : out[0] = vals[0]; out[1] = out[3] = vals[1]; out[2] = vals[2];          break;
+      default : out[0] = vals[0]; out[1] = vals[1]; out[2] = vals[2]; out[3] = vals[3]; break;
+    }
+
+  return true;
 }
 
 
@@ -252,7 +352,7 @@ bool UI_PROPERTYREGISTRY::ParseBoxShadow(XSTRING& raw, double& outoffsetx, doubl
 
 /**-------------------------------------------------------------------------------------------------------------------
 *
-* @fn         bool UI_PROPERTYREGISTRY::ResolveMarginEdges(UI_STYLE& style, bool use_css_trbl, bool apply_longhands, double out_lrud[4])
+* @fn         bool UI_PROPERTYREGISTRY::ResolveMarginEdges(UI_STYLE& style, bool use_css_trbl, bool apply_longhands, double out_lrud[4], UI_LENGTH_CONTEXT* lengthctx)
 * @brief      Resolve margin shorthand + optional longhands into LEFT/RIGHT/UP/DOWN edges.
 * @ingroup    USERINTERFACE
 *
@@ -260,60 +360,97 @@ bool UI_PROPERTYREGISTRY::ParseBoxShadow(XSTRING& raw, double& outoffsetx, doubl
 * @param[in]  use_css_trbl : true = 4-value shorthand is TOP,RIGHT,BOTTOM,LEFT; false = LEFT,RIGHT,UP,DOWN.
 * @param[in]  apply_longhands : true = honour margin-top/right/bottom/left after the shorthand.
 * @param[out] out_lrud : Receives LEFT, RIGHT, UP, DOWN when any margin key was present.
+* @param[in]  lengthctx : Optional; when non-NULL with use_css_trbl, resolve rem/vw/vh/% via UI_LENGTH.
 *
 * @return     bool : true if at least one margin key was present; otherwise false (out_lrud untouched).
 *
 * --------------------------------------------------------------------------------------------------------------------*/
-bool UI_PROPERTYREGISTRY::ResolveMarginEdges(UI_STYLE& style, bool use_css_trbl, bool apply_longhands, double out_lrud[4])
+bool UI_PROPERTYREGISTRY::ResolveMarginEdges(UI_STYLE& style, bool use_css_trbl, bool apply_longhands, double out_lrud[4], UI_LENGTH_CONTEXT* lengthctx)
 {
   if(!out_lrud) return false;
 
   double left = 0.0, right = 0.0, up = 0.0, down = 0.0;
   bool   any  = false;
+  bool   use_lengths = (lengthctx != NULL) && use_css_trbl;
 
   XSTRING marginstr;
   if(style.Get(__L("margin"), marginstr))
     {
       any = true;
 
-      double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
-      XDWORD n = TokenizeNumbers(marginstr, vals, 4);
-
-      if(n == 4 && !use_css_trbl)
+      if(use_lengths)
         {
-          // Legacy 4-value form (no stylesheet): LEFT, RIGHT, UP, DOWN.
-          left  = vals[0];
-          right = vals[1];
-          up    = vals[2];
-          down  = vals[3];
-        }
-       else
-        {
-          // CSS TRBL: 4 values TOP,RIGHT,BOTTOM,LEFT; 1-3 via ExpandCSSShorthand4 table.
           double out[4] = { 0.0, 0.0, 0.0, 0.0 };
-          if(n == 4)
+          if(ExpandCSSShorthand4Lengths(marginstr, *lengthctx, out))
             {
-              out[0] = vals[0]; out[1] = vals[1]; out[2] = vals[2]; out[3] = vals[3];
+              up    = out[0];
+              right = out[1];
+              down  = out[2];
+              left  = out[3];
             }
            else
             {
+              // Fallback: plain numbers if a token was not a resolvable length.
               ExpandCSSShorthand4(marginstr, out);
+              up    = out[0];
+              right = out[1];
+              down  = out[2];
+              left  = out[3];
             }
+        }
+       else
+        {
+          double vals[4] = { 0.0, 0.0, 0.0, 0.0 };
+          XDWORD n = TokenizeNumbers(marginstr, vals, 4);
 
-          up    = out[0];
-          right = out[1];
-          down  = out[2];
-          left  = out[3];
+          if(n == 4 && !use_css_trbl)
+            {
+              // Legacy 4-value form (no stylesheet): LEFT, RIGHT, UP, DOWN.
+              left  = vals[0];
+              right = vals[1];
+              up    = vals[2];
+              down  = vals[3];
+            }
+           else
+            {
+              // CSS TRBL: 4 values TOP,RIGHT,BOTTOM,LEFT; 1-3 via ExpandCSSShorthand4 table.
+              double out[4] = { 0.0, 0.0, 0.0, 0.0 };
+              if(n == 4)
+                {
+                  out[0] = vals[0]; out[1] = vals[1]; out[2] = vals[2]; out[3] = vals[3];
+                }
+               else
+                {
+                  ExpandCSSShorthand4(marginstr, out);
+                }
+
+              up    = out[0];
+              right = out[1];
+              down  = out[2];
+              left  = out[3];
+            }
         }
     }
 
   if(apply_longhands)
     {
-      double mv = 0.0;
-      if(style.Get(__L("margin-left")  , mv)) { left  = mv; any = true; }
-      if(style.Get(__L("margin-right") , mv)) { right = mv; any = true; }
-      if(style.Get(__L("margin-top")   , mv)) { up    = mv; any = true; }
-      if(style.Get(__L("margin-bottom"), mv)) { down  = mv; any = true; }
+      if(use_lengths)
+        {
+          XSTRING mvstr;
+          double  mv = 0.0;
+          if(style.Get(__L("margin-left")  , mvstr) && ResolveLengthToken(mvstr, *lengthctx, mv)) { left  = mv; any = true; }
+          if(style.Get(__L("margin-right") , mvstr) && ResolveLengthToken(mvstr, *lengthctx, mv)) { right = mv; any = true; }
+          if(style.Get(__L("margin-top")   , mvstr) && ResolveLengthToken(mvstr, *lengthctx, mv)) { up    = mv; any = true; }
+          if(style.Get(__L("margin-bottom"), mvstr) && ResolveLengthToken(mvstr, *lengthctx, mv)) { down  = mv; any = true; }
+        }
+       else
+        {
+          double mv = 0.0;
+          if(style.Get(__L("margin-left")  , mv)) { left  = mv; any = true; }
+          if(style.Get(__L("margin-right") , mv)) { right = mv; any = true; }
+          if(style.Get(__L("margin-top")   , mv)) { up    = mv; any = true; }
+          if(style.Get(__L("margin-bottom"), mv)) { down  = mv; any = true; }
+        }
     }
 
   if(!any) return false;

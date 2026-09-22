@@ -107,6 +107,7 @@ UI_ELEMENT_STATISTICSCHART::~UI_ELEMENT_STATISTICSCHART()
 {
   ClearData();
   DeleteBitmap();
+  DeleteSharpBitmap();
 
   Clean();
 }
@@ -467,6 +468,99 @@ bool UI_ELEMENT_STATISTICSCHART::RebuildBitmap(GRP2DCANVAS* referencecanvas)
   return false;
   #else
 
+  GRPBITMAP* built = NULL;
+  if(!RasterizeChartBitmap(referencecanvas, 1.0, built)) return false;
+
+  DeleteBitmap();
+  bitmap       = built;
+  needsrebuild = false;
+  // Design rebuild implies sharp overlay is stale until EnsureSharpBitmap runs again.
+  InvalidateSharpBitmap();
+
+  return true;
+
+  #endif
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         GRPBITMAP* UI_ELEMENT_STATISTICSCHART::GetSharpBitmap()
+* @brief      Fase 7: denser chart bitmap for live overlay (may be NULL).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+GRPBITMAP* UI_ELEMENT_STATISTICSCHART::GetSharpBitmap()
+{
+  return sharpbitmap;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_STATISTICSCHART::InvalidateSharpBitmap()
+* @brief      Fase 7: drop denser overlay cache (scale/data change).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_STATISTICSCHART::InvalidateSharpBitmap()
+{
+  DeleteSharpBitmap();
+  sharp_density = 0.0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT_STATISTICSCHART::EnsureSharpBitmap(GRP2DCANVAS* referencecanvas, double density)
+* @brief      Fase 7: build/cache chart raster at design size × density for post-Present overlay.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT_STATISTICSCHART::EnsureSharpBitmap(GRP2DCANVAS* referencecanvas, double density)
+{
+  #ifndef GRP_STATISTICSCHARS_ACTIVE
+  return false;
+  #else
+
+  if(density < UI_LAYOUT_UISCALE_MIN) density = UI_LAYOUT_UISCALE_MIN;
+
+  if(sharpbitmap &&
+     (!needsrebuild) &&
+     (sharp_density > (density - UI_LAYOUT_UISCALE_EPSILON)) &&
+     (sharp_density < (density + UI_LAYOUT_UISCALE_EPSILON)))
+    {
+      return true;
+    }
+
+  GRPBITMAP* built = NULL;
+  if(!RasterizeChartBitmap(referencecanvas, density, built)) return false;
+
+  DeleteSharpBitmap();
+  sharpbitmap   = built;
+  sharp_density = density;
+  return true;
+
+  #endif
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT_STATISTICSCHART::RasterizeChartBitmap(GRP2DCANVAS* referencecanvas, double density, GRPBITMAP*& out_bitmap)
+* @brief      Generate SVG chart and rasterize at BoundaryLine size × density.
+* @note       INTERNAL. Does not touch NeedsRebuild / design bitmap ownership.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT_STATISTICSCHART::RasterizeChartBitmap(GRP2DCANVAS* referencecanvas, double density, GRPBITMAP*& out_bitmap)
+{
+  #ifndef GRP_STATISTICSCHARS_ACTIVE
+  out_bitmap = NULL;
+  return false;
+  #else
+
+  out_bitmap = NULL;
   if(!referencecanvas) return false;
   if(!HasData()) return false;
 
@@ -483,6 +577,10 @@ bool UI_ELEMENT_STATISTICSCHART::RebuildBitmap(GRP2DCANVAS* referencecanvas)
 
   if(chartwidth  <= 0.0) chartwidth  = 1.0;
   if(chartheight <= 0.0) chartheight = 1.0;
+  if(density < UI_LAYOUT_UISCALE_MIN) density = UI_LAYOUT_UISCALE_MIN;
+
+  chartwidth  *= density;
+  chartheight *= density;
 
   GRPSTATISTICSCHART* chart = NULL;
 
@@ -505,17 +603,15 @@ bool UI_ELEMENT_STATISTICSCHART::RebuildBitmap(GRP2DCANVAS* referencecanvas)
     {
       if(!title.IsEmpty()) config->SetTitle(title.Get());
 
-      config->SetTitleFontSize(14.0);
-      config->SetFontSize(11.0);
-      config->SetAxisFontSize(10.0);
+      config->SetTitleFontSize(14.0 * density);
+      config->SetFontSize(11.0 * density);
+      config->SetAxisFontSize(10.0 * density);
       config->SetShowValues(false);
       config->SetShowLegend(false);
       config->SetShowGrid(true);
       config->SetShowAxisLabels(true);
-      config->SetMargin(12.0);
+      config->SetMargin(12.0 * density);
 
-      // Prefer CSS background when opaque. Transparent (or unset) falls back to the Phase 1
-      // card-matching panel (22,27,34) so SVG+raster keeps the same contrast as the spike.
       bool usedcssbg = false;
       if(IsBackgroundColorSet())
         {
@@ -601,7 +697,7 @@ bool UI_ELEMENT_STATISTICSCHART::RebuildBitmap(GRP2DCANVAS* referencecanvas)
   GRPPROPERTIES properties;
   properties.CopyPropertysFrom(referencecanvas);
   properties.SetPosition(0, 0);
-  properties.SetSize((XDWORD)chartwidth, (XDWORD)chartheight);
+  properties.SetSize((XDWORD)(chartwidth + 0.5), (XDWORD)(chartheight + 0.5));
 
   GRP2DCANVAS* offscreen = GEN_GRPFACTORY.CreateCanvas(&properties);
   if(!offscreen)
@@ -610,8 +706,8 @@ bool UI_ELEMENT_STATISTICSCHART::RebuildBitmap(GRP2DCANVAS* referencecanvas)
       return false;
     }
 
-  offscreen->SetWidth((XDWORD)chartwidth);
-  offscreen->SetHeight((XDWORD)chartheight);
+  offscreen->SetWidth((XDWORD)(chartwidth + 0.5));
+  offscreen->SetHeight((XDWORD)(chartheight + 0.5));
 
   if(!offscreen->Buffer_Create())
     {
@@ -639,10 +735,7 @@ bool UI_ELEMENT_STATISTICSCHART::RebuildBitmap(GRP2DCANVAS* referencecanvas)
 
   if(!newbitmap) return false;
 
-  DeleteBitmap();
-  bitmap       = newbitmap;
-  needsrebuild = false;
-
+  out_bitmap = newbitmap;
   return true;
 
   #endif
@@ -701,6 +794,25 @@ bool UI_ELEMENT_STATISTICSCHART::DeleteBitmap()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_ELEMENT_STATISTICSCHART::DeleteSharpBitmap()
+* @brief      Fase 7: free denser overlay cache.
+* @note       INTERNAL
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_ELEMENT_STATISTICSCHART::DeleteSharpBitmap()
+{
+  if(!sharpbitmap) return false;
+
+  GEN_GRPFACTORY.DeleteBitmap(sharpbitmap);
+  sharpbitmap = NULL;
+
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         void UI_ELEMENT_STATISTICSCHART::Clean()
 * @brief      Clean the attributes of the class: Default initialize
@@ -710,10 +822,12 @@ bool UI_ELEMENT_STATISTICSCHART::DeleteBitmap()
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_ELEMENT_STATISTICSCHART::Clean()
 {
-  charttype    = UI_ELEMENT_STATISTICSCHART_TYPE_LINES;
-  needsrebuild = true;
-  bitmap       = NULL;
-  alpha        = 100;
+  charttype     = UI_ELEMENT_STATISTICSCHART_TYPE_LINES;
+  needsrebuild  = true;
+  bitmap        = NULL;
+  sharpbitmap   = NULL;
+  sharp_density = 0.0;
+  alpha         = 100;
 }
 
 

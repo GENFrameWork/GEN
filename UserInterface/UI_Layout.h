@@ -120,9 +120,8 @@ class UI_LAYOUT
     // True when this layout may use the design-canvas path (stylesheet OR explicit flag).
     bool                            IsUIScaleActive               () const;
 
-    // Fase 7: raster / design-canvas density. Equals GetUIScale() when UIScale is active and
-    // NeedsScaledPresent would apply for a matching screen; otherwise 1.0. Used to size the design
-    // offscreen and to rasterize SVG/charts so Present can blit ~1:1 instead of upscaling soft pixels.
+    // Fase 7: density for post-Present sharp SVG/chart overlay (= GetUIScale() when UIScale active).
+    // Design paint / BoundaryLine stay in design px; Present still upsamples the design canvas.
     double                          GetAssetRasterScale           () const;
 
     // scale = min(sw/dw, sh/dh), clamped to [FIT_MIN .. MAX]. Does not mutate layout.
