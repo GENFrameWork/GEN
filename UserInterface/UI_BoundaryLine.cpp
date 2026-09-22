@@ -169,6 +169,31 @@ bool UI_BOUNDARYLINE::IsWithin(XDWORD xpos, XDWORD ypos)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_BOUNDARYLINE::ExpandCenteredToMin(double min_width, double min_height)
+* @brief      Fase 6: grow this box to at least min_width x min_height, centered (hit-test only).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_BOUNDARYLINE::ExpandCenteredToMin(double min_width, double min_height)
+{
+  if((min_width > 0.0) && (width < min_width))
+    {
+      double pad = (min_width - width) * 0.5;
+      x     -= pad;
+      width  = min_width;
+    }
+
+  if((min_height > 0.0) && (height < min_height))
+    {
+      double mid = y - (height * 0.5);
+      height = min_height;
+      y      = mid + (height * 0.5);
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_BOUNDARYLINE::IsEmpty()
 * @brief      Is empty

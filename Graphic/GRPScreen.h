@@ -311,6 +311,8 @@ class GRPSCREEN : public GRPPROPERTIES, public XSUBJECT
 
     int                                   cfgchromesbuttonsrefwidth;
     int                                   cfgchromesbuttonsshift;
+    int                                   cfgchromeslastclientwidth;
+    int                                   cfgchromeslastclientheight;
     #endif
 
   private:

@@ -141,7 +141,11 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 		GRPSCREEN*                        GetScreen																(); 
 		GRP2DCANVAS*                      GetCanvas																();
     // Option B: while rebuilding the modal offscreen buffer, Draw_* must target that canvas.
-    void                              SetCanvasOverride                       (GRP2DCANVAS* override_canvas); 
+    void                              SetCanvasOverride                       (GRP2DCANVAS* override_canvas);
+
+		// Fase 7: paint into a denser design canvas (set by UIScale_BeginFrame). 1.0 = design px == canvas px.
+		double														GetPaintDensity													() const;
+		void															SetPaintDensity													(double density);
 		
 		bool															LoadFonts																();
 
@@ -254,6 +258,7 @@ class UI_SKINCANVAS : public UI_SKIN, public UI_SKINCANVAS_REBUILDAREAS
 	  int																viewportindex;
 		XPATH															fontpathfile;
     GRP2DCANVAS*                      canvas_override;
+		double														paint_density;   // Fase 7: UIScale asset density while painting
 
 	private:
 

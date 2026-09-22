@@ -45,6 +45,10 @@
 #include "MainProcWINDOWS.h"
 #include "APPFlowGraphics.h"
 
+#ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+#include "UI_Manager.h"
+#endif
+
 #include "GRPXEvent.h"
 #include "GRP2DCanvas.h"
 #include "GRPBitmap.h"
@@ -944,12 +948,30 @@ bool GRPWINDOWSSCREEN::Maximize(bool active)
 
   if(!active)
     {
-      return ShowWindow(hwnd, SW_NORMAL)?true:false;
+      // Restore the pre-maximize window rect when we grew via SetWindowPos (not SW_SHOWMAXIMIZED).
+      // ShowWindow(SW_NORMAL) alone does not shrink a window that never entered the OS maximized state.
+      if(maximize_restore_valid)
+        {
+          int x = maximize_restore_x;
+          int y = maximize_restore_y;
+          int w = maximize_restore_w;
+          int h = maximize_restore_h;
+          maximize_restore_valid = false;
+
+          if(w < 1) w = 1;
+          if(h < 1) h = 1;
+
+          if(!SetWindowPos(hwnd, NULL, x, y, w, h, SWP_NOZORDER))
+            {
+              return false;
+            }
+          return true;
+        }
+
+      return ShowWindow(hwnd, SW_RESTORE)?true:false;
     }
 
-  // Already as big as the viewport cap allows: maximizing could not grow the window. Per design the window
-  // must stay EXACTLY as it is (same size, same position), so this is a no-op -- identical to the X11
-  // backend's behaviour under KWin.
+  // Already as big as the viewport cap allows: caller (chrome button) toggles via Maximize(false).
   if(IsClientSizeAtMaximum())
     {
       return true;
@@ -1018,6 +1040,13 @@ bool GRPWINDOWSSCREEN::Maximize(bool active)
     {
       return false;
     }
+
+  // Remember current geometry so Maximize(false) / chrome toggle can shrink back.
+  maximize_restore_x     = windowrect.left;
+  maximize_restore_y     = windowrect.top;
+  maximize_restore_w     = windowrect.right  - windowrect.left;
+  maximize_restore_h     = windowrect.bottom - windowrect.top;
+  maximize_restore_valid = true;
 
   // Keep the current position; only nudge it back if the grown window would overflow the work area
   // (so growing never leaves part of the window off-screen or under the taskbar).
@@ -1836,9 +1865,33 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
       // is allowed to clear the cloak remains the real Update(GRP2DCANVAS*) driven by the main loop's own
       // per-frame DrawFrame()/UpdateViewports() cycle, once startup has actually produced a real frame.
       case WM_SIZE                  : { GRPWINDOWSSCREEN* screen = (GRPWINDOWSSCREEN*)GRPSCREEN::GetListScreens()->Get((void*)hwnd);
-                                        if(screen && !screen->windowcloaked)
+                                        if(screen)
                                           {
-                                            screen->UpdateViewports();
+                                            int clientwidth  = 0;
+                                            int clientheight = 0;
+                                            if(screen->GetClientSize(clientwidth, clientheight) && (clientwidth > 0) && (clientheight > 0))
+                                              {
+                                                if(((XDWORD)clientwidth != screen->GetWidth()) || ((XDWORD)clientheight != screen->GetHeight()))
+                                                  {
+                                                    screen->UpdateSize(clientwidth, clientheight);
+                                                    // CHANGESIZE → Update() already ran inside UpdateSize. A second pass
+                                                    // catches chrome dirtied by UIScale_Present in that first Update when
+                                                    // the modal resize loop will only UpdateViewports() next (no main-loop
+                                                    // tick until mouse-up) — without it the live canvas can stay blank
+                                                    // for the rest of the drag.
+                                                    #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+                                                    if(screen->IsCFGChromesActive())
+                                                      {
+                                                        GEN_USERINTERFACE.Update();
+                                                      }
+                                                    #endif
+                                                  }
+                                              }
+
+                                            if(!screen->windowcloaked)
+                                              {
+                                                screen->UpdateViewports();
+                                              }
                                           }
                                       }
                                       break;
@@ -1945,10 +1998,15 @@ LRESULT CALLBACK GRPWINDOWSSCREEN::BaseWndProc(HWND hwnd, UINT msg, WPARAM wpara
 * --------------------------------------------------------------------------------------------------------------------*/
 void GRPWINDOWSSCREEN::Clean()
 {
-  hinstance       = NULL;
-  hwnd            = NULL;
-  hdc             = NULL;
-  windowcloaked   = false;
+  hinstance               = NULL;
+  hwnd                    = NULL;
+  hdc                     = NULL;
+  windowcloaked           = false;
+  maximize_restore_valid  = false;
+  maximize_restore_x      = 0;
+  maximize_restore_y      = 0;
+  maximize_restore_w      = 0;
+  maximize_restore_h      = 0;
 
   #ifdef GRP_OPENGL_ACTIVE
   blitgles        = NULL;

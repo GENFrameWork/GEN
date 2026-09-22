@@ -40,8 +40,25 @@
 
 /*---- DEFINES & ENUMS  ----------------------------------------------------------------------------------------------*/
 
+// UIScale (Opción A): authors write XML/CSS in design pixels. scale = screen/design (or zoom).
+// Fase 1: API + contract — scale 1.0 identical to baseline.
+// Fase 2: ScreenToDesign / DesignToScreen; input maps screen→design before IsWithin (AABB stay design px).
+// Fase 3: paint via design offscreen canvas + scaled present (letterbox offsets in ScreenToDesign).
+// Fase 4: runtime SetUIScale + product clamp [MIN..MAX]; demo zoom +/- in UI_System.
+// Fase 5: autofit scale = min(sw/dw, sh/dh), recalc on window resize (FIT_MIN..MAX).
+// Fase 6: min hit-target in design px (expand IsWithin only; paint AABB unchanged).
+// Layouts WITHOUT a stylesheet (and without SetUIScaleEnabled(true)) keep the legacy path (UI_Options).
+#define UI_LAYOUT_UISCALE_DEFAULT           1.0
+#define UI_LAYOUT_UISCALE_MIN               0.75
+#define UI_LAYOUT_UISCALE_MAX               2.0
+#define UI_LAYOUT_UISCALE_FIT_MIN           0.25
+#define UI_LAYOUT_UISCALE_EPSILON           0.001
+#define UI_LAYOUT_UISCALE_STEP              0.25
+#define UI_LAYOUT_MINHITSIZE_DEFAULT        44.0
+#define UI_LAYOUT_MINHITSIZE_DISABLED       0.0
 
 class UI_STYLESHEET;
+class GRP2DCANVAS;
 
 
 /*---- CLASS ---------------------------------------------------------------------------------------------------------*/
@@ -77,6 +94,62 @@ class UI_LAYOUT
     UI_STYLESHEET*                  GetStyleSheet                 ();
     void                            SetStyleSheet                 (UI_STYLESHEET* sheet);
 
+    // -------------------------------------------------------------------------
+    // UIScale contract (design px → framebuffer). Opt-in per layout:
+    //   - automatic when a <stylesheet> is present, OR
+    //   - explicit via SetUIScaleEnabled(true).
+    // XML-only layouts (no sheet, no flag) never use the design canvas — e.g. UI_Options.
+    // Authors work in designWidth x designHeight; uiScale defaults to 1.0 (identical to baseline).
+    // -------------------------------------------------------------------------
+    XDWORD                          GetDesignWidth                () const;
+    XDWORD                          GetDesignHeight               () const;
+    void                            SetDesignSize                 (XDWORD width, XDWORD height);
+
+    double                          GetUIScale                    () const;
+    void                            SetUIScale                    (double scale);   // clamp to [UI_LAYOUT_UISCALE_MIN .. MAX]
+    // Autofit path: clamp [FIT_MIN .. MAX] (may be below product MIN). Does not clear autofit flag.
+    void                            SetUIScaleForFit              (double scale);
+
+    void                            SetUIScaleEnabled             (bool enabled);
+    bool                            GetUIScaleEnabled             () const;
+
+    // Fase 5: when true, scale tracks window size (fit). Manual SetUIScale / zoom keys clear it.
+    void                            SetUIScaleAutofit             (bool autofit);
+    bool                            GetUIScaleAutofit             () const;
+
+    // True when this layout may use the design-canvas path (stylesheet OR explicit flag).
+    bool                            IsUIScaleActive               () const;
+
+    // Fase 7: raster / design-canvas density. Equals GetUIScale() when UIScale is active and
+    // NeedsScaledPresent would apply for a matching screen; otherwise 1.0. Used to size the design
+    // offscreen and to rasterize SVG/charts so Present can blit ~1:1 instead of upscaling soft pixels.
+    double                          GetAssetRasterScale           () const;
+
+    // scale = min(sw/dw, sh/dh), clamped to [FIT_MIN .. MAX]. Does not mutate layout.
+    double                          ComputeFitUIScale             (XDWORD screen_w, XDWORD screen_h) const;
+
+    // Fase 6: minimum hit AABB in design px (0 = disabled). Applied only in PreSelect IsWithin.
+    double                          GetMinHitSize                 () const;
+    void                            SetMinHitSize                 (double size);
+
+    // Screen (framebuffer) ↔ design px. Uses GetUIScale() + letterbox offsets from ComputePresentTransform().
+    // Fase 2/3: input maps screen→design before IsWithin; paint presents design→screen with the same math.
+    void                            ScreenToDesign                (double screen_x, double screen_y, double& design_x, double& design_y) const;
+    void                            DesignToScreen                (double design_x, double design_y, double& screen_x, double& screen_y) const;
+
+    double                          GetUIScaleOffsetX             () const;
+    double                          GetUIScaleOffsetY             () const;
+
+    // Centered present: offset = (screen - design*scale) / 2 (positive = letterbox, negative = zoom crop).
+    void                            ComputePresentTransform       (XDWORD screen_w, XDWORD screen_h);
+
+    // True when paint must use design offscreen + scaled blit (scale≠1 or design size ≠ screen).
+    bool                            NeedsScaledPresent            (XDWORD screen_w, XDWORD screen_h) const;
+
+    // Owned design framebuffer for Fase 3 paint (NULL when identity path). Manager creates/deletes.
+    GRP2DCANVAS*                    GetDesignCanvas               () const;
+    void                            SetDesignCanvas               (GRP2DCANVAS* canvas);
+
     bool                            Elements_Add                  (UI_ELEMENT* element);
     XVECTOR<UI_ELEMENT*>*           Elements_Get                  ();
     UI_ELEMENT*                     Elements_Get                  (XCHAR* nameelement, UI_ELEMENT_TYPE type = UI_ELEMENT_TYPE_UNKNOWN);    
@@ -106,6 +179,16 @@ class UI_LAYOUT
     XVECTOR<UI_ELEMENT*>            elements;
 
     UI_STYLESHEET*                  stylesheet;
+
+    XDWORD                          designwidth;
+    XDWORD                          designheight;
+    double                          uiscale;
+    bool                            uiscale_enabled;
+    bool                            uiscale_autofit;
+    double                          minhitsize;
+    double                          uiscale_offset_x;
+    double                          uiscale_offset_y;
+    GRP2DCANVAS*                    designcanvas;
 };
 
 

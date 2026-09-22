@@ -145,6 +145,11 @@ class GRPWINDOWSSCREEN : public GRPSCREEN
 
 
     bool                                   windowcloaked;
+    bool                                   maximize_restore_valid;
+    int                                    maximize_restore_x;
+    int                                    maximize_restore_y;
+    int                                    maximize_restore_w;
+    int                                    maximize_restore_h;
 
     DEVMODE                               devmode;
 

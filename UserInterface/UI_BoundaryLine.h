@@ -77,6 +77,10 @@ class UI_BOUNDARYLINE
     bool             SetAround          (UI_BOUNDARYLINE& boundaryline);
     bool             IsWithin           (XDWORD xpos, XDWORD ypos);
 
+    // Expand width/height toward min_* centered on the current box (paint AABB unchanged elsewhere).
+    // Y uses bottom-anchored convention: mid = y - height/2 stays fixed.
+    void             ExpandCenteredToMin(double min_width, double min_height);
+
     bool             IsEmpty            ();
 
 

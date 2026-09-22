@@ -127,6 +127,11 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     // (e.g. UI_Options) must remain pixel-identical when no stylesheet is present.
     // Margin: no sheet -> 4-value LEFT,RIGHT,UP,DOWN and margin-* longhands ignored; with sheet -> CSS TRBL
     // plus margin-top/right/bottom/left (see UI_PROPERTYREGISTRY::ResolveMarginEdges).
+    //
+    // UIScale (Opción A): authors work in design px (UI_LAYOUT::SetDesignSize / GetUIScale). Opt-in when the
+    // layout has a stylesheet OR SetUIScaleEnabled(true). scale=1.0 is the compatible baseline. Input maps
+    // screen→design via MapScreenToDesign before IsWithin (Fase 2). Paint uses design offscreen + scaled
+    // present when NeedsScaledPresent (Fase 3). XML-only layouts ignore UIScale entirely.
     bool                            Layout_PutBackground                      (XCHAR* layoutname);    
     bool                            Layout_PutBackgroundColor                 (XCHAR* layoutname);    
     bool                            Layout_PutBackgroundImage                 (XCHAR* layoutname);    
@@ -216,6 +221,15 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
     bool                            CreaterVirtualKeyboard                    (UI_LAYOUT* layout, GRPSCREEN* screen);
     bool                            DeleteVirtualKeyboard                     ();
 
+    // Fase 3: after SetUIScale / SetDesignSize, ensure design canvas + seed background + full redraw.
+    bool                            UIScale_PrepareLayout                     (UI_LAYOUT* layout);
+
+    // Fase 4: runtime zoom — SetUIScale + PrepareLayout (redraw without reloading XML).
+    bool                            Layouts_SetUIScale                        (UI_LAYOUT* layout, double scale);
+
+    // Fase 5: scale = min(sw/dw, sh/dh) then PrepareLayout. No-op if UIScale inactive.
+    bool                            Layouts_ApplyFitUIScale                   (UI_LAYOUT* layout);
+
   private:
                                     UI_MANAGER                                ();
                                     UI_MANAGER                                (UI_MANAGER const&);
@@ -285,6 +299,20 @@ class UI_MANAGER : public XOBSERVER, public XSUBJECT
 
     bool                            UseMotionInElement                        (UI_ELEMENT* element, INPCURSORMOTION* cursormotion);
     bool                            UseMotion                                 (INPCURSORMOTION* cursormotion);
+
+    // Map pointer screen px → design px for a layout (identity if UIScale inactive).
+    void                            MapScreenToDesign                         (UI_LAYOUT* layout, int screen_x, int screen_y, int& design_x, int& design_y);
+
+    // Fase 3 internals: design offscreen paint + scaled present (letterbox).
+    bool                            UIScale_EnsureDesignCanvas                (UI_LAYOUT* layout);
+    bool                            UIScale_BeginFrame                        (UI_LAYOUT* layout);
+    bool                            UIScale_Present                           (UI_LAYOUT* layout);
+    void                            UIScale_EndFrame                          (UI_LAYOUT* layout);
+    // After scale/window change: drop composition caches, clear live canvas, dirty chrome.
+    void                            UIScale_ResetLiveComposition              (UI_LAYOUT* layout);
+    // Fase 7: rebind SVG images + mark StatisticsCharts for rebuild at current GetAssetRasterScale().
+    void                            UIScale_RefreshDenseAssets                (UI_LAYOUT* layout);
+    void                            UIScale_RefreshDenseAssets_Element        (UI_LAYOUT* layout, UI_ELEMENT* element);
 
     bool                            SelectScrollBar                           (int x, int y);
     bool                            SelectScrollBarInElement                  (UI_ELEMENT* element, int x, int y);

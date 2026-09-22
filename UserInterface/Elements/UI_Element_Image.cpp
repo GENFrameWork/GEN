@@ -121,6 +121,32 @@ bool UI_ELEMENT_IMAGE::SetImage(GRPBITMAP* image)
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         XSTRING* UI_ELEMENT_IMAGE::GetResource()
+* @brief      Fase 7: resource path for density rebind.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+XSTRING* UI_ELEMENT_IMAGE::GetResource()
+{
+  return &resource;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_ELEMENT_IMAGE::SetResource(XCHAR* resource)
+* @brief      Fase 7: store resource path for density rebind.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_ELEMENT_IMAGE::SetResource(XCHAR* resource)
+{
+  this->resource = resource ? resource : __L("");
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         XBYTE UI_ELEMENT_IMAGE::GetAlpha()
 * @brief      Get alpha
@@ -161,6 +187,7 @@ void UI_ELEMENT_IMAGE::SetAlpha(XBYTE alpha)
 void UI_ELEMENT_IMAGE::Clean()
 {
   image =  NULL;
+  resource.Empty();
   alpha =  100;
 }
 

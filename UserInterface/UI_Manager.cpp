@@ -54,6 +54,7 @@
 
 #include "GRPProperties.h"
 #include "GRPScreen.h"
+#include "GRPViewPort.h"
 #include "GRP2DCanvas.h"
 #include "GRP2DColor.h"
 #include "GRPBitmapFile.h"
@@ -746,7 +747,9 @@ bool UI_MANAGER::Layout_PutBackgroundImage(XCHAR* layoutname)
                                               GRP2DCANVAS* canvas = skin_canvas->GetCanvas();    
                                               if(canvas && screen) 
                                                 {
-                                                  layout->GetBackground()->GetBitmap()->Scale(screen->GetWidth(), screen->GetHeight());          
+                                                  // Scale background to the paint target (design canvas when UIScale
+                                                  // override is active; otherwise the live viewport).
+                                                  layout->GetBackground()->GetBitmap()->Scale((int)canvas->GetWidth(), (int)canvas->GetHeight());          
                                                   canvas->PutBitmapNoAlpha(0, 0, layout->GetBackground()->GetBitmap());                                              
 
                                                   status = true;
@@ -1191,7 +1194,17 @@ bool UI_MANAGER::Update(UI_LAYOUT* layout)
       if(modal_layout == layout) Element_PutToLastPositionLayout(element_modal);
     }
 
-  status = layout->Update();  
+  // Fase 3: paint into design canvas when scale≠1 (Begin may already be active from RebuildDrawAreas).
+  bool scaled = UIScale_BeginFrame(layout);
+
+  status = layout->Update();
+
+  if(scaled)
+    {
+      UIScale_Present(layout);
+      UIScale_EndFrame(layout);
+    }
+
   if(status)
     {         
       if(layout_commonindex != UI_MANAGER_LAYOUT_NOTFOUND)
@@ -2552,7 +2565,10 @@ bool UI_MANAGER::Elements_RebuildDrawAreas()
                   case UI_SKIN_DRAWMODE_CANVAS    : { UI_SKINCANVAS* skincanvas = (UI_SKINCANVAS*)layout->GetSkin();
                                                       if(skincanvas) 
                                                         {
-                                                          status = skincanvas->RebuildAllAreas();                                                                                
+                                                          // Fase 3: peel dirty rects on the design canvas when scaled.
+                                                          UIScale_BeginFrame(layout);
+                                                          status = skincanvas->RebuildAllAreas();
+                                                          UIScale_EndFrame(layout);
                                                         }
                                                     }
                                                     break;
@@ -4856,6 +4872,8 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Image(XFILEXMLELEMENT* node, UI_LAYOUT*
       double width  = element_image->GetBoundaryLine()->width;
       double height = element_image->GetBoundaryLine()->height;
 
+      element_image->SetResource(namefileimg.Get());
+
       UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), namefileimg.Get(), referencecanvas, width, height);
       if(animation) 
         { 
@@ -5003,6 +5021,7 @@ UI_ELEMENT* UI_MANAGER::GetLayoutElement_Animation(XFILEXMLELEMENT* node, UI_LAY
                           GRPBITMAP* bitmap = NULL; 
 
                           element_img->SetFather(element_animation);       
+                          element_img->SetResource(namefileimg.Get());
 
                           GetLayoutElement_Base(nodeelement, layout, element_img); 
 
@@ -6386,6 +6405,14 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
                               if(parser.ParseFile(stylesheet_csspath, *sheet) && sheet->Rules_Count() > 0)
                                 {
                                   layout->SetStyleSheet(sheet);
+                                  // UIScale opt-in via stylesheet: seed design canvas from the screen size at
+                                  // load (scale 1.0 = identical to pre-scale). Apps may override afterward
+                                  // (e.g. UI_System sets 1440x900 explicitly). XML-only layouts skip this.
+                                  if(screen)
+                                    {
+                                      layout->SetDesignSize(screen->GetWidth(), screen->GetHeight());
+                                      layout->SetUIScale(UI_LAYOUT_UISCALE_DEFAULT);
+                                    }
                                   XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Load] stylesheet [%s] loaded (%d rules) for layout [%s]"), stylesheet_csspath.Get(), sheet->Rules_Count(), layout->GetNameID()->Get());
                                 }
                                else
@@ -6873,8 +6900,17 @@ UI_ELEMENT* UI_MANAGER::PreSelectElement(UI_ELEMENT* element, int x, int y)
           bline.y       = element->GetYPositionWithScroll();          
           bline.width   = element->GetBoundaryLine()->width;
           bline.height  = element->GetBoundaryLine()->height;
+
+          // Fase 6: expand a copy for IsWithin only. Paint AABB (bline) stays for scroll-clip checks.
+          UI_BOUNDARYLINE hit = bline;
+          UI_LAYOUT* hitlayout = element->GetLayout();
+          if(hitlayout && hitlayout->IsUIScaleActive())
+            {
+              double m = hitlayout->GetMinHitSize();
+              if(m > 0.0) hit.ExpandCenteredToMin(m, m);
+            }
           
-          preselect = bline.IsWithin(x, y);
+          preselect = hit.IsWithin(x, y);
           if(preselect)
             {
               // Phase 2: allow :selected:hover when a stylesheet drives state visuals. Without a stylesheet
@@ -7221,6 +7257,517 @@ bool UI_MANAGER::UnSelectedElement()
 
 
 /**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::MapScreenToDesign(UI_LAYOUT* layout, int screen_x, int screen_y, int& design_x, int& design_y)
+* @brief      Map pointer coordinates from screen px to the layout's design px before hit-test.
+* @note       XML-only layouts (UIScale inactive) keep identity. AABB / IsWithin stay in design space.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  layout   : Layout that owns the elements being tested (may be NULL).
+* @param[in]  screen_x : Pointer X in framebuffer px.
+* @param[in]  screen_y : Pointer Y in framebuffer px.
+* @param[out] design_x : X in design px for IsWithin.
+* @param[out] design_y : Y in design px for IsWithin.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::MapScreenToDesign(UI_LAYOUT* layout, int screen_x, int screen_y, int& design_x, int& design_y)
+{
+  if(layout && layout->IsUIScaleActive())
+    {
+      double dx = 0.0;
+      double dy = 0.0;
+      layout->ScreenToDesign((double)screen_x, (double)screen_y, dx, dy);
+
+      design_x = (int)((dx >= 0.0) ? (dx + 0.5) : (dx - 0.5));
+      design_y = (int)((dy >= 0.0) ? (dy + 0.5) : (dy - 0.5));
+      return;
+    }
+
+  design_x = screen_x;
+  design_y = screen_y;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::UIScale_EnsureDesignCanvas(UI_LAYOUT* layout)
+* @brief      Create/resize the layout's design offscreen canvas to designWidth x designHeight.
+* @ingroup    USERINTERFACE
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::UIScale_EnsureDesignCanvas(UI_LAYOUT* layout)
+{
+  if(!layout || !layout->GetSkin()) return false;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return false;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  GRPSCREEN*     screen      = skin_canvas->GetScreen();
+  GRP2DCANVAS*   live        = NULL;
+
+  if(!screen || !screen->GetViewport(0)) return false;
+  live = screen->GetViewport(0)->GetCanvas();
+  if(!live) return false;
+
+  XDWORD dw = layout->GetDesignWidth();
+  XDWORD dh = layout->GetDesignHeight();
+  if(!dw) dw = screen->GetWidth();
+  if(!dh) dh = screen->GetHeight();
+  if(!dw || !dh) return false;
+
+  GRP2DCANVAS* existing = layout->GetDesignCanvas();
+  if(existing && existing->GetWidth() == (double)dw && existing->GetHeight() == (double)dh)
+    {
+      return true;
+    }
+
+  GRPPROPERTIES properties;
+  properties.CopyPropertysFrom(live);
+  properties.SetPosition(0, 0);
+  properties.SetSize(dw, dh);
+
+  GRP2DCANVAS* design = GEN_GRPFACTORY.CreateCanvas(&properties);
+  if(!design) return false;
+
+  design->SetWidth((double)dw);
+  design->SetHeight((double)dh);
+
+  if(!design->Buffer_Create())
+    {
+      GEN_GRPFACTORY.DeleteCanvas(design);
+      return false;
+    }
+
+  design->VectorFont_CopyFrom(live);
+  layout->SetDesignCanvas(design);
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::UIScale_BeginFrame(UI_LAYOUT* layout)
+* @brief      Redirect skin paint/rebuild to the design canvas when scaled present is required.
+* @ingroup    USERINTERFACE
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::UIScale_BeginFrame(UI_LAYOUT* layout)
+{
+  if(!layout || !layout->GetSkin()) return false;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return false;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  GRPSCREEN*     screen      = skin_canvas->GetScreen();
+  if(!screen) return false;
+
+  if(!layout->NeedsScaledPresent(screen->GetWidth(), screen->GetHeight()))
+    {
+      layout->ComputePresentTransform(screen->GetWidth(), screen->GetHeight()); // offsets ~0 at scale 1
+      return false;
+    }
+
+  if(!UIScale_EnsureDesignCanvas(layout)) return false;
+
+  layout->ComputePresentTransform(screen->GetWidth(), screen->GetHeight());
+
+  GRP2DCANVAS* design = layout->GetDesignCanvas();
+  if(!design) return false;
+
+  skin_canvas->SetCanvasOverride(design);
+  skin_canvas->SetTargetCanvas(design);
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::UIScale_Present(UI_LAYOUT* layout)
+* @brief      Blit design canvas → viewport with uiScale + letterbox offsets; fill letterbox bars.
+* @ingroup    USERINTERFACE
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::UIScale_Present(UI_LAYOUT* layout)
+{
+  if(!layout || !layout->GetSkin()) return false;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return false;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  GRPSCREEN*     screen      = skin_canvas->GetScreen();
+  GRP2DCANVAS*   design      = layout->GetDesignCanvas();
+  if(!screen || !design) return false;
+
+  if(!layout->NeedsScaledPresent(screen->GetWidth(), screen->GetHeight())) return false;
+
+  // Live viewport canvas (clear override temporarily for GetCanvas / blit target).
+  skin_canvas->SetCanvasOverride(NULL);
+  GRP2DCANVAS* live = skin_canvas->GetCanvas();
+  if(!live)
+    {
+      skin_canvas->SetCanvasOverride(design);
+      return false;
+    }
+
+  XDWORD dw = layout->GetDesignWidth();
+  XDWORD dh = layout->GetDesignHeight();
+  if(!dw) dw = (XDWORD)design->GetWidth();
+  if(!dh) dh = (XDWORD)design->GetHeight();
+
+  XDWORD sw = screen->GetWidth();
+  XDWORD sh = screen->GetHeight();
+
+  // Always refresh letterbox offsets from the live framebuffer size (avoids stale offsets after
+  // maximize/resize transitions that left asymmetric black gutters in captures).
+  layout->ComputePresentTransform(sw, sh);
+
+  double s = layout->GetUIScale();
+  if(s < UI_LAYOUT_UISCALE_MIN) s = UI_LAYOUT_UISCALE_MIN;
+
+  // Only sample the design region that will be visible after scale (avoids huge bitmaps when zoom>1).
+  double src_w = (double)dw;
+  double src_h = (double)dh;
+  if((dw * s) > (double)sw) src_w = ((double)sw) / s;
+  if((dh * s) > (double)sh) src_h = ((double)sh) / s;
+  if(src_w < 1.0) src_w = 1.0;
+  if(src_h < 1.0) src_h = 1.0;
+  if(src_w > (double)dw) src_w = (double)dw;
+  if(src_h > (double)dh) src_h = (double)dh;
+
+  GRPBITMAP* bmp = design->GetBitmap(0, 0, src_w, src_h);
+  if(!bmp)
+    {
+      skin_canvas->SetCanvasOverride(design);
+      return false;
+    }
+
+  int pw = (int)(src_w * s + 0.5);
+  int ph = (int)(src_h * s + 0.5);
+  if(pw < 1) pw = 1;
+  if(ph < 1) ph = 1;
+  if(pw > (int)sw) pw = (int)sw;
+  if(ph > (int)sh) ph = (int)sh;
+
+  bmp->Scale(pw, ph);
+
+  // Clear live whenever the blit will not cover every pixel (letterbox/pillarbox OR partial zoom
+  // region). Skipping Clear left ghosts of the previous scale/size after resize (Fase 5).
+  // Chrome is painted AFTER content Present in Update(), so a Clear here is safe for that frame
+  // only if chrome is dirtied — UIScale_ResetLiveComposition does that on transform changes.
+  // Steady-state: Clear only when we leave uncovered margins.
+  bool leaves_margins = (layout->GetUIScaleOffsetX() > 0.5) ||
+                        (layout->GetUIScaleOffsetY() > 0.5) ||
+                        (pw < (int)sw) ||
+                        (ph < (int)sh);
+  if(leaves_margins)
+    {
+      // Match layout page fill (not pure black) so letterbox matches the dashboard chrome.
+      GRP2DCOLOR_RGBA8 letterbox(0, 0, 0, 255);
+      if(layout->GetBackground() && layout->GetBackground()->GetColor() && layout->GetBackground()->GetColor()->IsValid())
+        {
+          UI_COLOR* bg = layout->GetBackground()->GetColor();
+          letterbox = GRP2DCOLOR_RGBA8((XBYTE)bg->GetRed(), (XBYTE)bg->GetGreen(), (XBYTE)bg->GetBlue(), 255);
+        }
+      live->Clear(&letterbox);
+    }
+
+  live->PutBitmapNoAlpha(layout->GetUIScaleOffsetX(), layout->GetUIScaleOffsetY(), bmp);
+
+  GEN_DELETE bmp;
+
+  // Scaled present writes the full (or letterboxed) live canvas and wipes anything previously
+  // composited there — including the custom-chrome caption painted AFTER content on the previous
+  // frame. Chrome only redraws when dirty; without an explicit dirty here the bar vanishes on the
+  // next tick after a resize (especially height-only / drag-from-top) and never returns.
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  if(screen)
+    {
+      for(XDWORD c=0; c<layouts.GetSize(); c++)
+        {
+          UI_LAYOUT* other = layouts.Get(c);
+          if(!other || !IsCFGChromesLayout(other)) continue;
+          if(!other->GetSkin() || other->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) continue;
+          UI_SKINCANVAS* chrome_skin = (UI_SKINCANVAS*)other->GetSkin();
+          if(chrome_skin->GetScreen() != screen) continue;
+          other->Elements_SetToRedraw(true);
+        }
+    }
+  #endif
+
+  // Keep painting redirected to design for any remaining work this layout frame; caller EndFrame clears.
+  skin_canvas->SetCanvasOverride(design);
+  skin_canvas->SetTargetCanvas(design);
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::UIScale_EndFrame(UI_LAYOUT* layout)
+* @brief      Restore skin canvas to the live viewport after scaled present.
+* @ingroup    USERINTERFACE
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::UIScale_EndFrame(UI_LAYOUT* layout)
+{
+  if(!layout || !layout->GetSkin()) return;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  GRPSCREEN*     screen      = skin_canvas->GetScreen();
+
+  skin_canvas->SetCanvasOverride(NULL);
+
+  if(screen && screen->GetViewport(0) && screen->GetViewport(0)->GetCanvas())
+    {
+      skin_canvas->SetTargetCanvas(screen->GetViewport(0)->GetCanvas());
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::UIScale_PrepareLayout(UI_LAYOUT* layout)
+* @brief      After changing uiScale at runtime: ensure design canvas, seed background, force full redraw.
+* @ingroup    USERINTERFACE
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::UIScale_PrepareLayout(UI_LAYOUT* layout)
+{
+  if(!layout || !layout->GetSkin()) return false;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return false;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  GRPSCREEN*     screen      = skin_canvas->GetScreen();
+  if(!screen) return false;
+
+  // Scale / window change: drop stale form/option/rebuild bitmaps and wipe live so the next
+  // Present/identity paint cannot show a previous scale's ghost (resize reduce/enlarge).
+  UIScale_ResetLiveComposition(layout);
+
+  XCHAR* layoutname = (layout->GetNameID() && !layout->GetNameID()->IsEmpty()) ? layout->GetNameID()->Get() : NULL;
+
+  if(!layout->NeedsScaledPresent(screen->GetWidth(), screen->GetHeight()))
+    {
+      layout->SetDesignCanvas(NULL);
+      layout->ComputePresentTransform(screen->GetWidth(), screen->GetHeight());
+      UIScale_EndFrame(layout);
+
+      // Identity path paints on live — must re-seed the real background color/image after the
+      // black Clear in ResetLiveComposition (otherwise sidebar/footer FormBackdrops capture black).
+      if(layoutname) Layout_PutBackground(layoutname);
+
+      layout->Elements_SetToRedraw(true);
+      return true;
+    }
+
+  if(!UIScale_EnsureDesignCanvas(layout)) return false;
+  layout->ComputePresentTransform(screen->GetWidth(), screen->GetHeight());
+
+  UIScale_BeginFrame(layout);
+
+  if(layoutname) Layout_PutBackground(layoutname);
+
+  layout->Elements_SetToRedraw(true);
+  UIScale_EndFrame(layout);
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::UIScale_RefreshDenseAssets(UI_LAYOUT* layout)
+* @brief      Fase 7: rebind SVG images and dirty StatisticsCharts for the current asset density.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::UIScale_RefreshDenseAssets(UI_LAYOUT* layout)
+{
+  if(!layout) return;
+
+  XVECTOR<UI_ELEMENT*>* roots = layout->Elements_Get();
+  if(!roots) return;
+
+  for(XDWORD c=0; c<roots->GetSize(); c++)
+    {
+      UIScale_RefreshDenseAssets_Element(layout, roots->Get(c));
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::UIScale_RefreshDenseAssets_Element(UI_LAYOUT* layout, UI_ELEMENT* element)
+* @brief      Fase 7: recursive SVG rebind + StatisticsChart rebuild mark.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::UIScale_RefreshDenseAssets_Element(UI_LAYOUT* layout, UI_ELEMENT* element)
+{
+  if(!layout || !element) return;
+
+  switch(element->GetType())
+    {
+      case UI_ELEMENT_TYPE_IMAGE :
+        {
+          UI_ELEMENT_IMAGE* image = (UI_ELEMENT_IMAGE*)element;
+          if(image->GetResource() && !image->GetResource()->IsEmpty() && IsVectorResource(image->GetResource()->Get()))
+            {
+              GRPPROPERTYMODE  grppropertymode = GRPPROPERTYMODE_XX_UNKNOWN;
+              UI_SKIN_DRAWMODE drawmode        = UI_SKIN_DRAWMODE_UNKNOWN;
+              GRP2DCANVAS*     referencecanvas = NULL;
+
+              if(layout->GetSkin() && layout->GetSkin()->GetDrawMode() == UI_SKIN_DRAWMODE_CANVAS)
+                {
+                  UI_SKINCANVAS* skincanvas = (UI_SKINCANVAS*)layout->GetSkin();
+                  if(skincanvas)
+                    {
+                      drawmode        = UI_SKIN_DRAWMODE_CANVAS;
+                      referencecanvas = skincanvas->GetCanvas();
+                      if(referencecanvas) grppropertymode = referencecanvas->GetMode();
+                    }
+                }
+
+              double width  = image->GetBoundaryLine()->width;
+              double height = image->GetBoundaryLine()->height;
+              double density = layout->GetAssetRasterScale();
+              if(density < (1.0 - UI_LAYOUT_UISCALE_EPSILON) || density > (1.0 + UI_LAYOUT_UISCALE_EPSILON))
+                {
+                  width  *= density;
+                  height *= density;
+                }
+
+              UI_ANIMATION* animation = GetOrAddAnimationCache(drawmode, grppropertymode, __L(""), image->GetResource()->Get(), referencecanvas, width, height);
+              if(animation && animation->GetBitmap()) image->SetImage(animation->GetBitmap());
+            }
+        }
+        break;
+
+      case UI_ELEMENT_TYPE_STATISTICSCHART :
+        {
+          UI_ELEMENT_STATISTICSCHART* chart = (UI_ELEMENT_STATISTICSCHART*)element;
+          chart->SetNeedsRebuild(true);
+        }
+        break;
+
+      default: break;
+    }
+
+  XVECTOR<UI_ELEMENT*>* children = element->GetComposeElements();
+  if(children)
+    {
+      for(XDWORD c=0; c<children->GetSize(); c++)
+        {
+          UIScale_RefreshDenseAssets_Element(layout, children->Get(c));
+        }
+    }
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_MANAGER::UIScale_ResetLiveComposition(UI_LAYOUT* layout)
+* @brief      Invalidate composition caches, clear the live viewport canvas, dirty chrome on the same screen.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_MANAGER::UIScale_ResetLiveComposition(UI_LAYOUT* layout)
+{
+  if(!layout || !layout->GetSkin()) return;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  GRPSCREEN*     screen      = skin_canvas->GetScreen();
+
+  skin_canvas->InvalidateCompositionCaches();
+
+  // Prefer the layout background color over pure black so a failed/late PutBackground does not
+  // leave navy→black (sidebar, footer, page fill) after resize.
+  GRP2DCOLOR_RGBA8 clearcolor(0, 0, 0, 255);
+  if(layout->GetBackground() && layout->GetBackground()->GetColor() && layout->GetBackground()->GetColor()->IsValid())
+    {
+      UI_COLOR* bg = layout->GetBackground()->GetColor();
+      clearcolor = GRP2DCOLOR_RGBA8((XBYTE)bg->GetRed(), (XBYTE)bg->GetGreen(), (XBYTE)bg->GetBlue(), (XBYTE)bg->GetAlpha());
+    }
+
+  // GetCanvas respects override — sample the live viewport canvas.
+  skin_canvas->SetCanvasOverride(NULL);
+  GRP2DCANVAS* live = skin_canvas->GetCanvas();
+  if(live)
+    {
+      live->Clear(&clearcolor);
+    }
+
+  if(layout->GetDesignCanvas())
+    {
+      layout->GetDesignCanvas()->Clear(&clearcolor);
+      skin_canvas->SetCanvasOverride(layout->GetDesignCanvas());
+      skin_canvas->SetTargetCanvas(layout->GetDesignCanvas());
+    }
+
+  ModalLayer_Invalidate();
+
+  #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+  if(screen)
+    {
+      for(XDWORD c=0; c<layouts.GetSize(); c++)
+        {
+          UI_LAYOUT* other = layouts.Get(c);
+          if(!other || !IsCFGChromesLayout(other)) continue;
+          if(!other->GetSkin() || other->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) continue;
+          UI_SKINCANVAS* chrome_skin = (UI_SKINCANVAS*)other->GetSkin();
+          if(chrome_skin->GetScreen() != screen) continue;
+          chrome_skin->InvalidateCompositionCaches();
+          other->Elements_SetToRedraw(true);
+        }
+    }
+  #endif
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::Layouts_SetUIScale(UI_LAYOUT* layout, double scale)
+* @brief      Runtime zoom: clamp+set uiScale and reclamar paint (Fase 4). No XML reload.
+* @ingroup    USERINTERFACE
+*
+* @param[in]  layout : Layout to zoom.
+* @param[in]  scale  : Desired scale (clamped by UI_LAYOUT::SetUIScale).
+*
+* @return     bool : true if prepared successfully.
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::Layouts_SetUIScale(UI_LAYOUT* layout, double scale)
+{
+  if(!layout) return false;
+
+  layout->SetUIScaleAutofit(false);
+  layout->SetUIScale(scale);
+  return UIScale_PrepareLayout(layout);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_MANAGER::Layouts_ApplyFitUIScale(UI_LAYOUT* layout)
+* @brief      Fase 5: set scale = min(sw/dw, sh/dh) from the layout's screen and reclamar paint.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_MANAGER::Layouts_ApplyFitUIScale(UI_LAYOUT* layout)
+{
+  if(!layout || !layout->IsUIScaleActive()) return false;
+  if(!layout->GetSkin()) return false;
+  if(layout->GetSkin()->GetDrawMode() != UI_SKIN_DRAWMODE_CANVAS) return false;
+
+  UI_SKINCANVAS* skin_canvas = (UI_SKINCANVAS*)layout->GetSkin();
+  GRPSCREEN*     screen      = skin_canvas->GetScreen();
+  if(!screen) return false;
+
+  XDWORD sw = screen->GetWidth();
+  XDWORD sh = screen->GetHeight();
+  if(!sw || !sh) return false;
+
+  double fit = layout->ComputeFitUIScale(sw, sh);
+  layout->SetUIScaleAutofit(true);
+  layout->SetUIScaleForFit(fit);
+  return UIScale_PrepareLayout(layout);
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
 * 
 * @fn         bool UI_MANAGER::UseMotionInElement(UI_ELEMENT* element, INPCURSORMOTION* cursormotion)
 * @brief      Use motion in element
@@ -7252,8 +7799,26 @@ bool UI_MANAGER::UseMotionInElement(UI_ELEMENT* element, INPCURSORMOTION* cursor
       return false;
     }
 
-  bool isinrect = cursormotion->IsInRect((int)element->GetXPosition()           , (int)(element->GetYPosition() - element->GetBoundaryLine()->height), 
-                                         (int)element->GetBoundaryLine()->width , (int)element->GetBoundaryLine()->height);
+  // Motion points are in screen px; element AABB is in design px. Expand the rect to screen when UIScale is active
+  // so IsInRect stays aligned (Fase 2 input path; paint scale arrives in Fase 3).
+  double rect_x = element->GetXPosition();
+  double rect_y = element->GetYPosition() - element->GetBoundaryLine()->height;
+  double rect_w = element->GetBoundaryLine()->width;
+  double rect_h = element->GetBoundaryLine()->height;
+  double scale  = 1.0;
+
+  UI_LAYOUT* layout = element->GetLayout();
+  if(layout && layout->IsUIScaleActive())
+    {
+      scale = layout->GetUIScale();
+      if(scale < UI_LAYOUT_UISCALE_MIN) scale = UI_LAYOUT_UISCALE_MIN;
+      rect_x = rect_x * scale + layout->GetUIScaleOffsetX();
+      rect_y = rect_y * scale + layout->GetUIScaleOffsetY();
+      rect_w *= scale;
+      rect_h *= scale;
+    }
+
+  bool isinrect = cursormotion->IsInRect((int)rect_x, (int)rect_y, (int)rect_w, (int)rect_h);
   if(isinrect)
     {
       XDWORD differential = 0;
@@ -7263,7 +7828,7 @@ bool UI_MANAGER::UseMotionInElement(UI_ELEMENT* element, INPCURSORMOTION* cursor
           switch(motiondir)
             {
               case INPCURSORMOTION_DIR_UP         :
-              case INPCURSORMOTION_DIR_DOWN       : { double shift = (differential/3);
+              case INPCURSORMOTION_DIR_DOWN       : { double shift = (differential/3.0) / scale;
                                                       if(motiondir == INPCURSORMOTION_DIR_DOWN) shift *= -1;
                                                       
                                                       property_scrolleable->Scroll_SetStep(UI_PROPERTY_SCROLLEABLE_TYPE_VERTICAL, shift);   
@@ -7445,15 +8010,20 @@ bool UI_MANAGER::SelectScrollBarInElement(UI_ELEMENT* element, int x, int y)
 * --------------------------------------------------------------------------------------------------------------------*/
 bool UI_MANAGER::SelectScrollBar(int x, int y)
 {
+  // x,y are screen (framebuffer) px from the input event.
   for(int d=0; d<layouts.GetSize(); d++)
     {
       UI_LAYOUT* layout = layouts.Get(d);
       if(layout)
         {
+          int design_x = x;
+          int design_y = y;
+          MapScreenToDesign(layout, x, y, design_x, design_y);
+
           for(XDWORD c=0; c<layout->Elements_Get()->GetSize(); c++)
             {
               UI_ELEMENT* element = layout->Elements_Get()->Get(c);
-              if(element && SelectScrollBarInElement(element, x, y)) return true;
+              if(element && SelectScrollBarInElement(element, design_x, design_y)) return true;
             }
         }
     }
@@ -7477,10 +8047,10 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
   switch(event->GetEventType())
     {
       case UI_XEVENT_TYPE_INPUT_CURSOR_MOVE         : { UI_ELEMENT*  _preselect_element = NULL;
-                                                        int          x                  = event->GetXPos();
-                                                        int          y                  = event->GetYPos();
+                                                        int          screen_x           = event->GetXPos();
+                                                        int          screen_y           = event->GetYPos();
 
-                                                        //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("x: %d, y: %d"), x, y);
+                                                        //XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("x: %d, y: %d"), screen_x, screen_y);
 
                                                         // Remember where the pointer is right now (not only where it last
                                                         // landed ON an element). UnSelectedElement() re-issues a CURSOR_MOVE at
@@ -7490,12 +8060,16 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
                                                         // and the device parks the cursor off-canvas (-1,-1), so keeping these in
                                                         // sync here means the lifted finger leaves NO stuck preselect, while a
                                                         // real mouse still correctly re-preselects whatever it is hovering.
-                                                        last_xposition = x;
-                                                        last_yposition = y;
+                                                        // Stored in SCREEN px; MapScreenToDesign converts per layout on use.
+                                                        last_xposition = screen_x;
+                                                        last_yposition = screen_y;
                                                   
                                                         if(element_modal)
                                                           {
-                                                            _preselect_element = PreSelectElement(element_modal, x, y);
+                                                            int design_x = screen_x;
+                                                            int design_y = screen_y;
+                                                            MapScreenToDesign(element_modal->GetLayout(), screen_x, screen_y, design_x, design_y);
+                                                            _preselect_element = PreSelectElement(element_modal, design_x, design_y);
                                                           }
                                                          else
                                                           {
@@ -7509,17 +8083,24 @@ void UI_MANAGER::HandleEvent_UI(UI_XEVENT* event)
                                                             // same issue one level down, in the recursive child loop). Visiting
                                                             // every top-level element/layout every tick is cheap and guarantees a
                                                             // single, correct hover state regardless of the path the pointer took.
+                                                            //
+                                                            // Fase 2: convert screen→design per layout before IsWithin so AABB
+                                                            // stay in design px while the pointer arrives in framebuffer px.
                                                             for(int d=0; d<layouts.GetSize(); d++)
                                                               {
                                                                 UI_LAYOUT* layout = layouts.Get(d);
                                                                 if(layout)
                                                                   {
+                                                                    int design_x = screen_x;
+                                                                    int design_y = screen_y;
+                                                                    MapScreenToDesign(layout, screen_x, screen_y, design_x, design_y);
+
                                                                     for(XDWORD c=0; c<layout->Elements_Get()->GetSize(); c++)
                                                                       {
                                                                         UI_ELEMENT* element = layout->Elements_Get()->Get(c);
                                                                         if(element)
                                                                           {
-                                                                            UI_ELEMENT* found = PreSelectElement(element, x, y);
+                                                                            UI_ELEMENT* found = PreSelectElement(element, design_x, design_y);
                                                                             if(found) _preselect_element = found;
                                                                           }
                                                                       }

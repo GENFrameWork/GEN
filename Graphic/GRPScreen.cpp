@@ -45,6 +45,7 @@
 #include "UI_Manager.h"
 #include "UI_Layout.h"
 #include "UI_Element_Text.h"
+#include "UI_Element_Form.h"
 #include "UI_SkinCanvas.h"
 #include "INPManager.h"
 #include "XTimer.h"
@@ -1066,7 +1067,9 @@ bool GRPSCREEN::LoadCFGChromesLayout()
 
   // Reference width for UpdateCFGChromesButtonsPosition(): the width the layout's element positions were just
   // resolved against. The min/max/close buttons keep their authored distance to the RIGHT edge of this width;
-  // when the window is later resized narrower they are shifted left by exactly the difference.
+  // when the window is later resized they are shifted by (live client width - this reference) so they hug
+  // the live right edge — both when shrinking and when enlarging / maximizing. The caption bar width is
+  // also kept equal to the live client width in that same update.
   //
   // That reference is the CAPTION's own resolved width, not GetWidth(): a chrome layout no longer has to
   // hardcode a width at all (UI_SKINCANVAS::CalculateBoundaryLine_Form resolves a role="caption" form with no
@@ -1729,13 +1732,12 @@ bool GRPSCREEN::UpdateCFGChromesAutoHide()
 *
 * @fn         bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
 * @brief      Update CFG chromes buttons position
-* @note       Keeps the chrome's minimize/maximize/close buttons visible when the window is resized narrower
-*             than the width their layout positions were authored for: all three are shifted LEFT together by
-*             exactly (reference width - current width) so they hug the window's live right edge. At or above
-*             the reference width they sit exactly where the layout put them (never pushed further right).
-*             Only the horizontal position is touched; only these three roles are moved (icon/title/caption
-*             stay put, per design). The shift is applied as a delta over the previously applied one, so
-*             positions never accumulate error and nothing at all is touched while the width is unchanged.
+* @note       Keeps the chrome caption + minimize/maximize/close buttons locked to the LIVE client size:
+*             the caption bar width tracks the client width, and the three buttons shift by
+*             (client width - reference width) so they hug the live right edge (shrink and grow).
+*             Any client size change — including height-only (resize from the top/bottom edge) — also
+*             dirties the chrome layout: UpdateSize recreates empty canvases, and without a redraw the
+*             caption band disappears until something else happens to invalidate it.
 * @ingroup    GRAPHIC
 *
 * @return     bool : true if the operation is successful; otherwise false.
@@ -1748,8 +1750,7 @@ bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
   if(!cfgchromeslayout)                return false;
   if(!cfgchromesbuttonsrefwidth)       return false;
 
-  // LIVE native client width (platform virtual) -- NOT GetWidth(), which is the fixed content size and would
-  // never change on a resize. This is what makes this same code work identically on Windows and Linux.
+  // LIVE native client size (platform virtual) -- NOT GetWidth()/GetHeight() alone in all backends.
   int clientwidth  = 0;
   int clientheight = 0;
 
@@ -1761,32 +1762,66 @@ bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
   // would yank all three buttons far to the left for a frame or two and then snap them back -- and because
   // the canvas is only repainted through rebuild areas, the pixels they left behind at the old position are
   // not erased, so those frames smear the top of the window. Waiting one frame for a real size costs nothing.
-  if(clientwidth <= 0) return false;
+  if(clientwidth <= 0 || clientheight <= 0) return false;
 
-  int shift = clientwidth - cfgchromesbuttonsrefwidth;
-  if(shift > 0) shift = 0;                                    // never right of the authored position
+  bool size_changed = ((clientwidth != cfgchromeslastclientwidth) || (clientheight != cfgchromeslastclientheight));
+  cfgchromeslastclientwidth  = clientwidth;
+  cfgchromeslastclientheight = clientheight;
 
-  if(shift == cfgchromesbuttonsshift) return true;            // width unchanged since last applied: nothing to do
-
-  double dx = (double)(shift - cfgchromesbuttonsshift);
-
-  UI_ELEMENT_CHROMEROLE roles[3] = { UI_ELEMENT_CHROMEROLE_MINIMIZE,
-                                     UI_ELEMENT_CHROMEROLE_MAXIMIZE,
-                                     UI_ELEMENT_CHROMEROLE_CLOSE    };
-
-  for(int c=0; c<3; c++)
+  // Caption bar IS the window width: keep its AABB in sync with the live client so enlarge/maximize paints
+  // the full band (authored XML width / load-time canvas size is only the initial reference).
+  bool caption_resized = false;
+  UI_ELEMENT* captionelement = cfgchromeslayout->Elements_Get(UI_ELEMENT_CHROMEROLE_CAPTION);
+  if(captionelement)
     {
-      UI_ELEMENT* buttonelement = cfgchromeslayout->Elements_Get(roles[c]);
-      if(buttonelement)
+      double captionwidth = captionelement->GetBoundaryLine()->width;
+      if(captionwidth != (double)clientwidth)
         {
-          GRPSCREEN_ShiftElementXRecursive(buttonelement, dx);
+          captionelement->GetBoundaryLine()->width = (double)clientwidth;
+          UI_ELEMENT_FORM* captionform = dynamic_cast<UI_ELEMENT_FORM*>(captionelement);
+          if(captionform && captionform->GetVisibleRect() && (captionform->GetVisibleRect()->width > 0.0))
+            {
+              captionform->GetVisibleRect()->width = (double)clientwidth;
+            }
+          caption_resized = true;
         }
     }
 
-  cfgchromesbuttonsshift = shift;
+  // Bidirectional: negative when narrower than ref, positive when wider (maximize / enlarge).
+  int shift = clientwidth - cfgchromesbuttonsrefwidth;
 
-  // Selective chrome dirty (no per-frame force redraw): buttons moved → repaint chrome only.
-  if(cfgchromeslayout) cfgchromeslayout->Elements_SetToRedraw();
+  if(shift != cfgchromesbuttonsshift)
+    {
+      double dx = (double)(shift - cfgchromesbuttonsshift);
+
+      UI_ELEMENT_CHROMEROLE roles[3] = { UI_ELEMENT_CHROMEROLE_MINIMIZE,
+                                         UI_ELEMENT_CHROMEROLE_MAXIMIZE,
+                                         UI_ELEMENT_CHROMEROLE_CLOSE    };
+
+      for(int c=0; c<3; c++)
+        {
+          UI_ELEMENT* buttonelement = cfgchromeslayout->Elements_Get(roles[c]);
+          if(buttonelement)
+            {
+              GRPSCREEN_ShiftElementXRecursive(buttonelement, dx);
+            }
+        }
+
+      cfgchromesbuttonsshift = shift;
+      size_changed = true;   // buttons moved → must repaint
+    }
+
+  if(!size_changed && !caption_resized) return true;
+
+  // Height-only (or any) resize after UpdateSize wiped the live canvas: drop chrome FormBackdrops so the
+  // next Draw_Form re-captures under the new size, and mark the whole chrome layout dirty.
+  UI_SKIN* skin = cfgchromeslayout->GetSkin();
+  if(skin && skin->GetDrawMode() == UI_SKIN_DRAWMODE_CANVAS)
+    {
+      ((UI_SKINCANVAS*)skin)->InvalidateCompositionCaches();
+    }
+
+  cfgchromeslayout->Elements_SetToRedraw();
 
   return true;
 }
@@ -1809,6 +1844,48 @@ bool GRPSCREEN::UpdateCFGChromesButtonsPosition()
 * --------------------------------------------------------------------------------------------------------------------*/
 bool GRPSCREEN::UpdateSize(int width, int height)
 {
+  if(width  < 1) width  = 1;
+  if(height < 1) height = 1;
+
+  bool changed = (((XDWORD)width != GetWidth()) || ((XDWORD)height != GetHeight()));
+  if(changed)
+    {
+      SetSize((XDWORD)width, (XDWORD)height);
+
+      if(screencanvas)
+        {
+          screencanvas->Buffer_Delete();
+          screencanvas->SetWidth((XDWORD)width);
+          screencanvas->SetHeight((XDWORD)height);
+          screencanvas->Buffer_Create();
+        }
+
+      GRPVIEWPORT* viewport = GetViewport(0);
+      if(viewport)
+        {
+          viewport->SetSize((float)width, (float)height);
+          GRP2DCANVAS* canvas = viewport->GetCanvas();
+          if(canvas)
+            {
+              canvas->Buffer_Delete();
+              canvas->SetWidth((XDWORD)width);
+              canvas->SetHeight((XDWORD)height);
+              canvas->Buffer_Create();
+            }
+        }
+
+      #ifdef GRP_SCREEN_CUSTOMCHROMES_ACTIVE
+      // BEFORE CHANGESIZE observers run Update(): recreate wiped the live canvas. Height-only
+      // resizes (drag top/bottom edge) never moved the chrome buttons, so the chrome layout used
+      // to stay clean and never repainted — caption vanished until a later width change. Sync
+      // caption/buttons and dirty chrome here so the imminent UI Update() redraws the bar.
+      if(IsCFGChromesActive() && !cfgchromes.GetUseNativeChromes() && cfgchromeslayout)
+        {
+          UpdateCFGChromesButtonsPosition();
+        }
+      #endif
+    }
+
   GRPXEVENT grpevent(this, GRPXEVENT_TYPE_SCREEN_CHANGESIZE);
   grpevent.SetScreen(this);
 
@@ -2208,6 +2285,8 @@ void GRPSCREEN::Clean()
 
   cfgchromesbuttonsrefwidth  = 0;         // captured by LoadCFGChromesLayout(); 0 = repositioning inactive
   cfgchromesbuttonsshift     = 0;
+  cfgchromeslastclientwidth  = 0;
+  cfgchromeslastclientheight = 0;
   #endif
 }
 

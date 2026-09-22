@@ -7423,6 +7423,34 @@ void UI_SKINCANVAS::Clean()
   screen          = NULL;
   viewportindex   = 0;
   canvas_override = NULL;
+  paint_density   = 1.0;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         double UI_SKINCANVAS::GetPaintDensity() const
+* @brief      Fase 7: canvas px per design px while painting (1.0 = identity).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+double UI_SKINCANVAS::GetPaintDensity() const
+{
+  return paint_density;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_SKINCANVAS::SetPaintDensity(double density)
+* @brief      Fase 7: set paint density for denser design canvas (clamped to > 0).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_SKINCANVAS::SetPaintDensity(double density)
+{
+  if(density < UI_LAYOUT_UISCALE_MIN) density = UI_LAYOUT_UISCALE_MIN;
+  paint_density = density;
 }
 
 
