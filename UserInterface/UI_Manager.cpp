@@ -6524,6 +6524,25 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
                       layout->GetBackground()->GetColor()->SetFromString(background_color[1]);
                       layout->GetBackground()->GetBitmapFileName()->Set(background_namefile[1]);
 
+                      // Track B / UIScale: optional authoring canvas from XML so @media and rem/vw resolve
+                      // against design px before elements are built (UI_System used to set this only after Load).
+                      XDWORD xml_design_w = 0;
+                      XDWORD xml_design_h = 0;
+                      {
+                        XCHAR* dw = nodelayout->GetValueAttribute(__L("designwidth"));
+                        XCHAR* dh = nodelayout->GetValueAttribute(__L("designheight"));
+                        if(dw) { XSTRING s(dw); xml_design_w = (XDWORD)s.ConvertToInt(); }
+                        if(dh) { XSTRING s(dh); xml_design_h = (XDWORD)s.ConvertToInt(); }
+                      }
+                      if(xml_design_w && xml_design_h)
+                        {
+                          layout->SetDesignSize(xml_design_w, xml_design_h);
+                        }
+                       else if(screen)
+                        {
+                          layout->SetDesignSize(screen->GetWidth(), screen->GetHeight());
+                        }
+
                       // Phase 1 ownership step: parse a FRESH UI_STYLESHEET instance for THIS layout (instead of
                       // one UI_MANAGER-wide instance shared by every <layout> this XML root defines, which is
                       // the overwhelming common case anyway -- one root, one layout). Any I/O or parse issue is
@@ -6538,15 +6557,24 @@ bool UI_MANAGER::CreateLayouts(XFILEXML& xml, XPATH& xmlpathfile, GRPSCREEN* scr
                               if(parser.ParseFile(stylesheet_csspath, *sheet) && sheet->Rules_Count() > 0)
                                 {
                                   layout->SetStyleSheet(sheet);
-                                  // UIScale opt-in via stylesheet: seed design canvas from the screen size at
-                                  // load (scale 1.0 = identical to pre-scale). Apps may override afterward
-                                  // (e.g. UI_System sets 1440x900 explicitly). XML-only layouts skip this.
-                                  if(screen)
+                                  // UIScale opt-in via stylesheet: seed design canvas if XML did not already.
+                                  if(!xml_design_w || !xml_design_h)
                                     {
-                                      layout->SetDesignSize(screen->GetWidth(), screen->GetHeight());
+                                      if(screen)
+                                        {
+                                          layout->SetDesignSize(screen->GetWidth(), screen->GetHeight());
+                                          layout->SetUIScale(UI_LAYOUT_UISCALE_DEFAULT);
+                                        }
+                                    }
+                                   else
+                                    {
                                       layout->SetUIScale(UI_LAYOUT_UISCALE_DEFAULT);
                                     }
-                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Load] stylesheet [%s] loaded (%d rules) for layout [%s]"), stylesheet_csspath.Get(), sheet->Rules_Count(), layout->GetNameID()->Get());
+
+                                  // Track B: gate @media against design viewport (load-time; see L.3).
+                                  sheet->SetMediaViewport((int)layout->GetDesignWidth(), (int)layout->GetDesignHeight());
+
+                                  XTRACE_PRINTCOLOR(XTRACE_COLOR_BLUE, __L("[UI Load] stylesheet [%s] loaded (%d rules) for layout [%s] media=%dx%d"), stylesheet_csspath.Get(), sheet->Rules_Count(), layout->GetNameID()->Get(), layout->GetDesignWidth(), layout->GetDesignHeight());
                                 }
                                else
                                 {

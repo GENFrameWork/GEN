@@ -191,128 +191,20 @@ bool UI_CSSPARSER::ParseText(XSTRING& text, UI_STYLESHEET& out)
 
   discarded_rules        = 0;
   unterminated_comments  = 0;
+  last_rules_kept        = 0;
 
   while(pos < len)
     {
       SkipWhitespaceAndComments(text, pos);
       if(pos >= len) break;
 
-      // Step 5: "@import "file.css";" (ParseFile()-driven parses only -- see ResolveAndParseImport()). Handled
-      // BEFORE the generic rule path on purpose: an at-rule has no '{' of its own, so ReadSelectorList() would
-      // otherwise happily scan straight through it looking for one, folding it and the NEXT real rule's
-      // selector into a single corrupt token. Any other at-rule (@media, @font-face, ...) is outside GEN's CSS
-      // subset and is discarded the same way a malformed rule is, rather than being fed to the selector parser.
-      if(text[pos] == __C('@'))
+      if(!ParseOneRuleOrAtRule(text, pos, out, NULL, NULL, ruleindex, rules_kept))
         {
-          int     atrulestart = pos;
-          int     kwend       = pos + 7; if(kwend > len) kwend = len;
-          XSTRING atkeyword;
-          text.Copy(pos, kwend, atkeyword);
-
-          if(!atkeyword.Compare(__L("@import"), true))
-            {
-              pos += 7;   // length of "@import"
-
-              XSTRING importurl;
-              if(ReadImportStatement(text, pos, importurl))
-                {
-                  ResolveAndParseImport(importurl, out);   // failures are traced inside; never fatal here
-                }
-               else
-                {
-                  int line, col;
-                  ResolveLineColumn(text, atrulestart, line, col);
-                  XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] malformed @import discarded (line %d, column %d)"), line, col);
-                  SkipToNextRule(text, pos);
-                }
-            }
-           else
-            {
-              int line, col;
-              ResolveLineColumn(text, atrulestart, line, col);
-              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] unsupported at-rule ignored (line %d, column %d)"), line, col);
-              SkipToNextRule(text, pos);
-            }
-
-          continue;
+          return false;
         }
-
-      int rulestartcolumn = pos;
-      ruleindex++;
-
-      UI_CSSRULE* rule = GEN_NEW UI_CSSRULE();
-      if(!rule) return false;
-
-      if(!ReadSelectorList(text, pos, rule) || !ReadDeclarationBlock(text, pos, rule->GetDeclarations()))
-        {
-          // Malformed rule: throw it away and try to resync on the next '}'. Step 11 gave this a flat character
-          // column (ParseFile() used to flatten the whole file into one line with no separators, so a real line
-          // number was not recoverable); Phase 2 keeps real '\n' separators through the flatten (see
-          // ParseFile()), so ResolveLineColumn() now turns both endpoints into a real (line, column) pair.
-          int startline, startcol, endline, endcol;
-          ResolveLineColumn(text, rulestartcolumn, startline, startcol);
-          ResolveLineColumn(text, pos,              endline,   endcol);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d discarded: malformed selector or declaration block (started at line %d, column %d; gave up at line %d, column %d)"), ruleindex, startline, startcol, endline, endcol);
-          if(!currentfilepath.IsEmpty())
-            {
-              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] file [%s] rule #%d discarded (lines %d:%d .. %d:%d)"), currentfilepath.Get(), ruleindex, startline, startcol, endline, endcol);
-            }
-
-          discarded_rules++;
-          GEN_DELETE rule;
-          SkipToNextRule(text, pos);
-          continue;
-        }
-
-      // A rule with zero valid selectors OR zero declarations is silently dropped: it cannot match anything
-      // useful, and keeping it would just waste cycles during Resolve().
-      if(rule->GetSelectors().GetSize() == 0 || rule->GetDeclarations().GetProperties()->GetSize() == 0)
-        {
-          int line, col;
-          ResolveLineColumn(text, rulestartcolumn, line, col);
-          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d dropped: parsed with %d selector(s) and %d declaration(s) (started at line %d, column %d)"), ruleindex, (int)rule->GetSelectors().GetSize(), (int)rule->GetDeclarations().GetProperties()->GetSize(), line, col);
-          if(!currentfilepath.IsEmpty())
-            {
-              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] file [%s] rule #%d empty after parse (line %d, column %d)"), currentfilepath.Get(), ruleindex, line, col);
-            }
-
-          discarded_rules++;
-          GEN_DELETE rule;
-          continue;
-        }
-
-      // ":root { ... }" interception: if ANY selector in this rule is exactly ":root", its declarations are
-      // absorbed into the stylesheet's variable table (later declarations overwrite earlier ones, matching
-      // CSS cascade order) and the rule itself is discarded so it never reaches the matcher.
-      bool isroot = false;
-      {
-        XVECTOR<UI_CSSSELECTOR*>& sels = rule->GetSelectors();
-        for(XDWORD s=0; s<sels.GetSize(); s++)
-          {
-            UI_CSSSELECTOR* sel = sels.Get(s);
-            if(sel && sel->IsRootOnly()) { isroot = true; break; }
-          }
-      }
-
-      if(isroot)
-        {
-          XVECTOR<UI_STYLEPROPERTY*>* declprops = rule->GetDeclarations().GetProperties();
-          if(declprops)
-            {
-              for(XDWORD d=0; d<declprops->GetSize(); d++)
-                {
-                  UI_STYLEPROPERTY* prop = declprops->Get(d);
-                  if(prop) out.Variables().Set(prop->GetKey().Get(), prop->GetValue());
-                }
-            }
-
-          GEN_DELETE rule;
-          continue;
-        }
-
-      out.Rules_Add(rule);
-      rules_kept++;
     }
+
+  last_rules_kept = rules_kept;
 
   // Resolve variable references now -- but ONLY if this ParseText() call is the outermost one, i.e. not itself
   // running because ResolveAndParseImport() recursed into ParseFile() for an "@import"ed file (importdepth > 0
@@ -1058,7 +950,9 @@ bool UI_CSSPARSER::ReadDeclarationBlock(XSTRING& text, int& pos, UI_STYLE& decls
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_CSSPARSER::SkipToNextRule(XSTRING& text, int& pos)
 {
-  int len = (int)text.GetSize();
+  int len   = (int)text.GetSize();
+  int depth = 0;
+  bool seen_brace = false;
 
   while(pos < len)
     {
@@ -1070,10 +964,344 @@ void UI_CSSPARSER::SkipToNextRule(XSTRING& text, int& pos)
           continue;
         }
 
+      if(ch == __C('{'))
+        {
+          depth++;
+          seen_brace = true;
+          pos++;
+          continue;
+        }
+
+      if(ch == __C('}'))
+        {
+          pos++;
+          if(!seen_brace) return;
+          depth--;
+          if(depth <= 0) return;
+          continue;
+        }
+
+      if(!seen_brace && ch == __C(';'))
+        {
+          pos++;
+          return;
+        }
+
       pos++;
-      if(ch == __C('}')) return;
     }
 }
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ParseOneRuleOrAtRule(XSTRING& text, int& pos, UI_STYLESHEET& out, int* media_min_w, int* media_max_w, int& ruleindex, int& rules_kept)
+* @brief      Parse one top-level construct: @import, @media, or a normal rule. Optional media_* attach Track B
+*             gates when parsing nested rules inside an @media block (NULL = unconditional).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ParseOneRuleOrAtRule(XSTRING& text, int& pos, UI_STYLESHEET& out, int* media_min_w, int* media_max_w, int& ruleindex, int& rules_kept)
+{
+  int len = (int)text.GetSize();
+  if(pos >= len) return true;
+
+  // Nested @media body ends at the closing '}' of the outer block -- caller stops when it sees that.
+  if(media_min_w && text[pos] == __C('}')) return true;
+
+  if(text[pos] == __C('@'))
+    {
+      int     atrulestart = pos;
+      int     kwend       = pos + 7; if(kwend > len) kwend = len;
+      XSTRING atkeyword;
+      text.Copy(pos, kwend, atkeyword);
+
+      if(!atkeyword.Compare(__L("@import"), true))
+        {
+          if(media_min_w)
+            {
+              // @import inside @media is outside GEN's subset -- skip the statement.
+              int line, col;
+              ResolveLineColumn(text, atrulestart, line, col);
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] @import inside @media ignored (line %d, column %d)"), line, col);
+              pos += 7;
+              SkipToNextRule(text, pos);
+              return true;
+            }
+
+          pos += 7;
+          XSTRING importurl;
+          if(ReadImportStatement(text, pos, importurl))
+            {
+              ResolveAndParseImport(importurl, out);
+            }
+           else
+            {
+              int line, col;
+              ResolveLineColumn(text, atrulestart, line, col);
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] malformed @import discarded (line %d, column %d)"), line, col);
+              SkipToNextRule(text, pos);
+            }
+          return true;
+        }
+
+      // "@media" is 6 chars -- compare by copying enough chars
+      kwend = pos + 6; if(kwend > len) kwend = len;
+      text.Copy(pos, kwend, atkeyword);
+      if(!atkeyword.Compare(__L("@media"), true))
+        {
+          if(media_min_w)
+            {
+              int line, col;
+              ResolveLineColumn(text, atrulestart, line, col);
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] nested @media ignored (line %d, column %d)"), line, col);
+              SkipToNextRule(text, pos);
+              return true;
+            }
+
+          pos += 6;
+          int  min_w = -1;
+          int  max_w = -1;
+          bool ok    = false;
+          if(!ReadMediaCondition(text, pos, min_w, max_w, ok))
+            {
+              int line, col;
+              ResolveLineColumn(text, atrulestart, line, col);
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] malformed @media discarded (line %d, column %d)"), line, col);
+              SkipToNextRule(text, pos);
+              return true;
+            }
+
+          if(!ok)
+            {
+              // Unsupported feature list (e.g. orientation) -- skip block, do not keep rules.
+              int line, col;
+              ResolveLineColumn(text, atrulestart, line, col);
+              XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] unsupported @media query ignored (line %d, column %d)"), line, col);
+              SkipToNextRule(text, pos);
+              return true;
+            }
+
+          return ParseMediaBlock(text, pos, out, min_w, max_w);
+        }
+
+      int line, col;
+      ResolveLineColumn(text, atrulestart, line, col);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] unsupported at-rule ignored (line %d, column %d)"), line, col);
+      SkipToNextRule(text, pos);
+      return true;
+    }
+
+  int rulestartcolumn = pos;
+  ruleindex++;
+
+  UI_CSSRULE* rule = GEN_NEW UI_CSSRULE();
+  if(!rule) return false;
+
+  if(!ReadSelectorList(text, pos, rule) || !ReadDeclarationBlock(text, pos, rule->GetDeclarations()))
+    {
+      int startline, startcol, endline, endcol;
+      ResolveLineColumn(text, rulestartcolumn, startline, startcol);
+      ResolveLineColumn(text, pos,              endline,   endcol);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d discarded: malformed selector or declaration block (started at line %d, column %d; gave up at line %d, column %d)"), ruleindex, startline, startcol, endline, endcol);
+      if(!currentfilepath.IsEmpty())
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] file [%s] rule #%d discarded (lines %d:%d .. %d:%d)"), currentfilepath.Get(), ruleindex, startline, startcol, endline, endcol);
+        }
+
+      discarded_rules++;
+      GEN_DELETE rule;
+      SkipToNextRule(text, pos);
+      return true;
+    }
+
+  if(rule->GetSelectors().GetSize() == 0 || rule->GetDeclarations().GetProperties()->GetSize() == 0)
+    {
+      int line, col;
+      ResolveLineColumn(text, rulestartcolumn, line, col);
+      XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] rule #%d dropped: parsed with %d selector(s) and %d declaration(s) (started at line %d, column %d)"), ruleindex, (int)rule->GetSelectors().GetSize(), (int)rule->GetDeclarations().GetProperties()->GetSize(), line, col);
+      if(!currentfilepath.IsEmpty())
+        {
+          XTRACE_PRINTCOLOR(XTRACE_COLOR_WARNING, __L("[CSS Parse] file [%s] rule #%d empty after parse (line %d, column %d)"), currentfilepath.Get(), ruleindex, line, col);
+        }
+
+      discarded_rules++;
+      GEN_DELETE rule;
+      return true;
+    }
+
+  bool isroot = false;
+  {
+    XVECTOR<UI_CSSSELECTOR*>& sels = rule->GetSelectors();
+    for(XDWORD s=0; s<sels.GetSize(); s++)
+      {
+        UI_CSSSELECTOR* sel = sels.Get(s);
+        if(sel && sel->IsRootOnly()) { isroot = true; break; }
+      }
+  }
+
+  if(isroot)
+    {
+      XVECTOR<UI_STYLEPROPERTY*>* declprops = rule->GetDeclarations().GetProperties();
+      if(declprops)
+        {
+          for(XDWORD d=0; d<declprops->GetSize(); d++)
+            {
+              UI_STYLEPROPERTY* prop = declprops->Get(d);
+              if(prop) out.Variables().Set(prop->GetKey().Get(), prop->GetValue());
+            }
+        }
+
+      GEN_DELETE rule;
+      return true;
+    }
+
+  if(media_min_w && media_max_w)
+    {
+      rule->SetMediaWidthRange(*media_min_w, *media_max_w);
+    }
+
+  out.Rules_Add(rule);
+  rules_kept++;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ReadMediaCondition(XSTRING& text, int& pos, int& out_min_w, int& out_max_w, bool& out_ok)
+* @brief      Parse `@media` query features after the keyword. Supports (min-width:N[px]) / (max-width:N[px])
+*             optionally joined by `and`. out_ok=false means unsupported feature (caller skips block).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ReadMediaCondition(XSTRING& text, int& pos, int& out_min_w, int& out_max_w, bool& out_ok)
+{
+  int len = (int)text.GetSize();
+  out_min_w = -1;
+  out_max_w = -1;
+  out_ok    = true;
+
+  bool saw_feature = false;
+
+  for(;;)
+    {
+      SkipWhitespaceAndComments(text, pos);
+      if(pos >= len) return false;
+
+      if(text[pos] == __C('{')) break;
+
+      // optional "and" between features
+      if(saw_feature)
+        {
+          if(pos + 3 <= len)
+            {
+              XSTRING andkw;
+              text.Copy(pos, pos + 3, andkw);
+              if(!andkw.Compare(__L("and"), true))
+                {
+                  // ensure word boundary
+                  if(pos + 3 >= len || text[pos + 3] == __C(' ') || text[pos + 3] == __C('\t') || text[pos + 3] == __C('\n') || text[pos + 3] == __C('\r') || text[pos + 3] == __C('('))
+                    {
+                      pos += 3;
+                      SkipWhitespaceAndComments(text, pos);
+                    }
+                }
+            }
+        }
+
+      if(pos >= len || text[pos] != __C('(')) return false;
+      pos++;   // '('
+
+      SkipWhitespaceAndComments(text, pos);
+      XSTRING feature;
+      if(!ReadIdentifier(text, pos, feature)) return false;
+
+      SkipWhitespaceAndComments(text, pos);
+      if(pos >= len || text[pos] != __C(':')) return false;
+      pos++;
+
+      SkipWhitespaceAndComments(text, pos);
+      // read number [px]
+      int numstart = pos;
+      while(pos < len && ((text[pos] >= __C('0') && text[pos] <= __C('9')) || text[pos] == __C('.'))) pos++;
+      if(pos == numstart) return false;
+
+      XSTRING numstr;
+      text.Copy(numstart, pos, numstr);
+      int value = numstr.ConvertToInt();
+
+      SkipWhitespaceAndComments(text, pos);
+      if(pos + 2 <= len)
+        {
+          XSTRING unit;
+          text.Copy(pos, pos + 2, unit);
+          if(!unit.Compare(__L("px"), true)) pos += 2;
+        }
+
+      SkipWhitespaceAndComments(text, pos);
+      if(pos >= len || text[pos] != __C(')')) return false;
+      pos++;
+
+      if(!feature.Compare(__L("min-width"), true))
+        {
+          out_min_w = value;
+          saw_feature = true;
+        }
+       else if(!feature.Compare(__L("max-width"), true))
+        {
+          out_max_w = value;
+          saw_feature = true;
+        }
+       else
+        {
+          out_ok = false;   // unsupported feature; still consume the rest of the query until '{'
+          // continue scanning so we can skip the block cleanly
+          saw_feature = true;
+        }
+    }
+
+  if(!saw_feature) return false;
+  if(out_ok && out_min_w < 0 && out_max_w < 0) out_ok = false;
+  return true;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSPARSER::ParseMediaBlock(XSTRING& text, int& pos, UI_STYLESHEET& out, int media_min_w, int media_max_w)
+* @brief      Parse `{ ... }` body of an @media rule; each kept rule receives the media width range.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSPARSER::ParseMediaBlock(XSTRING& text, int& pos, UI_STYLESHEET& out, int media_min_w, int media_max_w)
+{
+  int len = (int)text.GetSize();
+  SkipWhitespaceAndComments(text, pos);
+  if(pos >= len || text[pos] != __C('{')) return false;
+  pos++;   // '{'
+
+  int ruleindex  = 0;
+  int rules_kept = 0;
+
+  while(pos < len)
+    {
+      SkipWhitespaceAndComments(text, pos);
+      if(pos >= len) break;
+      if(text[pos] == __C('}'))
+        {
+          pos++;
+          return true;
+        }
+
+      if(!ParseOneRuleOrAtRule(text, pos, out, &media_min_w, &media_max_w, ruleindex, rules_kept))
+        {
+          return false;
+        }
+    }
+
+  return true;   // EOF without '}' -- tolerate like SkipToNextRule
+}
+
 
 
 /**-------------------------------------------------------------------------------------------------------------------
@@ -1223,4 +1451,5 @@ void UI_CSSPARSER::Clean()
   importdepth             = 0;
   discarded_rules         = 0;
   unterminated_comments   = 0;
+  last_rules_kept         = 0;
 }

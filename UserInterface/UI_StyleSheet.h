@@ -63,7 +63,10 @@
 *   NULL (the default) is always safe: any selector that HAS a combinator requirement simply cannot match then,
 *   the same conservative "cannot verify, so no match" a pure-logic caller already gets for free.
 *
-*   No attribute selectors, no @media. @import IS supported (see
+*   No attribute selectors. `@media` supports a GEN subset: `(min-width: Npx)` / `(max-width: Npx)`
+*   (optional `and` between features). Evaluation is load-time against the layout design viewport
+*   (`UI_STYLESHEET::SetMediaViewport`); no re-eval on window resize (same contract as rem/vw Track L.3).
+*   `@import` IS supported (see
 *   UI_CSSPARSER::ReadImportStatement()/ResolveAndParseImport()), with cycle detection against the in-progress
 *   import stack. Pseudo-classes are syntactically accepted (parsed into UI_CSSSELECTOR::pseudos); ":root" is
 *   intercepted at parse time as the anchor for CSS custom properties (theme variables, see below) and never
@@ -255,6 +258,12 @@ class UI_CSSRULE
     int                             GetSourceIndex              () const { return sourceindex; }
     void                            SetSourceIndex              (int idx)                     { sourceindex = idx; }
 
+    // Track B: optional @media (min/max-width). has_media=false → unconditional rule.
+    bool                            HasMedia                    () const { return has_media; }
+    void                            ClearMedia                  ();
+    void                            SetMediaWidthRange          (int min_width_px, int max_width_px);
+    bool                            MatchesMediaViewport        (int viewport_w) const;
+
   private:
 
     void                            Clean                       ();
@@ -262,6 +271,10 @@ class UI_CSSRULE
     XVECTOR<UI_CSSSELECTOR*>        selectors;
     UI_STYLE                        declarations;
     int                             sourceindex;
+
+    bool                            has_media;
+    int                             media_min_width;   // -1 = no min
+    int                             media_max_width;   // -1 = no max
 };
 
 
@@ -313,6 +326,10 @@ class UI_STYLESHEET
     // Phase 4: expand var(--x[, fallback]) in a single value string against this sheet's :root table.
     bool                            ExpandValueVars             (XSTRING& in, XSTRING& out);
 
+    // Track B: design viewport gates @media rules in Resolve()/HasPseudoRulesFor().
+    void                            SetMediaViewport            (int width_px, int height_px);
+    int                             GetMediaViewportWidth       () const { return media_viewport_w; }
+    int                             GetMediaViewportHeight      () const { return media_viewport_h; }
 
 
 
@@ -363,6 +380,9 @@ class UI_STYLESHEET
     XVECTOR<UI_CSSINDEXBUCKET*>     index_byid;            // owned buckets, keyed by selector id
     XVECTOR<UI_CSSINDEXBUCKET*>     index_byclass;         // owned buckets, keyed by selector class name
     XVECTOR<UI_CSSRULE*>            index_unrestricted;    // borrowed; rules with a selector with no type/id/class
+
+    int                             media_viewport_w;      // Track B; 0 = unset (media-conditioned rules do not match)
+    int                             media_viewport_h;
 };
 
 

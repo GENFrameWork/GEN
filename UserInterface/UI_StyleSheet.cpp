@@ -491,7 +491,57 @@ UI_CSSRULE::~UI_CSSRULE()
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_CSSRULE::Clean()
 {
-  sourceindex = 0;
+  sourceindex      = 0;
+  has_media        = false;
+  media_min_width  = -1;
+  media_max_width  = -1;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_CSSRULE::ClearMedia()
+* @brief      Clear optional @media gate (rule becomes unconditional).
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_CSSRULE::ClearMedia()
+{
+  has_media       = false;
+  media_min_width = -1;
+  media_max_width = -1;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_CSSRULE::SetMediaWidthRange(int min_width_px, int max_width_px)
+* @brief      Attach Track B @media (min/max-width). Pass -1 for an unbound edge.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_CSSRULE::SetMediaWidthRange(int min_width_px, int max_width_px)
+{
+  has_media       = true;
+  media_min_width = min_width_px;
+  media_max_width = max_width_px;
+}
+
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         bool UI_CSSRULE::MatchesMediaViewport(int viewport_w) const
+* @brief      True if this rule has no media gate, or viewport_w satisfies min/max-width.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+bool UI_CSSRULE::MatchesMediaViewport(int viewport_w) const
+{
+  if(!has_media) return true;
+  if(viewport_w <= 0) return false;
+  if(media_min_width >= 0 && viewport_w < media_min_width) return false;
+  if(media_max_width >= 0 && viewport_w > media_max_width) return false;
+  return true;
 }
 
 
@@ -879,6 +929,7 @@ bool UI_STYLESHEET::Resolve(XSTRING& elementtype, XSTRING& elementid, XVECTOR<XS
     {
       UI_CSSRULE* rule = candidates.Get(c);
       if(!rule) continue;
+      if(!rule->MatchesMediaViewport(media_viewport_w)) continue;
 
       XVECTOR<UI_CSSSELECTOR*>& sels = rule->GetSelectors();
 
@@ -1245,6 +1296,7 @@ bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, 
     {
       UI_CSSRULE* rule = candidates.Get(c);
       if(!rule) continue;
+      if(!rule->MatchesMediaViewport(media_viewport_w)) continue;
 
       XVECTOR<UI_CSSSELECTOR*>& sels = rule->GetSelectors();
 
@@ -1288,5 +1340,20 @@ bool UI_STYLESHEET::HasPseudoRulesFor(XSTRING& elementtype, XSTRING& elementid, 
 * --------------------------------------------------------------------------------------------------------------------*/
 void UI_STYLESHEET::Clean()
 {
+  media_viewport_w = 0;
+  media_viewport_h = 0;
+}
 
+
+/**-------------------------------------------------------------------------------------------------------------------
+*
+* @fn         void UI_STYLESHEET::SetMediaViewport(int width_px, int height_px)
+* @brief      Track B: set design viewport used to gate @media (min/max-width) rules.
+* @ingroup    USERINTERFACE
+*
+* --------------------------------------------------------------------------------------------------------------------*/
+void UI_STYLESHEET::SetMediaViewport(int width_px, int height_px)
+{
+  media_viewport_w = (width_px  > 0) ? width_px  : 0;
+  media_viewport_h = (height_px > 0) ? height_px : 0;
 }

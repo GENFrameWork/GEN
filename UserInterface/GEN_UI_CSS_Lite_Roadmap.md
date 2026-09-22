@@ -19,6 +19,7 @@ Contrato dual: layouts **sin** stylesheet (`UI_Options`) no cambian. Solo layout
 | sizefont / font-size (Text, TextBox vía cascade) | font-family (un vector por skin) |
 | transition (ms), :hover / :selected / … | |
 | @import, :root variables, var(--x) en reglas de hoja | var() **no** se expande en `style=""` inline (usar literales) |
+| `@media (min-width\|max-width)` load-time vs design | |
 
 **Paint (política Track D.3):**
 
@@ -60,17 +61,30 @@ Contrato dual: layouts **sin** stylesheet (`UI_Options`) no cambian. Solo layout
 |---|------|--------|
 | P.1 | Contrato Android: design canvas = 1440×900; fit visual = GLES letterbox; UIScale = 1.0 | ✅ UI_System fuerza scale 1.0 (`#ifdef ANDROID`) |
 | P.2 | Config change: no destruir design size con UpdateSize(native) | ✅ `MainProcANDROID` GLES: keep design + `CHANGESIZE` |
-| P.3 | Build `android_apk` (arm64) + checklist dispositivo/emulador | ✅ checklist `captures/uiscale/PP_android_notes.md` |
+| P.3 | Build `android_apk` (arm64) + checklist dispositivo/emulador | ✅ smoke AVD API34 + capturas `PP_android_*` |
 
 **Contrato P:** en Android el canvas de autoría permanece 1440×900; el letterbox GLES + `MapWindowToCanvas` adaptan a la superficie nativa. `UIScale` Present = 1.0 (sin doble escala). `OnConfigurationChanged` no llama `UpdateSize(native)` bajo GLES.
 
 ### Track B — `@media` / breakpoints
 
-Diferido (después de Track P / Nivel 4).
+| # | Paso | Estado |
+|---|------|--------|
+| B.1 | Parser `@media (min-width\|max-width)` + `and` | ✅ |
+| B.2 | Evaluación load-time vs design viewport (`SetMediaViewport`) | ✅ |
+| B.3 | `designwidth`/`designheight` en XML layout + demo dashboard | ✅ |
+| B.4 | Unit tests + captura `PB_media_*` | ✅ 301 PASS + `PB_media_cards_gap.png` |
+
+**Contrato B:** subset GEN — solo `min-width` / `max-width` (px). Se evalúa **una vez al cargar** contra el design canvas (igual que rem/vw L.3). Sin re-eval al resize. Features no soportadas → bloque ignorado.
 
 ### Track Q — Calidad
 
-Diagnóstico de parseo CSS, capturas, suite verde en cada PR.
+| # | Paso | Estado |
+|---|------|--------|
+| Q.1 | Contadores parse testables + tests higiene | ✅ `GetLastRulesKept/Discarded/UnterminatedComments` |
+| Q.2 | Checklist PR + índice capturas | ✅ `captures/uiscale/PQ_quality_notes.md` |
+| Q.3 | Suite `UnitTests_UserInterface` como puerta | ✅ **304 PASS** |
+
+**Contrato Q:** cada PR que toque UI CSS/scale debe dejar la suite verde y, si cambia layout visual, una captura `P*` + nota. Diagnósticos de parseo van a XTRACE y a getters unit-testables (no scrapear logs).
 
 ---
 
@@ -82,9 +96,9 @@ Diagnóstico de parseo CSS, capturas, suite verde en cada PR.
 | Mismo dashboard en Android/DPI | Track P |
 | Ninguno urgente | **Parar en Nivel 1** (producto dashboard) o seguir L.2 |
 
-**Decisión fijada:** **Nivel 2** alcanzado (L.3 = load-time). **Track P** cerrado → camino a **Nivel 4**. Track B sigue diferido.
+**Decisión fijada:** **Nivel 2–4** alcanzados (D+L+P+B). **Track Q** cerrado (higiene + checklist PR). L.4 opcional (re-resolve en resize) queda fuera.
 
-Capturas: `PD_L1_*`, `PL2_gap_rem.png`, checklist Android `PP_android_*`.
+Capturas: `PD_L1_*`, `PL2_*`, `PP_android_*`, `PB_media_*`, checklist `PQ_quality_notes.md`.
 
 ---
 

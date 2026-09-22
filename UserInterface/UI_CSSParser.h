@@ -115,6 +115,12 @@ class UI_CSSPARSER
     // and reusable by any future caller that wants to report "line N" instead of a meaningless flat offset.
     static void                     ResolveLineColumn           (XSTRING& text, int offset, int& outline, int& outcolumn);
 
+    // Track Q: parse hygiene counters from the last ParseText()/ParseFile() on this instance (XTRACE already
+    // prints them; getters make the failure modes unit-testable without scraping logs).
+    int                             GetLastRulesKept            () const { return last_rules_kept; }
+    int                             GetLastRulesDiscarded       () const { return discarded_rules; }
+    int                             GetLastUnterminatedComments () const { return unterminated_comments; }
+
 
   private:
 
@@ -143,6 +149,11 @@ class UI_CSSPARSER
     bool                            ReadImportStatement         (XSTRING& text, int& pos, XSTRING& outurl);
     bool                            ResolveAndParseImport       (XSTRING& importurl, UI_STYLESHEET& out);
 
+    // Track B: @media (min-width / max-width) [and ...] { rules }
+    bool                            ReadMediaCondition          (XSTRING& text, int& pos, int& out_min_w, int& out_max_w, bool& out_ok);
+    bool                            ParseMediaBlock             (XSTRING& text, int& pos, UI_STYLESHEET& out, int media_min_w, int media_max_w);
+    bool                            ParseOneRuleOrAtRule        (XSTRING& text, int& pos, UI_STYLESHEET& out, int* media_min_w, int* media_max_w, int& ruleindex, int& rules_kept);
+
     UI_CSSSELECTOR*                 ParseCompoundSelector       (XSTRING& text, int start, int end);
 
     // Phase 2 ("combinadores descendiente/hijo"): see the class banner above. Splits [start, end) -- one
@@ -169,6 +180,7 @@ class UI_CSSPARSER
     // early by */ in prose, everything after is garbage" failure mode that used to leave the UI fully transparent.
     int                             discarded_rules;
     int                             unterminated_comments;
+    int                             last_rules_kept;      // Track Q: kept count after last ParseText
 };
 
 
